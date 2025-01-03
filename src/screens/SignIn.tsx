@@ -41,7 +41,7 @@ export const SignIn: React.FC = () => {
             className='t16'
             style={{marginBottom: 30, display: 'block'}}
           >
-            Sign in to continue
+            Sign in to continue..
           </span>
           <components.Input
             placeholder='Email'
