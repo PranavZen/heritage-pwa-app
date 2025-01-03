@@ -20,7 +20,7 @@ type Props = {
 const modalMenu = [
   {
     id: 1,
-    title: 'Personal informationn',
+    title: 'Personal information',
     route: Routes.EditProfile,
     switch: false,
   },
