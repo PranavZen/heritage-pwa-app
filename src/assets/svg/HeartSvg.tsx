@@ -12,7 +12,7 @@ type Props = {
 export const HeartSvg: React.FC<Props> = ({dish, style}) => {
   const wishlist = useSelector((state: RootState) => state.wishlistSlice);
 
-  const ifInWishlist = wishlist.list.find((item) => item.id === dish.id);
+  const ifInWishlist = wishlist.list.find((item) => item.option_value_name === dish.option_value_name);
 
   return (
     <svg

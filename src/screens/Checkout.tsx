@@ -60,7 +60,7 @@ export const Checkout: React.FC = () => {
             className='t18'
             style={{color: 'var(--main-color)'}}
           >
-            ${total.toFixed(2)}
+            ₹ {total.toFixed(2)}
           </span>
         </div>
         <ul>
@@ -73,7 +73,7 @@ export const Checkout: React.FC = () => {
               >
                 <span className='t14'>{dish.name}</span>
                 <span className='t14'>
-                  {dish.quantity} x ${dish.price}
+                  {dish.quantity} x ₹ {dish.price}
                 </span>
               </li>
             );
@@ -84,11 +84,11 @@ export const Checkout: React.FC = () => {
           style={{marginBottom: 8}}
         >
           <span className='t14'>Discount</span>
-          <span className='t14'>- ${discount}</span>
+          <span className='t14'>- ₹ {discount}</span>
         </div>
         <div className='row-center-space-between'>
           <span className='t14'>Delivery</span>
-          <span className='t14'>${delivery}</span>
+          <span className='t14'>₹ {delivery}</span>
         </div>
       </section>
     );

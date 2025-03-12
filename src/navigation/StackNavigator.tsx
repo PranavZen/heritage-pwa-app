@@ -1,9 +1,7 @@
 import React from 'react';
 import {RouterProvider, createBrowserRouter} from 'react-router-dom';
-
 import {Routes} from '../routes';
 import {screens} from '../screens';
-
 import {TabNavigator} from './TabNavigator';
 
 const stack = createBrowserRouter([
@@ -107,6 +105,26 @@ const stack = createBrowserRouter([
     path: Routes.TabNavigator,
     element: <TabNavigator />,
   },
+  {
+    path: Routes.MyAddress,
+    element: <screens.MyAddress />,
+  },
+  {   
+    path: Routes.AddressAdd,
+    element: <screens.AddressAdd />,
+  },
+  {   
+    path: Routes.ClientNotification,
+    element: <screens.ClientNotification />,
+  },
+  {   
+    path: Routes.ClientNotificationDetails,
+    element: <screens.ClientNotificationDetails />,
+  },
+  {   
+    path: Routes.CustomerCare,
+    element: <screens.CustomerCare/>,
+  }
 ]);
 
 export const StackNavigator: React.FC = () => {

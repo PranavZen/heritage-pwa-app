@@ -11,6 +11,8 @@ export const Menu: React.FC = () => {
 
   const {menuLoading, menu} = hooks.useGetMenu();
 
+  // console.log("menumenumenuaaaaa",menu);
+
   const [opacity, setOpacity] = useState<number>(0);
 
   hooks.useScrollToTop();
@@ -34,9 +36,9 @@ export const Menu: React.FC = () => {
                 className='clickable'
                 style={{position: 'relative'}}
                 onClick={() =>
-                  navigate(Routes.MenuList, {state: {menuName: menu.name}})
+                  navigate(Routes.MenuList, {state: {menuName: menu.product_cat_id}})
                 }
-              >
+              >   
                 <img
                   src={menu.image}
                   alt={menu.name}

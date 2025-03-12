@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import {hooks} from '../hooks';
-import {svg} from '../assets/svg';
-import {RootState} from '../store';
-import {components} from '../components';
-import {TabScreens, Routes} from '../routes';
-import {setScreen} from '../store/slices/tabSlice';
+import { hooks } from '../hooks';
+import { svg } from '../assets/svg';
+import { RootState } from '../store';
+import { components } from '../components';
+import { TabScreens, Routes } from '../routes';
+import { setScreen } from '../store/slices/tabSlice';
+import axios from 'axios';
 
 type Props = {
   title?: string;
@@ -17,47 +18,62 @@ type Props = {
   headerStyle?: React.CSSProperties;
 };
 
+// Define the type for profileData
+interface ProfileData {
+  firstname: string;
+  lastname: string;
+  email: string;
+  photo: File | null;
+  photo_url: string | null;
+
+}
+
 const modalMenu = [
   {
     id: 1,
-    title: 'Personal information',
+    title: 'Edit Profile',
     route: Routes.EditProfile,
     switch: false,
   },
   {
     id: 2,
-    title: 'My orders',
-    route: Routes.OrderHistory,
-    // route: Routes.OrderHistoryEmpty,
+    title: 'My Addresses',
+    route: Routes.MyAddress,
     switch: false,
   },
+  // {
+  //   id: 3,
+  //   title: 'My orders',
+  //   route: Routes.OrderHistory,
+  //   switch: false,
+  // },
   {
-    id: 3,
-    title: 'Promocodes & gift cards',
-    route: Routes.Promocodes,
-    // route: Routes.PromocodesEmpty,
+    id: 5,
+    title: 'Notifications',
+    route: Routes.ClientNotification,
     switch: false,
   },
   {
     id: 4,
-    title: 'Notifications',
-    route: '',
-    switch: true,
+    title: 'Store Locator',
+    route: Routes.Promocodes,
+    switch: false,
   },
-  {
-    id: 5,
-    title: 'Face ID',
-    route: '',
-    switch: true,
-  },
+
   {
     id: 6,
-    title: 'Support center',
+    title: 'Customer Care',
+    route: Routes.CustomerCare,
+    switch:false,
+  },
+  {
+    id: 7,
+    title: 'FAQ',
     route: '',
     switch: false,
   },
   {
-    id: 7,
+    id: 8,
     title: 'Sign out',
     route: Routes.SignIn,
     switch: false,
@@ -89,6 +105,35 @@ export const Header: React.FC<Props> = ({
 
   const cart = useSelector((state: RootState) => state.cartSlice);
 
+  const [profileData, SetProfileData] = useState<ProfileData | null>(null);
+
+  // console.log("profileDataprofileDataqqqqqq", profileData);
+
+  const cityId = localStorage.getItem('c_id');
+
+  useEffect(() => {
+    const GetProfileData = async () => {
+      const formData = new FormData();
+      formData.append('c_id', cityId || 'null');
+      try {
+        const response = await axios.post(
+          'https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById',
+          formData
+        );
+
+        if (response.data.status === 'success') {
+          SetProfileData(response.data.CustomerDetail[0]);
+        } else {
+          console.log('Error:', response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    GetProfileData();
+  }, []);
+
   const renderUser = (): JSX.Element | null => {
     if (!userName && !userPhoto) return null;
 
@@ -109,11 +154,11 @@ export const Header: React.FC<Props> = ({
         }}
       >
         <img
-          alt='user'
-          src='https://george-fx.github.io/dinehub_api/assets/users/01.jpg'
-          style={{width: 22, height: 22, borderRadius: 20}}
+          alt="user"
+          src={profileData?.photo && profileData.photo_url ? `${profileData.photo_url}${profileData.photo}` : ''}
+          style={{ width: 22, height: 22, borderRadius: 20 }}
         />
-        {userName && <h5>Jordan Hebert</h5>}
+        {profileData?.firstname}
       </div>
     );
   };
@@ -131,7 +176,7 @@ export const Header: React.FC<Props> = ({
             alignItems: 'center',
             padding: '0 20px',
           }}
-          className='clickable'
+          className="clickable"
         >
           <svg.GoBackSvg />
         </div>
@@ -150,7 +195,7 @@ export const Header: React.FC<Props> = ({
         }}
       >
         <span
-          className='t16'
+          className="t16"
           style={{
             color: 'var(--main-color)',
             marginBottom: 2,
@@ -165,7 +210,6 @@ export const Header: React.FC<Props> = ({
 
   const renderBasket = (): JSX.Element | null => {
     if (!showBasket) return null;
-
     return (
       <button
         onClick={() => {
@@ -183,7 +227,7 @@ export const Header: React.FC<Props> = ({
         }}
       >
         <div
-          className='t10'
+          className="t10"
           style={{
             position: 'absolute',
             backgroundColor: 'var(--main-turquoise)',
@@ -206,7 +250,7 @@ export const Header: React.FC<Props> = ({
               fontSize: 10,
             }}
           >
-            ${cart.total > 0 ? cart.total.toFixed(2) : '0'}
+            ₹ {cart.total > 0 ? cart.total.toFixed(2) : '0'}
           </span>
         </div>
         <svg.HeaderBasketSvg />
@@ -216,6 +260,7 @@ export const Header: React.FC<Props> = ({
 
   const renderModal = (): JSX.Element | null => {
     if (!showModal) return null;
+
     return (
       <>
         <div
@@ -260,22 +305,29 @@ export const Header: React.FC<Props> = ({
             }}
           >
             <img
-              src='https://george-fx.github.io/dinehub_api/assets/users/01.jpg'
-              alt='user'
-              style={{width: 60, height: 60, borderRadius: 20}}
+              src={profileData?.photo instanceof File
+                ? URL.createObjectURL(profileData?.photo)
+                : profileData?.photo_url && profileData?.photo
+                  ? `${profileData?.photo_url}${profileData?.photo}`
+                  : 'https://george-fx.github.io/dinehub_api/assets/users/01.jpg'}
+              alt="user"
+              style={{ width: 60, height: 60, borderRadius: 50 }}
             />
-            <div style={{display: 'flex', flexDirection: 'column'}}>
+
+
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span
-                className='t14'
+                className="t14"
                 style={{
                   color: 'var(--main-color)',
                   fontWeight: 500,
                   marginBottom: 4,
                 }}
               >
-                Jordan Hebert
+                {profileData ? `${profileData.firstname} ${profileData.lastname}` : 'Loading...'}
+
               </span>
-              <span className='t14'>jordanhebert@mail.com</span>
+              <span className="t14">{profileData?.email || 'Loading...'}</span>
             </div>
           </div>
           {/* Phone */}
@@ -291,7 +343,7 @@ export const Header: React.FC<Props> = ({
 
               return (
                 <li
-                  className='row-center-space-between clickable'
+                  className="row-center-space-between clickable"
                   style={{
                     paddingTop: 6,
                     paddingBottom: 6,
@@ -305,18 +357,16 @@ export const Header: React.FC<Props> = ({
                   }}
                 >
                   <span
-                    className='t16 number-of-lines-1'
+                    className="t16 number-of-lines-1"
                     style={
                       item.title === 'Sign out'
-                        ? {color: '#FA5555'}
-                        : {color: 'var(--main-color)'}
+                        ? { color: '#FA5555' }
+                        : { color: 'var(--main-color)' }
                     }
                   >
                     {item.title}
                   </span>
-                  {item.route !== '' && item.title !== 'Sign out' && (
-                    <svg.RightArrowSvg />
-                  )}
+                  {item.route !== '' && item.title !== 'Sign out' && <svg.RightArrowSvg />}
                   {item.switch && <components.Switch />}
                 </li>
               );
@@ -336,7 +386,7 @@ export const Header: React.FC<Props> = ({
           backgroundColor: 'var(--main-background)',
           ...headerStyle,
         }}
-        className='row-center-space-between'
+        className="row-center-space-between"
       >
         {renderUser()}
         {renderGoBack()}

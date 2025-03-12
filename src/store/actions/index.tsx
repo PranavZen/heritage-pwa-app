@@ -36,4 +36,5 @@ export const actions = {
   setSelectedColors,
   removeFromWishlist,
   setSelectedCategories,
+  
 };

@@ -20,12 +20,15 @@ export const RecomendedItem: React.FC<Props> = ({index, dish, isLast}) => {
 
   const wishlist = useSelector((state: RootState) => state.wishlistSlice);
 
-  const ifInWishlist = wishlist.list.find((item) => item.id === dish.id);
+
+  const ifInWishlist = wishlist.list.find((item) => item.option_value_name === dish.option_value_name);
+
+  // console.log("ifInWishlist",ifInWishlist)
 
   const cartHandler = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    console.log('Added to cart:', dish);
+    // console.log('Added to cart:', dish);
     event.stopPropagation();
     dispatch(actions.addToCart(dish));
   };
@@ -40,7 +43,6 @@ export const RecomendedItem: React.FC<Props> = ({index, dish, isLast}) => {
       dispatch(actions.addToWishlist(dish));
     }
   };
-
   return (
     <div
       style={{
@@ -52,10 +54,10 @@ export const RecomendedItem: React.FC<Props> = ({index, dish, isLast}) => {
         marginRight: isLast ? 20 : 0,
         backgroundColor: 'var(--white-color)',
       }}
-      onClick={() => navigate(`/dish/${dish.id}`, {state: {dish}})}
-    >
+      onClick={() => navigate(`/dish/${dish.option_value_name}`, {state: {dish}})}
+    >     
       <img
-        src={dish.image}
+        src={dish.option_value_image}
         alt={dish.name}
         style={{maxWidth: 149, width: '100%', marginBottom: 10}}
       />
@@ -91,14 +93,14 @@ export const RecomendedItem: React.FC<Props> = ({index, dish, isLast}) => {
       <button
         onClick={wishlistHandler}
         style={{
-          position: 'absolute',
+          position:'absolute',
           right: 0,
           bottom: 72 - 15,
           padding: 15,
           borderRadius: 10,
         }}
       >
-        <svg.HeartSvg dish={dish} />
+        <svg.HeartSvg dish={dish}/>
       </button>
       <components.Name
         dish={dish}

@@ -1,8 +1,7 @@
-import {useDispatch, useSelector} from 'react-redux';
-
-import {DishType} from '../types';
-import {RootState} from '../store';
-import {actions} from '../store/actions';
+import { useDispatch, useSelector } from "react-redux";
+import { DishType } from "../types";
+import { RootState } from "../store";
+import { actions } from "../store/actions";
 
 export const useWishlistHandler = () => {
   const dispatch = useDispatch();
@@ -10,7 +9,7 @@ export const useWishlistHandler = () => {
 
   const addToWishlist = (
     dish: DishType,
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.stopPropagation();
     dispatch(actions.addToWishlist(dish));
@@ -18,15 +17,16 @@ export const useWishlistHandler = () => {
 
   const removeFromWishlist = (
     dish: DishType,
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.stopPropagation();
     dispatch(actions.removeFromWishlist(dish));
   };
 
-  const ifInWishlist = (id: number): boolean => {
-    return !!wishlist.list.find((dish) => dish.id === id);
+  const ifInWishlist = (id: string): boolean => {
+    return wishlist.list.some((dish) => dish.option_value_name === id);
   };
+  
 
   return {
     addToWishlist,

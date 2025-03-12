@@ -2,7 +2,7 @@ import {FC} from 'react';
 import React from 'react';
 
 type Props = {
-  type?: 'text' | 'password';
+  type?: 'text' | 'password '| 'number';
   clickable?: boolean;
   containerStyle?: React.CSSProperties;
   label?: string;
@@ -11,16 +11,19 @@ type Props = {
   icon?: JSX.Element;
   leftIcon?: JSX.Element;
   rightIcon?: JSX.Element;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; 
 };
 
 export const Input: FC<Props> = ({
+  
   placeholder,
   containerStyle,
   autoCapitalize = 'none',
-  clickable,
+  onChange,
   leftIcon,
   rightIcon,
-  type = 'text',
+  type ,
 }) => {
   return (
     <div
@@ -43,6 +46,7 @@ export const Input: FC<Props> = ({
         placeholder={placeholder}
         maxLength={50}
         type={type}
+        onChange={onChange}
         style={{
           width: '100%',
           height: '100%',

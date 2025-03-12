@@ -1,5 +1,5 @@
-import React, {CSSProperties} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import React, { CSSProperties } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 type Props = {
   to?: string;
@@ -9,6 +9,7 @@ type Props = {
   onClick?: (
     event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>,
   ) => void;
+  disabled?: boolean; // Added disabled prop
 };
 
 export const Button: React.FC<Props> = ({
@@ -17,12 +18,18 @@ export const Button: React.FC<Props> = ({
   containerStyle,
   text = 'Button',
   colorScheme = 'primary',
+  disabled = false,
 }) => {
   const navigate = useNavigate();
 
   const handleClick = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>,
   ) => {
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
+
     if (to === 'back') {
       event.preventDefault();
       navigate(-1);
@@ -33,20 +40,26 @@ export const Button: React.FC<Props> = ({
 
   const style: CSSProperties = {
     height: 50,
-    backgroundColor:
-      colorScheme === 'primary' ? 'var(--main-turquoise)' : 'transparent',
-    color:
-      colorScheme === 'primary'
-        ? 'var(--white-color)'
-        : 'var(--main-turquoise)',
+    backgroundColor: disabled
+      ? 'var(--gray-color)' // Disabled state color
+      : colorScheme === 'primary'
+      ? 'var(--main-turquoise)'
+      : 'transparent',
+    color: disabled
+      ? 'var(--disabled-text-color)' // Disabled text color
+      : colorScheme === 'primary'
+      ? 'var(--white-color)'
+      : 'var(--main-turquoise)',
     fontFamily: 'DM Sans',
     fontWeight: 700,
     fontSize: 14,
     lineHeight: 1.7,
-    cursor: 'pointer',
+    cursor: disabled ? 'not-allowed' : 'pointer', // Update cursor
     margin: '0 auto',
     textAlign: 'center',
-    border: '1px solid var(--main-turquoise)',
+    border: `1px solid ${
+      disabled ? 'var(--gray-color)' : 'var(--main-turquoise)'
+    }`,
     textTransform: 'capitalize',
     width: '100%',
     userSelect: 'none',
@@ -59,26 +72,19 @@ export const Button: React.FC<Props> = ({
 
   if (to) {
     return (
-      <Link
-        to={to}
-        style={{...style}}
-        onClick={handleClick}
-      >
+      <Link to={to} style={{ ...style }} onClick={handleClick}>
         {text}
       </Link>
     );
   }
 
-  if (!to) {
-    return (
-      <button
-        style={{...style}}
-        onClick={onClick}
-      >
-        {text}
-      </button>
-    );
-  }
-
-  return null;
+  return (
+    <button
+      style={{ ...style }}
+      onClick={handleClick}
+      disabled={disabled} // Add the disabled attribute
+    >
+      {text}
+    </button>
+  );
 };

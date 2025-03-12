@@ -9,6 +9,7 @@ import {Loader} from './Loader';
 import {Switch} from './Switch';
 import {RatingStars} from './RatingStars';
 import {BlockHeading} from './BlockHeading';
+import {Modal}   from './Modal'
 
 export const components = {
   Name,
@@ -21,5 +22,6 @@ export const components = {
   Rating,
   Switch,
   RatingStars,
-  BlockHeading,
+  BlockHeading, 
+  Modal,
 };

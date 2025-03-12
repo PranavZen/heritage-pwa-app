@@ -62,11 +62,24 @@ h6 {
   line-height: 1.5;
 }
 
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .t14 {
   font-size: 14px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   color: var(--text-color);
+  line-height: 1.5;
+}
+
+.t144 {
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  color: red;
   line-height: 1.5;
 }
 

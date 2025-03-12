@@ -38,7 +38,7 @@ export const FavoriteItem: React.FC<Props> = ({dish}) => {
       dispatch(actions.addToWishlist(dish));
     }
   };
-
+  
   return (
     <li
       style={{
@@ -51,7 +51,7 @@ export const FavoriteItem: React.FC<Props> = ({dish}) => {
       onClick={() => navigate(`/dish/${dish.id}`, {state: {dish}})}
     >
       <img
-        src={dish.image}
+        src={dish.option_value_image}
         alt={dish.name}
         style={{width: '100%', marginBottom: 10}}
       />

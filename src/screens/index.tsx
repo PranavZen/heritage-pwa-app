@@ -22,7 +22,11 @@ import {OrderHistoryEmpty} from './OrderHistoryEmpty';
 import {SignUpAccountCreated} from './SignUpAccountCreated';
 import {VerifyYourPhoneNumber} from './VerifyYourPhoneNumber';
 import {ForgotPasswordSentEmail} from './ForgotPasswordSentEmail';
-
+import { MyAddress } from './MyAddress';
+import { AddressAdd } from './AddressAdd';
+import {ClientNotification} from '../screens/ClientNotification';
+import {ClientNotificationDetails} from './ClientNotificationDetails'
+import { CustomerCare } from './CustomerCare';
 export const screens = {
   Dish,
   SignIn,
@@ -48,4 +52,9 @@ export const screens = {
   SignUpAccountCreated,
   VerifyYourPhoneNumber,
   ForgotPasswordSentEmail,
+  MyAddress,
+  AddressAdd,
+  ClientNotification,
+  ClientNotificationDetails,
+  CustomerCare,
 };

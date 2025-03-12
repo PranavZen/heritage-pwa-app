@@ -1,23 +1,52 @@
-import React, {useState} from 'react';
-
-import {hooks} from '../hooks';
-import {components} from '../components';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { hooks } from '../hooks';
+import { components } from '../components';
+import { Routes } from '../routes';
 
 export const Search: React.FC = () => {
+  const [selectedOption, setSelectedOption] = useState('');
+  const [opacity, setOpacity] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dishes, setDishes] = useState<any[]>([]);  
+  // console.log("qqqqqqqqqqqqqqqqq",dishes);
+  const [dishesLoading, setDishesLoading] = useState<boolean>(false);
+
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
 
-  const [opacity, setOpacity] = useState<number>(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const {dishesLoading, dishes} = hooks.useGetDishes();
+
+  const fetchDishes = async (searchQuery: string) => {
+    // console.log("searchQuery",searchQuery)
+    const formData = new FormData();
+    formData.append('search_key', searchQuery);
+    formData.append('city_id','325');
+    setDishesLoading(true);
+    try {
+
+      const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/search',formData);
+
+      console.log("responseresponseqqqqaaaqqaaaqaaaqqqqaaq",response);
+
+      setDishes(response.data.search_data || []); 
+    } catch (error) {
+      console.error("Error fetching dishes:", error);
+    } finally {
+      setDishesLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (searchQuery) {
+      fetchDishes(searchQuery);
+    } else {
+      setDishes([]);  // Clear dishes if search query is empty
+    }
+  }, [searchQuery]);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
-
-  const filteredDishes = dishes.filter((dish: any) =>
-    dish.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
 
   const renderHeader = (): JSX.Element => {
     return (
@@ -30,7 +59,7 @@ export const Search: React.FC = () => {
 
   const renderSearch = (): JSX.Element => {
     return (
-      <section style={{borderBottom: '1px solid #DBE9F5'}}>
+      <section style={{ borderBottom: '1px solid #DBE9F5' }}>
         <div
           style={{
             padding: 20,
@@ -70,12 +99,21 @@ export const Search: React.FC = () => {
 
   const renderDishes = (): JSX.Element => {
     if (dishesLoading) return <components.Loader />;
-
     return (
-      <section style={{paddingTop: 14}}>
-        {filteredDishes.map((dish) => {
+      <section style={{ paddingTop: 14 }}>
+        {dishes.map((dish) => {
           return (
-            <button key={dish.id}>
+            <button
+              key={dish.id}
+              
+              onClick={() => {
+                navigate(Routes.MenuList, { state: { id: dish.id }});
+              }}
+              
+            >
+              <div>
+                <img src={dish.image} alt="" width={60} height={60} />
+              </div>
               <span className='t16 number-of-lines-1'>{dish.name}</span>
             </button>
           );
@@ -89,10 +127,7 @@ export const Search: React.FC = () => {
   };
 
   return (
-    <div
-      id='screen'
-      style={{opacity}}
-    >
+    <div id='screen' style={{ opacity }}>
       {renderHeader()}
       {renderSearch()}
       {renderContent()}

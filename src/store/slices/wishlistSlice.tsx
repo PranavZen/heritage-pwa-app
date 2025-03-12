@@ -15,7 +15,7 @@ export const wishlistSlice = createSlice({
   reducers: {
     addToWishlist: (state, action: PayloadAction<DishType>) => {
       const inWishlist = state.list.find(
-        (item) => item.id === action.payload.id,
+        (item) => item.option_value_name === action.payload.option_value_name,
       );
 
       if (!inWishlist) {
@@ -24,15 +24,23 @@ export const wishlistSlice = createSlice({
         });
       }
     },
+    
     removeFromWishlist: (state, action: PayloadAction<DishType>) => {
-      const inWishlist = state.list.find(
-        (item) => item.id === action.payload.id,
-      );
 
+      const inWishlist = state.list.find((item) => {
+
+        return item.option_value_name === action.payload.option_value_name;
+      });
+  
+     
+    
       if (inWishlist) {
-        state.list = state.list.filter((item) => item.id !== action.payload.id);
+        state.list = state.list.filter(
+          (item) => item.option_value_name !== action.payload.option_value_name
+        );
       }
     },
+
     setWishlist: (state, action: PayloadAction<DishType[]>) => {
       state.list = action.payload;
     },

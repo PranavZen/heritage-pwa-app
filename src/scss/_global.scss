@@ -83,3 +83,220 @@ details summary {
   list-style: none;
   cursor: pointer;
 }
+
+.NoData-Found {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #00b0b9;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.home_product_category {
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+  text-align: center;
+  background-color: var(--white-color);
+  // border-radius: 0 0 10px 10px;
+  color: var(--main-color);
+  font-size: 20;
+  font-family: sans-serif;
+}
+
+.terms-and-conditions {
+  margin: 20px;
+}
+
+.terms-and-conditions input {
+  margin-right: 10px;
+  background-color: green;
+  color: 17px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.terms-and-conditions span a {
+  color: green;
+}
+
+// ***********************************************************************************
+/* AddressAdd.css */
+
+/* Style for the form container */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for form input fields */
+.form-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+}
+
+/* Style for the label */
+.form-label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+/* Flex layout for two input fields in one row */
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Make inputs take equal width */
+.input-group input {
+  width: 90%;
+}
+
+/* Style for submit button */
+.submit-btn {
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+.edit-address {
+  padding: 0px 20px 0px 20px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.profile-photo-main {
+  display: flex;
+  justify-content: center;
+  justify-content: center;
+}
+
+// profile photo
+.upload-circle {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #007bff;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 100px;
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+
+.upload-circle img {
+  border-radius: 50%;
+}
+
+// **************notification ************
+.notification-client {
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid gray;
+  background-color: var(--white-color);
+  padding: 20px;
+}
+
+// Customer Care
+
+/* External CSS for better styling */
+
+.option-div {
+  padding: 10px 15px;
+  margin: 10px 0;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.option-div:hover {
+  background-color: #e0e0e0;
+}
+
+.option-div:active {
+  background-color: #d0d0d0;
+}
+
+.message-input-box {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+.cutomercare-submit-button {
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+  margin: 10px auto;
+}
+.cutomercare-submit-button:disabled {
+  background-color: #cccccc;
+}
+.cutomercare-submit-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+.Choose-your-delivery-plan {
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+}
+.main-card-daily-delivery {
+  display: inline;
+  justify-content: space-between;
+  padding: 15px;
+}
+.main-card-daily-delivery-box {
+  display: flex;
+  font-size: 18px;
+  padding: 9px;
+  gap: 13px;
+}
+.delete-address{
+  padding:12px;
+  text-align:end;
+  cursor:pointer;
+}
+.myaddress-getting-separate{
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-shadow: 4px 4px 5px white;
+  padding: 20px;
+  margin: 10px;
+}

@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
-
-import {hooks} from '../../hooks';
-import {items} from '../../items';
-import {Routes} from '../../routes';
-import {RootState} from '../../store';
-import type {DishType} from '../../types';
-import {components} from '../../components';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { hooks } from '../../hooks';
+import { items } from '../../items';
+import { Routes } from '../../routes';
+import { RootState } from '../../store';
+import type { DishType } from '../../types';
+import { components } from '../../components';
+import { MenuType } from '../../types/MenuType'
+import axios from 'axios';
 
 export const Order: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -17,25 +18,57 @@ export const Order: React.FC = () => {
   hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
 
   const navigate = hooks.useNavigate();
+  const [totalPrice, SetTotalPrice] = useState<any[]>([]);
 
-  const {menuLoading, menu} = hooks.useGetMenu();
+  console.log('ccccccccccccccccccccccccccccccc', totalPrice);
 
-  const {list, subtotal, delivery, total} = useSelector(
+  // **************************************************
+  const c_id = localStorage.getItem('c_id');
+  const cityId = localStorage.getItem('cityId');
+
+  useEffect(() => {
+    const getAddToCartData = async () => {
+      const formData = new FormData();
+      formData.append('city_id', cityId || '');
+      formData.append('c_id', c_id || '');
+      formData.append('next_id', '1');
+      try{
+        const response = await axios.post(
+          `https://heritage.bizdel.in/app/consumer/services_v11/getCartData`,
+          formData
+        );
+        console.log('getAddtocartdataqqqq', response.data);
+
+        SetTotalPrice(response.data.optionListing);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getAddToCartData();
+  }, [cityId, c_id]);
+
+  // *************************************************
+
+  const { menuLoading, menu } = hooks.useGetMenu();
+
+  const { list, subtotal, delivery, total } = useSelector(
     (state: RootState) => state.cartSlice,
   );
 
+  // console.log("listttttttttttting",list);
+
   const renderDishes = (): JSX.Element => {
     return (
-      <section style={{marginBottom: 20}}>
-        <ul style={{paddingTop: 10}}>
-          {list.map((dish: DishType, index: number, array: DishType[]) => {
-            const isLast = index === array.length - 1;
+      <section style={{ marginBottom: 20 }}>
+        <ul style={{ paddingTop: 10 }}>
+          {totalPrice.map((dish: DishType, index: number, array: DishType[]) => {
 
+            const isLast = index === array.length - 1;
             return (
               <items.OrderItem
                 key={dish.id}
-                isLast={isLast}
                 dish={dish}
+                isLast={isLast} 
               />
             );
           })}
@@ -43,7 +76,6 @@ export const Order: React.FC = () => {
       </section>
     );
   };
-
   const renderSummary = (): JSX.Element => {
     return (
       <section
@@ -56,19 +88,22 @@ export const Order: React.FC = () => {
       >
         <div
           className='row-center-space-between'
-          style={{marginBottom: 13}}
+          style={{ marginBottom: 13 }}
         >
           <span
             className='t14'
-            style={{color: 'var(--main-color)', fontWeight: 500}}
+            style={{ color: 'var(--main-color)', fontWeight: 500 }}
           >
             Subtotal
           </span>
           <span
             className='t14'
-            style={{color: 'var(--main-color)'}}
+            style={{ color: 'var(--main-color)' }}
           >
-            ${subtotal.toFixed(2)}
+            ₹{" "}
+            {totalPrice.reduce((total, elem) =>{
+              return total + elem.quantity * elem.price * elem.no_of_deliveries;
+            }, 0).toFixed(2)}
           </span>
         </div>
         <div
@@ -80,16 +115,20 @@ export const Order: React.FC = () => {
           }}
         >
           <span className='t14'>Delivery</span>
-          <span className='t14'>${delivery}</span>
+          <span className='t14'>₹{delivery}</span>
         </div>
         <div className='row-center-space-between'>
           <h4>Total</h4>
-          <h4>${total.toFixed(2)}</h4>
+          <h4>
+            ₹{" "}
+            {totalPrice.reduce((total, elem) =>{
+              return total + elem.quantity * elem.price * elem.no_of_deliveries;
+            }, 0).toFixed(2)}
+          </h4>
         </div>
       </section>
     );
   };
-
   const renderButton = (): JSX.Element => {
     return (
       <components.Button
@@ -102,7 +141,7 @@ export const Order: React.FC = () => {
   };
 
   const renderContent = (): JSX.Element | null => {
-    if (list.length === 0 && !menuLoading) return null;
+    if (totalPrice.length === 0 && !menuLoading) return null;
 
     return (
       <main className='container scrollable'>
@@ -114,7 +153,7 @@ export const Order: React.FC = () => {
   };
 
   const renderEmpty = (): JSX.Element | null => {
-    if (list.length === 0 && !menuLoading) {
+    if (totalPrice.length === 0 && !menuLoading) {
       return (
         <main className='scrollable container'>
           <section
@@ -148,7 +187,7 @@ export const Order: React.FC = () => {
             </h2>
             <p
               className='t16'
-              style={{textAlign: 'center'}}
+              style={{ textAlign: 'center' }}
             >
               Looks like you haven't made <br />
               your order yet.
@@ -162,14 +201,14 @@ export const Order: React.FC = () => {
   };
 
   const renderShopNowButton = (): JSX.Element | null => {
-    if (list.length > 0 || menuLoading) return null;
+    if (totalPrice.length > 0 || menuLoading) return null;
 
     return (
-      <section style={{padding: '20px 20px 0 20px '}}>
+      <section style={{ padding: '20px 20px 0 20px ' }}>
         <components.Button
           text='Shop now'
           onClick={() =>
-            navigate(Routes.MenuList, {state: {menuName: menu[0].name}})
+            navigate(Routes.MenuList, { state: { menuName: menu[0].product_cat_id } })
           }
         />
       </section>
@@ -185,8 +224,7 @@ export const Order: React.FC = () => {
   return (
     <div
       id='screen'
-      style={{opacity}}
-    >
+      style={{ opacity }}>
       {renderEmpty()}
       {renderContent()}
       {renderLoading()}

@@ -96,7 +96,7 @@ export const OrderHistory: React.FC = () => {
                         className='t14'
                         style={{fontWeight: 500, color: 'var(--main-color)'}}
                       >
-                        ${order.total}
+                        ₹{order.total}
                       </span>
                     </section>
                     <section className='row-center-space-between'>

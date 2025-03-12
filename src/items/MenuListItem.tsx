@@ -9,14 +9,17 @@ type Props = {
   isLast: boolean;
 };
 
+
 export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
+  // console.log("dishhhhhhhhh",dish);
   const navigate = hooks.useNavigate();
+
 
   const {addToCart, getDishQty} = hooks.useCartHandler();
   const {ifInWishlist, addToWishlist, removeFromWishlist} =
     hooks.useWishlistHandler();
 
-  const qty = getDishQty(dish.id ?? 0);
+  const qty = getDishQty(dish.option_value_name ?? 0);
 
   return (
     <li
@@ -28,10 +31,10 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
         position: 'relative',
       }}
       className='row-center'
-      onClick={() => navigate(`/dish/${dish.id}`, {state: {dish}})}
+      onClick={() => navigate(`/dish/${dish.option_name}`, {state: {dish}})}
     >
       <img
-        src={dish.image}
+        src={dish.option_value_image}
         alt={dish.name}
         style={{width: 117, height: 'auto', borderRadius: 10, marginRight: 10}}
       />
@@ -50,7 +53,7 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
           }}
         />
       )}
-      {dish.isNew && (
+      {dish.isNew &&(
         <img
           alt='New'
           src={require('../assets/icons/14.png')}
@@ -93,13 +96,22 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
         >
           {dish.kcal} kcal - {dish.weight}g
         </span>
+  
         <span
           className='t14'
           style={{
             color: 'var(--main-color)',
           }}
         >
-          ${dish.price}
+          ₹ {dish.price}
+        </span>
+        <span
+          className='t14'
+          style={{
+            color: 'var(--main-color)',
+          }}
+        >
+          {dish.option_value_name}
         </span>
       </div>
       <button
@@ -110,8 +122,8 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
           top: 0,
           borderRadius: 4,
         }}
-        onClick={(event) => {
-          ifInWishlist(dish.id ?? 0)
+        onClick={(event) => { 
+          ifInWishlist(dish.option_value_name ?? 0)
             ? removeFromWishlist(dish, event)
             : addToWishlist(dish, event);
         }}
@@ -142,6 +154,7 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
           </span>
         </div>
       )}
+      
       {qty === 0 && (
         <button
           style={{
@@ -152,6 +165,7 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
             borderRadius: 4,
           }}
           onClick={(event) => {
+            // console.log("Adding to cart: ", event);
             addToCart(dish, event);
           }}
         >
