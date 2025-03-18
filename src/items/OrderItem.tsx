@@ -10,6 +10,8 @@ type Props = {
   isLast: boolean;
 };
 
+
+
 export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const navigate = hooks.useNavigate();
   const { removeFromCart } = hooks.useCartHandler();

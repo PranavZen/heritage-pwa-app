@@ -15,6 +15,10 @@ export const Dish: React.FC = () => {
   const [packageOptions, setPackageOptions] = useState<any[]>([]);
   const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
+    const [cartId, setCartId] = useState<string[]>([]);
+   
+    const [cartItemId, setCartItemId] = useState<string | null>(null);
+    console.log("cartIdcartIdcartIdcartId", cartItemId);
 
   const dish: DishType = location.state.dish;
 
@@ -23,7 +27,85 @@ export const Dish: React.FC = () => {
   const c_id = localStorage.getItem('c_id')
   const cityId = localStorage.getItem('cityId')
 
-  console.log("kkkkk", quantity)
+  // console.log("kkkkk", quantity)
+
+
+  // ***************************************************************************************************
+
+  useEffect(() => {
+      const fetchCartData = async () => {
+        try {
+          const formData = new FormData();
+          formData.append('city_id', cityId || '');
+          formData.append('c_id', c_id || '');
+          formData.append('next_id', '0');
+  
+          const response = await axios.post(
+            'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
+            formData
+          );
+  
+          if (response.data.optionListing) {
+            const cartItems = response.data.optionListing.map(
+              (item: any) => item.cart_product_option_value_id
+            );
+            setCartId(cartItems);
+  
+            const matchedItem = response.data.optionListing.find(
+              (item: any) =>
+                item.cart_product_option_value_id === dish.product_option_value_id
+            );
+  
+            if (matchedItem) {
+              setQuantity(Number(matchedItem.quantity) || 1);
+              setCartItemId(String(matchedItem.cart_id));
+            } else {
+              setQuantity(0);
+              setCartItemId(null);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching cart data:', error);
+        }
+      };
+  
+      fetchCartData();
+    }, [cityId, c_id, dish.product_option_value_id]);
+  
+
+
+  const handleRemoveFromCart = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    if (quantity > 1) {
+      handleUpdateCart(quantity - 1);
+    } else {
+      try {
+        const formData = new FormData();
+        formData.append('id', String(cartItemId));
+        formData.append('c_id', c_id || '');
+
+        const response = await axios.post(
+          'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
+          formData
+        );
+
+        if (response.data.status === 'success') {
+          notification.success({ message: 'Success', description: response.data.message });
+          window.location.reload();
+          setQuantity(0);
+          // setCartItemId(null);
+        } else {
+          notification.error({ message: 'Error', description: response.data.message || 'Failed to remove item.' });
+        }
+      } catch (error) {
+        console.error('Error removing item from cart:', error);
+        notification.error({ message: 'Error', description: 'Failed to remove item from cart.' });
+      }
+    }
+  };
+
+  // *******************************************************************************************************
 
   const handleAddToCart = async (cartData: any) => {
     try {
@@ -51,6 +133,7 @@ export const Dish: React.FC = () => {
       console.log("wwwwwww", response)
       if (response.data.status) {
         notification.success({ message: response.data.message });
+        window.location.reload();
         dispatch(actions.addToCart(response.data.cartItem));
       } else {
         console.error("Failed to add item to cart:", response.data.message);
@@ -115,11 +198,11 @@ export const Dish: React.FC = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const formattedDate = tomorrow.toISOString().split('T')[0];
-    formData.append('id', String(dish.cart_id));
+    formData.append('id', cartItemId || '');
     formData.append('c_id', localStorage.getItem('c_id') || '');
     formData.append('package_id', '13');
     formData.append('quantity', String(newQuantity));
-    formData.append('delivery_preference', '1'); 
+    formData.append('delivery_preference', '1');
     formData.append('no_of_deliveries', '1');
     formData.append('order_date', formattedDate);
     formData.append('order_type', '1');
@@ -134,19 +217,15 @@ export const Dish: React.FC = () => {
         notification.success({ message: response.data.message });
         window.location.reload();
       } else {
-        notification.error({ message: response.data.message });
+        notification.error({ message: "Please 1st add the item." });
       }
     } catch (error) {
       console.error('Error updating cart:', error);
     }
   };
 
-
   //*******************************************update api end**********************************************
 
- 
-  //*********************************************************************************
- 
   useEffect(() => {
     const deliveryData = async () => {
       const formData = new FormData();
@@ -404,32 +483,28 @@ export const Dish: React.FC = () => {
             ₹ {dish.price}
           </span>
 
-
+          {/* ************************************************************************************************** */}
           {/* Remove quantity */}
           <div className="row-center">
             <button
-              style={{ padding: '23px 20px', borderRadius: 4 }}
-              onClick={() => handleUpdateCart(quantity + 1)}
+               onClick={(event) =>
+                 quantity === 1 ? handleRemoveFromCart(event) : handleUpdateCart(quantity - 1)
+               }
+              style={{ padding: '4px 14px', borderRadius: 4 }}
             >
               <svg.MinusSvg />
             </button>
-            <div style={{ marginLeft: 4, marginRight: 4 }}>
-              <span
-                className="t14"
-                style={{ fontWeight: 700, color: 'var(--text-color)' }}
-              >
-                {getDishQty(dish.option_value_name ?? 0)}
-              </span>
-            </div>
-            {/* increaseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee */}
+
+            <span style={{ margin: '0 10px' }}>{quantity}</span>
+
             <button
-              style={{ padding: '23px 20px', borderRadius: 4 }}
               onClick={() => handleUpdateCart(quantity + 1)}
+              style={{ padding: '4px 14px', borderRadius: 4 }}
             >
-              <svg.PlusSvg />
+              <svg.AddSvg />
             </button>
           </div>
-
+          {/* ******************************************************************************************************/}
           {/* Remove quantity from cart */}
 
         </div>
