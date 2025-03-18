@@ -11,37 +11,34 @@ type Props = {
 };
 
 export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
-
-  console.log("qqqqqqqqqqqqqqqq", dish);
-
   const navigate = hooks.useNavigate();
   const { removeFromCart } = hooks.useCartHandler();
 
   const [quantity, setQuantity] = useState(Number(dish.quantity) || 1);
-  const [deliveryPreference, setDeliveryPreference] = useState(String(dish.preferenceName) || '');
+  const [deliveryPreference, setDeliveryPreference] = useState(String(dish.delivery_preference) || '');
   const [noOfDeliveries, setNoOfDeliveries] = useState(Number(dish.no_of_deliveries) || 1);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 1) return;
-
     const formData = new FormData();
     formData.append('id', String(dish.cart_id));
     formData.append('c_id', localStorage.getItem('c_id') || '');
-    formData.append('package_id', String(dish.package_id));
+    formData.append('package_id', String(dish.package_id || '13'));
     formData.append('quantity', String(newQuantity));
     formData.append('delivery_preference', deliveryPreference);
     formData.append('no_of_deliveries', String(noOfDeliveries));
     formData.append('order_date', String(dish.cart_order_date));
     formData.append('order_type', '1');
+
     try {
       const response = await axios.post(
         'https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem',
         formData
       );
 
-      if (response.data.status === 'success') {
+      if(response.data.status === 'success') {
         setQuantity(newQuantity);
         notification.success({ message: response.data.message });
         window.location.reload();
@@ -68,7 +65,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
           formData
         );
-
+    
         if (response.data.status === 'success') {
           notification.success({ message: response.data.message });
           window.location.reload();
@@ -159,8 +156,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           }}
         >
           <Button onClick={handleOpenModal}>Modify</Button>
-
-
           {/* Remove (Decrease Quantity) */}
           <button
             style={{ padding: '14px 14px 4px 14px', borderRadius: 4 }}
@@ -191,12 +186,12 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           <p>{dish.name}</p>
         
           {/* Remove from Cart Button */}
-          <button
+          {/* <button
             style={{ padding: '14px 14px 4px 14px', borderRadius: 4 }}
             onClick={handleRemoveFromCart}
-          >
-            <svg.RemoveSvg />
-          </button>
+          > */}
+            {/* <svg.RemoveSvg /> */}
+          {/* </button> */}
         </div>
 
         {/* Update Modal */}

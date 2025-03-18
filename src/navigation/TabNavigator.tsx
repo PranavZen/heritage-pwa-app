@@ -8,8 +8,7 @@ import {Menu} from '../screens/tabs/Menu';
 import {Order} from '../screens/tabs/Order';
 import {Favorite} from '../screens/tabs/Favorite';
 import {Notification} from '../screens/tabs/Notification';
-
-
+    
 export const TabNavigator: React.FC = () => {
   const currentTabScreen = useSelector(
     (state: RootState) => state.tabSlice.screen,
@@ -78,6 +77,8 @@ export const TabNavigator: React.FC = () => {
         return false;
     }
   };
+
+
   const renderHeader = (): JSX.Element => {
     return (
       <components.Header
@@ -88,6 +89,8 @@ export const TabNavigator: React.FC = () => {
       />
     );
   };
+
+
   const renderFooter = (): JSX.Element => {
     return <components.Footer />;
   };
