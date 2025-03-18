@@ -64,7 +64,7 @@ const modalMenu = [
     id: 6,
     title: 'Customer Care',
     route: Routes.CustomerCare,
-    switch:false,
+    switch: false,
   },
   {
     id: 7,
@@ -107,6 +107,9 @@ export const Header: React.FC<Props> = ({
 
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
 
+  const [cartCount, setCartCount] = useState<number>(0);
+
+
   // console.log("profileDataprofileDataqqqqqq", profileData);
 
   const cityId = localStorage.getItem('c_id');
@@ -120,9 +123,11 @@ export const Header: React.FC<Props> = ({
           'https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById',
           formData
         );
+        console.log("resqwqwllllllllllllll", response.data.cart_count);
 
         if (response.data.status === 'success') {
           SetProfileData(response.data.CustomerDetail[0]);
+          setCartCount(response.data.cart_count);
         } else {
           console.log('Error:', response.data.message);
         }
@@ -231,9 +236,9 @@ export const Header: React.FC<Props> = ({
           style={{
             position: 'absolute',
             backgroundColor: 'var(--main-turquoise)',
-            padding: '5px 4px 3px 4px',
-            borderRadius: '12px',
-            bottom: 9,
+            padding: '8px',
+            borderRadius: '50%',
+            bottom: 4,
             right: 44,
             display: 'flex',
             alignItems: 'center',
@@ -250,8 +255,9 @@ export const Header: React.FC<Props> = ({
               fontSize: 10,
             }}
           >
-            ₹ {cart.total > 0 ? cart.total.toFixed(2) : '0'}
+            <p>{cartCount}</p>
           </span>
+
         </div>
         <svg.HeaderBasketSvg />
       </button>

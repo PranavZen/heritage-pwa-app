@@ -31,14 +31,15 @@ export const Order: React.FC = () => {
       const formData = new FormData();
       formData.append('city_id', cityId || '');
       formData.append('c_id', c_id || '');
-      formData.append('next_id', '1');
+      formData.append('next_id', '0');
       try{
         const response = await axios.post(
           `https://heritage.bizdel.in/app/consumer/services_v11/getCartData`,
           formData
         );
-        console.log('getAddtocartdataqqqq', response.data);
 
+        console.log('wwwwwwwwwwwwwwwwwwwwwww', response.data);
+       
         SetTotalPrice(response.data.optionListing);
       } catch (error) {
         console.error(error);
