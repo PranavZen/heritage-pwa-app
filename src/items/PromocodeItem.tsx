@@ -11,7 +11,7 @@ type Props = {
 export const PromocodeItem: React.FC<Props> = ({isLast, promocode}) => {
   const colors = (): string => {
     if (promocode.discount <= 10) {
-      return '#00B0B9';
+      return '#1a712e';
     }
 
     if (promocode.discount <= 35) {

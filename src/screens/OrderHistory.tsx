@@ -107,7 +107,7 @@ export const OrderHistory: React.FC = () => {
                           borderRadius: 5,
                           backgroundColor:
                             order.status === 'delivered'
-                              ? '#00B0B9'
+                              ? '#1a712e'
                               : order.status === 'shipping'
                               ? '#FFA462'
                               : '#FA5555',

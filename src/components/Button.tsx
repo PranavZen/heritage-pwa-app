@@ -43,13 +43,13 @@ export const Button: React.FC<Props> = ({
     backgroundColor: disabled
       ? 'var(--gray-color)' // Disabled state color
       : colorScheme === 'primary'
-      ? 'var(--main-turquoise)'
+      ? '#1a712e'
       : 'transparent',
     color: disabled
       ? 'var(--disabled-text-color)' // Disabled text color
       : colorScheme === 'primary'
       ? 'var(--white-color)'
-      : 'var(--main-turquoise)',
+      : '#1a712e',
     fontFamily: 'DM Sans',
     fontWeight: 700,
     fontSize: 14,
@@ -58,7 +58,7 @@ export const Button: React.FC<Props> = ({
     margin: '0 auto',
     textAlign: 'center',
     border: `1px solid ${
-      disabled ? 'var(--gray-color)' : 'var(--main-turquoise)'
+      disabled ? 'var(--gray-color)' : '#1a712e'
     }`,
     textTransform: 'capitalize',
     width: '100%',

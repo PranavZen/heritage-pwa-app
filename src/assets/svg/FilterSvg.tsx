@@ -9,9 +9,9 @@ export const FilterSvg: React.FC = () => {
       fill='none'
     >
       <path
-        fill='#748BA0'
+        fill='#1a712e'
         fillOpacity={0.15}
-        stroke='#748BA0'
+        stroke='#1a712e'
         strokeLinejoin='round'
         strokeWidth={1.5}
         d='m3 4.5 7.2 8.409v6.313L13.8 21v-8.091L21 4.5H3Z'

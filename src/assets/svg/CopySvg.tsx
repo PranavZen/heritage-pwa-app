@@ -9,16 +9,16 @@ export const CopySvg: React.FC = () => {
       fill='none'
     >
       <path
-        fill='#748BA0'
+        fill='#1a712e'
         fillOpacity={0.15}
-        stroke='#748BA0'
+        stroke='#1a712e'
         strokeLinecap='round'
         strokeLinejoin='round'
         strokeWidth={1.2}
         d='M16.667 7.5h-7.5c-.92 0-1.667.746-1.667 1.667v7.5c0 .92.746 1.666 1.667 1.666h7.5c.92 0 1.666-.746 1.666-1.666v-7.5c0-.92-.746-1.667-1.666-1.667Z'
       />
       <path
-        stroke='#748BA0'
+        stroke='#1a712e'
         strokeLinecap='round'
         strokeLinejoin='round'
         strokeWidth={1.2}

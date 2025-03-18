@@ -1,27 +1,29 @@
-import React, {useState} from 'react';
-import {Swiper, SwiperSlide} from 'swiper/react';
-
-import {hooks} from '../../hooks';
-import {items} from '../../items';
-import {actions} from '../../store/actions';
-import {components} from '../../components';
-import {Routes, TabScreens} from '../../routes';
-import type {CarouselType, DishType, MenuType} from '../../types';
-import { Route } from 'react-router-dom';
+import React, { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import { hooks } from "../../hooks";
+import { items } from "../../items";
+import { actions } from "../../store/actions";
+import { components } from "../../components";
+import { Routes, TabScreens } from "../../routes";
+import type { CarouselType, DishType, MenuType } from "../../types";
+import { Route } from "react-router-dom";
 
 export const Home: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
-  const {menuLoading, menu} = hooks.useGetMenu();
-  const {dishesLoading, dishes} = hooks.useGetDishes();
-  const {reviewsLoading, reviews} = hooks.useGetReviews();
-  const {carouselLoading, carousel} = hooks.useGetCarousel();
-  const {menuLoadingBanner, banner} = hooks.useGetMenu();
+  const { menuLoading, menu } = hooks.useGetMenu();
+  const { dishesLoading, dishes } = hooks.useGetDishes();
+  const { reviewsLoading, reviews } = hooks.useGetReviews();
+  const { carouselLoading, carousel } = hooks.useGetCarousel();
+  const { menuLoadingBanner, banner } = hooks.useGetMenu();
 
   // console.log("aqaqaqaqaqaqaqaqaqaqaq",banner);
 
   const loading: boolean =
-       menuLoading || dishesLoading || reviewsLoading || carouselLoading;
+    menuLoading || dishesLoading || reviewsLoading || carouselLoading;
 
   const [opacity, setOpacity] = useState<number>(0);
 
@@ -38,38 +40,40 @@ export const Home: React.FC = () => {
     const dish = dishes[2];
 
     return (
-      <section style={{marginBottom: 30, marginTop: 10, position: 'relative'}}>
+      <section
+        style={{ marginBottom: 30, position: "relative" }}
+      >
         <Swiper
-          slidesPerView={'auto'}
-          pagination={{clickable: true}}
-          navigation={true}
+          modules={[Pagination]} // Add Pagination module
+          slidesPerView={1}
           mousewheel={true}
+          scrollbar={false}
+          navigation={false}
+          pagination={{ clickable: true }} // Ensure pagination is enabled
           onSlideChange={handleSlideChange}
         >
-          {banner.map((banner) => {
-            return (
-              <SwiperSlide key={banner.id}>
-                <img
-                  alt={'banner'}
-                  src={banner.image}
-                  style={{width: '100%', height:"100%"}}
-                  className='clickable'
-                  onClick={() => navigate(Routes.Dish, {state: {dish: dish}})}
-                />
-              </SwiperSlide>
-            );
-          })}
+          {banner.map((banner) => (
+            <SwiperSlide key={banner.id}>
+              <img
+                alt="banner"
+                src={banner.image}
+                style={{ width: "100%", height: "100%" }}
+                className="clickable"
+                onClick={() => navigate(Routes.Dish, { state: { dish: dish } })}
+              />
+            </SwiperSlide>
+          ))}
         </Swiper>
 
-        <div
+        {/* <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'absolute',
-            bottom:5,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            bottom: 5,
             zIndex: 1,
-            width: '100%',
+            width: "100%",
             gap: 6,
           }}
         >
@@ -83,70 +87,58 @@ export const Home: React.FC = () => {
                   borderRadius: 10,
                   backgroundColor:
                     activeSlide === index
-                      ? 'var(--white-color)'
+                      ? "var(--white-color)"
                       : `rgba(255, 255, 255, 0.5)`,
                 }}
               />
             );
           })}
-        </div>
+        </div> */}
       </section>
     );
   };
   const renderMenu = (): JSX.Element => {
     return (
-      <section style={{marginBottom: 30}}>
+      <section style={{ marginBottom: 30 }}>
         <components.BlockHeading
-          title='Product Category'
-          viewAllOnClick={() =>{ 
+          title="Product Category"
+          viewAllOnClick={() => {
             dispatch(actions.setScreen(TabScreens.Menu));
           }}
-          containerStyle={{marginLeft: 20, marginRight: 20, marginBottom: 14}}
+          containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}
         />
-        <div style={{width: '100%'}}>
+        <div style={{ width: "100%"}}>
           <Swiper
             spaceBetween={10}
-            slidesPerView={'auto'}
-            pagination={{clickable: true}}
+            slidesPerView={"auto"}
+            pagination={{ clickable: true }}
             navigation={true}
             mousewheel={true}
           >
             {menu.map((menu: MenuType, index: number, array: MenuType[]) => {
               const isLast = index === array.length - 1;
               return (
-                <SwiperSlide
-                  key={menu.id}
-                  style={{width: 'auto'}}
-                >
-                  <button
-                    style={{
-                      width:120,
-                      height: 90,
-                      borderRadius: 10,
-                      marginLeft: index === 0 ? 20 : 0,
-                      marginRight: isLast ? 20 : 0,
-                      position: 'relative',
-                    }}  
-                    onClick={() => {
-                      navigate(Routes.MenuList, {state: {menuName: menu.product_cat_id}}); 
-                    }}
-                    >
-                    <img
-                      src={menu.image}
-                      alt={menu.name}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: 10,    
+                <SwiperSlide key={menu.id} style={{ width: "auto" }}>
+                  <div className="itemWrap">
+                    <button
+                        style={{
+                          marginRight: isLast ? 20 : 0,
+                          marginLeft: index === 0 ? 20 : 0
+                        }}
+                      onClick={() => {
+                        navigate(Routes.MenuList, {
+                          state: { menuName: menu.product_cat_id },
+                        });
                       }}
-                    />
-                    <span
-                     
-                      className='home_product_category'
                     >
-                      {menu.name}
-                    </span>
-                  </button>
+                      <img
+                        src={menu.image}
+                        alt={menu.name}
+                        className="itemImg"
+                      />
+                    </button>
+                    <span className="home_product_category">{menu.name}</span>
+                  </div>
                 </SwiperSlide>
               );
             })}
@@ -158,26 +150,23 @@ export const Home: React.FC = () => {
 
   const renderRecommendedForYou = (): JSX.Element => {
     return (
-      <div style={{marginBottom: 40}}>
+      <div style={{ marginBottom: 40 }}>
         <components.BlockHeading
-          title='Recommended for you'
-          containerStyle={{marginLeft: 20, marginRight: 20, marginBottom: 14}}
+          title="Recommended for you"
+          containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}
         />
-        <div style={{width: '100%'}}>
+        <div style={{ width: "100%" }}>
           <Swiper
             spaceBetween={14}
-            slidesPerView={'auto'}
-            pagination={{clickable: true}}
+            slidesPerView={"auto"}
+            pagination={{ clickable: true }}
             navigation={true}
             mousewheel={true}
           >
-            {dishes.map((dish: DishType, index: number, array: DishType[]) =>{
+            {dishes.map((dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;
-              return(
-                <SwiperSlide
-                  key={dish.id}
-                  style={{width: 'auto'}}
-                >
+              return (
+                <SwiperSlide key={dish.id} style={{ width: "auto" }}>
                   <items.RecomendedItem
                     index={index}
                     isLast={isLast}
@@ -194,27 +183,24 @@ export const Home: React.FC = () => {
 
   const renderReviews = (): JSX.Element => {
     return (
-      <section style={{marginBottom: 20}}>
+      <section style={{ marginBottom: 20 }}>
         <components.BlockHeading
-          title='Our Happy clients say'
+          title="Our Happy clients say"
           viewAllOnClick={() => navigate(Routes.Reviews)}
-          containerStyle={{marginLeft: 20, marginRight: 20, marginBottom: 14}}
+          containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}
         />
-        <div style={{width: '100%'}}>
+        <div style={{ width: "100%" }}>
           <Swiper
             spaceBetween={14}
-            slidesPerView={'auto'}
-            pagination={{clickable: true}}
+            slidesPerView={"auto"}
+            pagination={{ clickable: true }}
             navigation={true}
             mousewheel={true}
           >
             {reviews.map((review, index, array) => {
               const isLast = index === array.length - 1;
               return (
-                <SwiperSlide
-                  key={review.id}
-                  style={{width: 'auto'}}
-                >
+                <SwiperSlide key={review.id} style={{ width: "auto" }}>
                   <items.HomeReviewItem
                     index={index}
                     isLast={isLast}
@@ -233,7 +219,7 @@ export const Home: React.FC = () => {
     if (loading) return <components.Loader />;
 
     return (
-      <main className='scrollable'>
+      <main className="scrollable">
         {renderCarousel()}
         {renderMenu()}
         {renderRecommendedForYou()}
@@ -243,10 +229,7 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div
-      id='screen'
-      style={{opacity}}
-    >
+    <div id="screen" style={{ opacity }}>
       {renderContent()}
     </div>
   );

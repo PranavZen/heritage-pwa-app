@@ -170,6 +170,7 @@ export const SignIn: React.FC = () => {
                 type="checkbox"
                 checked={isTermsAccepted}
                 onChange={() => setIsTermsAccepted(!isTermsAccepted)}
+                className='checkboxWrap'
               />
               I agree to the <a href="#">Terms & Conditions</a>
             </span>

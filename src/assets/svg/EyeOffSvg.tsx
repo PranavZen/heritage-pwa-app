@@ -9,7 +9,7 @@ export const EyeOffSvg: React.FC = () => {
       fill='none'
     >
       <g
-        stroke='#748BA0'
+        stroke='#1a712e'
         strokeLinecap='round'
         strokeLinejoin='round'
         strokeWidth={1.2}

@@ -23,18 +23,13 @@ export const Menu: React.FC = () => {
     return (
       <section style={{paddingTop: 10}}>
         <ul
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 15,
-          }}
+          className='menuItemsWrap'
         >
           {menu.map((menu: MenuType, index: number, array: MenuType[]) => {
             return (
               <li
                 key={menu.id}
-                className='clickable'
-                style={{position: 'relative'}}
+                className="itemWrap innerMenu"
                 onClick={() =>
                   navigate(Routes.MenuList, {state: {menuName: menu.product_cat_id}})
                 }
@@ -42,16 +37,13 @@ export const Menu: React.FC = () => {
                 <img
                   src={menu.image}
                   alt={menu.name}
-                  style={{borderRadius: 10, width: '100%', height: 'auto'}}
+                  className="itemImg"
                 />
-                <div style={{position: 'absolute', left: 15, bottom: 10}}>
-                  <span
-                    className='t16 number-of-lines-1'
-                    style={{color: 'var(--main-color)'}}
+               <span
+                    className="home_product_category"
                   >
                     {menu.name}
                   </span>
-                </div>
               </li>
             );
           })}

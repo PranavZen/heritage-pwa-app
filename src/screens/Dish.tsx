@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { hooks } from '../hooks';
-import { Routes } from '../routes';
-import { svg } from '../assets/svg';
-import { DishType } from '../types';
-import { components } from '../components';
-import { actions } from '../store/actions';
-import axios from 'axios';
-import { notification } from 'antd';
+import { notification } from "antd";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { svg } from "../assets/svg";
+import { components } from "../components";
+import { hooks } from "../hooks";
+import { actions } from "../store/actions";
+import { DishType } from "../types";
 
 export const Dish: React.FC = () => {
   const navigate = hooks.useNavigate();
   const dispatch = hooks.useDispatch();
   const location = hooks.useLocation();
   const [packageOptions, setPackageOptions] = useState<any[]>([]);
-  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
+  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<
+    any[]
+  >([]);
 
   // console.log("deliveryOptionsPreferencedeliveryOptionsPreference", deliveryOptionsPreference);
 
@@ -22,40 +23,49 @@ export const Dish: React.FC = () => {
     console.log("carttttttttttttttttt", cartData);
     try {
       const formData = new FormData();
-      formData.append('c_id', String(c_id || '1'));
-      formData.append('product_id', String(cartData.product_id));
-      formData.append('package_id', '13');
-      formData.append('product_option_id', String(cartData.product_option_id));
-      formData.append('product_option_value_id', String(cartData.product_option_value_id));
-      formData.append('quantity', '1');
-      formData.append('weight', String(cartData.weight));
-      formData.append('weight_unit', String(cartData.weight_unit));
-      formData.append('delivery_preference', String(cartData.deliveryPreference));
-      formData.append('no_of_deliveries', String(cartData.deliveries));
-      formData.append('order_date', String(cartData.startDate));
-      formData.append('order_type', String(cartData.normal_product));
+      formData.append("c_id", String(c_id || "1"));
+      formData.append("product_id", String(cartData.product_id));
+      formData.append("package_id", "13");
+      formData.append("product_option_id", String(cartData.product_option_id));
+      formData.append(
+        "product_option_value_id",
+        String(cartData.product_option_value_id)
+      );
+      formData.append("quantity", "1");
+      formData.append("weight", String(cartData.weight));
+      formData.append("weight_unit", String(cartData.weight_unit));
+      formData.append(
+        "delivery_preference",
+        String(cartData.deliveryPreference)
+      );
+      formData.append("no_of_deliveries", String(cartData.deliveries));
+      formData.append("order_date", String(cartData.startDate));
+      formData.append("order_type", String(cartData.normal_product));
 
-      console.log('formData',formData);
-      const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart', formData);
-      console.log('rrrrrrrrrrrrrrr',response);
-      if (response.data.status === 'success') {
+      console.log("formData", formData);
+      const response = await axios.post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
+        formData
+      );
+      console.log("rrrrrrrrrrrrrrr", response);
+      if (response.data.status === "success") {
         notification.success({
-          message: 'Success',
+          message: "Success",
           description: response.data.message,
         });
         return response.data.cart_count;
       } else {
         notification.error({
-          message: 'Error',
-          description: response.data.message || 'Something went wrong.',
+          message: "Error",
+          description: response.data.message || "Something went wrong.",
         });
         return null;
       }
     } catch (error) {
       console.error(error);
       notification.error({
-        message: 'Error',
-        description: 'Failed to add item to cart. Please try again later.',
+        message: "Error",
+        description: "Failed to add item to cart. Please try again later.",
       });
       return null;
     }
@@ -63,19 +73,21 @@ export const Dish: React.FC = () => {
 
   // ***********************************************
 
-
   const dish: DishType = location.state.dish;
   //*********************************************************************************
-  const c_id = localStorage.getItem('c_id')
-  const cityId = localStorage.getItem('cityId')
+  const c_id = localStorage.getItem("c_id");
+  const cityId = localStorage.getItem("cityId");
   useEffect(() => {
     const deliveryData = async () => {
       const formData = new FormData();
-      formData.append('c_id', c_id || 'null');
-      formData.append('city_id', cityId || 'null');
-      formData.append('product_option_value_id', '50');
+      formData.append("c_id", c_id || "null");
+      formData.append("city_id", cityId || "null");
+      formData.append("product_option_value_id", "50");
       try {
-        const response = await axios.post(`https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`, formData);
+        const response = await axios.post(
+          `https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`,
+          formData
+        );
 
         // console.log("paaaaaaaaaaaaaaa", response.data.productDetails);
 
@@ -83,7 +95,7 @@ export const Dish: React.FC = () => {
       } catch (error) {
         console.log(error);
       }
-    }
+    };
     deliveryData();
   }, []);
 
@@ -91,23 +103,25 @@ export const Dish: React.FC = () => {
   const [opacity, setOpacity] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
-  const [isAlternateModalOpen, setIsAlternateModalOpen] = useState<boolean>(false);
-  const [startDate, setStartDate] = useState<string>('');
+  const [isAlternateModalOpen, setIsAlternateModalOpen] =
+    useState<boolean>(false);
+  const [startDate, setStartDate] = useState<string>("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const [deliveryPreference, setDeliveryPreference] = useState<string>('');
+  const [deliveryPreference, setDeliveryPreference] = useState<string>("");
   const [deliveries, setDeliveries] = useState<number>(15);
   const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
 
   const today = new Date();
   today.setDate(today.getDate() + 1);
-  const minDate = today.toISOString().split('T')[0];
+  const minDate = today.toISOString().split("T")[0];
 
   const { getDishQty } = hooks.useCartHandler();
-  const { addToWishlist, removeFromWishlist, ifInWishlist } = hooks.useWishlistHandler();
+  const { addToWishlist, removeFromWishlist, ifInWishlist } =
+    hooks.useWishlistHandler();
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
-  hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
+  hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -127,12 +141,12 @@ export const Dish: React.FC = () => {
 
   const handleOpenModalAlternateDays = () => {
     setIsAlternateModalOpen(true);
-  }
+  };
 
   const handleCloseModalAlternateDays = () => {
     setIsAlternateModalOpen(false);
     // console.log("aaaaaaaaaaaaaaaaaaaaaaaaa");
-  }
+  };
 
   const handleAddToCartWithPreferences = async () => {
     const dishWithPreferences = {
@@ -149,17 +163,16 @@ export const Dish: React.FC = () => {
     }
   };
 
-
   // *********************************Alternate add to cart*********************************************
   const handleAddToCartWithAlternate = async () => {
     const dishWithPreferences = {
-      c_id: c_id || 'null',
+      c_id: c_id || "null",
       product_id: dish.product_id,
       product_option_id: 6,
       product_option_value_id: 11,
       quantity: 1,
       weight: dish.weight,
-      weight_unit: 'g',
+      weight_unit: "g",
       delivery_preference: deliveryPreference,
       no_of_deliveries: deliveries,
       order_date: startDate,
@@ -178,7 +191,7 @@ export const Dish: React.FC = () => {
 
   const handleAddToCartWithCustomPreferences = async () => {
     const dishWithCustomPreferences = {
-      c_id: c_id || 'null',
+      c_id: c_id || "null",
       // package_id: 13, // Assuming this value is predefined or can be dynamic
       package_days: 0,
       product_id: dish.product_id, // Assuming `dish` contains the product ID
@@ -186,7 +199,7 @@ export const Dish: React.FC = () => {
       product_option_value_id: 11, // Assuming the product option value ID is static or can be dynamic
       quantity: 1, // Set as per the dish quantity
       weight: dish.weight, // Set as per the dish weight
-      weight_unit: 'g', // Assuming weight unit is 'g'
+      weight_unit: "g", // Assuming weight unit is 'g'
       delivery_preference: deliveryPreference,
       no_of_deliveries: deliveries,
       order_date: startDate, // Start date
@@ -201,8 +214,6 @@ export const Dish: React.FC = () => {
     }
   };
 
-
-
   const handleCustomDaySelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
 
@@ -212,77 +223,26 @@ export const Dish: React.FC = () => {
       if (checked) {
         return [...prevSelectedDays, upperCaseValue];
       } else {
-        return prevSelectedDays.filter(day => day !== upperCaseValue);
+        return prevSelectedDays.filter((day) => day !== upperCaseValue);
       }
     });
   };
 
-
   const renderHeader = (): JSX.Element => {
-    return (
-      <components.Header
-        showGoBack={true}
-        showBasket={true}
-      />
-    );
+    return <components.Header showGoBack={true} showBasket={true} />;
   };
 
   const renderImage = (): JSX.Element => {
     return (
-      <section style={{ position: 'relative', marginBottom: 30 }}>
+      <section style={{ position: "relative", marginBottom: 30 }}>
         <img
           src={dish.option_value_image}
           alt={dish.option_name}
           style={{
-            width: '100%',
-            height: 'auto',
+            width: "100%",
+            height: "auto",
           }}
         />
-        {dish.isNew && (
-          <img
-            alt={dish.option_name}
-            src={require('../assets/icons/14.png')}
-            style={{
-              width: 58.09,
-              height: 'auto',
-              position: 'absolute',
-              top: 21,
-              left: 20,
-            }}
-          />
-        )}
-        {dish.isHot && (
-          <img
-            alt="Hot"
-            src={require('../assets/icons/15.png')}
-            style={{
-              width: 24,
-              left: 0,
-              top: 0,
-              marginLeft: 20,
-              marginTop: 20,
-              height: 'auto',
-              position: 'absolute',
-            }}
-          />
-        )}
-        <button
-          style={{
-            padding: 14,
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            borderRadius: 4,
-          }}
-          onClick={(event) => {
-            ifInWishlist(dish.option_value_name ?? 0)
-              ? removeFromWishlist(dish, event)
-              : addToWishlist(dish, event);
-          }}
-        >
-          <svg.HeartSvg dish={dish} />
-        </button>
-
       </section>
     );
   };
@@ -290,53 +250,74 @@ export const Dish: React.FC = () => {
   const renderDetails = (): JSX.Element => {
     return (
       <section className="container">
-        <div
-          className="row-center-space-between"
-          style={{ marginBottom: 12 }}
-        >
+        {/* <div className="row-center-space-between" style={{ marginBottom: 12 }}>
           <h3
             className="number-of-lines-1"
-            style={{ textTransform: 'capitalize' }}
+            style={{ textTransform: "capitalize" }}
           >
             {dish.name}
           </h3>
           <span
             className="t16"
-            style={{ marginLeft: 14, whiteSpace: 'nowrap' }}
+            style={{ marginLeft: 14, whiteSpace: "nowrap" }}
           >
-            <div>{dish.kcal} kcal - {dish.weight}g </div>
+            <div>
+              {dish.kcal} kcal - {dish.weight}g{" "}
+            </div>
             {dish.option_value_name}
           </span>
         </div>
-        <p className="t16">{dish.description}</p>
-      </section>
-    );
-  };
-
-  const renderButtons = (): JSX.Element => {
-    return (
-      <section style={{ padding: 20 }}>
-        <div  
-          className="row-center-space-between"
-          style={{
-            backgroundColor: 'var(--white-color)',
-            borderRadius: 10,
-            paddingLeft: 20,
-            marginBottom: 10,
-          }}
-        >
-          <span
+        <p className="t16">{dish.description}</p> */}
+        <div className="row-center-space-between">
+          <h3 className="number-of-lines-1">
+            Toned Milk <small> (200g) </small>
+          </h3>
+          {dish.isNew && (
+            <img
+              alt={dish.option_name}
+              src={require("../assets/icons/14.png")}
+              style={{
+                width: 58.09,
+                height: "auto",
+              }}
+            />
+          )}
+          {dish.isHot && (
+            <img
+              alt="Hot"
+              src={require("../assets/icons/15.png")}
+              style={{
+                width: 24,
+                marginLeft: 20,
+                marginTop: 20,
+                height: "auto",
+              }}
+            />
+          )}
+          <button
             style={{
-              fontFamily: 'DM Sans',
-              fontSize: 20,
-              fontWeight: 700,
+              padding: 14,
+              borderRadius: 4,
+            }}
+            onClick={(event) => {
+              ifInWishlist(dish.option_value_name ?? 0)
+                ? removeFromWishlist(dish, event)
+                : addToWishlist(dish, event);
             }}
           >
-            ₹ {dish.price}
-          </span>
+            <svg.HeartSvg dish={dish} />
+          </button>
+        </div>
+        <p className="t16">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore,
+          molestiae accusantium consequuntur voluptatem nemo minima facilis
+          quaerat eius sint amet.
+        </p>
+        <div className="qtPriceWrap row-center-space-between">
+          <span>₹ {dish.price}</span>
           <div className="row-center">
             <button
-              style={{ padding: '23px 20px', borderRadius: 4 }}
+              style={{ padding: "23px 20px", borderRadius: 4 }}
               onClick={() => {
                 dispatch(actions.removeFromCart(dish));
               }}
@@ -346,14 +327,14 @@ export const Dish: React.FC = () => {
             <div style={{ marginLeft: 4, marginRight: 4 }}>
               <span
                 className="t14"
-                style={{ fontWeight: 700, color: 'var(--text-color)' }}
+                style={{ fontWeight: 700, color: "var(--text-color)" }}
               >
                 {getDishQty(dish.option_value_name ?? 0)}
               </span>
             </div>
 
             <button
-              style={{ padding: '23px 20px', borderRadius: 4 }}
+              style={{ padding: "23px 20px", borderRadius: 4 }}
               onClick={() => {
                 dispatch(actions.addToCart(dish));
               }}
@@ -362,21 +343,18 @@ export const Dish: React.FC = () => {
             </button>
           </div>
         </div>
+      </section>
+    );
+  };
+
+  const renderButtons = (): JSX.Element => {
+    return (
+      <section style={{ padding: 20 }}>
         <div>
           <p className="Choose-your-delivery-plan">Choose your delivery plan</p>
         </div>
-
-
-        <components.Button
-          text="+ Add to cart"
-          onClick={() => {
-            dispatch(actions.addToCart(dish));
-          }}
-
-          containerStyle={{ marginBottom: 10 }}
-        />
-
-        <components.Button
+       <div className="row-center-space-between gap-3">
+       <components.Button
           text="Daily"
           onClick={handleOpenModal}
           containerStyle={{ marginBottom: 10 }}
@@ -384,8 +362,17 @@ export const Dish: React.FC = () => {
         <components.Button
           text="Alternate Days"
           onClick={handleOpenModalAlternateDays}
-          containerStyle={{ marginBottom: 10}}
+          containerStyle={{ marginBottom: 10 }}
         />
+       </div>
+        <components.Button
+          text="+ Add to cart"
+          onClick={() => {
+            dispatch(actions.addToCart(dish));
+          }}
+          containerStyle={{ marginBottom: 10 }}
+        />
+
         {/* <components.Button
           text="Custom"
           onClick={handleOpenCustomModal}
@@ -397,10 +384,7 @@ export const Dish: React.FC = () => {
   const renderModal = (): JSX.Element => {
     if (!isModalOpen) return <> </>;
     return (
-      <components.Modal
-        title="Delivery Preferences"
-        onClose={handleCloseModal}
-      >
+      <components.Modal title="Delivery Preferences" onClose={handleCloseModal}>
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
             <label>Start Date :- </label>
@@ -412,11 +396,16 @@ export const Dish: React.FC = () => {
               required
             />
           </div>
-          <select value={deliveryPreference} onChange={(e) => setDeliveryPreference(e.target.value)}>
-            {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 ? (
+          <select
+            value={deliveryPreference}
+            onChange={(e) => setDeliveryPreference(e.target.value)}
+          >
+            {deliveryOptionsPreference &&
+            deliveryOptionsPreference.length > 0 ? (
               deliveryOptionsPreference.map((elem) => (
                 <>
-                  {elem.deliveryPreference && elem.deliveryPreference.length > 0 ? (
+                  {elem.deliveryPreference &&
+                  elem.deliveryPreference.length > 0 ? (
                     elem.deliveryPreference.map((option: any) => (
                       <option key={option.id} value={option.id}>
                         {option.name}
@@ -439,21 +428,26 @@ export const Dish: React.FC = () => {
               value={deliveries}
               onChange={(e) => {
                 const selectedValue = Number(e.target.value);
-                console.log('Selected Delivery :', selectedValue);
+                console.log("Selected Delivery :", selectedValue);
                 setDeliveries(selectedValue);
               }}
             >
-              {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 &&
+              {deliveryOptionsPreference &&
+                deliveryOptionsPreference.length > 0 &&
                 deliveryOptionsPreference.map((elem) => {
-                  return elem.packages && elem.packages.length > 0 ? elem.packages.map((option: any) => {
-                    if (option.package_name === "Daily") {
-                      return option.no_of_deliveries.split(',').map((delivery: string, index: number) => (
-                        <option key={index} value={delivery}>
-                          {`${delivery}`}
-                        </option>
-                      ));
-                    }
-                  }) : null;
+                  return elem.packages && elem.packages.length > 0
+                    ? elem.packages.map((option: any) => {
+                        if (option.package_name === "Daily") {
+                          return option.no_of_deliveries
+                            .split(",")
+                            .map((delivery: string, index: number) => (
+                              <option key={index} value={delivery}>
+                                {`${delivery}`}
+                              </option>
+                            ));
+                        }
+                      })
+                    : null;
                 })}
             </select>
           </div>
@@ -473,8 +467,10 @@ export const Dish: React.FC = () => {
     if (!isAlternateModalOpen) return <></>;
 
     return (
-      <components.Modal title="Delivery Preferences"
-        onClose={handleCloseModalAlternateDays}>
+      <components.Modal
+        title="Delivery Preferences"
+        onClose={handleCloseModalAlternateDays}
+      >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
             <label>Start Date :- </label>
@@ -490,19 +486,20 @@ export const Dish: React.FC = () => {
             value={deliveryPreference}
             onChange={(e) => setDeliveryPreference(e.target.value)}
           >
-            { deliveryOptionsPreference &&  deliveryOptionsPreference.length > 0 ? (
-               deliveryOptionsPreference.map((elem) => (
+            {deliveryOptionsPreference &&
+            deliveryOptionsPreference.length > 0 ? (
+              deliveryOptionsPreference.map((elem) => (
                 <>
-                  {elem.deliveryPreference && elem.deliveryPreference.length > 0 ? (
-                    
+                  {elem.deliveryPreference &&
+                  elem.deliveryPreference.length > 0 ? (
                     elem.deliveryPreference.map((option: any) => (
-                      <> 
-                      {console.log("eeeeeee", )}
-                      <option key={option.id} value={option.id}>
-                        {option.name}
-                      </option>
+                      <>
+                        {console.log("eeeeeee")}
+                        <option key={option.id} value={option.id}>
+                          {option.name}
+                        </option>
                       </>
-                    )) 
+                    ))
                   ) : (
                     <option key="no-preference" value="">
                       No delivery options available
@@ -525,16 +522,16 @@ export const Dish: React.FC = () => {
                 deliveryOptionsPreference.map((elem) => {
                   return elem.packages && elem.packages.length > 0
                     ? elem.packages.map((option: any) => {
-                      if (option.package_name === 'Alternate Days') {
-                        return option.no_of_deliveries
-                          .split(',')
-                          .map((delivery: string, index: number) => (
-                            <option key={index} value={delivery}>
-                              {`${delivery}`}
-                            </option>
-                          ));
-                      }
-                    })
+                        if (option.package_name === "Alternate Days") {
+                          return option.no_of_deliveries
+                            .split(",")
+                            .map((delivery: string, index: number) => (
+                              <option key={index} value={delivery}>
+                                {`${delivery}`}
+                              </option>
+                            ));
+                        }
+                      })
                     : null;
                 })}
             </select>
@@ -552,9 +549,7 @@ export const Dish: React.FC = () => {
   };
   // **************************Alternate Days*************************************************
 
-
   // **************************Alternate Days*************************************************
-
 
   // ****************************Custom*************************************************
   // const renderCustomModal = (): JSX.Element => {
@@ -575,7 +570,6 @@ export const Dish: React.FC = () => {
   //             min={minDate}
   //           />
   //         </div>
-
 
   //         <div className="week-days">
   //           {deliveryOptionsPreference &&
@@ -602,7 +596,6 @@ export const Dish: React.FC = () => {
   //                 : null;
   //             })}
   //         </div>
-
 
   //         <div className="main-card-daily-delivery-box">
   //           <label>Delivery Preference :-</label>

@@ -1,22 +1,20 @@
-import React from 'react';
+import React from "react";
 
-import {hooks} from '../hooks';
-import {svg} from '../assets/svg';
-import {DishType} from '../types';
+import { hooks } from "../hooks";
+import { svg } from "../assets/svg";
+import { DishType } from "../types";
 
 type Props = {
   dish: DishType;
   isLast: boolean;
 };
 
-
-export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
+export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
   // console.log("dishhhhhhhhh",dish);
   const navigate = hooks.useNavigate();
 
-
-  const {addToCart, getDishQty} = hooks.useCartHandler();
-  const {ifInWishlist, addToWishlist, removeFromWishlist} =
+  const { addToCart, getDishQty } = hooks.useCartHandler();
+  const { ifInWishlist, addToWishlist, removeFromWishlist } =
     hooks.useWishlistHandler();
 
   const qty = getDishQty(dish.option_value_name ?? 0);
@@ -25,65 +23,72 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
     <li
       style={{
         borderRadius: 10,
-        padding: '14px 14px',
-        backgroundColor: 'var(--white-color)',
+        padding: "14px 14px",
+        backgroundColor: "var(--white-color)",
         marginBottom: isLast ? 0 : 14,
-        position: 'relative',
+        position: "relative",
+        border: '1px solid #eee'
       }}
-      className='row-center'
-      onClick={() => navigate(`/dish/${dish.option_name}`, {state: {dish}})}
+      className="row-center"
+      onClick={() => navigate(`/dish/${dish.option_name}`, { state: { dish } })}
     >
       <img
         src={dish.option_value_image}
         alt={dish.name}
-        style={{width: 117, height: 'auto', borderRadius: 10, marginRight: 10}}
+        style={{
+          width: 117,
+          height: "auto",
+          borderRadius: 10,
+          marginRight: 10,
+          border: "1px solid var(--main-turquoise)",
+        }}
       />
       {dish.isHot && (
         <img
-          alt='Hot'
-          src={require('../assets/icons/15.png')}
+          alt="Hot"
+          src={require("../assets/icons/15.png")}
           style={{
             width: 18,
             left: 0,
             top: 0,
             marginLeft: 14,
             marginTop: 14,
-            height: 'auto',
-            position: 'absolute',
+            height: "auto",
+            position: "absolute",
           }}
         />
       )}
-      {dish.isNew &&(
+      {dish.isNew && (
         <img
-          alt='New'
-          src={require('../assets/icons/14.png')}
+          alt="New"
+          src={require("../assets/icons/14.png")}
           style={{
             width: 34,
-            height: 'auto',
+            height: "auto",
             margin: 14,
             left: 0,
             top: 0,
-            position: 'absolute',
+            position: "absolute",
           }}
         />
       )}
-      <div style={{display: 'flex', flexDirection: 'column'}}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <span
-          className='t14'
+          className="t14"
           style={{
             marginBottom: 4,
-            display: 'block',
-            color: 'var(--main-color)',
-            textTransform: 'capitalize',
+            display: "block",
+            color: "var(--main-color)",
+            textTransform: "capitalize",
           }}
         >
           {dish.name}
         </span>
         <p
-          className='number-of-lines-2 t10'
+          className="number-of-lines-2 t10"
           style={{
             fontSize: 10,
-            color: 'var(--text-color)',
+            color: "var(--text-color)",
             lineHeight: 1.5,
             marginBottom: 4,
           }}
@@ -91,38 +96,36 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
           {dish.description}
         </p>
         <span
-          className='t10'
-          style={{marginBottom: 8}}
-        >
-          {dish.kcal} kcal - {dish.weight}g
-        </span>
-  
-        <span
-          className='t14'
+          className="t14"
           style={{
-            color: 'var(--main-color)',
+            color: "var(--main-color)",
+          }}
+        >
+          {dish.option_value_name} ( {dish.kcal} kcal - {dish.weight}g)
+        </span>
+        {/* <span className="t10" style={{ marginBottom: 8 }}>
+          {dish.kcal} kcal - {dish.weight}g
+        </span> */}
+
+        <h3
+          className="t14"
+          style={{
+            color: "var(--main-color)",
           }}
         >
           ₹ {dish.price}
-        </span>
-        <span
-          className='t14'
-          style={{
-            color: 'var(--main-color)',
-          }}
-        >
-          {dish.option_value_name}
-        </span>
+        </h3>
+        
       </div>
       <button
         style={{
           padding: 14,
-          position: 'absolute',
+          position: "absolute",
           right: 0,
           top: 0,
           borderRadius: 4,
         }}
-        onClick={(event) => { 
+        onClick={(event) => {
           ifInWishlist(dish.option_value_name ?? 0)
             ? removeFromWishlist(dish, event)
             : addToWishlist(dish, event);
@@ -133,32 +136,29 @@ export const MenuListItem: React.FC<Props> = ({dish, isLast}) => {
       {qty > 0 && (
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             right: 0,
             bottom: 0,
             height: 21,
             minWidth: 21,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             margin: 14,
             borderRadius: 12,
-            backgroundColor: 'var(--main-turquoise)',
+            backgroundColor: "var(--main-turquoise)",
           }}
         >
-          <span
-            className='t14'
-            style={{color: 'var(--white-color)'}}
-          >
+          <span className="t14" style={{ color: "var(--white-color)" }}>
             {qty}
           </span>
         </div>
       )}
-      
+
       {qty === 0 && (
         <button
           style={{
-            position: 'absolute',
+            position: "absolute",
             right: 0,
             bottom: 0,
             padding: 14,

@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
     <section
       style={{
         padding: 20,
-        backgroundColor: 'ver(--main-turquoise: #00b0b9)',
+        backgroundColor: 'ver(--main-turquoise: #1a712e)',
         paddingTop: 10,
         paddingBottom: 10,
       }}

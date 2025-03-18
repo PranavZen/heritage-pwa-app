@@ -119,8 +119,8 @@ export const Onboarding: React.FC = () => {
               key={item.id}
               style={{
                 backgroundColor: isSelected
-                  ? '#00B0B9'
-                  : 'rgba(0, 176, 185, 0.5)',
+                  ? '#1a712e'
+                  : '#31c152',
                 width: 8,
                 height: isSelected ? 20 : 8,
                 borderRadius: 10,

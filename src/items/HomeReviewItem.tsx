@@ -50,14 +50,14 @@ export const HomeReviewItem: React.FC<Props> = ({isLast, review, index}) => {
           </div>
           <div className='row-center-space-between'>
             <components.Rating rating={review.rating} />
-            <button>
+            {/* <button>
               <span
                 className='t10'
                 style={{lineHeight: 1.2, color: 'var(--main-turquoise)'}}
               >
                 Reply
               </span>
-            </button>
+            </button> */}
           </div>
         </div>
       </section>
