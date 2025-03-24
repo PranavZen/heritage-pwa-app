@@ -14,7 +14,7 @@ export const Price: React.FC<Props> = ({dish}) => {
     >
       <span
         className='t14'
-        style={{fontWeight: 500, color: 'var(--main-color)'}}
+        style={{fontWeight: 600, color: 'var(--main-color)', fontSize: 16}}
       >
         ₹ {dish.price}
       </span>

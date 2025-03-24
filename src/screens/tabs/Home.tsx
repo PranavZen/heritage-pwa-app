@@ -155,10 +155,10 @@ export const Home: React.FC = () => {
           title="Recommended for you"
           containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}
         />
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "100%", padding: "0 20px" }}>
           <Swiper
             spaceBetween={14}
-            slidesPerView={"auto"}
+            slidesPerView={2.8}
             pagination={{ clickable: true }}
             navigation={true}
             mousewheel={true}

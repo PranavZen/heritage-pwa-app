@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-import { hooks } from '../hooks';
-import { svg } from '../assets/svg';
-import { RootState } from '../store';
-import { components } from '../components';
-import { TabScreens, Routes } from '../routes';
-import { setScreen } from '../store/slices/tabSlice';
-import axios from 'axios';
+import { hooks } from "../hooks";
+import { svg } from "../assets/svg";
+import { RootState } from "../store";
+import { components } from "../components";
+import { TabScreens, Routes } from "../routes";
+import { setScreen } from "../store/slices/tabSlice";
+import axios from "axios";
 
 type Props = {
   title?: string;
@@ -25,19 +25,18 @@ interface ProfileData {
   email: string;
   photo: File | null;
   photo_url: string | null;
-
 }
 
 const modalMenu = [
   {
     id: 1,
-    title: 'Edit Profile',
+    title: "Edit Profile",
     route: Routes.EditProfile,
     switch: false,
   },
   {
     id: 2,
-    title: 'My Addresses',
+    title: "My Addresses",
     route: Routes.MyAddress,
     switch: false,
   },
@@ -49,32 +48,32 @@ const modalMenu = [
   // },
   {
     id: 5,
-    title: 'Notifications',
+    title: "Notifications",
     route: Routes.ClientNotification,
     switch: false,
   },
   {
     id: 4,
-    title: 'Store Locator',
+    title: "Store Locator",
     route: Routes.Promocodes,
     switch: false,
   },
 
   {
     id: 6,
-    title: 'Customer Care',
+    title: "Customer Care",
     route: Routes.CustomerCare,
     switch: false,
   },
   {
     id: 7,
-    title: 'FAQ',
-    route: '',
+    title: "FAQ",
+    route: "",
     switch: false,
   },
   {
     id: 8,
-    title: 'Sign out',
+    title: "Sign out",
     route: Routes.SignIn,
     switch: false,
   },
@@ -93,13 +92,13 @@ export const Header: React.FC<Props> = ({
   const dispatch = hooks.useDispatch();
 
   const [showModal, setShowModal] = useState(false);
-  const [themeColor, setThemeColor] = useState('#F6F9F9');
+  const [themeColor, setThemeColor] = useState("#F6F9F9");
 
   useEffect(() => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
     if (metaThemeColor && themeColor) {
-      metaThemeColor.setAttribute('content', themeColor);
+      metaThemeColor.setAttribute("content", themeColor);
     }
   }, [themeColor, showModal]);
 
@@ -109,27 +108,26 @@ export const Header: React.FC<Props> = ({
 
   const [cartCount, setCartCount] = useState<number>(0);
 
-
   // console.log("profileDataprofileDataqqqqqq", profileData);
 
-  const cityId = localStorage.getItem('c_id');
+  const cityId = localStorage.getItem("c_id");
 
   useEffect(() => {
     const GetProfileData = async () => {
       const formData = new FormData();
-      formData.append('c_id', cityId || 'null');
+      formData.append("c_id", cityId || "null");
       try {
         const response = await axios.post(
-          'https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById',
+          "https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById",
           formData
         );
         console.log("resqwqwllllllllllllll", response.data.cart_count);
 
-        if (response.data.status === 'success') {
+        if (response.data.status === "success") {
           SetProfileData(response.data.CustomerDetail[0]);
           setCartCount(response.data.cart_count);
         } else {
-          console.log('Error:', response.data.message);
+          console.log("Error:", response.data.message);
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -144,42 +142,37 @@ export const Header: React.FC<Props> = ({
 
     return (
       <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 20px',
-          gap: 10,
-        }}
+        className="leftBox"
         onClick={() => {
           setShowModal(true);
-          setThemeColor('#fff');
+          setThemeColor("#fff");
         }}
       >
         <img
           alt="user"
-          src={profileData?.photo && profileData.photo_url ? `${profileData.photo_url}${profileData.photo}` : ''}
-          style={{ width: 22, height: 22, borderRadius: 20 }}
+          src={
+            profileData?.photo && profileData.photo_url
+              ? `${profileData.photo_url}${profileData.photo}`
+              : ""
+          }
+          className="userImg"
         />
-        {profileData?.firstname}
+        <span className="userName"> {profileData?.firstname}</span>
       </div>
     );
   };
 
   const renderGoBack = (): JSX.Element | null => {
-    if (showGoBack && location.key !== 'default')
+    if (showGoBack && location.key !== "default")
       return (
         <div
           onClick={() => navigate(-1)}
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 20px',
+            display: "flex",
+            alignItems: "center",
+            padding: "0 20px",
           }}
           className="clickable"
         >
@@ -192,19 +185,14 @@ export const Header: React.FC<Props> = ({
 
   const renderTitle = (): JSX.Element | null => {
     return (
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          transform: 'translateX(-50%)',
-        }}
-      >
+      <div className="middleBox">
         <span
           className="t16"
           style={{
-            color: 'var(--main-color)',
-            marginBottom: 2,
-            display: 'block',
+            color: "var(--main-color)",
+            marginLeft: 20,
+            display: "block",
+            fontWeight: 500,
           }}
         >
           {title}
@@ -221,43 +209,10 @@ export const Header: React.FC<Props> = ({
           dispatch(setScreen(TabScreens.Order));
           navigate(Routes.TabNavigator);
         }}
-        style={{
-          height: '100%',
-          width: 'auto',
-          padding: '0 20px',
-          display: 'flex',
-          alignItems: 'center',
-          position: 'absolute',
-          right: 0,
-        }}
+        className="rightBox"
       >
-        <div
-          className="t10"
-          style={{
-            position: 'absolute',
-            backgroundColor: 'var(--main-turquoise)',
-            padding: '8px',
-            borderRadius: '50%',
-            bottom: 4,
-            right: 44,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            lineHeight: 1,
-          }}
-        >
-          <span
-            style={{
-              color: 'var(--white-color)',
-              fontFamily: 'DM Sans',
-              fontWeight: 700,
-              marginBottom: 1,
-              fontSize: 10,
-            }}
-          >
-            <p>{cartCount}</p>
-          </span>
-
+        <div className="basketCount">
+          <span>{cartCount}</span>
         </div>
         <svg.HeaderBasketSvg />
       </button>
@@ -268,81 +223,49 @@ export const Header: React.FC<Props> = ({
     if (!showModal) return null;
 
     return (
-      <>
+      <div className="modalWrapBox">
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(30, 37, 56, 0.6)',
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(30, 37, 56, 0.6)",
             zIndex: 101,
-            cursor: 'pointer',
+            cursor: "pointer",
           }}
           onClick={() => {
-            setThemeColor('#F6F9F9');
+            setThemeColor("#F6F9F9");
             setShowModal(false);
           }}
         />
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            height: '100%',
-            width: '80%',
-            backgroundColor: 'var(--white-color)',
-            zIndex: 101,
-          }}
-        >
-          <div
-            style={{
-              paddingTop: '20%',
-              paddingLeft: 20,
-              paddingRight: 20,
-              marginBottom: 27,
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 14,
-              paddingBottom: 20,
-              borderBottom: '1px solid #DBE9F5',
-            }}
-          >
+        <div className={showModal ? "sideMenu" : "sideMenu hidden"}>
+          <div className="sideMwnuHeader">
             <img
-              src={profileData?.photo instanceof File
-                ? URL.createObjectURL(profileData?.photo)
-                : profileData?.photo_url && profileData?.photo
+              src={
+                profileData?.photo instanceof File
+                  ? URL.createObjectURL(profileData?.photo)
+                  : profileData?.photo_url && profileData?.photo
                   ? `${profileData?.photo_url}${profileData?.photo}`
-                  : 'https://george-fx.github.io/dinehub_api/assets/users/01.jpg'}
+                  : "https://george-fx.github.io/dinehub_api/assets/users/01.jpg"
+              }
               alt="user"
               style={{ width: 60, height: 60, borderRadius: 50 }}
             />
 
-
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span
-                className="t14"
-                style={{
-                  color: 'var(--main-color)',
-                  fontWeight: 500,
-                  marginBottom: 4,
-                }}
-              >
-                {profileData ? `${profileData.firstname} ${profileData.lastname}` : 'Loading...'}
-
+            <div className="sideMenuHeaderContent">
+              <span>
+                {profileData
+                  ? `${profileData.firstname} ${profileData.lastname}`
+                  : "Loading..."}
               </span>
-              <span className="t14">{profileData?.email || 'Loading...'}</span>
+              <span>{profileData?.email || "Loading..."}</span>
             </div>
           </div>
           {/* Phone */}
           <ul
-            style={{
-              paddingLeft: 20,
-              paddingRight: 20,
-              paddingBottom: 20,
-            }}
+            className="sideMenuList"
           >
             {modalMenu.map((item, index, array) => {
               const isLast = index === array.length - 1;
@@ -357,7 +280,7 @@ export const Header: React.FC<Props> = ({
                   }}
                   key={item.id}
                   onClick={() => {
-                    if (item.route !== '') {
+                    if (item.route !== "") {
                       navigate(item.route);
                     }
                   }}
@@ -365,35 +288,29 @@ export const Header: React.FC<Props> = ({
                   <span
                     className="t16 number-of-lines-1"
                     style={
-                      item.title === 'Sign out'
-                        ? { color: '#FA5555' }
-                        : { color: 'var(--main-color)' }
+                      item.title === "Sign out"
+                        ? { color: "#FA5555" }
+                        : { color: "var(--main-color)" }
                     }
                   >
                     {item.title}
                   </span>
-                  {item.route !== '' && item.title !== 'Sign out' && <svg.RightArrowSvg />}
+                  {item.route !== "" && item.title !== "Sign out" && (
+                    <svg.RightArrowSvg />
+                  )}
                   {item.switch && <components.Switch />}
                 </li>
               );
             })}
           </ul>
         </div>
-      </>
+      </div>
     );
   };
 
   return (
     <>
-      <header
-        style={{
-          position: 'relative',
-          height: 'var(--header-height)',
-          backgroundColor: 'var(--main-background)',
-          ...headerStyle,
-        }}
-        className="row-center-space-between"
-      >
+      <header className="topHeader">
         {renderUser()}
         {renderGoBack()}
         {renderTitle()}
