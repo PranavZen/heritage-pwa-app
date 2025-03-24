@@ -1,0 +1,75 @@
+
+  .onboarding-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f6f9;
+  }
+  
+  .onboarding-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width:400px;
+    text-align: center;
+  }
+  
+  .onboarding-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .onboarding-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .onboarding-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .onboarding-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    color: #f44336;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  .city-info h3 {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #333;
+  }
+.login-page{
+    width: 300px;
+    height: 30px;
+    border: 1px solid rgba(0, 128, 0, 0.781);
+    border-radius: 20px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    cursor: pointer;
+
+}  

@@ -6,7 +6,7 @@ import { DishType } from '../types';
 import { components } from '../components';
 import { actions } from '../store/actions';
 import axios from 'axios';
-import { notification } from 'antd';
+import { Modal, notification } from 'antd';
 
 export const Dish: React.FC = () => {
   const navigate = hooks.useNavigate();
@@ -15,10 +15,10 @@ export const Dish: React.FC = () => {
   const [packageOptions, setPackageOptions] = useState<any[]>([]);
   const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
-    const [cartId, setCartId] = useState<string[]>([]);
-   
-    const [cartItemId, setCartItemId] = useState<string | null>(null);
-    console.log("cartIdcartIdcartIdcartId", cartItemId);
+  const [cartId, setCartId] = useState<string[]>([]);
+
+  const [cartItemId, setCartItemId] = useState<string | null>(null);
+  console.log("cartIdcartIdcartIdcartId", cartItemId);
 
   const dish: DishType = location.state.dish;
 
@@ -33,45 +33,45 @@ export const Dish: React.FC = () => {
   // ***************************************************************************************************
 
   useEffect(() => {
-      const fetchCartData = async () => {
-        try {
-          const formData = new FormData();
-          formData.append('city_id', cityId || '');
-          formData.append('c_id', c_id || '');
-          formData.append('next_id', '0');
-  
-          const response = await axios.post(
-            'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
-            formData
+    const fetchCartData = async () => {
+      try {
+        const formData = new FormData();
+        formData.append('city_id', cityId || '');
+        formData.append('c_id', c_id || '');
+        formData.append('next_id', '0');
+
+        const response = await axios.post(
+          'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
+          formData
+        );
+
+        if (response.data.optionListing) {
+          const cartItems = response.data.optionListing.map(
+            (item: any) => item.cart_product_option_value_id
           );
-  
-          if (response.data.optionListing) {
-            const cartItems = response.data.optionListing.map(
-              (item: any) => item.cart_product_option_value_id
-            );
-            setCartId(cartItems);
-  
-            const matchedItem = response.data.optionListing.find(
-              (item: any) =>
-                item.cart_product_option_value_id === dish.product_option_value_id
-            );
-  
-            if (matchedItem) {
-              setQuantity(Number(matchedItem.quantity) || 1);
-              setCartItemId(String(matchedItem.cart_id));
-            } else {
-              setQuantity(0);
-              setCartItemId(null);
-            }
+          setCartId(cartItems);
+
+          const matchedItem = response.data.optionListing.find(
+            (item: any) =>
+              item.cart_product_option_value_id === dish.product_option_value_id
+          );
+
+          if (matchedItem) {
+            setQuantity(Number(matchedItem.quantity) || 1);
+            setCartItemId(String(matchedItem.cart_id));
+          } else {
+            setQuantity(0);
+            setCartItemId(null);
           }
-        } catch (error) {
-          console.error('Error fetching cart data:', error);
         }
-      };
-  
-      fetchCartData();
-    }, [cityId, c_id, dish.product_option_value_id]);
-  
+      } catch (error) {
+        console.error('Error fetching cart data:', error);
+      }
+    };
+
+    fetchCartData();
+  }, [cityId, c_id, dish.product_option_value_id]);
+
 
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
@@ -108,6 +108,23 @@ export const Dish: React.FC = () => {
   // *******************************************************************************************************
 
   const handleAddToCart = async (cartData: any) => {
+
+    const c_id = localStorage.getItem('c_id');
+
+    if (!c_id) {
+      Modal.info({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {
+
+
+          navigate('/sign-in');
+        },
+      });
+      return;
+    }
+
+
     try {
       const formData = new FormData();
       formData.append('c_id', String(c_id || '1'));
@@ -130,7 +147,7 @@ export const Dish: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
         formData
       );
-      console.log("wwwwwww", response)
+      // console.log("wwwwwww", response)
       if (response.data.status) {
         notification.success({ message: response.data.message });
         window.location.reload();
@@ -147,7 +164,6 @@ export const Dish: React.FC = () => {
 
   // ***************************************ADDddddddddddddddddddddddddddddddddddddd
   const addToCartApi = async (cartData: any) => {
-    console.log("carttttttttttttttttt", cartData);
     try {
       const formData = new FormData();
       formData.append('c_id', String(c_id || '1'));
@@ -191,6 +207,20 @@ export const Dish: React.FC = () => {
 
   // ******************update api start*****************************
   const handleUpdateCart = async (newQuantity: number) => {
+
+    const c_id = localStorage.getItem('c_id');
+
+    if (!c_id) {
+      Modal.info({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {
+          navigate('/sign-in');
+        },
+      });
+      return;
+    }
+
     if (newQuantity < 1) return;
 
     const formData = new FormData();
@@ -268,6 +298,20 @@ export const Dish: React.FC = () => {
   hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
 
   const handleOpenModal = () => {
+    const c_id = localStorage.getItem('c_id');
+
+    if (!c_id) {
+      Modal.info({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {
+
+
+          navigate('/sign-in');
+        },
+      });
+      return;
+    }
     setIsModalOpen(true);
   };
 
@@ -284,6 +328,21 @@ export const Dish: React.FC = () => {
   };
 
   const handleOpenModalAlternateDays = () => {
+    const c_id = localStorage.getItem('c_id');
+
+    if (!c_id) {
+      Modal.info({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {
+
+
+          navigate('/sign-in');
+        },
+      });
+      return;
+    }
+
     setIsAlternateModalOpen(true);
   }
 
@@ -482,14 +541,13 @@ export const Dish: React.FC = () => {
           >
             ₹ {dish.price}
           </span>
-
           {/* ************************************************************************************************** */}
           {/* Remove quantity */}
           <div className="row-center">
             <button
-               onClick={(event) =>
-                 quantity === 1 ? handleRemoveFromCart(event) : handleUpdateCart(quantity - 1)
-               }
+              onClick={(event) =>
+                quantity === 1 ? handleRemoveFromCart(event) : handleUpdateCart(quantity - 1)
+              }
               style={{ padding: '4px 14px', borderRadius: 4 }}
             >
               <svg.MinusSvg />

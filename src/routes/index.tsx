@@ -1,5 +1,6 @@
 export enum TabScreens {
   Home = 'Home',
+  Subscription='Subscription',
   Menu = 'Menu',
   Order = 'Order',
   Favorite = 'Favorite',
@@ -58,5 +59,6 @@ export enum Routes {
   AddressAdd='/add-your-address',  
   ClientNotification='/notification',
   ClientNotificationDetails='/notification-message',
-  CustomerCare='/customer-care'
+  CustomerCare='/customer-care',
+  OrderSubscription='/orderSubscription',
 }

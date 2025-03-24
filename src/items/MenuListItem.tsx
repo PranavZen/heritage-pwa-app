@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { hooks } from '../hooks';
 import { svg } from '../assets/svg';
-import { notification } from 'antd';
+import { Modal, notification } from 'antd';
 import axios from 'axios';
 import { DishType } from '../types';
 
@@ -92,6 +92,19 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
   }, [cityId, c_id, dish.product_option_value_id]);
 
   const HandleAddToCart = async () => {
+    const c_id = localStorage.getItem('c_id');
+
+    if (!c_id) {
+      Modal.info({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {
+          navigate('/sign-in');
+        },
+      });
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append('c_id', c_id);
@@ -221,7 +234,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
             </button>
 
             <span style={{ margin: '0 10px' }}>{quantity}</span>
-
             <button
               onClick={() => handleUpdateCart(quantity + 1)}
               style={{ padding: '4px 14px', borderRadius: 4 }}

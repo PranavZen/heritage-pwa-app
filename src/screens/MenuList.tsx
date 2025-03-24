@@ -68,7 +68,7 @@ export const MenuList: React.FC = () => {
         formData
       );
 
-      console.log("qwqwqwqwqwqwqwqwqwq", response);
+      // console.log("qwqwqwqwqwqwqwqwqwq", response);
 
       setFilterData(response.data?.optionListing || []);
     } catch (error) {

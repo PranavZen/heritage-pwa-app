@@ -7,7 +7,7 @@ import { RootState } from '../store';
 import { actions } from '../store/actions';
 import { components } from '../components';
 import axios from 'axios';
-import { notification } from 'antd';
+import { notification, Modal } from 'antd';
 
 type Props = {
   index: number;
@@ -16,6 +16,7 @@ type Props = {
 };
 
 export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
+  // console.log("qqqqqqqqqqqqq", dish);
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
   const [quantity, setQuantity] = useState<number>(0);
@@ -30,9 +31,19 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     (item) => item.option_value_name === dish.option_value_name
   );
 
-
-
   const HandleAddToCart = async () => {
+    const c_id = localStorage.getItem('c_id'); 
+    
+    if (!c_id) {
+      Modal.info({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {  
+          navigate('/sign-in');
+        },
+      });
+      return; 
+    }
     try {
       const formData = new FormData();
       formData.append('c_id', c_id);
@@ -41,17 +52,18 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       formData.append('product_option_id', String(dish.product_option_id));
       formData.append('product_option_value_id', String(dish.product_option_value_id));
       formData.append('quantity', '1');
-      formData.append('weight',  '500');
-      formData.append('weight_unit',  'mg');
+      formData.append('weight', '500');
+      formData.append('weight_unit', 'mg');
       formData.append('delivery_preference', '1');
       formData.append('no_of_deliveries', '1');
       formData.append('order_date', getTomorrowDate());
       formData.append('order_type', '1');
-
+  
       const response = await axios.post(
         'https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart',
         formData
       );
+  
       if (response.data.status === 'success') {
         notification.success({ message: 'Success', description: response.data.message });
         window.location.reload();
@@ -59,14 +71,12 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         setCartItemId(response.data.cart_id);
       } else {
         notification.error({ message: 'Error', description: response.data.message || 'Something went wrong.' });
-      } 
+      }
     } catch (error) {
       console.error('Error adding to cart:', error);
       notification.error({ message: 'Error', description: 'Failed to add item to cart.' });
     }
   };
-
-
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -80,6 +90,8 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
           formData
         );
+
+        // console.log("aaasasasasasasasasasasa", response);
 
         if (response.data.optionListing) {
           const cartItems = response.data.optionListing.map(
@@ -114,7 +126,6 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     return tomorrow.toISOString().split('T')[0];
   };
 
- 
 
 
   const handleUpdateCart = async (newQuantity: number) => {

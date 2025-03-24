@@ -8,6 +8,7 @@ import type { DishType } from '../../types';
 import { components } from '../../components';
 import { MenuType } from '../../types/MenuType'
 import axios from 'axios';
+import { notification } from 'antd';
 
 export const Order: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -19,6 +20,8 @@ export const Order: React.FC = () => {
 
   const navigate = hooks.useNavigate();
   const [totalPrice, SetTotalPrice] = useState<any[]>([]);
+
+  const [addressId, SetAddressId]=useState(); 
 
   console.log('ccccccccccccccccccccccccccccccc', totalPrice);
 
@@ -48,16 +51,65 @@ export const Order: React.FC = () => {
     getAddToCartData();
   }, [cityId, c_id]);
 
-  // *************************************************
+
+  // ******************************************************************************************************************
+
+  useEffect(() => {
+    const getAddress = async () => {
+      const formData = new FormData();
+      formData.append('c_id', c_id || '');
+      try{
+        const response = await axios.post(
+          `https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById`,
+          formData
+        );
+
+        // console.log('aaaaaaaaaaaaaaaaaaaa', response.data.addresses[0].id);
+        
+        SetAddressId(response.data.addresses[0].id);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getAddress();
+  }, [c_id]);
+
+  
+  const handleCheckout = async () => {
+    const formData = new FormData();
+    formData.append('c_id', c_id || '');
+    formData.append('addresses_id', addressId || '');
+    
+    try {
+      const response = await axios.post(
+        `https://heritage.bizdel.in/app/consumer/services_v11/placeOrder`,
+        formData
+      );
+  
+      if (response.data.status === 'success') {
+        notification.success({ message: response.data.message || 'Order Placed successfully' });
+      } else if (response.data.status === 'fail') {
+        notification.error({ message: response.data.message || 'Order placement failed' });
+      } 
+  
+    } catch (error) {
+      console.error(error);
+      notification.error({ message: 'An error occurred while placing your order.' });
+    }
+  };
+  
+  useEffect(() => {
+    handleCheckout();
+  },[]);
+  
+  // ******************************************************************************************************************
 
   const { menuLoading, menu } = hooks.useGetMenu();
 
   const { list, subtotal, delivery, total } = useSelector(
     (state: RootState) => state.cartSlice,
   );
-
-  // console.log("listttttttttttting",list);
-
+  
   const renderDishes = (): JSX.Element => {
     return (
       <section style={{ marginBottom: 20 }}>
@@ -134,9 +186,11 @@ export const Order: React.FC = () => {
     return (
       <components.Button
         text='Checkout'
-        onClick={() => {
-          navigate(Routes.Checkout);
-        }}
+
+        onClick={handleCheckout}
+        // onClick={() => {
+        //   // navigate(Routes.Checkout);
+        // }}
       />
     );
   };
@@ -218,7 +272,6 @@ export const Order: React.FC = () => {
 
   const renderLoading = (): JSX.Element | null => {
     if (menuLoading) return <components.Loader />;
-
     return null;
   };
 

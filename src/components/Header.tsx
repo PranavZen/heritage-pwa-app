@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { hooks } from '../hooks';
 import { svg } from '../assets/svg';
 import { RootState } from '../store';
@@ -18,14 +17,12 @@ type Props = {
   headerStyle?: React.CSSProperties;
 };
 
-// Define the type for profileData
 interface ProfileData {
   firstname: string;
   lastname: string;
   email: string;
   photo: File | null;
   photo_url: string | null;
-
 }
 
 const modalMenu = [
@@ -41,12 +38,6 @@ const modalMenu = [
     route: Routes.MyAddress,
     switch: false,
   },
-  // {
-  //   id: 3,
-  //   title: 'My orders',
-  //   route: Routes.OrderHistory,
-  //   switch: false,
-  // },
   {
     id: 5,
     title: 'Notifications',
@@ -59,7 +50,6 @@ const modalMenu = [
     route: Routes.Promocodes,
     switch: false,
   },
-
   {
     id: 6,
     title: 'Customer Care',
@@ -75,7 +65,7 @@ const modalMenu = [
   {
     id: 8,
     title: 'Sign out',
-    route: Routes.SignIn,
+    route: Routes.Onboarding,
     switch: false,
   },
 ];
@@ -91,27 +81,11 @@ export const Header: React.FC<Props> = ({
   const navigate = hooks.useNavigate();
   const location = hooks.useLocation();
   const dispatch = hooks.useDispatch();
-
   const [showModal, setShowModal] = useState(false);
   const [themeColor, setThemeColor] = useState('#F6F9F9');
-
-  useEffect(() => {
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-
-    if (metaThemeColor && themeColor) {
-      metaThemeColor.setAttribute('content', themeColor);
-    }
-  }, [themeColor, showModal]);
-
   const cart = useSelector((state: RootState) => state.cartSlice);
-
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
-
   const [cartCount, setCartCount] = useState<number>(0);
-
-
-  // console.log("profileDataprofileDataqqqqqq", profileData);
-
   const cityId = localStorage.getItem('c_id');
 
   useEffect(() => {
@@ -123,8 +97,6 @@ export const Header: React.FC<Props> = ({
           'https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById',
           formData
         );
-        console.log("resqwqwllllllllllllll", response.data.cart_count);
-
         if (response.data.status === 'success') {
           SetProfileData(response.data.CustomerDetail[0]);
           setCartCount(response.data.cart_count);
@@ -138,6 +110,13 @@ export const Header: React.FC<Props> = ({
 
     GetProfileData();
   }, []);
+
+  const signOut = () => {
+    // Clear local storage
+    localStorage.clear();
+    // Navigate to onboarding or login page
+    navigate(Routes.Onboarding);
+  };
 
   const renderUser = (): JSX.Element | null => {
     if (!userName && !userPhoto) return null;
@@ -257,7 +236,6 @@ export const Header: React.FC<Props> = ({
           >
             <p>{cartCount}</p>
           </span>
-
         </div>
         <svg.HeaderBasketSvg />
       </button>
@@ -319,8 +297,6 @@ export const Header: React.FC<Props> = ({
               alt="user"
               style={{ width: 60, height: 60, borderRadius: 50 }}
             />
-
-
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span
                 className="t14"
@@ -331,12 +307,10 @@ export const Header: React.FC<Props> = ({
                 }}
               >
                 {profileData ? `${profileData.firstname} ${profileData.lastname}` : 'Loading...'}
-
               </span>
               <span className="t14">{profileData?.email || 'Loading...'}</span>
             </div>
           </div>
-          {/* Phone */}
           <ul
             style={{
               paddingLeft: 20,
@@ -357,7 +331,9 @@ export const Header: React.FC<Props> = ({
                   }}
                   key={item.id}
                   onClick={() => {
-                    if (item.route !== '') {
+                    if (item.title === 'Sign out') {
+                      signOut();  // Clear local storage and sign out
+                    } else if (item.route !== '') {
                       navigate(item.route);
                     }
                   }}

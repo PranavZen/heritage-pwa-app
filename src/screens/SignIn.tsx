@@ -42,7 +42,7 @@ export const SignIn: React.FC = () => {
 
         const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/login', formData);
 
-        console.log("responseqwqwqwqwqwqwqwqw", response);
+        console.log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzz", response);
 
         if (response.data.status === 'success' && response.data.action === 'existing user') {
           setIsOtpSent(true);
@@ -86,8 +86,8 @@ export const SignIn: React.FC = () => {
         'https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP',
         formData
       );
- 
-      console.log("pppppppppppppppppppppppAAAAAAAAAAAA",response.data.CustomerDetail[0].address_details[0].area_id);
+
+      console.log("pppppppppppppppppppppppAAAAAAAAAAAA",  response);
 
       if (response.data.status === 'success') {
         const addressDetails = response.data.CustomerDetail[0].address_details;
@@ -198,7 +198,6 @@ export const SignIn: React.FC = () => {
       </main>
     );
   };
-
 
   return (
     <div id="screen" style={{ opacity }}>

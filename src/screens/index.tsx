@@ -27,6 +27,7 @@ import { AddressAdd } from './AddressAdd';
 import {ClientNotification} from '../screens/ClientNotification';
 import {ClientNotificationDetails} from './ClientNotificationDetails'
 import { CustomerCare } from './CustomerCare';
+import {SubscriptionOrder} from './tabs/SubscriptionOrder'
 export const screens = {
   Dish,
   SignIn,
@@ -57,4 +58,5 @@ export const screens = {
   ClientNotification,
   ClientNotificationDetails,
   CustomerCare,
+  SubscriptionOrder,
 };

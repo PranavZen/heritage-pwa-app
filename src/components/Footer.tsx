@@ -5,6 +5,8 @@ import {svg} from '../assets/svg';
 import {TabScreens} from '../routes';
 import {actions} from '../store/actions';
 
+
+
 const tabs = [
   {
     id: 1,
@@ -13,21 +15,26 @@ const tabs = [
   },
   {
     id: 2,
+    screen: TabScreens.Subscription,
+    icon: <svg.OrderTabSvg/>,
+  },
+  {
+    id: 3,
     screen: TabScreens.Menu,
     icon: <svg.SearchTabSvg />,
   },
   {
-    id: 3,
+    id: 4,
     screen: TabScreens.Order,
     icon: <svg.OrderTabSvg />,
   },
   {
-    id: 4,
+    id: 5,
     screen: TabScreens.Favorite,
     icon: <svg.HeartTabSvg />,
   },
   {
-    id: 5,
+    id: 6,
     screen: TabScreens.Notification,
     icon: <svg.BellTabSvg />,
   },

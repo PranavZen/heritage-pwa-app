@@ -123,10 +123,13 @@ const stack = createBrowserRouter([
   },
   {   
     path: Routes.CustomerCare,
-    element: <screens.CustomerCare/>,
+    element:<screens.CustomerCare/>,
+  },
+  {   
+    path: Routes.OrderSubscription,
+    element:<screens.SubscriptionOrder/>
   }
 ]);
-
 export const StackNavigator: React.FC = () => {
   return <RouterProvider router={stack} />;
 };

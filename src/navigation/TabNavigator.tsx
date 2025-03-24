@@ -1,23 +1,26 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
-import {RootState} from '../store';
-import {TabScreens} from '../routes';
-import {components} from '../components';
-import {Home} from '../screens/tabs/Home';
-import {Menu} from '../screens/tabs/Menu';
-import {Order} from '../screens/tabs/Order';
-import {Favorite} from '../screens/tabs/Favorite';
-import {Notification} from '../screens/tabs/Notification';
-    
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { TabScreens } from '../routes';
+import { components } from '../components';
+import { Home } from '../screens/tabs/Home';
+import { Menu } from '../screens/tabs/Menu';
+import { Order } from '../screens/tabs/Order';
+import { Favorite } from '../screens/tabs/Favorite';
+import { Notification } from '../screens/tabs/Notification';
+import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
+
 export const TabNavigator: React.FC = () => {
   const currentTabScreen = useSelector(
     (state: RootState) => state.tabSlice.screen,
-  ); 
+  );
   const renderTitle = (): string => {
     switch (currentTabScreen) {
-    case TabScreens.Home:
+      case TabScreens.Home:
         return '';
       case TabScreens.Menu:
+        return '';
+      case TabScreens.Subscription:
         return '';
       case TabScreens.Order:
         return 'Order';
@@ -28,13 +31,15 @@ export const TabNavigator: React.FC = () => {
       default:
         return 'Home';
     }
-  }; 
+  };
   const renderScreens = (): JSX.Element | null => {
     switch (currentTabScreen) {
       case TabScreens.Home:
         return <Home />;
       case TabScreens.Menu:
         return <Menu />;
+      case TabScreens.Subscription:
+        return <SubscriptionOrder />;
       case TabScreens.Order:
         return <Order />;
       case TabScreens.Favorite:
@@ -51,6 +56,8 @@ export const TabNavigator: React.FC = () => {
         return true;
       case TabScreens.Menu:
         return true;
+      case TabScreens.Subscription:
+        return  true;
       case TabScreens.Order:
         return true;
       case TabScreens.Favorite:
@@ -67,6 +74,8 @@ export const TabNavigator: React.FC = () => {
         return true;
       case TabScreens.Menu:
         return true;
+        case TabScreens.Subscription:
+          return  true;
       case TabScreens.Order:
         return false;
       case TabScreens.Favorite:
@@ -77,7 +86,6 @@ export const TabNavigator: React.FC = () => {
         return false;
     }
   };
-
 
   const renderHeader = (): JSX.Element => {
     return (

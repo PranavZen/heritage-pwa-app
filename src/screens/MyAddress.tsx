@@ -11,7 +11,7 @@ export const MyAddress: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
-  console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq',addresses);
+  //console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq',addresses);
   const [newAddress, setNewAddress] = useState<any | null>(null); 
   const [opacity, setOpacity] = useState<number>(0);
   const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
@@ -30,7 +30,7 @@ export const MyAddress: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById', formData);
-        console.log('aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbb', response.data.addresses);
+        // console.log('xxxxxxxxxxxxxxx', response.data.addresses);
         setAddresses(response.data.addresses);
 
         setLoading(false);
@@ -112,7 +112,6 @@ export const MyAddress: React.FC = () => {
     });
   };
 
-  // Handle adding new address
   const handleNewAddressAdd = (newAddressData: any) => {
     setNewAddress(newAddressData); // Store the new address in state
     setAddresses((prev) => [newAddressData, ...prev]); // Add the new address to the list
