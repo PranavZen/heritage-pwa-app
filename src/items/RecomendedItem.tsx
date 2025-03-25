@@ -29,7 +29,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const ifInWishlist = wishlist.list.find(
     (item) => item.option_value_name === dish.option_value_name
   );
-
+  // Removed duplicate declaration of getTomorrowDate
   const HandleAddToCart = async () => {
     try {
       const formData = new FormData();
@@ -75,6 +75,46 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       });
     }
   };
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("city_id", cityId);
+        formData.append("c_id", c_id);
+        formData.append("next_id", "0");
+
+        const response = await axios.post(
+          "https://heritage.bizdel.in/app/consumer/services_v11/getCartData",
+          formData
+        );
+
+        if (response.data.optionListing) {
+          const cartItems = response.data.optionListing.map(
+            (item: any) => item.cart_product_option_value_id
+          );
+          setCartId(cartItems);
+
+          const matchedItem = response.data.optionListing.find(
+            (item: any) =>
+              item.cart_product_option_value_id === dish.product_option_value_id
+          );
+
+          if (matchedItem) {
+            setQuantity(Number(matchedItem.quantity) || 1);
+            setCartItemId(String(matchedItem.cart_id));
+          } else {
+            setQuantity(0);
+            setCartItemId(null);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+      }
+    };
+
+    fetchCartData();
+  }, [cityId, c_id, dish.product_option_value_id]);
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -217,9 +257,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   };
 
   return (
-    <div
-      className="proCardWrap"
-    >
+    <div className="proCardWrap">
       <div className="itemImgWrap">
         <img
           src={dish.option_value_image}
@@ -272,7 +310,9 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           <svg.HeartSvg dish={dish} />
         </button>
         {/* <components.Name dish={dish.option_value_name} containerStyle={{ marginBottom: 3 }} /> */}
-        <span className='t14 number-of-lines-1' style={{marginBottom: 5}}>{dish.option_value_name}</span>
+        <span className="t14 number-of-lines-1" style={{ marginBottom: 5 }}>
+          {dish.option_value_name}
+        </span>
         <components.Price dish={dish} />
 
         <div className="cartButtonWrap">

@@ -47,7 +47,7 @@ export const MenuList: React.FC = () => {
   const { dishesLoading, dishes } = hooks.useGetDishes(selectedCategory);
 
   // console.log("selectedCategoryselectedCategory", selectedCategory);
-  const c_id = localStorage.getItem("c_id");
+  const c_id =localStorage.getItem('c_id')
   // Fetch dishes based on selectedCategory
   const getDishes = async () => {
     const cityId = localStorage.getItem("cityId");
@@ -56,12 +56,12 @@ export const MenuList: React.FC = () => {
 
     setFilterDataDishesLoading(true);
     const formData = new FormData();
-    formData.append("city_id", cityId || "null");
-    formData.append("building_id", "980");
-    formData.append("c_id", c_id || "null");
-    formData.append("category_id", selectedCategory || "");
-    formData.append("product_id", searchId || "");
-    formData.append("next_id", "0");
+    formData.append('city_id', cityId || 'null');
+    formData.append('building_id', '980');
+    formData.append('c_id', c_id || 'null');
+    formData.append('category_id', selectedCategory || '');
+    formData.append('product_id', searchId  || '');
+    formData.append('next_id', '0');
     try {
       const response = await axios.post(
         `https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,

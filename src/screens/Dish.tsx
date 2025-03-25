@@ -681,8 +681,7 @@ export const Dish: React.FC = () => {
                 setDeliveries(selectedValue);
               }}
             >
-              {deliveryOptionsPreference &&
-                deliveryOptionsPreference.length > 0 &&
+              {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 &&
                 deliveryOptionsPreference.map((elem) => {
                   return elem.packages && elem.packages.length > 0
                     ? elem.packages.map((option: any) => {
