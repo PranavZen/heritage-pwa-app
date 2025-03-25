@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../routes'; 
@@ -10,6 +11,7 @@ export const Onboarding: React.FC = () => {
   const [filteredCities, setFilteredCities] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchCityData = async () => {
@@ -27,6 +29,7 @@ export const Onboarding: React.FC = () => {
       }
     };
 
+
     fetchCityData();
   }, [searchQuery]); 
 
@@ -35,6 +38,7 @@ export const Onboarding: React.FC = () => {
   };
 
   useEffect(() => {
+
     if (searchQuery) {
       const filtered = cities.filter((city) =>
         city.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -42,8 +46,10 @@ export const Onboarding: React.FC = () => {
       setFilteredCities(filtered);
     } else {
       setFilteredCities(cities);
+
     }
   }, [searchQuery, cities]);
+
 
   const handleCitySelect = (cityId: string) => {
    console.log("rrrrrrrrrrrrrrrrrrrrrr", cityId);
@@ -53,8 +59,10 @@ export const Onboarding: React.FC = () => {
   };
 
 
+
   const renderSlider = (): JSX.Element => {
     return (
+
       <div className="embla">
         {filteredCities.map((city) => (
           <div
@@ -66,10 +74,12 @@ export const Onboarding: React.FC = () => {
           </div>
         ))}
       </div>
+
     );
   };
 
   return (
+
     <div id="screen">
       <div className="container">
         <h2>Select Your City</h2>
@@ -82,6 +92,7 @@ export const Onboarding: React.FC = () => {
         />
         {renderSlider()}
       </div>
+
     </div>
   );
 };

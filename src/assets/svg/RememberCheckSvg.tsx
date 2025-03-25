@@ -8,7 +8,7 @@ export const RememberCheckSvg: React.FC = () => (
     fill='none'
   >
     <path
-      stroke='#748BA0'
+      stroke='#1a712e'
       strokeLinecap='round'
       strokeLinejoin='round'
       strokeWidth={1.071}

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { hooks } from '../hooks';
-import { Routes } from '../routes';
-import { components } from '../components';
-import { notification } from 'antd';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { hooks } from "../hooks";
+import { Routes } from "../routes";
+import { components } from "../components";
+import { notification } from "antd";
 
 interface User {
   id: string;
@@ -22,54 +22,50 @@ export const EditProfile: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
 
-  const cityId = localStorage.getItem('c_id');
-
+  const cityId = localStorage.getItem("c_id");
 
   const [profileData, SetProfileData] = useState();
 
   console.log("profileDataprofileDataprofileData", profileData);
 
-  console.log("cityIda", cityId)
+  console.log("cityIda", cityId);
 
   const [opacity, setOpacity] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [userDetails, setUserDetails] = useState<User>({
-    id: cityId || 'null',
-    salutation: 'Mr.',
-    firstname: '',
-    lastname: '',
-    gender: 'male',
-    dob: '',
-    email: '',
-    mobile: '',
+    id: cityId || "null",
+    salutation: "Mr.",
+    firstname: "",
+    lastname: "",
+    gender: "male",
+    dob: "",
+    email: "",
+    mobile: "",
     photo: null,
     photo_url: null,
   });
 
-
-  // **************************Get profile data********************* 
+  // **************************Get profile data*********************
   useEffect(() => {
     const GetProfileData = async () => {
       const formData = new FormData();
-      formData.append('c_id', cityId || 'null');
+      formData.append("c_id", cityId || "null");
       try {
         const response = await axios.post(
-          'https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById',
+          "https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById",
           formData
         );
 
         console.log("response data", response.data.CustomerDetail);
 
-        if (response.data.status === 'success') {
-          console.log('User profile data:', response.data.data);
+        if (response.data.status === "success") {
+          console.log("User profile data:", response.data.data);
           const profile = response.data.CustomerDetail[0];
 
           SetProfileData(response.data.CustomerDetail[0]);
 
           // Check if photo is a URL or base64 string
           const photoUrl = profile.photo ? profile.photo : null;
-
-
 
           console.log("photoUrlphotoUrl", photoUrl);
 
@@ -84,10 +80,9 @@ export const EditProfile: React.FC = () => {
             mobile: profile.mobile,
             photo: profile.photo ? profile.photo : null,
             photo_url: profile.photo_url || null,
-            
           });
         } else {
-          console.log('Error:', response.data.message);
+          console.log("Error:", response.data.message);
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -101,28 +96,31 @@ export const EditProfile: React.FC = () => {
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
-  hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
+  hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
   const updateUser = async () => {
     const formData = new FormData();
-    formData.append('id', userDetails.id);
-    formData.append('salutation', userDetails.salutation);
-    formData.append('firstname', userDetails.firstname);
-    formData.append('lastname', userDetails.lastname);
-    formData.append('gender', userDetails.gender);
-    formData.append('dob', userDetails.dob);
-    formData.append('email', userDetails.email);
-    formData.append('mobile', userDetails.mobile);
+    formData.append("id", userDetails.id);
+    formData.append("salutation", userDetails.salutation);
+    formData.append("firstname", userDetails.firstname);
+    formData.append("lastname", userDetails.lastname);
+    formData.append("gender", userDetails.gender);
+    formData.append("dob", userDetails.dob);
+    formData.append("email", userDetails.email);
+    formData.append("mobile", userDetails.mobile);
 
     if (userDetails.photo) {
-      formData.append('photo', userDetails.photo);
+      formData.append("photo", userDetails.photo);
     }
 
     try {
       setLoading(true);
-      const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/updateUser', formData);
+      const response = await axios.post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/updateUser",
+        formData
+      );
       console.log("responseweeupdatedProfile", response);
-      if (response.data.status === 'success') {
+      if (response.data.status === "success") {
         navigate(Routes.EditProfile);
         notification.success({ message: response.data.message });
       } else {
@@ -131,7 +129,7 @@ export const EditProfile: React.FC = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error('Error updating user details:', error);
+      console.error("Error updating user details:", error);
     }
   };
 
@@ -171,134 +169,145 @@ export const EditProfile: React.FC = () => {
     if (loading) return <components.Loader />;
 
     return (
-      <main className="scrollable container">
-        <section className="accordion" style={{ paddingTop: 10 }}>
-          <div style={{ marginBottom: 20 }}>
-            <h2>User Details</h2>
-            <form onSubmit={handleSubmit} className="form-container">
-
-              <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-                <label htmlFor="photo-upload" className="upload-circle" style={{ cursor: 'pointer' }}>
-                  {imagePreview || userDetails.photo ? (
-                    <img
-                      src={imagePreview || (userDetails.photo && userDetails.photo_url ? `${userDetails.photo_url}${userDetails.photo}` : '')}
-                      alt="Profile"
-                      style={{
-                        width: '100px',
-                        height: '100px',
-                        objectFit: 'cover',
-                        borderRadius: '50%',
-                      }}
-                    />
-                  ) : (
-                    <span style={{ lineHeight: '100px', fontSize: '24px', color: '#fff' }}>+</span>
-                  )}
-                </label>
-
-                <input
-                  type="file"
-                  id="photo-upload"
-                  name="photo"
-                  onChange={handleFileChange}
-                  style={{ display: 'none' }}
-                  accept="image/*"
+      <section className="scrollable">
+        <form onSubmit={handleSubmit} className="form-container">
+          <div className="upload-container">
+            <label
+              htmlFor="photo-upload"
+              className="upload-circle"
+              style={{ cursor: "pointer" }}
+            >
+              {imagePreview || userDetails.photo ? (
+                <img
+                  src={
+                    imagePreview ||
+                    (userDetails.photo && userDetails.photo_url
+                      ? `${userDetails.photo_url}${userDetails.photo}`
+                      : "")
+                  }
+                  alt="Profile"
                 />
-              </div>
-
-
-              <div>
-                <label className="form-label">Salutation</label>
-                <input
-                  type="text"
-                  name="salutation"
-                  value={userDetails.salutation}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="form-label">First Name</label>
-                <input
-                  type="text"
-                  name="firstname"
-                  value={userDetails.firstname}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="form-label">Last Name</label>
-                <input
-                  type="text"
-                  name="lastname"
-                  value={userDetails.lastname}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="form-label">Gender</label>
-                <select
-                  name="gender"
-                  value={userDetails.gender}
-                  className="form-input"
+              ) : (
+                <span
+                  style={{
+                    lineHeight: "100px",
+                    fontSize: "24px",
+                    color: "#fff",
+                  }}
                 >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </div>
+                  +
+                </span>
+              )}
+              <span className="upload-icon">
+                <i className="fas fa-camera"></i>
+              </span>
+            </label>
 
-              <div>
-                <label className="form-label">Date of Birth</label>
-                <input
-                  type="date"
-                  name="dob"
-                  value={userDetails.dob}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="form-label">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={userDetails.email}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="form-label">Mobile</label>
-                <input
-                  type="text"
-                  name="mobile"
-                  value={userDetails.mobile}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div>
-                <button type="submit" className="submit-btn">
-                  Update User
-                </button>
-              </div>
-            </form>
+            <input
+              type="file"
+              id="photo-upload"
+              name="photo"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+              accept="image/*"
+            />
           </div>
-        </section>
-      </main>
+
+          <div className="inputWrap">
+            {/* <div className="col-2">
+              <label className="form-label">Sal.</label>
+              <input
+                type="text"
+                name="salutation"
+                value={userDetails.salutation}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div> */}
+
+            <div className="col-6">
+              <label className="form-label">First Name</label>
+              <input
+                type="text"
+                name="firstname"
+                value={userDetails.firstname}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+
+            <div className="col-6">
+              <label className="form-label">Last Name</label>
+              <input
+                type="text"
+                name="lastname"
+                value={userDetails.lastname}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="inputWrap">
+            <div className="col-6">
+              <label className="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={userDetails.email}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+
+            <div className="col-6">
+              <label className="form-label">Mobile</label>
+              <input
+                type="text"
+                name="mobile"
+                value={userDetails.mobile}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+          </div>
+          <div className="inputWrap">
+            <div className="col-6">
+              <label className="form-label">Gender</label>
+              <select
+                name="gender"
+                value={userDetails.gender}
+                className="form-input"
+              >
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+
+            <div className="col-6">
+              <label className="form-label">Date of Birth</label>
+              <input
+                type="date"
+                name="dob"
+                value={userDetails.dob}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+          </div>
+          <div className="submitBtnWrap">
+            <button type="submit" className="submit-btn">
+              Update User
+            </button>
+          </div>
+        </form>
+      </section>
     );
   };
 

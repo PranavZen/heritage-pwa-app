@@ -9,7 +9,7 @@ export const HeaderBasketSvg: React.FC = () => {
       fill='none'
     >
       <path
-        fill='#748BA0'
+        fill='#1a712e'
         fillOpacity={0.15}
         d='M5.1 9 3 10.5l1.5 8.7L6 21l12.9-.6 2.1-9-1.8-2.1L5.1 9Z'
       />

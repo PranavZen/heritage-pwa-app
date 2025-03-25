@@ -11,7 +11,7 @@ export const NotificationCheckSvg: React.FC = () => {
       <rect
         width={24}
         height={24}
-        fill='#00B0B9'
+        fill='#1a712e'
         rx={12}
       />
       <path

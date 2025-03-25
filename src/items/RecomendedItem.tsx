@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { hooks } from '../hooks';
@@ -9,6 +10,7 @@ import { components } from '../components';
 import axios from 'axios';
 import { notification, Modal } from 'antd';
 
+
 type Props = {
   index: number;
   dish: DishType;
@@ -16,6 +18,7 @@ type Props = {
 };
 
 export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
+
   // console.log("qqqqqqqqqqqqq", dish);
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
@@ -26,12 +29,14 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const c_id = localStorage.getItem('c_id') || '1';
   const cityId = localStorage.getItem('cityId') || '';
 
+
   const wishlist = useSelector((state: RootState) => state.wishlistSlice);
   const ifInWishlist = wishlist.list.find(
     (item) => item.option_value_name === dish.option_value_name
   );
 
   const HandleAddToCart = async () => {
+
     const c_id = localStorage.getItem('c_id'); 
     
     if (!c_id) {
@@ -93,6 +98,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
 
         // console.log("aaasasasasasasasasasasa", response);
 
+
         if (response.data.optionListing) {
           const cartItems = response.data.optionListing.map(
             (item: any) => item.cart_product_option_value_id
@@ -113,7 +119,9 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           }
         }
       } catch (error) {
+
         console.error('Error fetching cart data:', error);
+
       }
     };
 
@@ -123,8 +131,10 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
+
     return tomorrow.toISOString().split('T')[0];
   };
+
 
 
 
@@ -133,6 +143,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
 
     try {
       const formData = new FormData();
+
       formData.append('id', String(cartItemId || '')); 
       formData.append('c_id', c_id);
       formData.append('package_id', '13');
@@ -148,11 +159,13 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       );
 
       if (response.data.status === 'success') {
+
         if (newQuantity === 0) {
           setQuantity(0);
         } else {
           setQuantity(newQuantity);
         }
+
         notification.success({ message: 'Success', description: response.data.message });
       } else {
         notification.error({ message: 'Error', description: response.data.message || 'Failed to update quantity.' });
@@ -160,6 +173,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     } catch (error) {
       console.error('Error updating cart:', error);
       notification.error({ message: 'Error', description: 'Failed to update item quantity.' });
+
     }
   };
 
@@ -171,6 +185,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     } else {
       try {
         const formData = new FormData();
+
         formData.append('id', String(cartItemId));
         formData.append('c_id', c_id);
 
@@ -189,6 +204,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       } catch (error) {
         console.error('Error removing item from cart:', error);
         notification.error({ message: 'Error', description: 'Failed to remove item from cart.' });
+
       }
     }
   };
@@ -207,6 +223,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
 
   return (
     <div
+
       style={{
         padding: 14,
         paddingTop: 8,
@@ -227,31 +244,35 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         <img
           alt="Hot"
           src={require('../assets/icons/15.png')}
+
           style={{
             width: 18,
             left: 0,
             top: 0,
             marginLeft: 14,
             marginTop: 14,
-            height: 'auto',
-            position: 'absolute',
+            height: "auto",
+            position: "absolute",
           }}
         />
       )}
       {dish.isNew && (
         <img
           alt="New"
+
           src={require('../assets/icons/14.png')}
+
           style={{
             width: 34,
-            height: 'auto',
+            height: "auto",
             margin: 14,
             left: 0,
             top: 0,
-            position: 'absolute',
+            position: "absolute",
           }}
         />
       )}
+
       <button
         onClick={wishlistHandler}
         style={{
@@ -310,6 +331,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
             </button>
           </>
         )}
+
       </div>
     </div>
   );

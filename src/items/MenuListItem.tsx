@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState } from 'react';
 import { hooks } from '../hooks';
 import { svg } from '../assets/svg';
 import { Modal, notification } from 'antd';
 import axios from 'axios';
 import { DishType } from '../types';
+
 
 type Props = {
   dish: DishType;
@@ -15,6 +17,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
   const [quantity, setQuantity] = useState<number>(0);
 
   // console.log("qqqqqqqqqqqqqqqqqqqqqqqqmmmm", quantity);
+
 
   const c_id = localStorage.getItem('c_id') || '1';
   const cityId = localStorage.getItem('cityId') || '';
@@ -143,6 +146,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
 
     try {
       const formData = new FormData();
+
       formData.append('id', String(dish.cart_id || '')); 
       formData.append('c_id', c_id);
       formData.append('package_id', '13');
@@ -158,11 +162,13 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
       );
 
       if (response.data.status === 'success') {
+
         if (newQuantity === 0) {
           setQuantity(0); // Reset to 0 if quantity reaches 0
         } else {
           setQuantity(newQuantity);
         }
+
         notification.success({ message: 'Success', description: response.data.message });
       } else {
         notification.error({ message: 'Error', description: response.data.message || 'Failed to update quantity.' });
@@ -170,10 +176,12 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
     } catch (error) {
       console.error('Error updating cart:', error);
       notification.error({ message: 'Error', description: 'Failed to update item quantity.' });
+
     }
   };
 
   const navigate = hooks.useNavigate();
+
   const { ifInWishlist, addToWishlist, removeFromWishlist } = hooks.useWishlistHandler();
 
   return (
@@ -211,10 +219,12 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
         style={{ padding: 14, position: 'absolute', right: 0, top: 0, borderRadius: 4 }}
         onClick={(event) =>
           ifInWishlist(dish.option_value_name ?? 0) ? removeFromWishlist(dish, event) : addToWishlist(dish, event)
+
         }
       >
         <svg.HeartSvg dish={dish} />
       </button>
+
 
       <div style={{ position: 'absolute', right: 0, bottom: 0, margin: 14, display: 'flex', alignItems: 'center' }}>
         {quantity === 0 ? (
@@ -222,11 +232,13 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
             style={{ border: '1px solid green', padding: '7px 12px', borderRadius: 6, cursor: 'pointer' }}
             onClick={HandleAddToCart}
           >
+
             + Add
           </button>
         ) : (
           <>
             <button
+
               onClick={(event) => (quantity === 1 ? handleRemoveFromCart(event) : handleUpdateCart(quantity - 1))}
               style={{ padding: '4px 14px', borderRadius: 4 }}
             >
@@ -239,6 +251,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
               style={{ padding: '4px 14px', borderRadius: 4 }}
             >
               <svg.AddSvg />
+
             </button>
           </>
         )}

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { TabScreens } from '../routes';
@@ -9,6 +10,7 @@ import { Order } from '../screens/tabs/Order';
 import { Favorite } from '../screens/tabs/Favorite';
 import { Notification } from '../screens/tabs/Notification';
 import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
+
 
 export const TabNavigator: React.FC = () => {
   const currentTabScreen = useSelector(
@@ -86,6 +88,7 @@ export const TabNavigator: React.FC = () => {
         return false;
     }
   };
+
 
   const renderHeader = (): JSX.Element => {
     return (

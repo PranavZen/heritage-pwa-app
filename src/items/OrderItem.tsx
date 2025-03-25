@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { hooks } from '../hooks';
 import { svg } from '../assets/svg';
@@ -5,12 +6,14 @@ import axios from 'axios';
 import type { DishType } from '../types';
 import { notification, Button, Modal, Input } from 'antd';
 
+
 type Props = {
   dish: DishType;
   isLast: boolean;
 };
 
 export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
+
   const navigate = hooks.useNavigate();
   const { removeFromCart } = hooks.useCartHandler();
   const [deliveryPreferenceInModal, setDeliveryPreferenceInModal] = useState<any[]>([]);
@@ -35,6 +38,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     getData();
   }, []);
 
+
   const [quantity, setQuantity] = useState<number>(Number(dish.quantity) || 1);
   const [deliveryPreference, setDeliveryPreference] = useState<string>(String(dish.delivery_preference) || '');
   const [noOfDeliveries, setNoOfDeliveries] = useState<number>(Number(dish.no_of_deliveries));
@@ -42,6 +46,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [selectedPackage, setSelectedPackage] = useState<string>(dish.packages_name || '');
   const [selectedPackageDetails, setSelectedPackageDetails] = useState<string>();
   const [cartData, SetSetCartData] = useState<string>();
+
 
   // console.log('zzzzzzzzzzzzzzzz', cartData);
 
@@ -52,6 +57,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 1) return;
     const formData = new FormData();
+
     formData.append('id', String(dish.cart_id));
     formData.append('c_id', localStorage.getItem('c_id') || '');
     formData.append('package_id', String(dish.package_id || '13'));
@@ -66,6 +72,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     try {
       const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem', formData);
       if (response.data.status === 'success') {
+
         setQuantity(newQuantity);
         notification.success({ message: response.data.message });
         window.location.reload();
@@ -73,7 +80,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         notification.error({ message: response.data.message });
       }
     } catch (error) {
-      console.error('Error updating cart:', error);
+      console.error("Error updating cart:", error);
     }
   };
 
@@ -84,17 +91,19 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     } else {
       try {
         const formData = new FormData();
+
         formData.append('id', String(dish.cart_id));
         formData.append('c_id', localStorage.getItem('c_id') || '');
         const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem', formData);
         if (response.data.status === 'success') {
+
           notification.success({ message: response.data.message });
           window.location.reload();
         } else {
           notification.error({ message: response.data.message });
         }
       } catch (error) {
-        console.error('Error removing item from cart:', error);
+        console.error("Error removing item from cart:", error);
       }
     }
   };
@@ -141,6 +150,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
 
   const handlePackageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
@@ -280,6 +290,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
 
         <div>
           <select
+
             value={noOfDeliveries}
             onChange={handlePackageChange}
           >

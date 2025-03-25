@@ -41,8 +41,10 @@ export const Order: React.FC = () => {
           formData
         );
 
+
         console.log('wwwwwwwwwwwwwwwwwwwwwww', response.data); 
       
+
         SetTotalPrice(response.data.optionListing);
       } catch (error) {
         console.error(error);

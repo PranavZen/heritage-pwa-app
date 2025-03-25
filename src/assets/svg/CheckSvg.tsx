@@ -10,7 +10,7 @@ export const CheckSvg: React.FC = () => {
     >
       <g>
         <path
-          stroke='#00B0B9'
+          stroke='#1a712e'
           strokeLinecap='round'
           strokeLinejoin='round'
           strokeWidth={1.2}

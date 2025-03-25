@@ -11,7 +11,7 @@ export const AddSvg: React.FC = () => {
       <rect
         width={21}
         height={21}
-        fill='#E6F3F8'
+        fill=''
         rx={10.5}
       />
       <path
