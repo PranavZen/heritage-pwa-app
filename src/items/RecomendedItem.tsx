@@ -54,8 +54,8 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       formData.append('quantity', '1');
       formData.append('weight', '500');
       formData.append('weight_unit', 'mg');
-      formData.append('delivery_preference', '1');
-      formData.append('no_of_deliveries', '1');
+      formData.append('delivery_preference', '0');
+      formData.append('no_of_deliveries', '0');
       formData.append('order_date', getTomorrowDate());
       formData.append('order_type', '2');
   

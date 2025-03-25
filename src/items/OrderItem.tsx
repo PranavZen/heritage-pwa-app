@@ -126,10 +126,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   }, [cityId, c_id]);
 
   // *************************************************************************************
-  const handleOpenModal = () => {
-    
+  const handleOpenModal = (option_name:any) => {
+// console.log("aaaacccccccccccccccccccc", option_name)
     // setIsModalOpen(true);
-    //  navigate(`/dish/${dish.option_name}`)
+     navigate(`/dish/${dish.option_name}`, { state: { dish } });
   }
 
   const handleOk = async () => {
@@ -214,6 +214,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             </span>
           )}
         </div>
+
+
         <div
           style={{
             height: '100%',
@@ -224,7 +226,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           }}
         >
           {noOfDeliveries > 0 && (
-            <Button onClick={handleOpenModal}>Modify</Button>
+            <Button onClick={() => handleOpenModal(dish.option_name)}>Modify</Button>
           )}
 
           {/* Remove (Decrease Quantity) */}
@@ -249,9 +251,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           </button>
         </div>
       </li>
-
       {/* Update data modal */}
-      <Modal title="Update Order" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      {/* <Modal title="Update Order" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <label>Quantity:</label>
         <Input
           type="number"
@@ -301,7 +302,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             ))}
           </select>
         </div>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

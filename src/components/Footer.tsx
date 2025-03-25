@@ -18,16 +18,16 @@ const tabs = [
     screen: TabScreens.Subscription,
     icon: <svg.OrderTabSvg/>,
   },
-  {
-    id: 3,
-    screen: TabScreens.Menu,
-    icon: <svg.SearchTabSvg />,
-  },
-  {
-    id: 4,
-    screen: TabScreens.Order,
-    icon: <svg.OrderTabSvg />,
-  },
+  // {
+  //   id: 3,
+  //   screen: TabScreens.Menu,
+  //   icon: <svg.SearchTabSvg />,
+  // },
+  // {
+  //   id: 4,
+  //   screen: TabScreens.Order,
+  //   icon: <svg.OrderTabSvg />,
+  // },
   {
     id: 5,
     screen: TabScreens.Favorite,

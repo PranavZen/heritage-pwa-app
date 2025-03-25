@@ -22,13 +22,12 @@ export const Dish: React.FC = () => {
 
   const dish: DishType = location.state.dish;
 
-  console.log("ppppppp", dish);
+  // console.log("ppppppp", dish);
 
   const c_id = localStorage.getItem('c_id')
   const cityId = localStorage.getItem('cityId')
 
   // console.log("kkkkk", quantity)
-
 
   // ***************************************************************************************************
 
@@ -39,7 +38,6 @@ export const Dish: React.FC = () => {
         formData.append('city_id', cityId || '');
         formData.append('c_id', c_id || '');
         formData.append('next_id', '0');
-
         const response = await axios.post(
           'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
           formData
@@ -172,7 +170,7 @@ export const Dish: React.FC = () => {
       formData.append('weight_unit', String(cartData.weight_unit));
       formData.append('delivery_preference', String(cartData.deliveryPreference));
       formData.append('no_of_deliveries', String(cartData.deliveries));
-      formData.append('order_date', String(cartData.startDate));
+      formData.append('order_date', getTomorrowDate());
       formData.append('order_type', '1');
 
       console.log('formData', formData);
@@ -228,10 +226,10 @@ export const Dish: React.FC = () => {
     formData.append('c_id', localStorage.getItem('c_id') || '');
     formData.append('package_id', '13');
     formData.append('quantity', String(newQuantity));
-    formData.append('delivery_preference', '1');
-    formData.append('no_of_deliveries', '1');
+    formData.append('delivery_preference', '0');
+    formData.append('no_of_deliveries', '0');
     formData.append('order_date', formattedDate);
-    formData.append('order_type', '1');
+    formData.append('order_type', '2');
     try {
       const response = await axios.post(
         'https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem',
