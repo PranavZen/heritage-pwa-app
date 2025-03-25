@@ -8,8 +8,8 @@ export enum TabScreens {
 }
 
 export enum Routes {
-  Onboarding = '/',
-  SignIn = '/sign-in',
+  Onboarding = '/city-choose',
+  SignIn = '/',
   OrderHistory = '/profile/orders',
   OrderHistoryEmpty = '/profile/orders-empty',
   EditProfile = '/profile/edit',

@@ -21,7 +21,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   useEffect(() => {
     const getData = async () => {
       const formData = new FormData();
-      formData.append('c_id',  localStorage.getItem('c_id') || '');
+      formData.append('c_id', localStorage.getItem('c_id') || '');
       formData.append('city_id', localStorage.getItem('cityId') || '');
       formData.append('product_option_value_id', '50');
       try {
@@ -41,10 +41,11 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   console.log('[noOfDeliveries[noOfDeliveries[noOfDeliveries', noOfDeliveries);
   const [selectedPackage, setSelectedPackage] = useState<string>(dish.packages_name || '');
   const [selectedPackageDetails, setSelectedPackageDetails] = useState<string>();
+  const [cartData, SetSetCartData] = useState<string>();
 
-  console.log("aaaaaaaaaaaaaaaaaaa", noOfDeliveries);
+  // console.log('zzzzzzzzzzzzzzzz', cartData);
 
-  console.log("selectedPackagewwwww", selectedPackage);
+  console.log("dis", dish);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -61,7 +62,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       String(selectedPackageDetails || noOfDeliveries)
     );
     formData.append('order_date', String(dish.cart_order_date));
-    formData.append('order_type', '1');
+    formData.append('order_type', '2');
     try {
       const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem', formData);
       if (response.data.status === 'success') {
@@ -99,10 +100,37 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   };
 
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+  // **************************************************************************
+  const c_id = localStorage.getItem('c_id');
+  const cityId = localStorage.getItem('cityId');
 
+  useEffect(() => {
+    const getAddToCartData = async () => {
+      const formData = new FormData();
+      formData.append('city_id', cityId || '');
+      formData.append('c_id', c_id || '');
+      formData.append('next_id', '0');
+      try {
+        const response = await axios.post(
+          `https://heritage.bizdel.in/app/consumer/services_v11/getCartData`,
+          formData
+        );
+
+        console.log('bbbbbbbbb', response.data)
+        SetSetCartData(response.data.optionListing.map((elem: any) => elem.no_of_deliveries));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getAddToCartData();
+  }, [cityId, c_id]);
+
+  // *************************************************************************************
+  const handleOpenModal = () => {
+    
+    // setIsModalOpen(true);
+    //  navigate(`/dish/${dish.option_name}`)
+  }
 
   const handleOk = async () => {
     await handleUpdateCart(quantity);
@@ -117,7 +145,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const handlePackageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     setNoOfDeliveries(Number(selectedValue));
-};
+  };
 
 
   // ********************************************************************************************************
@@ -164,17 +192,28 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
             Qty : {quantity}
           </span>
-          <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-            Deliveries : {noOfDeliveries}
-          </span>
-          <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-            Preference : {dish.preferenceName}
-          </span>
-          <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-            Package : {dish.packages_name}
-          </span>
-        </div>
 
+          {/* Conditionally render the "Deliveries" field */}
+          {noOfDeliveries > 0 && (
+            <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
+              Deliveries : {noOfDeliveries}
+            </span>
+          )}
+
+          {/* Conditionally render the "Preference" field */}
+          {dish.preferenceName && (
+            <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
+              Preference : {dish.preferenceName}
+            </span>
+          )}
+
+          {/* Conditionally render the "Package" field if packages_name is not "0" */}
+          {dish.packages_name && dish.packages_name !== '0' && (
+            <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
+              Package : {dish.packages_name}
+            </span>
+          )}
+        </div>
         <div
           style={{
             height: '100%',
@@ -184,7 +223,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             justifyContent: 'space-between',
           }}
         >
-          <Button onClick={handleOpenModal}>Modify</Button>
+          {noOfDeliveries > 0 && (
+            <Button onClick={handleOpenModal}>Modify</Button>
+          )}
+
           {/* Remove (Decrease Quantity) */}
           <button
             style={{ padding: '14px 14px 4px 14px', borderRadius: 4 }}
@@ -218,7 +260,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         />
         <br />
         <br />
-
         <label>Delivery Preference:</label>
         <select value={deliveryPreference} onChange={(e) => setDeliveryPreference(e.target.value)}>
           {deliveryPreferenceInModal.length > 0 &&
@@ -238,28 +279,28 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         <label>No. of Deliveries:</label>
 
         <div>
-    <select
-        value={noOfDeliveries}
-        onChange={handlePackageChange}
-    >
-        {deliveriesInModal.map((pkg: any) => (
-            <optgroup key={pkg.package_id} label={pkg.product_name}>
+          <select
+            value={noOfDeliveries}
+            onChange={handlePackageChange}
+          >
+            {deliveriesInModal.map((pkg: any) => (
+              <optgroup key={pkg.package_id} label={pkg.product_name}>
                 {pkg.packages.map((packageDetails: any) => {
-                    const deliveryArray = packageDetails.no_of_deliveries.split(",");
+                  const deliveryArray = packageDetails.no_of_deliveries.split(",");
 
-                    if (selectedPackage === "Daily" && packageDetails.package_name === "Daily") {
-                        return deliveryArray.map((delivery: string, index: number) => (
-                            <option key={index} value={delivery}>
-                                {delivery}
-                            </option>
-                        ));
-                    }
-                    return null;
+                  if (selectedPackage === "Daily" && packageDetails.package_name === "Daily") {
+                    return deliveryArray.map((delivery: string, index: number) => (
+                      <option key={index} value={delivery}>
+                        {delivery}
+                      </option>
+                    ));
+                  }
+                  return null;
                 })}
-            </optgroup>
-        ))}
-    </select>
-</div>
+              </optgroup>
+            ))}
+          </select>
+        </div>
       </Modal>
     </>
   );

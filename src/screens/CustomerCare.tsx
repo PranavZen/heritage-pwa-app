@@ -32,12 +32,12 @@ export const CustomerCare: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+
     e.preventDefault();
     if (!message) {
       setError('Please enter a message or select an option');
       return;
     }
-
     setLoading(true);
     const cityId = localStorage.getItem('c_id');
     const questionId = 5; 

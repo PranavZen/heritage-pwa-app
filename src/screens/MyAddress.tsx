@@ -12,7 +12,7 @@ export const MyAddress: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
   //console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq',addresses);
-  const [newAddress, setNewAddress] = useState<any | null>(null); 
+  const [newAddress, setNewAddress] = useState<any | null>(null);
   const [opacity, setOpacity] = useState<number>(0);
   const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
   const [deleteAddressId, setDeleteAddressId] = useState<number | null>(null);
@@ -26,7 +26,7 @@ export const MyAddress: React.FC = () => {
   useEffect(() => {
     const fetchAddresses = async () => {
       const formData = new FormData();
-      formData.append('c_id', c_id || 'null');
+      formData.append('c_id', c_id || '0');
       try {
         setLoading(true);
         const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById', formData);
@@ -96,6 +96,18 @@ export const MyAddress: React.FC = () => {
   };
 
   const movetoAddressAddPage = () => {
+    const c_id = localStorage.getItem('c_id');
+
+    if (!c_id) {
+      Modal.info({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {
+          navigate('/sign-in');
+        },
+      });
+      return;
+    }
     navigate(Routes.AddressAdd);
   };
 
@@ -113,8 +125,8 @@ export const MyAddress: React.FC = () => {
   };
 
   const handleNewAddressAdd = (newAddressData: any) => {
-    setNewAddress(newAddressData); // Store the new address in state
-    setAddresses((prev) => [newAddressData, ...prev]); // Add the new address to the list
+    setNewAddress(newAddressData);
+    setAddresses((prev) => [newAddressData, ...prev]);
   };
 
   const renderHeader = (): JSX.Element => {
@@ -151,9 +163,7 @@ export const MyAddress: React.FC = () => {
             </p>
           </div>
 
-
-          {/* Display existing addresses in a separate div if more than one address */}
-          {addresses.length > 0 && (
+          {Array.isArray(addresses) && addresses.length > 0 ? (
             <div
               style={{
                 borderRadius: 10,
@@ -200,7 +210,19 @@ export const MyAddress: React.FC = () => {
                 </div>
               ))}
             </div>
+          ) : (
+            <div
+              style={{
+                borderRadius: 10,
+                marginBottom: 10,
+                backgroundColor: 'var(--white-color)',
+                padding: 20,
+              }}
+            >
+              <h3>No data found</h3>
+            </div>
           )}
+
 
         </section>
       </main>

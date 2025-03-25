@@ -68,7 +68,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
           'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
           formData
         );
-
+        
         if (response.data.optionListing) {
           const cartItems = response.data.optionListing.map((item: any) => item.cart_product_option_value_id);
           setCartId(cartItems);
@@ -99,7 +99,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
-          navigate('/sign-in');
+          navigate('/');
         },
       });
       return;
@@ -115,10 +115,10 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
       formData.append('quantity', '1');
       formData.append('weight', String(dish.weight));
       formData.append('weight_unit', String(dish.weight_unit));
-      formData.append('delivery_preference', '1');
-      formData.append('no_of_deliveries', '1');
+      formData.append('delivery_preference', '0');
+      formData.append('no_of_deliveries', '0');
       formData.append('order_date', getTomorrowDate());
-      formData.append('order_type', '1');
+      formData.append('order_type', '2');
 
       const response = await axios.post(
         'https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart',
@@ -143,7 +143,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
 
     try {
       const formData = new FormData();
-      formData.append('id', String(dish.cart_id || '')); // Handle null/undefined cart_id
+      formData.append('id', String(dish.cart_id || '')); 
       formData.append('c_id', c_id);
       formData.append('package_id', '13');
       formData.append('quantity', String(newQuantity));

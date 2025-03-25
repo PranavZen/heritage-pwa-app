@@ -71,9 +71,7 @@ export const Dish: React.FC = () => {
 
     fetchCartData();
   }, [cityId, c_id, dish.product_option_value_id]);
-
-
-
+  
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
 
@@ -106,7 +104,11 @@ export const Dish: React.FC = () => {
   };
 
   // *******************************************************************************************************
-
+  const getTomorrowDate = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
+  };
   const handleAddToCart = async (cartData: any) => {
 
     const c_id = localStorage.getItem('c_id');
@@ -116,15 +118,11 @@ export const Dish: React.FC = () => {
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
-
-
-          navigate('/sign-in');
+          navigate('/');
         },
       });
       return;
     }
-
-
     try {
       const formData = new FormData();
       formData.append('c_id', String(c_id || '1'));
@@ -136,12 +134,10 @@ export const Dish: React.FC = () => {
       formData.append('weight', String(cartData.weight ?? ''));
       formData.append('weight_unit', String(cartData.weight_unit ?? ''));
 
-      formData.append('delivery_preference', String(1));
-
-      formData.append('no_of_deliveries', '1');
-
-      formData.append('order_date', String(cartData.startDate ?? ''));
-      formData.append('order_type', '1');
+      formData.append('delivery_preference', '0');
+      formData.append('no_of_deliveries', '0');
+      formData.append('order_date', getTomorrowDate());
+      formData.append('order_type', '2');
 
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",

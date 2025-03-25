@@ -65,7 +65,7 @@ const modalMenu = [
   {
     id: 8,
     title: 'Sign out',
-    route: Routes.Onboarding,
+    route: Routes.SignIn,
     switch: false,
   },
 ];
@@ -112,10 +112,8 @@ export const Header: React.FC<Props> = ({
   }, []);
 
   const signOut = () => {
-    // Clear local storage
     localStorage.clear();
-    // Navigate to onboarding or login page
-    navigate(Routes.Onboarding);
+    navigate(Routes.SignIn);
   };
 
   const renderUser = (): JSX.Element | null => {
@@ -332,7 +330,7 @@ export const Header: React.FC<Props> = ({
                   key={item.id}
                   onClick={() => {
                     if (item.title === 'Sign out') {
-                      signOut();  // Clear local storage and sign out
+                      signOut(); 
                     } else if (item.route !== '') {
                       navigate(item.route);
                     }

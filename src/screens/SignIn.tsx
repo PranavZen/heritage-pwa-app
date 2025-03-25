@@ -127,6 +127,10 @@ export const SignIn: React.FC = () => {
     return <components.Header showGoBack={true} />;
   };
 
+  const redirectToCity =()=>{
+        navigate('/city-choose');
+  }
+ 
   const renderContent = (): JSX.Element => {
     return (
       <main className="scrollable container">
@@ -193,6 +197,10 @@ export const SignIn: React.FC = () => {
             </>
           )}
           <div style={{ gap: 4 }} className="row-center">
+
+            <button  onClick={redirectToCity} style={{textAlign:"center"}}>
+                  Explore Now
+            </button>
           </div>
         </section>
       </main>

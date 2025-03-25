@@ -19,7 +19,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   // console.log("qqqqqqqqqqqqq", dish);
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
   const [cartId, setCartId] = useState<string[]>([]);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
 
@@ -39,7 +39,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {  
-          navigate('/sign-in');
+          navigate('/');
         },
       });
       return; 
@@ -48,7 +48,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       const formData = new FormData();
       formData.append('c_id', c_id);
       formData.append('product_id', String(dish.product_id));
-      formData.append('package_id', '13');
+      formData.append('package_id', String(13));
       formData.append('product_option_id', String(dish.product_option_id));
       formData.append('product_option_value_id', String(dish.product_option_value_id));
       formData.append('quantity', '1');
@@ -57,7 +57,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       formData.append('delivery_preference', '1');
       formData.append('no_of_deliveries', '1');
       formData.append('order_date', getTomorrowDate());
-      formData.append('order_type', '1');
+      formData.append('order_type', '2');
   
       const response = await axios.post(
         'https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart',
@@ -137,8 +137,8 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       formData.append('c_id', c_id);
       formData.append('package_id', '13');
       formData.append('quantity', String(newQuantity));
-      formData.append('delivery_preference', '1');
-      formData.append('no_of_deliveries', '1');
+      formData.append('delivery_preference', '0');
+      formData.append('no_of_deliveries', '0');
       formData.append('order_date', getTomorrowDate());
       formData.append('order_type', '1');
 
