@@ -1,78 +1,77 @@
-import React, { useEffect, useState } from 'react';
-import { hooks } from '../hooks';
-import { Routes } from '../routes';
-import { svg } from '../assets/svg';
-import { DishType } from '../types';
-import { components } from '../components';
-import { actions } from '../store/actions';
-import axios from 'axios';
-import { notification } from 'antd';
+import React, { useEffect, useState } from "react";
+import { hooks } from "../hooks";
+import { Routes } from "../routes";
+import { svg } from "../assets/svg";
+import { DishType } from "../types";
+import { components } from "../components";
+import { actions } from "../store/actions";
+import axios from "axios";
+import { notification } from "antd";
 
 export const Dish: React.FC = () => {
   const navigate = hooks.useNavigate();
   const dispatch = hooks.useDispatch();
   const location = hooks.useLocation();
   const [packageOptions, setPackageOptions] = useState<any[]>([]);
-  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
+  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<
+    any[]
+  >([]);
   const [quantity, setQuantity] = useState(1);
-    const [cartId, setCartId] = useState<string[]>([]);
-   
-    const [cartItemId, setCartItemId] = useState<string | null>(null);
-    console.log("cartIdcartIdcartIdcartId", cartItemId);
+  const [cartId, setCartId] = useState<string[]>([]);
+
+  const [cartItemId, setCartItemId] = useState<string | null>(null);
+  console.log("cartIdcartIdcartIdcartId", cartItemId);
 
   const dish: DishType = location.state.dish;
 
   console.log("ppppppp", dish);
 
-  const c_id = localStorage.getItem('c_id')
-  const cityId = localStorage.getItem('cityId')
+  const c_id = localStorage.getItem("c_id");
+  const cityId = localStorage.getItem("cityId");
 
   // console.log("kkkkk", quantity)
-
 
   // ***************************************************************************************************
 
   useEffect(() => {
-      const fetchCartData = async () => {
-        try {
-          const formData = new FormData();
-          formData.append('city_id', cityId || '');
-          formData.append('c_id', c_id || '');
-          formData.append('next_id', '0');
-  
-          const response = await axios.post(
-            'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
-            formData
-          );
-  
-          if (response.data.optionListing) {
-            const cartItems = response.data.optionListing.map(
-              (item: any) => item.cart_product_option_value_id
-            );
-            setCartId(cartItems);
-  
-            const matchedItem = response.data.optionListing.find(
-              (item: any) =>
-                item.cart_product_option_value_id === dish.product_option_value_id
-            );
-  
-            if (matchedItem) {
-              setQuantity(Number(matchedItem.quantity) || 1);
-              setCartItemId(String(matchedItem.cart_id));
-            } else {
-              setQuantity(0);
-              setCartItemId(null);
-            }
-          }
-        } catch (error) {
-          console.error('Error fetching cart data:', error);
-        }
-      };
-  
-      fetchCartData();
-    }, [cityId, c_id, dish.product_option_value_id]);
-  
+    const fetchCartData = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("city_id", cityId || "");
+        formData.append("c_id", c_id || "");
+        formData.append("next_id", "0");
 
+        const response = await axios.post(
+          "https://heritage.bizdel.in/app/consumer/services_v11/getCartData",
+          formData
+        );
+
+        if (response.data.optionListing) {
+          const cartItems = response.data.optionListing.map(
+            (item: any) => item.cart_product_option_value_id
+          );
+          setCartId(cartItems);
+
+          const matchedItem = response.data.optionListing.find(
+            (item: any) =>
+              item.cart_product_option_value_id === dish.product_option_value_id
+          );
+
+          if (matchedItem) {
+            setQuantity(Number(matchedItem.quantity) || 1);
+            setCartItemId(String(matchedItem.cart_id));
+          } else {
+            setQuantity(0);
+            setCartItemId(null);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+      }
+    };
+
+    fetchCartData();
+  }, [cityId, c_id, dish.product_option_value_id]);
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -82,25 +81,34 @@ export const Dish: React.FC = () => {
     } else {
       try {
         const formData = new FormData();
-        formData.append('id', String(cartItemId));
-        formData.append('c_id', c_id || '');
+        formData.append("id", String(cartItemId));
+        formData.append("c_id", c_id || "");
 
         const response = await axios.post(
-          'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
+          "https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem",
           formData
         );
 
-        if (response.data.status === 'success') {
-          notification.success({ message: 'Success', description: response.data.message });
+        if (response.data.status === "success") {
+          notification.success({
+            message: "Success",
+            description: response.data.message,
+          });
           window.location.reload();
           setQuantity(0);
           // setCartItemId(null);
         } else {
-          notification.error({ message: 'Error', description: response.data.message || 'Failed to remove item.' });
+          notification.error({
+            message: "Error",
+            description: response.data.message || "Failed to remove item.",
+          });
         }
       } catch (error) {
-        console.error('Error removing item from cart:', error);
-        notification.error({ message: 'Error', description: 'Failed to remove item from cart.' });
+        console.error("Error removing item from cart:", error);
+        notification.error({
+          message: "Error",
+          description: "Failed to remove item from cart.",
+        });
       }
     }
   };
@@ -110,27 +118,33 @@ export const Dish: React.FC = () => {
   const handleAddToCart = async (cartData: any) => {
     try {
       const formData = new FormData();
-      formData.append('c_id', String(c_id || '1'));
-      formData.append('product_id', String(cartData.product_id ?? ''));
-      formData.append('package_id', '13');
-      formData.append('product_option_id', String(cartData.product_option_id ?? ''));
-      formData.append('product_option_value_id', String(cartData.product_option_value_id ?? ''));
-      formData.append('quantity', '1');
-      formData.append('weight', String(cartData.weight ?? ''));
-      formData.append('weight_unit', String(cartData.weight_unit ?? ''));
+      formData.append("c_id", String(c_id || "1"));
+      formData.append("product_id", String(cartData.product_id ?? ""));
+      formData.append("package_id", "13");
+      formData.append(
+        "product_option_id",
+        String(cartData.product_option_id ?? "")
+      );
+      formData.append(
+        "product_option_value_id",
+        String(cartData.product_option_value_id ?? "")
+      );
+      formData.append("quantity", "1");
+      formData.append("weight", String(cartData.weight ?? ""));
+      formData.append("weight_unit", String(cartData.weight_unit ?? ""));
 
-      formData.append('delivery_preference', String(1));
+      formData.append("delivery_preference", String(1));
 
-      formData.append('no_of_deliveries', '1');
+      formData.append("no_of_deliveries", "1");
 
-      formData.append('order_date', String(cartData.startDate ?? ''));
-      formData.append('order_type', '1');
+      formData.append("order_date", String(cartData.startDate ?? ""));
+      formData.append("order_type", "1");
 
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
         formData
       );
-      console.log("wwwwwww", response)
+      console.log("wwwwwww", response);
       if (response.data.status) {
         notification.success({ message: response.data.message });
         window.location.reload();
@@ -150,40 +164,49 @@ export const Dish: React.FC = () => {
     console.log("carttttttttttttttttt", cartData);
     try {
       const formData = new FormData();
-      formData.append('c_id', String(c_id || '1'));
-      formData.append('product_id', String(cartData.product_id));
-      formData.append('package_id', '13');
-      formData.append('product_option_id', String(cartData.product_option_id));
-      formData.append('product_option_value_id', String(cartData.product_option_value_id));
-      formData.append('quantity', '1');
-      formData.append('weight', String(cartData.weight));
-      formData.append('weight_unit', String(cartData.weight_unit));
-      formData.append('delivery_preference', String(cartData.deliveryPreference));
-      formData.append('no_of_deliveries', String(cartData.deliveries));
-      formData.append('order_date', String(cartData.startDate));
-      formData.append('order_type', '1');
+      formData.append("c_id", String(c_id || "1"));
+      formData.append("product_id", String(cartData.product_id));
+      formData.append("package_id", "13");
+      formData.append("product_option_id", String(cartData.product_option_id));
+      formData.append(
+        "product_option_value_id",
+        String(cartData.product_option_value_id)
+      );
+      formData.append("quantity", "1");
+      formData.append("weight", String(cartData.weight));
+      formData.append("weight_unit", String(cartData.weight_unit));
+      formData.append(
+        "delivery_preference",
+        String(cartData.deliveryPreference)
+      );
+      formData.append("no_of_deliveries", String(cartData.deliveries));
+      formData.append("order_date", String(cartData.startDate));
+      formData.append("order_type", "1");
 
-      console.log('formData', formData);
-      const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart', formData);
-      console.log('rrrrrrrrrrrrrrr', response);
-      if (response.data.status === 'success') {
+      console.log("formData", formData);
+      const response = await axios.post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
+        formData
+      );
+      console.log("rrrrrrrrrrrrrrr", response);
+      if (response.data.status === "success") {
         notification.success({
-          message: 'Success',
+          message: "Success",
           description: response.data.message,
         });
         return response.data.cart_count;
       } else {
         notification.error({
-          message: 'Error',
-          description: response.data.message || 'Something went wrong.',
+          message: "Error",
+          description: response.data.message || "Something went wrong.",
         });
         return null;
       }
     } catch (error) {
       console.error(error);
       notification.error({
-        message: 'Error',
-        description: 'Failed to add item to cart. Please try again later.',
+        message: "Error",
+        description: "Failed to add item to cart. Please try again later.",
       });
       return null;
     }
@@ -197,22 +220,22 @@ export const Dish: React.FC = () => {
 
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const formattedDate = tomorrow.toISOString().split('T')[0];
-    formData.append('id', cartItemId || '');
-    formData.append('c_id', localStorage.getItem('c_id') || '');
-    formData.append('package_id', '13');
-    formData.append('quantity', String(newQuantity));
-    formData.append('delivery_preference', '1');
-    formData.append('no_of_deliveries', '1');
-    formData.append('order_date', formattedDate);
-    formData.append('order_type', '1');
+    const formattedDate = tomorrow.toISOString().split("T")[0];
+    formData.append("id", cartItemId || "");
+    formData.append("c_id", localStorage.getItem("c_id") || "");
+    formData.append("package_id", "13");
+    formData.append("quantity", String(newQuantity));
+    formData.append("delivery_preference", "1");
+    formData.append("no_of_deliveries", "1");
+    formData.append("order_date", formattedDate);
+    formData.append("order_type", "1");
     try {
       const response = await axios.post(
-        'https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem',
+        "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
         formData
       );
 
-      if (response.data.status === 'success') {
+      if (response.data.status === "success") {
         setQuantity(newQuantity);
         notification.success({ message: response.data.message });
         window.location.reload();
@@ -220,7 +243,7 @@ export const Dish: React.FC = () => {
         notification.error({ message: "Please 1st add the item." });
       }
     } catch (error) {
-      console.error('Error updating cart:', error);
+      console.error("Error updating cart:", error);
     }
   };
 
@@ -229,11 +252,14 @@ export const Dish: React.FC = () => {
   useEffect(() => {
     const deliveryData = async () => {
       const formData = new FormData();
-      formData.append('c_id', c_id || 'null');
-      formData.append('city_id', cityId || 'null');
-      formData.append('product_option_value_id', '50');
+      formData.append("c_id", c_id || "null");
+      formData.append("city_id", cityId || "null");
+      formData.append("product_option_value_id", "50");
       try {
-        const response = await axios.post(`https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`, formData);
+        const response = await axios.post(
+          `https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`,
+          formData
+        );
 
         // console.log("paaaaaaaaaaaaaaa", response.data.productDetails);
 
@@ -241,7 +267,7 @@ export const Dish: React.FC = () => {
       } catch (error) {
         console.log(error);
       }
-    }
+    };
     deliveryData();
   }, []);
 
@@ -249,23 +275,25 @@ export const Dish: React.FC = () => {
   const [opacity, setOpacity] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
-  const [isAlternateModalOpen, setIsAlternateModalOpen] = useState<boolean>(false);
-  const [startDate, setStartDate] = useState<string>('');
+  const [isAlternateModalOpen, setIsAlternateModalOpen] =
+    useState<boolean>(false);
+  const [startDate, setStartDate] = useState<string>("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const [deliveryPreference, setDeliveryPreference] = useState<string>('');
+  const [deliveryPreference, setDeliveryPreference] = useState<string>("");
   const [deliveries, setDeliveries] = useState<number>(15);
   const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
 
   const today = new Date();
   today.setDate(today.getDate() + 1);
-  const minDate = today.toISOString().split('T')[0];
+  const minDate = today.toISOString().split("T")[0];
 
   const { getDishQty } = hooks.useCartHandler();
-  const { addToWishlist, removeFromWishlist, ifInWishlist } = hooks.useWishlistHandler();
+  const { addToWishlist, removeFromWishlist, ifInWishlist } =
+    hooks.useWishlistHandler();
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
-  hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
+  hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -285,12 +313,12 @@ export const Dish: React.FC = () => {
 
   const handleOpenModalAlternateDays = () => {
     setIsAlternateModalOpen(true);
-  }
+  };
 
   const handleCloseModalAlternateDays = () => {
     setIsAlternateModalOpen(false);
     // console.log("aaaaaaaaaaaaaaaaaaaaaaaaa");
-  }
+  };
 
   const handleAddToCartWithPreferences = async () => {
     const dishWithPreferences = {
@@ -326,7 +354,7 @@ export const Dish: React.FC = () => {
 
   const handleAddToCartWithCustomPreferences = async () => {
     const dishWithCustomPreferences = {
-      c_id: c_id || 'null',
+      c_id: c_id || "null",
       // package_id: 13, // Assuming this value is predefined or can be dynamic
       package_days: 0,
       product_id: dish.product_id, // Assuming `dish` contains the product ID
@@ -334,7 +362,7 @@ export const Dish: React.FC = () => {
       product_option_value_id: 11, // Assuming the product option value ID is static or can be dynamic
       quantity: 1, // Set as per the dish quantity
       weight: dish.weight, // Set as per the dish weight
-      weight_unit: 'g', // Assuming weight unit is 'g'
+      weight_unit: "g", // Assuming weight unit is 'g'
       delivery_preference: deliveryPreference,
       no_of_deliveries: deliveries,
       order_date: startDate, // Start date
@@ -349,8 +377,6 @@ export const Dish: React.FC = () => {
     }
   };
 
-
-
   const handleCustomDaySelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
 
@@ -360,64 +386,57 @@ export const Dish: React.FC = () => {
       if (checked) {
         return [...prevSelectedDays, upperCaseValue];
       } else {
-        return prevSelectedDays.filter(day => day !== upperCaseValue);
+        return prevSelectedDays.filter((day) => day !== upperCaseValue);
       }
     });
   };
 
-
   const renderHeader = (): JSX.Element => {
-    return (
-      <components.Header
-        showGoBack={true}
-        showBasket={true}
-      />
-    );
+    return <components.Header showGoBack={true} showBasket={true} />;
   };
 
   const renderImage = (): JSX.Element => {
     return (
-      <div style={{ position: 'relative', marginBottom: 30 }}>
-        <img
-          src={dish.option_value_image}
-          alt={dish.option_name}
-          style={{
-            width: '100%',
-            height: 'auto',
-          }}
-        />
-        {dish.isNew && (
+      <div className="upperBox">
+        <div className="productImgWrap">
           <img
+            src={dish.option_value_image}
             alt={dish.option_name}
-            src={require('../assets/icons/14.png')}
-            style={{
-              width: 58.09,
-              height: 'auto',
-              position: 'absolute',
-              top: 21,
-              left: 20,
-            }}
+            className="productImg"
           />
-        )}
-        {dish.isHot && (
-          <img
-            alt="Hot"
-            src={require('../assets/icons/15.png')}
-            style={{
-              width: 24,
-              left: 0,
-              top: 0,
-              marginLeft: 20,
-              marginTop: 20,
-              height: 'auto',
-              position: 'absolute',
-            }}
-          />
-        )}
+          {dish.isNew && (
+            <img
+              alt={dish.option_name}
+              src={require("../assets/icons/14.png")}
+              style={{
+                width: 58.09,
+                height: "auto",
+                position: "absolute",
+                top: 21,
+                left: 20,
+              }}
+            />
+          )}
+          {dish.isHot && (
+            <img
+              alt="Hot"
+              src={require("../assets/icons/15.png")}
+              style={{
+                width: 24,
+                left: 0,
+                top: 0,
+                marginLeft: 20,
+                marginTop: 20,
+                height: "auto",
+                position: "absolute",
+              }}
+            />
+          )}
+        </div>
         <button
           style={{
             padding: 14,
-            position: 'absolute',
+            position: "absolute",
             right: 0,
             top: 0,
             borderRadius: 4,
@@ -430,84 +449,60 @@ export const Dish: React.FC = () => {
         >
           <svg.HeartSvg dish={dish} />
         </button>
-
       </div>
     );
   };
 
   const renderDetails = (): JSX.Element => {
     return (
-      <div className="infoWrap">
-        <div
-          className=""
-          style={{ marginBottom: 12 }}
-        >
+      <div className="productInfoBox">
+        <div className="infoWrap">
           <h3
             className="number-of-lines-1"
-            style={{ textTransform: 'capitalize' }}
+            style={{ textTransform: "capitalize" }}
           >
-            {dish.name}
-          </h3>
-          <span
-            className="t16"
-            style={{ marginLeft: 14, whiteSpace: 'nowrap' }}
-          >
-            <div>{dish.kcal} kcal - {dish.weight}g </div>
             {dish.option_value_name}
-          </span>
+          </h3>
+          <span className="t16">{dish.weight} ml</span>
+          <div className="ppdBox">
+            <span>Packs</span>
+            <div className="cartButtonWrap">
+              <button
+                onClick={(event) =>
+                  quantity === 1
+                    ? handleRemoveFromCart(event)
+                    : handleUpdateCart(quantity - 1)
+                }
+                className="cartButton"
+              >
+                -
+              </button>
+
+              <span className="countNum">{quantity}</span>
+
+              <button
+                onClick={() => handleUpdateCart(quantity + 1)}
+                className="cartButton"
+              >
+                +
+              </button>
+            </div>
+            <span>Per Day</span>
+          </div>
+          <div className="priceWrap">
+            <span><small>MRP</small> ₹ {dish.price}</span>
+          </div>
+          <span className="ppText">Per Pack</span>
+          <p className="fatText">Fat 3.0%, SNF 8.5%</p>
         </div>
-        <p className="t16">{dish.description}</p>
+        {/* <p className="t16">{dish.description}</p> */}
       </div>
     );
   };
 
   const renderButtons = (): JSX.Element => {
     return (
-      <div className='infoBtnsWrap' style={{ padding: 20 }}>
-        <div
-          className="row-center-space-between"
-          style={{
-            backgroundColor: 'var(--white-color)',
-            borderRadius: 10,
-            paddingLeft: 20,
-            marginBottom: 10,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: 'DM Sans',
-              fontSize: 20,
-              fontWeight: 700,
-            }}
-          >
-            ₹ {dish.price}
-          </span>
-
-          {/* ************************************************************************************************** */}
-          {/* Remove quantity */}
-          <div className="row-center">
-            <button
-               onClick={(event) =>
-                 quantity === 1 ? handleRemoveFromCart(event) : handleUpdateCart(quantity - 1)
-               }
-              style={{ padding: '4px 14px', borderRadius: 4 }}
-            >
-              <svg.MinusSvg />
-            </button>
-
-            <span style={{ margin: '0 10px' }}>{quantity}</span>
-
-            <button
-              onClick={() => handleUpdateCart(quantity + 1)}
-              style={{ padding: '4px 14px', borderRadius: 4 }}
-            >
-              <svg.AddSvg />
-            </button>
-          </div>
-          {/* ******************************************************************************************************/}
-          {/* Remove quantity from cart */}
-
-        </div>
+      <div className="infoBtnsWrap" style={{ padding: 20 }}>
         <div>
           <p className="Choose-your-delivery-plan">Choose your delivery plan</p>
         </div>
@@ -515,20 +510,21 @@ export const Dish: React.FC = () => {
         {/* add quantity */}
         <components.Button
           text="+ Add to cart"
-          onClick={() => handleAddToCart({
-            product_id: dish.product_id || "",
-            product_option_id: dish.product_option_id || "",
-            product_option_value_id: dish.product_option_value_id || "",
-            weight: dish.weight || "0",
-            weight_unit: dish.weight_unit || "kg",
-            deliveryPreference: deliveryPreference || "1",
-            deliveries: deliveries || "1",
-            startDate: startDate || new Date().toISOString().split("T")[0],
-          })}
+          onClick={() =>
+            handleAddToCart({
+              product_id: dish.product_id || "",
+              product_option_id: dish.product_option_id || "",
+              product_option_value_id: dish.product_option_value_id || "",
+              weight: dish.weight || "0",
+              weight_unit: dish.weight_unit || "kg",
+              deliveryPreference: deliveryPreference || "1",
+              deliveries: deliveries || "1",
+              startDate: startDate || new Date().toISOString().split("T")[0],
+            })
+          }
           containerStyle={{ marginBottom: 10 }}
         />
         {/* add quantity */}
-
 
         <components.Button
           text="Daily"
@@ -551,10 +547,7 @@ export const Dish: React.FC = () => {
   const renderModal = (): JSX.Element => {
     if (!isModalOpen) return <> </>;
     return (
-      <components.Modal
-        title="Delivery Preferences"
-        onClose={handleCloseModal}
-      >
+      <components.Modal title="Delivery Preferences" onClose={handleCloseModal}>
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
             <label>Start Date :- </label>
@@ -566,11 +559,16 @@ export const Dish: React.FC = () => {
               required
             />
           </div>
-          <select value={deliveryPreference} onChange={(e) => setDeliveryPreference(e.target.value)}>
-            {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 ? (
+          <select
+            value={deliveryPreference}
+            onChange={(e) => setDeliveryPreference(e.target.value)}
+          >
+            {deliveryOptionsPreference &&
+            deliveryOptionsPreference.length > 0 ? (
               deliveryOptionsPreference.map((elem) => (
                 <>
-                  {elem.deliveryPreference && elem.deliveryPreference.length > 0 ? (
+                  {elem.deliveryPreference &&
+                  elem.deliveryPreference.length > 0 ? (
                     elem.deliveryPreference.map((option: any) => (
                       <option key={option.id} value={option.id}>
                         {option.name}
@@ -593,21 +591,26 @@ export const Dish: React.FC = () => {
               value={deliveries}
               onChange={(e) => {
                 const selectedValue = Number(e.target.value);
-                console.log('Selected Delivery :', selectedValue);
+                console.log("Selected Delivery :", selectedValue);
                 setDeliveries(selectedValue);
               }}
             >
-              {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 &&
+              {deliveryOptionsPreference &&
+                deliveryOptionsPreference.length > 0 &&
                 deliveryOptionsPreference.map((elem) => {
-                  return elem.packages && elem.packages.length > 0 ? elem.packages.map((option: any) => {
-                    if (option.package_name === "Daily") {
-                      return option.no_of_deliveries.split(',').map((delivery: string, index: number) => (
-                        <option key={index} value={delivery}>
-                          {`${delivery}`}
-                        </option>
-                      ));
-                    }
-                  }) : null;
+                  return elem.packages && elem.packages.length > 0
+                    ? elem.packages.map((option: any) => {
+                        if (option.package_name === "Daily") {
+                          return option.no_of_deliveries
+                            .split(",")
+                            .map((delivery: string, index: number) => (
+                              <option key={index} value={delivery}>
+                                {`${delivery}`}
+                              </option>
+                            ));
+                        }
+                      })
+                    : null;
                 })}
             </select>
           </div>
@@ -627,7 +630,8 @@ export const Dish: React.FC = () => {
     if (!isAlternateModalOpen) return <></>;
 
     return (
-      <components.Modal title="Delivery Preferences"
+      <components.Modal
+        title="Delivery Preferences"
         onClose={handleCloseModalAlternateDays}
       >
         <div className="main-card-daily-delivery">
@@ -641,11 +645,16 @@ export const Dish: React.FC = () => {
               required
             />
           </div>
-          <select value={deliveryPreference} onChange={(e) => setDeliveryPreference(e.target.value)}>
-            {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 ? (
+          <select
+            value={deliveryPreference}
+            onChange={(e) => setDeliveryPreference(e.target.value)}
+          >
+            {deliveryOptionsPreference &&
+            deliveryOptionsPreference.length > 0 ? (
               deliveryOptionsPreference.map((elem) => (
                 <>
-                  {elem.deliveryPreference && elem.deliveryPreference.length > 0 ? (
+                  {elem.deliveryPreference &&
+                  elem.deliveryPreference.length > 0 ? (
                     elem.deliveryPreference.map((option: any) => (
                       <option key={option.id} value={option.id}>
                         {option.name}
@@ -668,21 +677,26 @@ export const Dish: React.FC = () => {
               value={deliveries}
               onChange={(e) => {
                 const selectedValue = Number(e.target.value);
-                console.log('Selected Delivery :', selectedValue);
+                console.log("Selected Delivery :", selectedValue);
                 setDeliveries(selectedValue);
               }}
             >
-              {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 &&
+              {deliveryOptionsPreference &&
+                deliveryOptionsPreference.length > 0 &&
                 deliveryOptionsPreference.map((elem) => {
-                  return elem.packages && elem.packages.length > 0 ? elem.packages.map((option: any) => {
-                    if (option.package_name === "Alternate Days") {
-                      return option.no_of_deliveries.split(',').map((delivery: string, index: number) => (
-                        <option key={index} value={delivery}>
-                          {`${delivery}`}
-                        </option>
-                      ));
-                    }
-                  }) : null;
+                  return elem.packages && elem.packages.length > 0
+                    ? elem.packages.map((option: any) => {
+                        if (option.package_name === "Alternate Days") {
+                          return option.no_of_deliveries
+                            .split(",")
+                            .map((delivery: string, index: number) => (
+                              <option key={index} value={delivery}>
+                                {`${delivery}`}
+                              </option>
+                            ));
+                        }
+                      })
+                    : null;
                 })}
             </select>
           </div>
@@ -699,9 +713,7 @@ export const Dish: React.FC = () => {
   };
   // **************************Alternate Days*************************************************
 
-
   // **************************Alternate Days*************************************************
-
 
   // ****************************Custom*************************************************
   // const renderCustomModal = (): JSX.Element => {
@@ -722,7 +734,6 @@ export const Dish: React.FC = () => {
   //             min={minDate}
   //           />
   //         </div>
-
 
   //         <div className="week-days">
   //           {deliveryOptionsPreference &&
@@ -749,7 +760,6 @@ export const Dish: React.FC = () => {
   //                 : null;
   //             })}
   //         </div>
-
 
   //         <div className="main-card-daily-delivery-box">
   //           <label>Delivery Preference :-</label>
@@ -820,11 +830,11 @@ export const Dish: React.FC = () => {
 
   const renderContent = (): JSX.Element => {
     return (
-      <main className="scrollable">
+      <section className="scrollable">
         {renderImage()}
         {renderDetails()}
         {renderButtons()}
-      </main>
+      </section>
     );
   };
   return (

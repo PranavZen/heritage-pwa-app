@@ -8,7 +8,6 @@ function App() {
   return (
     <div
       id='app'
-      style={{backgroundColor: color}}
     >
       <StackNavigator />
     </div>
