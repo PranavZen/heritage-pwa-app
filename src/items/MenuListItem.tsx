@@ -250,9 +250,10 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
         <svg.HeartSvg dish={dish} />
       </button>
 
-      <div className="cartButtonWrap">
+      <div className="lastBox">
+      <div className="cartButtonWrap ">
         {quantity === 0 ? (
-          <button className="cartButton" onClick={HandleAddToCart}>
+          <button className="cartButton addBtnText" onClick={HandleAddToCart}>
             + Add
           </button>
         ) : (
@@ -265,7 +266,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
               }
               className="cartButton"
             >
-              <svg.MinusSvg />
+            -
             </button>
 
             <span className="countNum">{quantity}</span>
@@ -274,10 +275,12 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
               onClick={() => handleUpdateCart(quantity + 1)}
               className="cartButton"
             >
-              <svg.AddSvg />
+             +
             </button>
           </>
         )}
+      </div>
+      <span className="smallText">Deliver once</span>
       </div>
     </li>
   );

@@ -124,7 +124,7 @@ details summary {
   margin-right: 10px;
   background-color: green;
   color: 17px;
-  font-family: Arial, Helvetica, sans-serif;
+  // font-family: Arial, Helvetica, sans-serif;
 }
 
 .terms-and-conditions span a {
@@ -419,6 +419,9 @@ details summary {
   .proLeftBox {
     display: flex;
     gap: 20px;
+    @media screen and (max-width: 767px) {
+      gap: 8px;
+    }
     .proItemImgWrap {
       width: 120px;
       height: 120px;
@@ -428,6 +431,10 @@ details summary {
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      @media screen and (max-width: 767px) {
+        width: 70px;
+        height: 70px;
+      }
       img {
         width: 100%;
         height: 100%;
@@ -449,15 +456,24 @@ details summary {
         text-overflow: ellipsis;
         font-weight: 600;
         margin-bottom: 5px;
+        @media screen and (max-width: 767px) {
+          font-size: 14px;
+        }
       }
       .proWeigh {
         font-size: 14px;
         margin-bottom: 10px;
+        @media screen and (max-width: 767px) {
+          font-size: 12px;
+        }
       }
       .proPrice {
         font-size: 18px;
         font-weight: 600;
         color: #1a712e;
+        @media screen and (max-width: 767px) {
+          font-size: 16px;
+        }
       }
     }
   }
@@ -465,36 +481,69 @@ details summary {
     position: absolute;
     top: 15px;
     right: 25px;
+    @media screen and (max-width: 767px) {
+      top: 8px;
+      right: 8px;
+    }
   }
-  .cartButtonWrap {
-    display: flex;
-    align-items: center;
-    background-color: #1a712e;
-    justify-content: space-evenly;
-    border-radius: 50px;
-    width: 20%;
-    margin: 15px 0 0 auto;
-    .cartButton {
-      padding: 8px;
-      font-size: 16px;
-      color: #fff;
-      svg {
-        path {
-          stroke: #fff;
-          stroke-width: 2;
+  .lastBox {
+    .cartButtonWrap {
+      display: flex;
+      align-items: center;
+      background-color: #1a712e;
+      justify-content: space-evenly;
+      border-radius: 50px;
+      width: 100%;
+      margin: 15px 0 0 auto;
+      overflow: hidden;
+      .cartButton {
+        padding: 8px;
+        font-size: 16px;
+        color: #fff;
+        @media screen and (max-width: 767px) {
+          padding: 3.5px;
+          font-size: 16px;
+        }
+        &.addBtnText {
+          background-color: #242424;
+          width: 100%;
+          align-items: center;
+          justify-content: center;
+          padding: 9.5px;
+          @media screen and (max-width: 767px) {
+            padding: 6.5px;
+            font-size: 12px;
+          }
+        }
+        svg {
+          path {
+            stroke: #fff;
+            stroke-width: 2;
+          }
+        }
+      }
+      .countNum {
+        font-size: 18px;
+        font-weight: 500;
+        color: #fff;
+        @media screen and (max-width: 767px) {
+          font-size: 14px;
         }
       }
     }
-    .countNum {
-      font-size: 18px;
-      font-weight: 500;
-      color: #fff;
+    .smallText {
+      padding-top: 5px;
+      font-size: 14px;
+      color: #c80000;
+      @media screen and (max-width: 767px) {
+        font-size: 12px;
+      }
     }
   }
 }
 .cartLitItem {
   display: flex;
-  align-items: center;
+  // align-items: center;
   justify-content: space-between;
   gap: 20px;
   margin-bottom: 10px;
@@ -542,10 +591,17 @@ details summary {
       justify-content: space-evenly;
       border-radius: 50px;
       margin-top: 15px;
+      &.modifyBtn {
+        background-color: #f8d907;
+        border: 1px solid #333;
+      }
       .cartButton {
         padding: 8px;
         font-size: 16px;
         color: #fff;
+        &.modifyText {
+          color: #333;
+        }
         svg {
           path {
             stroke: #fff;
@@ -558,6 +614,106 @@ details summary {
         font-weight: 500;
         color: #fff;
       }
+    }
+  }
+}
+
+.upperBox {
+  position: relative;
+  .productImgWrap {
+    width: 230px;
+    height: 230px;
+    margin: 0 auto;
+    position: relative;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+}
+.productInfoBox {
+  .infoWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h3 {
+      font-family: "SF Pro Display Regular";
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+    .t16 {
+      font-family: "SF Pro Display Light";
+      color: #0c1d2e;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+    .ppdBox {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      span{
+        font-family: "SF Pro Display Light";
+        font-size: 14px;
+      }
+      .cartButtonWrap {
+        display: flex;
+        align-items: center;
+        background-color: #1a712e;
+        justify-content: space-evenly;
+        border-radius: 50px;
+        width: 25%;
+        &.modifyBtn {
+          background-color: #f8d907;
+          border: 1px solid #333;
+        }
+        .cartButton {
+          padding: 8px;
+          font-size: 16px;
+          color: #fff;
+          &.modifyText {
+            color: #333;
+          }
+          svg {
+            path {
+              stroke: #fff;
+              stroke-width: 2;
+            }
+          }
+        }
+        .countNum {
+          font-size: 18px;
+          font-weight: 500;
+          color: #fff;
+        }
+      }
+    }
+    .priceWrap{
+      margin: 15px 0 5px;
+      small{
+        font-family: "SF Pro Display Light";
+        font-size: 14px;
+      }
+      span{
+        font-family: "SF Pro Display Medium";
+        font-size: 20px;
+      }
+    }
+    .ppText{
+      font-family: "SF Pro Display Light";
+      font-size: 14px;
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+    .fatText{
+      font-family: "SF Pro Display Light";
+      font-size: 16px;
+      display: inline-block;
+      margin-bottom: 5px;
     }
   }
 }
@@ -905,5 +1061,8 @@ select {
       color: #fff;
     }
   }
+}
+.mb5 {
+  margin-bottom: 20px;
 }
 // Pranav added new css end

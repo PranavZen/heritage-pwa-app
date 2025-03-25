@@ -162,6 +162,14 @@ export const Home: React.FC = () => {
             pagination={{ clickable: true }}
             navigation={true}
             mousewheel={true}
+            breakpoints={{
+              0: {
+                slidesPerView: 1.6, // For screens below 767px
+              },
+              768: {
+                slidesPerView: 2.8, // For screens 768px and above
+              },
+            }}
           >
             {dishes.map((dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;

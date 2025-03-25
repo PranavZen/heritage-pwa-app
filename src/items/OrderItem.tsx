@@ -170,8 +170,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           </div>
         </div>
         <div className="cartRightBox">
-          <div className="cartButtonWrap">
-            <div onClick={handleOpenModal} className="cartButton">Modify</div>
+          <div className="cartButtonWrap modifyBtn">
+            <div onClick={handleOpenModal} className="cartButton modifyText">Modify</div>
           </div>
           {/* Remove (Decrease Quantity) */}
           <div className="cartButtonWrap">
