@@ -1,6 +1,62 @@
-@use '_text.scss';
-@use '_flex.scss';
-@use '_fonts.scss';
-@use '_reset.scss';
-@use '_global.scss';
-@use '_variables.scss';
+@use "_text.scss";
+@use "_flex.scss";
+// @use '_fonts.scss';
+@use "_reset.scss";
+@use "_global.scss";
+@use "_variables.scss";
+@font-face {
+  font-family: "SF Pro Display Medium";
+  font-style: normal;
+  // font-weight: 400;
+  src: local("SF Pro Display Medium"),
+    url("../assets/fonts/sf-pro-display/SF-Pro-Display-Medium.otf")
+      format("opentype");
+}
+@font-face {
+    font-family: "SF Pro Display Light";
+    font-style: normal;
+    // font-weight: 400;
+    src: local("SF Pro Display Light"),
+      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Light.otf")
+        format("opentype");
+  }
+  @font-face {
+    font-family: "SF Pro Display Regular";
+    font-style: normal;
+    // font-weight: 400;
+    src: local("SF Pro Display Regular"),
+      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Regular.otf")
+        format("opentype");
+  }
+  @font-face {
+    font-family: "SF Pro Display Semibold";
+    font-style: normal;
+    // font-weight: 400;
+    src: local("SF Pro Display Semibold"),
+      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Semibold.otf")
+        format("opentype");
+  }
+  @font-face {
+    font-family: "SF Pro Display Bold";
+    font-style: normal;
+    // font-weight: 400;
+    src: local("SF Pro Display Bold"),
+      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Bold.otf")
+        format("opentype");
+  }
+  @font-face {
+    font-family: "SF Pro Display Heavy";
+    font-style: normal;
+    // font-weight: 400;
+    src: local("SF Pro Display Heavy"),
+      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Heavy.otf")
+        format("opentype");
+  }
+  @font-face {
+    font-family: "SF Pro Display Ultralight";
+    font-style: normal;
+    // font-weight: 400;
+    src: local("SF Pro Display Ultralight"),
+      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Ultralight.otf")
+        format("opentype");
+  }

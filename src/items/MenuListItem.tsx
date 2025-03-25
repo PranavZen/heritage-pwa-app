@@ -174,76 +174,96 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
   };
 
   const navigate = hooks.useNavigate();
-  const { ifInWishlist, addToWishlist, removeFromWishlist } = hooks.useWishlistHandler();
+  const { ifInWishlist, addToWishlist, removeFromWishlist } =
+    hooks.useWishlistHandler();
 
   return (
-    <li
-      style={{
-        borderRadius: 10,
-        padding: '14px 14px',
-        backgroundColor: 'var(--white-color)',
-        marginBottom: isLast ? 0 : 14,
-        position: 'relative',
-      }}
-      className='row-center'
-    >
-      <img
-        src={dish.option_value_image}
-        alt={dish.name}
-        style={{ width: 117, height: 'auto', borderRadius: 10, marginRight: 10 }}
-        onClick={() => navigate(`/dish/${dish.option_name}`, { state: { dish } })}
-      />
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span className='t14' style={{ marginBottom: 4, color: 'var(--main-color)', textTransform: 'capitalize' }}>
+    <li className="proListItemWrap">
+      <div className="proLeftBox">
+        <div className="proItemImgWrap">
+          <img
+            src={dish.option_value_image}
+            alt={dish.name}
+            className="proItemImg"
+            onClick={() =>
+              navigate(`/dish/${dish.option_name}`, { state: { dish } })
+            }
+          />
+        </div>
+        <div className="proItemDetailsWrap">
+          {/* <span
+          className="t14"
+          style={{
+            marginBottom: 4,
+            color: "var(--main-color)",
+            textTransform: "capitalize",
+          }}
+        >
           {dish.name}
         </span>
-        <p className='t10' style={{ fontSize: 10, color: 'var(--text-color)', lineHeight: 1.5, marginBottom: 4 }}>
+        <p
+          className="t10"
+          style={{
+            fontSize: 10,
+            color: "var(--text-color)",
+            lineHeight: 1.5,
+            marginBottom: 4,
+          }}
+        >
           {dish.description}
-        </p>
-        <span className='t10' style={{ marginBottom: 8 }}>
-          {dish.kcal} kcal - {dish.weight}g
-        </span>
-        <span className='t14' style={{ color: 'var(--main-color)' }}>₹ {dish.price}</span>
-        <span className='t14' style={{ color: 'var(--main-color)' }}>{dish.option_value_name}</span>
+        </p> */}
+          <span className="proName">{dish.option_value_name}</span>
+          <span className="proWeigh">
+            {/* {dish.kcal} kcal - {dish.weight}g */}
+            {dish.weight}ml
+          </span>
+          <span className="proPrice">₹ {dish.price}</span>
+        </div>
       </div>
 
       <button
-        style={{ padding: 14, position: 'absolute', right: 0, top: 0, borderRadius: 4 }}
+        className="wishListBtn"
         onClick={(event) =>
-          ifInWishlist(dish.option_value_name ?? 0) ? removeFromWishlist(dish, event) : addToWishlist(dish, event)
+          ifInWishlist(dish.option_value_name ?? 0)
+            ? removeFromWishlist(dish, event)
+            : addToWishlist(dish, event)
         }
       >
         <svg.HeartSvg dish={dish} />
       </button>
 
-      <div style={{ position: 'absolute', right: 0, bottom: 0, margin: 14, display: 'flex', alignItems: 'center' }}>
+      <div className="lastBox">
+      <div className="cartButtonWrap ">
         {quantity === 0 ? (
-          <button
-            style={{ border: '1px solid green', padding: '7px 12px', borderRadius: 6, cursor: 'pointer' }}
-            onClick={HandleAddToCart}
-          >
+          <button className="cartButton addBtnText" onClick={HandleAddToCart}>
             + Add
           </button>
         ) : (
           <>
             <button
-              onClick={(event) => (quantity === 1 ? handleRemoveFromCart(event) : handleUpdateCart(quantity - 1))}
-              style={{ padding: '4px 14px', borderRadius: 4 }}
+              onClick={(event) =>
+                quantity === 1
+                  ? handleRemoveFromCart(event)
+                  : handleUpdateCart(quantity - 1)
+              }
+              className="cartButton"
             >
-              <svg.MinusSvg />
+            -
             </button>
 
-            <span style={{ margin: '0 10px' }}>{quantity}</span>
+            <span className="countNum">{quantity}</span>
+
             <button
               onClick={() => handleUpdateCart(quantity + 1)}
-              style={{ padding: '4px 14px', borderRadius: 4 }}
+              className="cartButton"
             >
-              <svg.AddSvg />
+             +
             </button>
           </>
         )}
       </div>
-
+      <span className="smallText">Deliver once</span>
+      </div>
     </li>
   );
 };

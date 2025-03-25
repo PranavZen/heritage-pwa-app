@@ -11,7 +11,7 @@ export const UserSvg: React.FC = () => {
       <rect
         width={40}
         height={40}
-        fill='#00B0B9'
+        fill='#1a712e'
         rx={8}
       />
       <path

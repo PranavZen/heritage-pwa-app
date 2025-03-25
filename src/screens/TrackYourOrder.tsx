@@ -58,7 +58,7 @@ export const TrackYourOrder: React.FC = () => {
             marginTop: 10,
             borderRadius: 10,
             marginBottom: 10,
-            border: '1px solid #00B0B9',
+            border: '1px solid #1a712e',
           }}
         >
           <div
@@ -117,9 +117,9 @@ export const TrackYourOrder: React.FC = () => {
                       marginBottom: isLast ? 0 : 7,
                       backgroundColor:
                         item.status === 'done'
-                          ? '#00B0B9'
+                          ? '#1a712e'
                           : 'var(--white-color)',
-                      border: '1px solid #00B0B9',
+                      border: '1px solid #1a712e',
                     }}
                     className='center'
                   >
@@ -132,7 +132,7 @@ export const TrackYourOrder: React.FC = () => {
                         height: 30,
                         marginBottom: 6,
                         borderRadius: 1,
-                        backgroundColor: '#00B0B9',
+                        backgroundColor: '#1a712e',
                       }}
                     />
                   )}

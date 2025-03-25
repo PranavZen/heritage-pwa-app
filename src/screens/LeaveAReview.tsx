@@ -74,7 +74,7 @@ export const LeaveAReview: React.FC = () => {
                 border: 'none',
                 fontSize: 16,
                 fontFamily: 'DM Sans',
-                color: '#748BA0',
+                color: '#1a712e',
                 backgroundColor: '#E9F3F6',
                 resize: 'none',
               }}

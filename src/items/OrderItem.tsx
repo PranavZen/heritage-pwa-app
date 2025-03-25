@@ -11,6 +11,7 @@ type Props = {
 };
 
 export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
+  // console.log("dish", dish);
   const navigate = hooks.useNavigate();
   const { removeFromCart } = hooks.useCartHandler();
   const [deliveryPreferenceInModal, setDeliveryPreferenceInModal] = useState<any[]>([]);
@@ -73,7 +74,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         notification.error({ message: response.data.message });
       }
     } catch (error) {
-      console.error('Error updating cart:', error);
+      console.error("Error updating cart:", error);
     }
   };
 
@@ -94,7 +95,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           notification.error({ message: response.data.message });
         }
       } catch (error) {
-        console.error('Error removing item from cart:', error);
+        console.error("Error removing item from cart:", error);
       }
     }
   };
@@ -142,167 +143,123 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     setIsModalOpen(false);
   };
 
-  const handlePackageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    setNoOfDeliveries(Number(selectedValue));
-  };
-
-
-  // ********************************************************************************************************
-
   return (
     <>
-      <li
-        style={{
-          backgroundColor: 'var(--white-color)',
-          borderRadius: 10,
-          paddingLeft: 12,
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'row',
-          marginBottom: isLast ? 0 : 14,
-          position: 'relative',
-        }}
-      >
-        <img
-          src={dish.option_value_image}
-          alt={dish.name}
-          style={{ width: 87, height: 'auto', marginRight: 14 }}
-        />
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            marginRight: 'auto',
-            height: '100%',
-            justifyContent: 'center',
-            gap: 3,
-          }}
-        >
-          <span className="t14">{dish.name}</span>
-          <span className="t10" style={{ marginBottom: 5 }}>
-            {dish.kcal} kcal - {dish.weight}g
-          </span>
-          <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-            ₹ {dish.price}
-          </span>
-          <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-            Starts on : {dish.cart_order_date}
-          </span>
-          <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-            Qty : {quantity}
-          </span>
-
-          {/* Conditionally render the "Deliveries" field */}
-          {noOfDeliveries > 0 && (
-            <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-              Deliveries : {noOfDeliveries}
+      <li className="cartLitItem">
+        <div className="cartLeftBox">
+          <div className="cartItmImgWrap">
+            <img
+              src={dish.option_value_image}
+              alt={dish.name}
+              className="cartItemImg"
+            />
+          </div>
+          <div className="cartItemDetailsWrap">
+            <span
+              className="t14"
+              style={{
+                color: "var(--main-color)",
+                fontWeight: 600,
+                fontSize: 16,
+              }}
+            >
+              {dish.option_name}{" "}
+              <span className="t10" style={{ fontSize: 14 }}>
+                {/* {dish.kcal} kcal - {dish.weight}g */}({dish.weight}ml)
+              </span>
             </span>
-          )}
 
-          {/* Conditionally render the "Preference" field */}
-          {dish.preferenceName && (
-            <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-              Preference : {dish.preferenceName}
+            <span
+              className="t14"
+              style={{
+                color: "var(--main-color)",
+                fontWeight: 600,
+                fontSize: 16,
+              }}
+            >
+              ₹ {dish.price}
             </span>
-          )}
 
-          {/* Conditionally render the "Package" field if packages_name is not "0" */}
-          {dish.packages_name && dish.packages_name !== '0' && (
-            <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
-              Package : {dish.packages_name}
+            <span
+              className="t14"
+              style={{ color: "var(--main-color)", fontWeight: 500 }}
+            >
+              <span className="cartLable">Qty :</span> {quantity}
             </span>
-          )}
+            <span
+              className="t14"
+              style={{ color: "var(--main-color)", fontWeight: 500 }}
+            >
+              <span className="cartLable">Deliveries :</span>{" "}
+              {dish.no_of_deliveries}
+            </span>
+            <span
+              className="t14"
+              style={{ color: "var(--main-color)", fontWeight: 500 }}
+            >
+              <span className="cartLable">Preference :</span>{" "}
+              {dish.preferenceName}
+            </span>
+            <span
+              className="t14"
+              style={{ color: "var(--main-color)", fontWeight: 500 }}
+            >
+              <span className="cartLable">Package :</span> {dish.packages_name}
+            </span>
+            <span
+              className="t14"
+              style={{ color: "var(--main-color)", fontWeight: 500 }}
+            >
+              <span className="cartLable">Starts on :</span>{" "}
+              {dish.cart_order_date}
+            </span>
+          </div>
         </div>
-
-
-        <div
-          style={{
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          {noOfDeliveries > 0 && (
-            <Button onClick={() => handleOpenModal(dish.option_name)}>Modify</Button>
-          )}
-
+        <div className="cartRightBox">
+          <div className="cartButtonWrap modifyBtn">
+            <div onClick={handleOpenModal} className="cartButton modifyText">Modify</div>
+          </div>
           {/* Remove (Decrease Quantity) */}
-          <button
-            style={{ padding: '14px 14px 4px 14px', borderRadius: 4 }}
-            onClick={handleRemoveFromCart}
-          >
-            <svg.RemoveSvg />
-          </button>
+          <div className="cartButtonWrap">
+            <button className="cartButton" onClick={handleRemoveFromCart}>
+              <svg.RemoveSvg />
+            </button>
 
-          {/* Display updated quantity */}
-          <span className="t12" style={{ lineHeight: 1 }}>
-            {quantity}
-          </span>
+            {/* Display updated quantity */}
+            <span className="countNum">{quantity}</span>
 
-          {/* Add to cart (Increase Quantity) */}
-          <button
-            style={{ padding: '4px 14px 14px 14px', borderRadius: 4 }}
-            onClick={() => handleUpdateCart(quantity + 1)}
-          >
-            <svg.AddSvg />
-          </button>
+            {/* Add to cart (Increase Quantity) */}
+            <button
+              className="cartButton"
+              onClick={() => handleUpdateCart(quantity + 1)}
+            >
+              <svg.AddSvg />
+            </button>
+          </div>
         </div>
       </li>
-      {/* Update data modal */}
-      {/* <Modal title="Update Order" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <label>Quantity:</label>
-        <Input
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
-        />
-        <br />
-        <br />
-        <label>Delivery Preference:</label>
-        <select value={deliveryPreference} onChange={(e) => setDeliveryPreference(e.target.value)}>
-          {deliveryPreferenceInModal.length > 0 &&
-            deliveryPreferenceInModal.map((elem: any, index: number) => (
-              <optgroup key={index} label={elem.someGroupLabel}>
-                {elem.deliveryPreference.map((ele: any, subIndex: number) => (
-                  <option key={subIndex} value={ele.id}>
-                    {ele.name}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-        </select>
+      
+      <div>
+        {/* Cart Item Display */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <p>{dish.name}</p>
 
-        <br />
-        <br />
-        <label>No. of Deliveries:</label>
-
-        <div>
-          <select
-            value={noOfDeliveries}
-            onChange={handlePackageChange}
-          >
-            {deliveriesInModal.map((pkg: any) => (
-              <optgroup key={pkg.package_id} label={pkg.product_name}>
-                {pkg.packages.map((packageDetails: any) => {
-                  const deliveryArray = packageDetails.no_of_deliveries.split(",");
-
-                  if (selectedPackage === "Daily" && packageDetails.package_name === "Daily") {
-                    return deliveryArray.map((delivery: string, index: number) => (
-                      <option key={index} value={delivery}>
-                        {delivery}
-                      </option>
-                    ));
-                  }
-                  return null;
-                })}
-              </optgroup>
-            ))}
-          </select>
+          {/* Remove from Cart Button */}
+          {/* <button
+            style={{ padding: '14px 14px 4px 14px', borderRadius: 4 }}
+            onClick={handleRemoveFromCart}
+          > */}
+          {/* <svg.RemoveSvg /> */}
+          {/* </button> */}
         </div>
-      </Modal> */}
+
+       </div>
     </>
   );
 };

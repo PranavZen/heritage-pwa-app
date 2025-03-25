@@ -1,34 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { hooks } from '../hooks';
-import { components } from '../components';
-import { Routes } from '../routes';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { hooks } from "../hooks";
+import { components } from "../components";
+import { Routes } from "../routes";
 
 export const Search: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   const [opacity, setOpacity] = useState<number>(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [dishes, setDishes] = useState<any[]>([]);  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [dishes, setDishes] = useState<any[]>([]);
   // console.log("qqqqqqqqqqqqqqqqq",dishes);
   const [dishesLoading, setDishesLoading] = useState<boolean>(false);
 
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
 
-
   const fetchDishes = async (searchQuery: string) => {
     // console.log("searchQuery",searchQuery)
     const formData = new FormData();
-    formData.append('search_key', searchQuery);
-    formData.append('city_id','325');
+    formData.append("search_key", searchQuery);
+    formData.append("city_id", "325");
     setDishesLoading(true);
     try {
+      const response = await axios.post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/search",
+        formData
+      );
 
-      const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/search',formData);
+      console.log("responseresponseqqqqaaaqqaaaqaaaqqqqaaq", response);
 
-      console.log("responseresponseqqqqaaaqqaaaqaaaqqqqaaq",response);
-
-      setDishes(response.data.search_data || []); 
+      setDishes(response.data.search_data || []);
     } catch (error) {
       console.error("Error fetching dishes:", error);
     } finally {
@@ -40,56 +41,48 @@ export const Search: React.FC = () => {
     if (searchQuery) {
       fetchDishes(searchQuery);
     } else {
-      setDishes([]);  // Clear dishes if search query is empty
+      setDishes([]); // Clear dishes if search query is empty
     }
   }, [searchQuery]);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
-  hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
+  hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
   const renderHeader = (): JSX.Element => {
-    return (
-      <components.Header
-        title='Filter'
-        showGoBack={true}
-      />
-    );
+    return <components.Header title="Filter" showGoBack={true} />;
   };
 
   const renderSearch = (): JSX.Element => {
     return (
-      <section style={{ borderBottom: '1px solid #DBE9F5' }}>
+      <section style={{ borderBottom: "1px solid #DBE9F5" }}>
         <div
           style={{
             padding: 20,
             paddingTop: 6,
             gap: 20,
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <input
-            type='text'
+            type="text"
             value={searchQuery}
-            placeholder='Search for dishes'
+            placeholder="Search for dishes"
             onChange={(event) => setSearchQuery(event.target.value)}
             style={{
-              width: '100%',
-              padding: '12px 20px',
+              width: "100%",
+              padding: "12px 20px",
               borderRadius: 10,
-              backgroundColor: '#E9F3F6',
-              color: 'var(--main-color)',
-              border: 'none',
+              backgroundColor: "#E9F3F6",
+              color: "var(--main-color)",
+              border: "none",
               fontSize: 16,
             }}
           />
-          <span
-            className='t16 clickable'
-            onClick={() => navigate(-1)}
-          >
+          <span className="t16 clickable" onClick={() => navigate(-1)}>
             Cancel
           </span>
         </div>
@@ -103,19 +96,18 @@ export const Search: React.FC = () => {
       <section style={{ paddingTop: 14 }}>
         {dishes.map((dish) => {
           return (
-            <button
+            <div
+              className="searchItemWrap"
               key={dish.id}
-              
               onClick={() => {
-                navigate(Routes.MenuList, { state: { id: dish.id }});
+                navigate(Routes.MenuList, { state: { id: dish.id } });
               }}
-              
             >
-              <div>
+              <div className="searchitmImg">
                 <img src={dish.image} alt="" width={60} height={60} />
               </div>
-              <span className='t16 number-of-lines-1'>{dish.name}</span>
-            </button>
+              <span className="t16 number-of-lines-1">{dish.name}</span>
+            </div>
           );
         })}
       </section>
@@ -123,11 +115,11 @@ export const Search: React.FC = () => {
   };
 
   const renderContent = (): JSX.Element => {
-    return <main className='scrollable container'>{renderDishes()}</main>;
+    return <main className="scrollable container">{renderDishes()}</main>;
   };
 
   return (
-    <div id='screen' style={{ opacity }}>
+    <div id="screen" style={{ opacity }}>
       {renderHeader()}
       {renderSearch()}
       {renderContent()}
