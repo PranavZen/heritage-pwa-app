@@ -605,7 +605,7 @@ export const Dish: React.FC = () => {
     return (
       <components.Modal
         title="Delivery Preferences"
-        onClose={handleCloseModal}
+        onClose={handleCloseModal} 
       >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
