@@ -143,7 +143,6 @@ export const MyAddress: React.FC = () => {
 
     return (
       <section className="scrollable">
-        {/* New Address Section */}
         <div className="newAddressBtnWrap">
           <button onClick={movetoAddressAddPage} className="newAddressBtn">
             <i className="fa fa-plus"></i> New Address
@@ -190,7 +189,7 @@ export const MyAddress: React.FC = () => {
 
                     {/* Show Default Address Label */}
                     {elem.is_default === "1" ? (
-                      <p style={{ color: "green", fontWeight: "bold" }}>
+                      <p className="defaultAddressLabel">
                         Default Address
                       </p>
                     ) : (

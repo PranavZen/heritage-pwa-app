@@ -59,7 +59,7 @@ export const ClientNotificationDetails: React.FC = () => {
   }, [notification_id]); // Add notification_id to the dependency array
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header title="My Notifications" showGoBack={true} />;
+    return <components.Header title="Notifications" showGoBack={true} />;
   };
 
   const renderContent = (): JSX.Element => {

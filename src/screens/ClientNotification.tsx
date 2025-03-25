@@ -46,7 +46,7 @@ export const ClientNotification: React.FC = () => {
   }, []);
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header title="My Notifications" showGoBack={true} />;
+    return <components.Header title="Notifications" showGoBack={true} />;
   };
 
   const renderContent = (): JSX.Element => {

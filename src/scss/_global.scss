@@ -75,7 +75,7 @@
   line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 600;
+  font-family: "SF Pro Display Medium";
 }
 
 .number-of-lines-2 {
@@ -170,8 +170,12 @@ details summary {
       height: 40px;
       margin: 0 auto;
       font-size: 16px;
-      font-weight: 600;
+      font-family: "SF Pro Display Medium";
       letter-spacing: 0.6px;
+      @media screen and (max-width: 767px) {
+        width: 40%;
+        font-size: 14px;
+      }
     }
   }
 }
@@ -182,16 +186,23 @@ details summary {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  font-family: "SF Pro Display Regular";
   width: 100%;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
 }
 
 /* Style for the label */
 .form-label {
   font-size: 16px;
   color: #333;
-  font-weight: 600;
+  font-family: "SF Pro Display Medium";
   margin-bottom: 5px;
   display: inline-block;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
 }
 
 /* Flex layout for two input fields in one row */
@@ -216,6 +227,9 @@ details summary {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
 }
 
 .submit-btn:hover {
@@ -258,6 +272,9 @@ details summary {
       top: 90%;
       left: 65%;
       transform: translate(-50%, -50%);
+      @media screen and (max-width: 767px) {
+        left: 70%;
+      }
       i {
         font-size: 32px;
         color: #1a712e;
@@ -283,6 +300,9 @@ details summary {
     font-size: 16px;
     font-weight: 500;
     gap: 6px;
+    @media screen and (max-width: 767px) {
+      font-size: 14px;
+    }
     i {
       &::before {
         font-weight: 500;
@@ -294,9 +314,12 @@ details summary {
   padding: 0 20px 20px;
   h3 {
     font-size: 20px;
-    font-weight: 600;
+    font-family: "SF Pro Display Medium";
     color: #1a712e;
     margin-bottom: 10px;
+    @media screen and (max-width: 767px) {
+      font-size: 18px;
+    }
   }
   .myAddressBoxWrap {
     display: flex;
@@ -309,12 +332,29 @@ details summary {
       border: 1px solid #1a712e;
       padding: 10px;
       max-width: 49%;
+      @media screen and (max-width: 767px) {
+        max-width: 100%;
+      }
       h4 {
         text-transform: capitalize;
         margin-bottom: 5px;
+        font-size: 18px;
+        font-family: "SF Pro Display Medium";
+        @media screen and (max-width: 767px) {
+          font-size: 16px;
+        }
       }
       p {
         line-height: 1.5;
+        @media screen and (max-width: 767px) {
+          font-size: 14px;
+        }
+      }
+      .defaultAddressLabel {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a712e;
+        line-height: 3;
       }
       .myAddressActionBtnWrap {
         display: flex;
@@ -334,6 +374,9 @@ details summary {
             i {
               font-size: 16px;
               color: #ffff;
+              @media screen and (max-width: 767px) {
+                font-size: 14px;
+              }
             }
             &:hover {
               transition: box-shadow 0.3s;
@@ -346,6 +389,9 @@ details summary {
             i {
               font-size: 16px;
               color: #9e2323;
+              @media screen and (max-width: 767px) {
+                font-size: 14px;
+              }
             }
             &:hover {
               transition: box-shadow 0.3s;
@@ -592,15 +638,23 @@ details summary {
       border-radius: 50px;
       margin-top: 15px;
       &.modifyBtn {
-        background-color: #f8d907;
-        border: 1px solid #333;
+        background-color: #fff;
+        border: 1px solid #1a712e;
       }
       .cartButton {
         padding: 8px;
         font-size: 16px;
         color: #fff;
+        @media screen and (max-width: 767px) {
+          padding: 3.5px;
+          font-size: 16px;
+        }
         &.modifyText {
-          color: #333;
+          color: #1a712e;
+          @media screen and (max-width: 767px) {
+            padding: 6.5px;
+            font-size: 12px;
+          }
         }
         svg {
           path {
@@ -613,6 +667,10 @@ details summary {
         font-size: 18px;
         font-weight: 500;
         color: #fff;
+        @media screen and (max-width: 767px) {
+          font-size: 14px;
+          
+        }
       }
     }
   }
@@ -656,7 +714,7 @@ details summary {
       align-items: center;
       gap: 5px;
       margin-top: 10px;
-      span{
+      span {
         font-family: "SF Pro Display Light";
         font-size: 14px;
       }
@@ -692,24 +750,24 @@ details summary {
         }
       }
     }
-    .priceWrap{
+    .priceWrap {
       margin: 15px 0 5px;
-      small{
+      small {
         font-family: "SF Pro Display Light";
         font-size: 14px;
       }
-      span{
+      span {
         font-family: "SF Pro Display Medium";
         font-size: 20px;
       }
     }
-    .ppText{
+    .ppText {
       font-family: "SF Pro Display Light";
       font-size: 14px;
       display: inline-block;
       margin-bottom: 5px;
     }
-    .fatText{
+    .fatText {
       font-family: "SF Pro Display Light";
       font-size: 16px;
       display: inline-block;
@@ -855,6 +913,20 @@ select {
   justify-content: space-between;
   padding: 0 20px;
   border-bottom: 0.2px solid #1a712e;
+  position: relative;
+  &::before {
+    content: "";
+    background-image: url("../assets/icons/pwa-logo.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 130px;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   .leftBox {
     display: flex;
     align-items: center;
@@ -868,7 +940,7 @@ select {
     }
     .userName {
       font-size: 18px;
-      font-weight: 600;
+      font-family: "SF Pro Display Semibold";
       color: #1a712e;
     }
   }
@@ -904,6 +976,9 @@ select {
   top: 0;
   transition: left 0.5s linear;
   overflow: hidden;
+  @media screen and (max-width: 767px) {
+    width: 75%;
+  }
   &.hidden {
     left: -100%;
   }
@@ -920,12 +995,12 @@ select {
       span {
         &:nth-child(1) {
           font-size: 18px;
-          font-weight: 600;
+          font-family: "SF Pro Display Semibold";
           color: #1a712e;
         }
         &:nth-child(2) {
           font-size: 16px;
-          font-weight: 500;
+          font-family: "SF Pro Display Light";
           color: #1a712e;
         }
       }
@@ -945,6 +1020,9 @@ select {
           color: #fff !important;
           height: 40px;
           margin: 0 auto;
+          @media screen and (max-width: 767px) {
+            font-size: 14px;
+          }
         }
       }
     }
@@ -971,7 +1049,7 @@ select {
     }
     .home_product_category {
       font-size: 22px;
-      font-weight: 700;
+      font-family: "SF Pro Display Medium";
       @media screen and (max-width: 768px) {
         font-size: 18px;
       }
@@ -1009,7 +1087,7 @@ select {
     /* background-color: #1a712e; */
     color: var(--main-color);
     font-size: 16px;
-    font-weight: 500;
+    font-family: "SF Pro Display Medium";
     margin-top: 5px;
     /* font-family: sans-serif; */
     // transform: translateX(-50%);

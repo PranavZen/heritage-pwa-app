@@ -222,7 +222,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           {/* Remove (Decrease Quantity) */}
           <div className="cartButtonWrap">
             <button className="cartButton" onClick={handleRemoveFromCart}>
-              <svg.RemoveSvg />
+              -
             </button>
 
             {/* Display updated quantity */}
@@ -233,7 +233,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               className="cartButton"
               onClick={() => handleUpdateCart(quantity + 1)}
             >
-              <svg.AddSvg />
+              +
             </button>
           </div>
         </div>
