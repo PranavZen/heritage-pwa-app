@@ -20,8 +20,9 @@ export const SubscriptionOrder: React.FC = () => {
 
   const loading: boolean = menuLoading || dishesLoading || reviewsLoading || carouselLoading;
 
-  const [subscriptionData, setSubscriptionData] = useState<any[]>([]); // Initialize as empty array
-  const [oneTimeOrderData, setOneTimeOrderData] = useState<any[]>([]); // Initialize as empty array
+  const [subscriptionData, setSubscriptionData] = useState<any[]>([]);
+  const [oneTimeOrderData, setOneTimeOrderData] = useState<any[]>([]);
+  console.log("oneTimeOrderDataoneTimeOrderData", oneTimeOrderData);
   const [activeTab, setActiveTab] = useState('subscriptions');
   const [isLoading, setIsLoading] = useState(false);
   const [subscriptionID, SetSubscriptionID] = useState<number | null>(null);
@@ -64,8 +65,10 @@ export const SubscriptionOrder: React.FC = () => {
     axios
       .post('https://heritage.bizdel.in/app/consumer/services_v11/oneTimeOrderList', formData)
       .then((response) => {
-        setOneTimeOrderData(response.data);
+        setOneTimeOrderData(response.data.ordersListing);
         setIsLoading(false);
+
+      console.log("kkkkkkkkkkkkkkkkkkk", response);
       })
       .catch((error) => {
         console.error('Error fetching one-time order data', error);
@@ -170,11 +173,14 @@ export const SubscriptionOrder: React.FC = () => {
                 {Array.isArray(oneTimeOrderData) && oneTimeOrderData.length > 0 ? (
                   oneTimeOrderData.map((order) => (
                     <div key={order.order_id} className="card">
-                      <h3>{order.product_name}</h3>
+
+                      <div>
+                        <img src={order.image} alt=""  width={100}height={100} />
+                      </div>
+                      <h3> Product:{order.product_name}</h3>
                       <p>Quantity: {order.quantity}</p>
                       <p>Price: ₹{order.price}</p>
                       <p>Status: {order.status}</p>
-                      <button className="btn">Manage Order</button>
                     </div>
                   ))
                 ) : (

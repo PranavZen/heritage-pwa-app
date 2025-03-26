@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { hooks } from "../hooks";
 import { Routes } from "../routes";
@@ -7,7 +7,6 @@ import { Input } from "../components/Input";
 import { components } from "../components";
 import { notification } from "antd";
 import { useDispatch } from "react-redux";
-// import { setProfileDetails } from './actions';
 
 export const SignIn: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -19,12 +18,29 @@ export const SignIn: React.FC = () => {
   const [otp, setOtp] = useState<string>("");
   const [isOtpSent, setIsOtpSent] = useState<boolean>(false);
   const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
-
-  // console.log("mobileeeeeeeeeee", mobile);
+  const [timer, setTimer] = useState<number>(60);
+  const [isResendAvailable, setIsResendAvailable] = useState<boolean>(false);
+  const [otpSentTime, setOtpSentTime] = useState<number | null>(null);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
+
+  useEffect(() => {
+    if (isOtpSent && otpSentTime) {
+      const interval = setInterval(() => {
+        const remainingTime = Math.max(0, otpSentTime + 60 - Math.floor(Date.now() / 1000));
+        setTimer(remainingTime);
+
+        if (remainingTime === 0) {
+          clearInterval(interval);
+          setIsResendAvailable(true);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isOtpSent, otpSentTime]);
 
   const handleLogin = async () => {
     if (!isTermsAccepted) {
@@ -44,24 +60,18 @@ export const SignIn: React.FC = () => {
           formData
         );
 
-        // console.log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzz", response);
-
         if (
           response.data.status === "success" &&
           response.data.action === "existing user"
         ) {
           setIsOtpSent(true);
+          setOtpSentTime(Math.floor(Date.now() / 1000));
           notification.success({
             message: response.data.message || "OTP sent to your mobile number",
             placement: "bottomRight",
           });
           localStorage.setItem("c_id", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
-
-          notification.success({
-            message: "OTP sent to your mobile number",
-            placement: "bottomRight",
-          });
         } else {
           notification.error({
             message: response.data.message || "Failed to send OTP",
@@ -93,17 +103,8 @@ export const SignIn: React.FC = () => {
         formData
       );
 
-      // console.log("pppppppppppppppppppppppAAAAAAAAAAAA",  response);
-
-      // console.log(
-      //   "pppppppppppppppppppppppAAAAAAAAAAAA",
-      //   response.data.CustomerDetail[0].address_details[0].area_id
-      // );
-
       if (response.data.status === "success") {
         const addressDetails = response.data.CustomerDetail[0].address_details;
-        // dispatch(setProfileDetails(response.data.CustomerDetail[0]));
-        // Store profile data in localStorage
         localStorage.setItem(
           "profileId",
           JSON.stringify(response.data.CustomerDetail[0].id)
@@ -143,13 +144,13 @@ export const SignIn: React.FC = () => {
   };
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header showGoBack={true} />;
+    return <components.Header showGoBack={false} />;
   };
 
-  const redirectToCity =()=>{
-        navigate('/city-choose');
-  }
- 
+  const redirectToCity = () => {
+    navigate("/city-choose");
+  };
+
   const renderContent = (): JSX.Element => {
     return (
       <main className="scrollable container">
@@ -164,11 +165,6 @@ export const SignIn: React.FC = () => {
           }}
         >
           <h1 style={{ marginBottom: 10 }}>Welcome Back!</h1>
-          <span className="t16" style={{ marginBottom: 30, display: "block" }}>
-            {isOtpSent
-              ? "Enter the OTP sent to your mobile"
-              : "Sign in to continue"}
-          </span>
 
           <Input
             type="number"
@@ -184,11 +180,9 @@ export const SignIn: React.FC = () => {
             }}
           />
           {mobile.length > 0 && mobile.length !== 10 && (
-            <span className="t144">
-              Mobile number must be exactly 10 digits.
-            </span>
+            <span className="t144">Mobile number must be exactly 10 digits.</span>
           )}
-          {/* terms & conditions */}
+
           <div className="terms-and-conditions">
             <span>
               <input
@@ -200,18 +194,46 @@ export const SignIn: React.FC = () => {
               I agree to the <a href="#">Terms & Conditions</a>
             </span>
           </div>
-          {/* terms & conditions */}
-          {
-            <div className="mb5">
-            <components.Button text="Generate OTP" onClick={handleLogin} />
-            </div>
-          }
-          {!isOtpSent ? (
-            <></>
-          ) : (
+
+          <span className="t16" style={{ marginBottom: 30, display: "block" }}>
+            {isOtpSent ? (
+              timer === 0 ? (
+                "Did not get OTP ?"
+              ) : (
+                `Did not get OTP ? (${timer}s)`
+              )
+            ) : (
+              ""
+            )}
+          </span>
+
+          <div className="mb5">
+            {!isOtpSent ? (
+              <components.Button text="Generate OTP" onClick={handleLogin} />
+            ) : (
+              <>
+                {timer === 0 && isResendAvailable && (
+                  <a
+                    onClick={() => {
+                      setIsOtpSent(false);
+                      setIsResendAvailable(false);
+                      setTimer(60);
+                      setOtpSentTime(Math.floor(Date.now() / 1000));
+                      handleLogin();
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Resend OTP
+                  </a>
+                )}
+              </>
+            )}
+          </div>
+
+          {isOtpSent && (
             <>
               <Input
-                placeholder="OTP"
+                placeholder="Enter OTP"
                 containerStyle={{ marginBottom: 14 }}
                 leftIcon={<svg.KeySvg />}
                 value={otp}
@@ -222,13 +244,10 @@ export const SignIn: React.FC = () => {
               <components.Button text="Verify OTP" onClick={handleVerifyOtp} />
             </>
           )}
-          <div style={{ gap: 4 }}>
-            <div  onClick={redirectToCity} style={{textAlign:"center"}}>
-                 <div style={{textAlign:"center"}}
-                 className="explore-btn"
-                 > Explore Now</div> 
-            </div>
-          </div>
+
+          <button onClick={redirectToCity} className="explore-btn">
+            <p style={{ margin: "0 auto" }}> Explore Now</p>
+          </button>
         </section>
       </main>
     );

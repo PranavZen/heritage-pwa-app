@@ -47,7 +47,7 @@ export const MenuList: React.FC = () => {
   const { dishesLoading, dishes } = hooks.useGetDishes(selectedCategory);
 
   // console.log("selectedCategoryselectedCategory", selectedCategory);
-  const c_id =localStorage.getItem('c_id')
+  const c_id = localStorage.getItem('c_id')
   // Fetch dishes based on selectedCategory
   const getDishes = async () => {
     const cityId = localStorage.getItem("cityId");
@@ -60,7 +60,7 @@ export const MenuList: React.FC = () => {
     formData.append('building_id', '980');
     formData.append('c_id', c_id || 'null');
     formData.append('category_id', selectedCategory || '');
-    formData.append('product_id', searchId  || '');
+    formData.append('product_id', searchId || '');
     formData.append('next_id', '0');
     try {
       const response = await axios.post(

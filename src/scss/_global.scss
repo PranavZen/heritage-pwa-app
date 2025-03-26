@@ -77,7 +77,7 @@
   line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 600;
+  font-family: "SF Pro Display Medium";
 }
 
 .number-of-lines-2 {
@@ -178,8 +178,12 @@ details summary {
       height: 40px;
       margin: 0 auto;
       font-size: 16px;
-      font-weight: 600;
+      font-family: "SF Pro Display Medium";
       letter-spacing: 0.6px;
+      @media screen and (max-width: 767px) {
+        width: 40%;
+        font-size: 14px;
+      }
     }
   }
 }
@@ -190,16 +194,23 @@ details summary {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  font-family: "SF Pro Display Regular";
   width: 100%;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
 }
 
 /* Style for the label */
 .form-label {
   font-size: 16px;
   color: #333;
-  font-weight: 600;
+  font-family: "SF Pro Display Medium";
   margin-bottom: 5px;
   display: inline-block;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
 }
 
 /* Flex layout for two input fields in one row */
@@ -224,6 +235,9 @@ details summary {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+  }
 }
 
 .submit-btn:hover {
@@ -269,7 +283,6 @@ details summary {
       top: 90%;
       left: 65%;
       transform: translate(-50%, -50%);
-
       i {
         font-size: 32px;
         color: #1a712e;
@@ -296,7 +309,6 @@ details summary {
     font-size: 16px;
     font-weight: 500;
     gap: 6px;
-
     i {
       &::before {
         font-weight: 500;
@@ -310,9 +322,12 @@ details summary {
 
   h3 {
     font-size: 20px;
-    font-weight: 600;
+    font-family: "SF Pro Display Medium";
     color: #1a712e;
     margin-bottom: 10px;
+    @media screen and (max-width: 767px) {
+      font-size: 18px;
+    }
   }
 
   .myAddressBoxWrap {
@@ -326,14 +341,27 @@ details summary {
       border: 1px solid #1a712e;
       padding: 10px;
       max-width: 49%;
-
       h4 {
         text-transform: capitalize;
         margin-bottom: 5px;
+        font-size: 18px;
+        font-family: "SF Pro Display Medium";
+        @media screen and (max-width: 767px) {
+          font-size: 16px;
+        }
       }
 
       p {
         line-height: 1.5;
+        @media screen and (max-width: 767px) {
+          font-size: 14px;
+        }
+      }
+      .defaultAddressLabel {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a712e;
+        line-height: 3;
       }
 
       .myAddressActionBtnWrap {
@@ -357,6 +385,9 @@ details summary {
             i {
               font-size: 16px;
               color: #ffff;
+              @media screen and (max-width: 767px) {
+                font-size: 14px;
+              }
             }
 
             &:hover {
@@ -372,6 +403,9 @@ details summary {
             i {
               font-size: 16px;
               color: #9e2323;
+              @media screen and (max-width: 767px) {
+                font-size: 14px;
+              }
             }
 
             &:hover {
@@ -659,17 +693,20 @@ details summary {
       margin-top: 15px;
 
       &.modifyBtn {
-        background-color: #f8d907;
-        border: 1px solid #333;
+        background-color: #fff;
+        border: 1px solid #1a712e;
       }
 
       .cartButton {
         padding: 8px;
         font-size: 16px;
         color: #fff;
-
         &.modifyText {
-          color: #333;
+          color: #1a712e;
+          @media screen and (max-width: 767px) {
+            padding: 6.5px;
+            font-size: 12px;
+          }
         }
 
         svg {
@@ -684,6 +721,9 @@ details summary {
         font-size: 18px;
         font-weight: 500;
         color: #fff;
+        @media screen and (max-width: 767px) {
+          font-size: 14px;
+        }
       }
     }
   }
@@ -733,7 +773,6 @@ details summary {
       align-items: center;
       gap: 5px;
       margin-top: 10px;
-
       span {
         font-family: "SF Pro Display Light";
         font-size: 14px;
@@ -776,28 +815,23 @@ details summary {
         }
       }
     }
-
     .priceWrap {
       margin: 15px 0 5px;
-
       small {
         font-family: "SF Pro Display Light";
         font-size: 14px;
       }
-
       span {
         font-family: "SF Pro Display Medium";
         font-size: 20px;
       }
     }
-
     .ppText {
       font-family: "SF Pro Display Light";
       font-size: 14px;
       display: inline-block;
       margin-bottom: 5px;
     }
-
     .fatText {
       font-family: "SF Pro Display Light";
       font-size: 16px;

@@ -162,7 +162,7 @@ export const EditProfile: React.FC = () => {
   };
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header title="Update User Details" showGoBack={true} />;
+    return <components.Header title="Edit Profile" showGoBack={true} />;
   };
 
   const renderContent = (): JSX.Element => {

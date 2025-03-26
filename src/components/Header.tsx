@@ -132,10 +132,12 @@ export const Header: React.FC<Props> = ({
           src={
             profileData?.photo && profileData.photo_url
               ? `${profileData.photo_url}${profileData.photo}`
-              : ""
+              : require('../assets/icons/placeholder.jpg')
           }
           className="userImg"
         />
+
+
         <span className="userName"> {profileData?.firstname}</span>
       </div>
     );
@@ -202,6 +204,7 @@ export const Header: React.FC<Props> = ({
 
   const renderModal = (): JSX.Element | null => {
     if (!showModal) return null;
+
     return (
       <div className="modalWrapBox">
         <div
@@ -228,7 +231,7 @@ export const Header: React.FC<Props> = ({
                   ? URL.createObjectURL(profileData?.photo)
                   : profileData?.photo_url && profileData?.photo
                     ? `${profileData?.photo_url}${profileData?.photo}`
-                    : "https://george-fx.github.io/dinehub_api/assets/users/01.jpg"
+                    : require('../assets/icons/placeholder.jpg')
               }
               alt="user"
               style={{ width: 60, height: 60, borderRadius: 50, border: "2px solid #1a712e" }}
@@ -283,7 +286,6 @@ export const Header: React.FC<Props> = ({
                   )}
                   {item.switch && <components.Switch />}
                 </li>
-
               );
             })}
           </ul>

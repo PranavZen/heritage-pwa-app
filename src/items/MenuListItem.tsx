@@ -68,7 +68,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
           'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
           formData
         );
-        
+
         if (response.data.optionListing) {
           const cartItems = response.data.optionListing.map((item: any) => item.cart_product_option_value_id);
           setCartId(cartItems);
@@ -95,16 +95,19 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
     const c_id = localStorage.getItem('c_id');
 
     if (!c_id) {
-      Modal.info({
+      Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
           navigate('/');
         },
+        onCancel() {
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
       });
       return;
     }
-
     try {
       const formData = new FormData();
       formData.append('c_id', c_id);
@@ -143,7 +146,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
 
     try {
       const formData = new FormData();
-      formData.append('id', String(dish.cart_id || '')); 
+      formData.append('id', String(dish.cart_id || ''));
       formData.append('c_id', c_id);
       formData.append('package_id', '13');
       formData.append('quantity', String(newQuantity));
@@ -233,36 +236,52 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
       </button>
 
       <div className="lastBox">
-      <div className="cartButtonWrap ">
-        {quantity === 0 ? (
-          <button className="cartButton addBtnText" onClick={HandleAddToCart}>
-            + Add
-          </button>
-        ) : (
-          <>
-            <button
-              onClick={(event) =>
-                quantity === 1
-                  ? handleRemoveFromCart(event)
-                  : handleUpdateCart(quantity - 1)
+        <div className="cartButtonWrap ">
+          {quantity === 0 ? (
+            <>
+              <button className="cartButton addBtnText" onClick={HandleAddToCart}>
+                + Add
+              </button>
+              <br />
+
+            </>
+          ) : (
+            <>
+              <button
+                onClick={(event) =>
+                  quantity === 1
+                    ? handleRemoveFromCart(event)
+                    : handleUpdateCart(quantity - 1)
+                }
+                className="cartButton"
+              >
+                -
+              </button>
+
+              <span className="countNum">{quantity}</span>
+
+              <button
+                onClick={() => handleUpdateCart(quantity + 1)}
+                className="cartButton"
+              >
+                +
+              </button>
+            </>
+          )}
+        </div>
+        {
+          quantity === 0 ? (<>
+            <button className="subscriptionButton"
+              onClick={() =>
+                navigate(`/dish/${dish.option_name}`, { state: { dish } })
               }
-              className="cartButton"
-            >
-            -
-            </button>
+            >Subscribe</button>
+          </>) : (<>
+            <span className="smallText">Deliver once</span>
+          </>)
+        }
 
-            <span className="countNum">{quantity}</span>
 
-            <button
-              onClick={() => handleUpdateCart(quantity + 1)}
-              className="cartButton"
-            >
-             +
-            </button>
-          </>
-        )}
-      </div>
-      <span className="smallText">Deliver once</span>
       </div>
     </li>
   );
