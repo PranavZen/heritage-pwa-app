@@ -153,10 +153,10 @@ export const SignIn: React.FC = () => {
 
   const renderContent = (): JSX.Element => {
     return (
-      <main className="scrollable container">
+      <main className="scrollable signInWrap">
         <section
           style={{
-            backgroundColor: "var(--white-color)",
+            backgroundColor: "#007bff0d",
             paddingLeft: 20,
             paddingRight: 20,
             height: "100%",
@@ -164,7 +164,7 @@ export const SignIn: React.FC = () => {
             borderRadius: 10,
           }}
         >
-          <h1 style={{ marginBottom: 10 }}>Welcome Back!</h1>
+          <h1 style={{ marginBottom: 30, textAlign: "center" }}>Welcome Back!</h1>
 
           <Input
             type="number"
@@ -183,19 +183,19 @@ export const SignIn: React.FC = () => {
             <span className="t144">Mobile number must be exactly 10 digits.</span>
           )}
 
-          <div className="terms-and-conditions">
-            <span>
+          <div style={{ margin: 10, marginBottom: 20 }}>
+            <span style={{fontSize: 16}}>
               <input
                 type="checkbox"
                 checked={isTermsAccepted}
                 onChange={() => setIsTermsAccepted(!isTermsAccepted)}
                 className="checkboxWrap"
               />
-              I agree to the <a href="#">Terms & Conditions</a>
+              {" "}I agree to the <a href="#">Terms & Conditions</a>
             </span>
           </div>
 
-          <span className="t16" style={{ marginBottom: 30, display: "block" }}>
+          <span className="t16" style={{ marginBottom: 0, display: "block", textAlign: "right", fontSize: 14 }}>
             {isOtpSent ? (
               timer === 0 ? (
                 "Did not get OTP ?"
@@ -213,7 +213,7 @@ export const SignIn: React.FC = () => {
             ) : (
               <>
                 {timer === 0 && isResendAvailable && (
-                  <a
+                  <button
                     onClick={() => {
                       setIsOtpSent(false);
                       setIsResendAvailable(false);
@@ -221,10 +221,11 @@ export const SignIn: React.FC = () => {
                       setOtpSentTime(Math.floor(Date.now() / 1000));
                       handleLogin();
                     }}
-                    style={{ cursor: "pointer" }}
+                    className="explore-btn"
+                    style={{ marginTop: 0 }}
                   >
                     Resend OTP
-                  </a>
+                  </button>
                 )}
               </>
             )}
