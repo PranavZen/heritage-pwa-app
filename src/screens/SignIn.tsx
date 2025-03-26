@@ -44,7 +44,7 @@ export const SignIn: React.FC = () => {
           formData
         );
 
-        console.log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzz", response);
+        // console.log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzz", response);
 
         if (
           response.data.status === "success" &&
@@ -93,12 +93,12 @@ export const SignIn: React.FC = () => {
         formData
       );
 
-      console.log("pppppppppppppppppppppppAAAAAAAAAAAA",  response);
+      // console.log("pppppppppppppppppppppppAAAAAAAAAAAA",  response);
 
-      console.log(
-        "pppppppppppppppppppppppAAAAAAAAAAAA",
-        response.data.CustomerDetail[0].address_details[0].area_id
-      );
+      // console.log(
+      //   "pppppppppppppppppppppppAAAAAAAAAAAA",
+      //   response.data.CustomerDetail[0].address_details[0].area_id
+      // );
 
       if (response.data.status === "success") {
         const addressDetails = response.data.CustomerDetail[0].address_details;
@@ -159,7 +159,7 @@ export const SignIn: React.FC = () => {
             paddingLeft: 20,
             paddingRight: 20,
             height: "100%",
-            paddingTop: "22%",
+            paddingTop: "5%",
             borderRadius: 10,
           }}
         >
@@ -222,11 +222,12 @@ export const SignIn: React.FC = () => {
               <components.Button text="Verify OTP" onClick={handleVerifyOtp} />
             </>
           )}
-          <div style={{ gap: 4 }} className="row-center">
-
-            <button  onClick={redirectToCity} style={{textAlign:"center"}}>
-                  Explore Now
-            </button>
+          <div style={{ gap: 4 }}>
+            <div  onClick={redirectToCity} style={{textAlign:"center"}}>
+                 <div style={{textAlign:"center"}}
+                 className="explore-btn"
+                 > Explore Now</div> 
+            </div>
           </div>
         </section>
       </main>

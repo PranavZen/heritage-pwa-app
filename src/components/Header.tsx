@@ -152,10 +152,12 @@ export const Header: React.FC<Props> = ({
             display: "flex",
             alignItems: "center",
             padding: "0 20px",
+            gap: 10,
           }}
           className="clickable"
         >
           <svg.GoBackSvg />
+          {title}
         </div>
       );
 
@@ -165,17 +167,17 @@ export const Header: React.FC<Props> = ({
   const renderTitle = (): JSX.Element | null => {
     return (
       <div className="middleBox">
-        <span
+        {/* <span
           className="t16"
           style={{
             color: "var(--main-color)",
-            marginLeft: 20,
             display: "block",
             fontWeight: 500,
           }}
         >
-          {title}
-        </span>
+         cadcdcsdcds
+        </span> */}
+        {/* <img src="" alt="Heritage Vet +" /> */}
       </div>
     );
   };
@@ -230,7 +232,7 @@ export const Header: React.FC<Props> = ({
                   : "https://george-fx.github.io/dinehub_api/assets/users/01.jpg"
               }
               alt="user"
-              style={{ width: 60, height: 60, borderRadius: 50 }}
+              style={{ width: 60, height: 60, borderRadius: 50, border: "2px solid #1a712e" }}
             />
 
             <div className="sideMenuHeaderContent">

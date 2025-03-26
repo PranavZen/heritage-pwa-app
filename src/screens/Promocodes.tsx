@@ -30,10 +30,10 @@ export const Promocodes: React.FC = () => {
           `https://heritage.bizdel.in/app/consumer/services_v11/store_locator`,
           formData
         );
-        console.log("responseresponseLocator", response);
+        // console.log("responseresponseLocator", response);
         setLocator(response.data.distributors); 
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     storeLocator();

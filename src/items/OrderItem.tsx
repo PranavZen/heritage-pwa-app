@@ -69,7 +69,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       if (response.data.status === 'success') {
         setQuantity(newQuantity);
         notification.success({ message: response.data.message });
-        window.location.reload();
       } else {
         notification.error({ message: response.data.message });
       }
@@ -127,10 +126,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   }, [cityId, c_id]);
 
   // *************************************************************************************
-  const handleOpenModal = (option_name:any) => {
-// console.log("aaaacccccccccccccccccccc", option_name)
+  const handleOpenModal = (option_name: any) => {
+    // console.log("aaaacccccccccccccccccccc", option_name)
     // setIsModalOpen(true);
-     navigate(`/dish/${dish.option_name}`, { state: { dish } });
+    navigate(`/dish/${dish.option_name}`, { state: { dish } });
   }
 
   const handleOk = async () => {
@@ -154,6 +153,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               className="cartItemImg"
             />
           </div>
+
+
+
           <div className="cartItemDetailsWrap">
             <span
               className="t14"
@@ -186,26 +188,32 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             >
               <span className="cartLable">Qty :</span> {quantity}
             </span>
-            <span
-              className="t14"
-              style={{ color: "var(--main-color)", fontWeight: 500 }}
-            >
-              <span className="cartLable">Deliveries :</span>{" "}
-              {dish.no_of_deliveries}
-            </span>
-            <span
-              className="t14"
-              style={{ color: "var(--main-color)", fontWeight: 500 }}
-            >
-              <span className="cartLable">Preference :</span>{" "}
-              {dish.preferenceName}
-            </span>
-            <span
-              className="t14"
-              style={{ color: "var(--main-color)", fontWeight: 500 }}
-            >
-              <span className="cartLable">Package :</span> {dish.packages_name}
-            </span>
+
+
+            {noOfDeliveries > 0 && (
+              <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
+                Deliveries : {noOfDeliveries}
+              </span>
+            )}
+
+
+
+            {dish.preferenceName && (
+              <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
+                Preference : {dish.preferenceName}
+              </span>
+            )}
+
+
+
+
+            {dish.packages_name && dish.packages_name !== '0' && (
+              <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
+                Package : {dish.packages_name}
+              </span>
+            )}
+
+
             <span
               className="t14"
               style={{ color: "var(--main-color)", fontWeight: 500 }}
@@ -214,10 +222,14 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               {dish.cart_order_date}
             </span>
           </div>
+
+
         </div>
         <div className="cartRightBox">
-          <div className="cartButtonWrap modifyBtn">
-            <div onClick={handleOpenModal} className="cartButton modifyText">Modify</div>
+          <div className="cartButtonWrap">
+            {noOfDeliveries > 0 && (
+              <div onClick={handleOpenModal} className="cartButton modifyText">Modify</div>
+            )}
           </div>
           {/* Remove (Decrease Quantity) */}
           <div className="cartButtonWrap">
@@ -238,7 +250,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           </div>
         </div>
       </li>
-      
+
+
+
       <div>
         {/* Cart Item Display */}
         <div
@@ -259,7 +273,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           {/* </button> */}
         </div>
 
-       </div>
+      </div>
     </>
   );
 };

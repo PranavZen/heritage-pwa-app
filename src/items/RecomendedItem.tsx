@@ -31,17 +31,17 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     (item) => item.option_value_name === dish.option_value_name
   );
   const HandleAddToCart = async () => {
-    const c_id = localStorage.getItem('c_id'); 
-    
+    const c_id = localStorage.getItem('c_id');
+
     if (!c_id) {
       Modal.info({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
-        onOk() {  
+        onOk() {
           navigate('/');
         },
       });
-      return; 
+      return;
     }
     try {
       const formData = new FormData();
@@ -57,12 +57,12 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       formData.append('no_of_deliveries', '0');
       formData.append('order_date', getTomorrowDate());
       formData.append('order_type', '2');
-  
+
       const response = await axios.post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
+        'https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart',
         formData
       );
-  
+
       if (response.data.status === 'success') {
         notification.success({ message: 'Success', description: response.data.message });
         window.location.reload();
@@ -72,14 +72,10 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         notification.error({ message: 'Error', description: response.data.message || 'Something went wrong.' });
       }
     } catch (error) {
-      console.error("Error adding to cart:", error);
-      notification.error({
-        message: "Error",
-        description: "Failed to add item to cart.",
-      });
+      console.error('Error adding to cart:', error);
+      notification.error({ message: 'Error', description: 'Failed to add item to cart.' });
     }
   };
-
   useEffect(() => {
     const fetchCartData = async () => {
       try {
@@ -175,14 +171,14 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
 
     try {
       const formData = new FormData();
-      formData.append('id', String(cartItemId || '')); 
+      formData.append('id', String(cartItemId || ''));
       formData.append('c_id', c_id);
       formData.append('package_id', '13');
       formData.append('quantity', String(newQuantity));
       formData.append('delivery_preference', '0');
       formData.append('no_of_deliveries', '0');
       formData.append('order_date', getTomorrowDate());
-      formData.append('order_type', '1');
+      formData.append('order_type', '2');
 
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",

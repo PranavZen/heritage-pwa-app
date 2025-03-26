@@ -46,7 +46,7 @@ export const Onboarding: React.FC = () => {
   }, [searchQuery, cities]);
 
   const handleCitySelect = (cityId: string) => {
-   console.log("rrrrrrrrrrrrrrrrrrrrrr", cityId);
+  //  console.log("rrrrrrrrrrrrrrrrrrrrrr", cityId);
     setSelectedCity(cityId);
     localStorage.setItem('cityId', cityId); 
     navigate(Routes.TabNavigator); 

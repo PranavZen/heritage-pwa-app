@@ -147,10 +147,10 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
       formData.append('c_id', c_id);
       formData.append('package_id', '13');
       formData.append('quantity', String(newQuantity));
-      formData.append('delivery_preference', '1');
-      formData.append('no_of_deliveries', '1');
+      formData.append('delivery_preference', '0');
+      formData.append('no_of_deliveries', '0');
       formData.append('order_date', getTomorrowDate());
-      formData.append('order_type', '1');
+      formData.append('order_type', '2');
 
       const response = await axios.post(
         'https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem',

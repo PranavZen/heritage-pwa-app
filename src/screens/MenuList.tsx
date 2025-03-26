@@ -27,20 +27,20 @@ export const MenuList: React.FC = () => {
 
   const searchId: string = location.state.id;
 
-  console.log("searchIdsearchId", searchId);
+  // console.log("searchIdsearchId", searchId);
 
   const [opacity, setOpacity] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] =
     useState<string>(product_cat_id);
 
-  console.log("selectedCategory", selectedCategory);
+  // console.log("selectedCategory", selectedCategory);
 
   // ********************************
   const [filterData, setFilterData] = useState<DishType[]>([]);
   const [filterDataLoading, setFilterDataDishesLoading] =
     useState<boolean>(false);
 
-  console.log("filterData", filterData);
+  // console.log("filterData", filterData);
 
   // ********************************
 
@@ -52,7 +52,7 @@ export const MenuList: React.FC = () => {
   const getDishes = async () => {
     const cityId = localStorage.getItem("cityId");
 
-    console.log("cityIdcityIdcityIdcityId", cityId);
+    // console.log("cityIdcityIdcityIdcityId", cityId);
 
     setFilterDataDishesLoading(true);
     const formData = new FormData();

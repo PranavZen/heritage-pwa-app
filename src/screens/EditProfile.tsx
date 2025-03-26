@@ -26,9 +26,9 @@ export const EditProfile: React.FC = () => {
 
   const [profileData, SetProfileData] = useState();
 
-  console.log("profileDataprofileDataprofileData", profileData);
+  // console.log("profileDataprofileDataprofileData", profileData);
 
-  console.log("cityIda", cityId);
+  // console.log("cityIda", cityId);
 
   const [opacity, setOpacity] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,10 +56,10 @@ export const EditProfile: React.FC = () => {
           formData
         );
 
-        console.log("response data", response.data.CustomerDetail);
+        // console.log("response data", response.data.CustomerDetail);
 
         if (response.data.status === "success") {
-          console.log("User profile data:", response.data.data);
+          // console.log("User profile data:", response.data.data);
           const profile = response.data.CustomerDetail[0];
 
           SetProfileData(response.data.CustomerDetail[0]);
@@ -67,7 +67,7 @@ export const EditProfile: React.FC = () => {
           // Check if photo is a URL or base64 string
           const photoUrl = profile.photo ? profile.photo : null;
 
-          console.log("photoUrlphotoUrl", photoUrl);
+          // console.log("photoUrlphotoUrl", photoUrl);
 
           setUserDetails({
             id: profile.id,
@@ -82,7 +82,7 @@ export const EditProfile: React.FC = () => {
             photo_url: profile.photo_url || null,
           });
         } else {
-          console.log("Error:", response.data.message);
+          // console.log("Error:", response.data.message);
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -119,7 +119,7 @@ export const EditProfile: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/updateUser",
         formData
       );
-      console.log("responseweeupdatedProfile", response);
+      // console.log("responseweeupdatedProfile", response);
       if (response.data.status === "success") {
         navigate(Routes.EditProfile);
         notification.success({ message: response.data.message });

@@ -93,7 +93,7 @@ export const SubscriptionOrder: React.FC = () => {
             notification.success({message: response.data.message});
           }
         } catch (error) {
-          console.log('Error while renewing order:', error);
+          // console.log('Error while renewing order:', error);
         }
       };
 
