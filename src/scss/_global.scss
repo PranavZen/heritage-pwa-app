@@ -1004,7 +1004,7 @@ select {
     background-size: contain; /* Ensures the entire image is visible */
     width: 30vw; /* 30% of the viewport width */
     max-width: 130px; /* Limit maximum size */
-    height: auto; /* Maintain aspect ratio */
+    height: 100%; /* Maintain aspect ratio */
     position: absolute;
     top: 50%;
     left: 50%;
