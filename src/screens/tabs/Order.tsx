@@ -23,7 +23,7 @@ export const Order: React.FC = () => {
 
   const [addressId, SetAddressId]=useState(); 
 
-  console.log('ccccccccccccccccccccccccccccccc', totalPrice);
+  // console.log('ccccccccccccccccccccccccccccccc', totalPrice);
 
   // **************************************************
   const c_id = localStorage.getItem('c_id');
@@ -41,7 +41,7 @@ export const Order: React.FC = () => {
           formData
         );
 
-        console.log('wwwwwwwwwwwwwwwwwwwwwww', response.data); 
+        // console.log('wwwwwwwwwwwwwwwwwwwwwww', response.data); 
       
         SetTotalPrice(response.data.optionListing);
       } catch (error) {

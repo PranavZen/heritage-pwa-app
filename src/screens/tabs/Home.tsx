@@ -44,12 +44,12 @@ export const Home: React.FC = () => {
         style={{ marginBottom: 30, position: "relative" }}
       >
         <Swiper
-          modules={[Pagination]} // Add Pagination module
+          modules={[Pagination]} 
           slidesPerView={1}
           mousewheel={true}
           scrollbar={false}
           navigation={false}
-          pagination={{ clickable: true }} // Ensure pagination is enabled
+          pagination={{ clickable: true }}
           onSlideChange={handleSlideChange}
         >
           {banner.map((banner) => (

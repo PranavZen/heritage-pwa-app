@@ -36,7 +36,7 @@ export const addItemToCartAPI = createAsyncThunk(
         order_type,
       });
 
-      console.log("responseaddto cart", response)
+      // console.log("responseaddto cart", response)
 
       return response.data;  
     } catch (error) {

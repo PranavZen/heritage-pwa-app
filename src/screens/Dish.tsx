@@ -90,7 +90,7 @@ export const Dish: React.FC = () => {
 
         if (response.data.status === 'success') {
           notification.success({ message: 'Success', description: response.data.message });
-          window.location.reload();
+          
           setQuantity(0);
           // setCartItemId(null);
         } else {
@@ -181,17 +181,18 @@ export const Dish: React.FC = () => {
       formData.append('order_date', getTomorrowDate());
       formData.append('order_type', '1');
 
-      console.log("formData", formData);
+      // console.log("formData", formData);
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
         formData
       );
-      console.log("rrrrrrrrrrrrrrr", response);
+      // console.log("rrrrrrrrrrrrrrr", response);
       if (response.data.status === "success") {
         notification.success({
           message: "Success",
           description: response.data.message,
         });
+        window.location.reload();
         return response.data.cart_count;
       } else {
         notification.error({
@@ -250,7 +251,7 @@ export const Dish: React.FC = () => {
       if (response.data.status === "success") {
         setQuantity(newQuantity);
         notification.success({ message: response.data.message });
-        window.location.reload();
+        // window.location.reload();
       } else {
         notification.error({ message: "Please 1st add the item." });
       }
@@ -258,9 +259,7 @@ export const Dish: React.FC = () => {
       console.error("Error updating cart:", error);
     }
   };
-
   //*******************************************update api end**********************************************
-
   useEffect(() => {
     const deliveryData = async () => {
       const formData = new FormData();
@@ -632,7 +631,7 @@ export const Dish: React.FC = () => {
               value={deliveries}
               onChange={(e) => {
                 const selectedValue = Number(e.target.value);
-                console.log("Selected Delivery :", selectedValue);
+                // console.log("Selected Delivery :", selectedValue);
                 setDeliveries(selectedValue);
               }}
             >
@@ -718,7 +717,7 @@ export const Dish: React.FC = () => {
               value={deliveries}
               onChange={(e) => {
                 const selectedValue = Number(e.target.value);
-                console.log("Selected Delivery :", selectedValue);
+                // console.log("Selected Delivery :", selectedValue);
                 setDeliveries(selectedValue);
               }}
             >
@@ -751,123 +750,8 @@ export const Dish: React.FC = () => {
       </components.Modal>
     );
   };
-  // **************************Alternate Days*************************************************
-
-  // **************************Alternate Days*************************************************
-
-  // ****************************Custom*************************************************
-  // const renderCustomModal = (): JSX.Element => {
-  //   if (!isCustomModalOpen) return <></>;
-
-  //   return (
-  //     <components.Modal
-  //       title="Custom Delivery Preferences"
-  //       onClose={handleCloseCustomModal}
-  //     >
-  //       <div className="main-card-daily-delivery">
-  //         <div className="main-card-daily-delivery-box">
-  //           <label>Start Date:- </label>
-  //           <input
-  //             type="date"
-  //             value={startDate}
-  //             onChange={(e) => setStartDate(e.target.value)}
-  //             min={minDate}
-  //           />
-  //         </div>
-
-  //         <div className="week-days">
-  //           {deliveryOptionsPreference &&
-  //             deliveryOptionsPreference.length > 0 &&
-  //             deliveryOptionsPreference.map((elem, elemIndex) => {
-  //               return elem.packages && elem.packages.length > 0
-  //                 ? elem.packages.map((option: any, optionIndex: number) => {
-  //                   if (option.package_name === 'Daily') {
-  //                     return option.days
-  //                       .split(',')
-  //                       .map((delivery: any, dayIndex: number) => (
-  //                         <label key={`${elemIndex}-${optionIndex}-${dayIndex}`}>
-  //                           <input
-  //                             type="checkbox"
-  //                             value={delivery.toUpperCase()} // Ensure the value is in uppercase
-  //                             checked={customSelectedDays.includes(delivery.toUpperCase())}
-  //                             onChange={handleCustomDaySelection}
-  //                           />
-  //                           {delivery.toUpperCase()} {/* Display the day in uppercase */}
-  //                         </label>
-  //                       ));
-  //                   }
-  //                 })
-  //                 : null;
-  //             })}
-  //         </div>
-
-  //         <div className="main-card-daily-delivery-box">
-  //           <label>Delivery Preference :-</label>
-  //           <select
-  //             value={deliveryPreference}
-  //             onChange={(e) => setDeliveryPreference(e.target.value)}
-  //           >
-  //             {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 ? (
-  //               deliveryOptionsPreference.map((elem) => (
-  //                 <>
-  //                   {elem.deliveryPreference && elem.deliveryPreference.length > 0 ? (
-  //                     elem.deliveryPreference.map((option: any) => (
-  //                       <option key={option.id} value={option.id}>
-  //                         {option.name}
-  //                       </option>
-  //                     ))
-  //                   ) : (
-  //                     <option key="no-preference" value="">
-  //                       No delivery options available
-  //                     </option>
-  //                   )}
-  //                 </>
-  //               ))
-  //             ) : (
-  //               <option value="">No delivery options available</option>
-  //             )}
-  //           </select>
-  //         </div>
-
-  //         <div className="delivery-dropdown">
-  //           <label>Select Days:</label>
-  //           <select
-  //             value={deliveries}
-  //             onChange={(e) => {
-  //               const selectedValue = Number(e.target.value);
-  //               console.log('Selected Delivery:', selectedValue);
-  //               setDeliveries(selectedValue);
-  //             }}
-  //           >
-  //             {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 &&
-  //               deliveryOptionsPreference.map((elem) => {
-  //                 return elem.packages && elem.packages.length > 0 ? elem.packages.map((option: any) => {
-  //                   if (option.package_name === "Custom") {
-  //                     return option.no_of_deliveries.split(',').map((delivery: string, index: number) => (
-  //                       <option key={index} value={delivery}>
-  //                         {`${delivery}`}
-  //                       </option>
-  //                     ));
-  //                   }
-  //                 }) : null;
-  //               })}
-  //           </select>
-  //         </div>
-
-  //       </div>
-
-  //       <div>
-  //         <components.Button
-  //           text="Confirm and Add to Cart"
-  //           onClick={handleAddToCartWithCustomPreferences}
-  //         />
-  //       </div>
-  //     </components.Modal>
-  //   );
-  // };
 
   // ***************************Custom************************************************
-
   const renderContent = (): JSX.Element => {
     return (
       <section className="scrollable">
@@ -877,6 +761,7 @@ export const Dish: React.FC = () => {
       </section>
     );
   };
+  
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}

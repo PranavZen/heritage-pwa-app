@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { hooks } from "../hooks";
-import { Routes } from "../routes";
-import { components } from "../components";
-import axios from "axios";
-import { notification, Modal } from "antd";
+import React, { useState, useEffect } from 'react';
+import { hooks } from '../hooks';
+import { Routes } from '../routes';
+import { components } from '../components';
+import axios from 'axios';
+import { notification, Modal } from 'antd';
 
 export const MyAddress: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -19,9 +19,9 @@ export const MyAddress: React.FC = () => {
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
-  hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
+  hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
 
-  const c_id = localStorage.getItem("c_id");
+  const c_id = localStorage.getItem('c_id');
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -36,7 +36,7 @@ export const MyAddress: React.FC = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.error("Error fetching addresses:", error);
+        console.error('Error fetching addresses:', error);
       }
     };
     fetchAddresses();
@@ -47,38 +47,33 @@ export const MyAddress: React.FC = () => {
     if (deleteAddressId !== null) {
       const deleteAddress = async () => {
         const formData = new FormData();
-        formData.append("c_id", c_id || "null");
-        formData.append("address_id", deleteAddressId.toString());
+        formData.append('c_id', c_id || 'null');
+        formData.append('address_id', deleteAddressId.toString());
         try {
           setLoading(true);
-          const response = await axios.post(
-            "https://heritage.bizdel.in/app/consumer/services_v11/deleteAddress",
-            formData
-          );
+          const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/deleteAddress', formData);
 
-          if (response.data.status === "fail") {
+          if (response.data.status === 'fail') {
             notification.error({
-              message: "Delete Failed",
+              message: 'Delete Failed',
               description: response.data.message,
               duration: 3,
             });
           } else {
-            setAddresses((prevAddresses) =>
-              prevAddresses.filter((addr) => addr.id !== deleteAddressId)
-            );
+            setAddresses(prevAddresses => prevAddresses.filter(addr => addr.id !== deleteAddressId));
             notification.success({
-              message: "Address Deleted",
-              description: "The address has been deleted successfully.",
+              message: 'Address Deleted',
+              description: 'The address has been deleted successfully.',
               duration: 3,
             });
           }
           setLoading(false);
         } catch (error) {
           setLoading(false);
-          console.error("Error deleting address:", error);
+          console.error('Error deleting address:', error);
           notification.error({
-            message: "Error",
-            description: "There was an error deleting the address.",
+            message: 'Error',
+            description: 'There was an error deleting the address.',
             duration: 3,
           });
         }
@@ -89,13 +84,13 @@ export const MyAddress: React.FC = () => {
 
   const confirmDelete = (id: number) => {
     Modal.confirm({
-      title: "Are you sure you want to delete this address?",
-      content: "This action cannot be undone.",
+      title: 'Are you sure you want to delete this address?',
+      content: 'This action cannot be undone.',
       onOk: () => {
         setDeleteAddressId(id);
       },
       onCancel: () => {
-        console.log("Delete canceled");
+        // console.log('Delete canceled');
       },
     });
   };
@@ -108,7 +103,7 @@ export const MyAddress: React.FC = () => {
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
-          navigate('/sign-in');
+          navigate('/');
         },
       });
       return;
@@ -135,7 +130,12 @@ export const MyAddress: React.FC = () => {
   };
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header title="My Addresses" showGoBack={true} />;
+    return (
+      <components.Header
+        title="My Addresses"
+        showGoBack={true}
+      />
+    );
   };
 
   const renderContent = (): JSX.Element => {
@@ -143,86 +143,90 @@ export const MyAddress: React.FC = () => {
 
     return (
       <section className="scrollable">
-        <div className="newAddressBtnWrap">
-          <button onClick={movetoAddressAddPage} className="newAddressBtn">
-            <i className="fa fa-plus"></i> New Address
-          </button>
-        </div>
-
-        {/* Display existing addresses in a separate div if more than one address */}
-        <div className="editAddressBoxWrap">
+      <div className="newAddressBtnWrap">
+        <button onClick={movetoAddressAddPage} className="newAddressBtn">
+          <i className="fa fa-plus"></i> New Address
+        </button>
+      </div>
+    
+      {Array.isArray(addresses) && addresses.length > 0 ? (
+        <div
+          style={{
+            borderRadius: 10,
+            marginBottom: 10,
+            backgroundColor: 'var(--white-color)',
+            padding: 20,
+          }}
+        >
           <h3>Existing Addresses</h3>
-          {addresses.length > 0 ? (
-            <div className="myAddressBoxWrap">
-              {addresses.map((elem) => (
-                <div className="myaddress-getting-separate" key={elem.id}>
-                  <h4>
-                    {elem.firstname} {elem.lastname}
-                  </h4>
-                  <p>
-                    {elem.flat_plot_no} {elem.wing} {elem.building_name},{" "}
-                    {elem.address1} {elem.address2}, {elem.area_name},{" "}
-                    {elem.city_name}, {elem.state_name} {elem.pincode}
-                  </p>
-                  <div className="myAddressActionBtnWrap">
-                    {/* Edit Button */}
-                    <span
-                      onClick={() => {
-                        navigate(Routes.AddressAdd, {
-                          state: { cityID: elem },
-                        });
-                      }}
-                      className="editBtn btns"
-                    >
-                      <i className="fa fa-edit"></i>
-                    </span>
-
-                    {/* Delete Button */}
-                    <span
-                      onClick={() => {
-                        confirmDelete(elem.id);
-                      }}
-                      className="deleteBtn btns"
-                    >
-                      <i className="fa fa-trash"></i>
-                    </span>
-
-                    {/* Show Default Address Label */}
-                    {elem.is_default === "1" ? (
-                      <p className="defaultAddressLabel">
-                        Default Address
-                      </p>
-                    ) : (
-                      <span
-                        className="setDefaultBtn btns"
-                      >
-                        <i className="fa fa-check-circle"></i> Set as Default
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
+          {addresses.map((elem) => (
+            <div className="myaddress-getting-separate" key={elem.id}>
+              <h4>
+                {elem.firstname} {elem.lastname}
+              </h4>
+              <p>
+                {elem.flat_plot_no} {elem.wing} {elem.building_name},{' '}
+                {elem.address1} {elem.address2}, {elem.area_name},{' '}
+                {elem.city_name}, {elem.state_name} {elem.pincode}
+              </p>
+              <div className="myAddressActionBtnWrap">
+                {/* Edit Button */}
+                <span
+                  onClick={() => {
+                    navigate(Routes.AddressAdd, {
+                      state: { cityID: elem },
+                    });
+                  }}
+                  className="editBtn btns"
+                >
+                  <i className="fa fa-edit"></i>
+                </span>
+    
+                {/* Delete Button */}
+                <span
+                  onClick={() => confirmDelete(elem.id)}
+                  className="deleteBtn btns"
+                >
+                  <i className="fa fa-trash"></i>
+                </span>
+    
+                {/* Show Default Address Label */}
+                {elem.is_default === '1' ? (
+                  <p className="defaultAddressLabel">Default Address</p>
+                ) : (
+                  <span
+                    
+                    className="setDefaultBtn btns"
+                  >
+                    Set as Default
+                  </span>
+                )}
+              </div>
             </div>
-          ) : (
-            <div
-              style={{
-                borderRadius: 10,
-                marginBottom: 10,
-                backgroundColor: "var(--white-color)",
-                padding: 20,
-              }}
-            >
-              <h3>No data found</h3>
-            </div>
-          )}
+          ))}
         </div>
-
-      </section>
+      ) : (
+        <div
+          style={{
+            borderRadius: 10,
+            marginBottom: 10,
+            backgroundColor: 'var(--white-color)',
+            padding: 20,
+          }}
+        >
+          <h3>No data found</h3>
+        </div>
+      )}
+    </section>
+    
     );
   };
 
   return (
-    <div id="screen" style={{ opacity }}>
+    <div
+      id="screen"
+      style={{ opacity }}
+    >
       {renderHeader()}
       {renderContent()}
     </div>

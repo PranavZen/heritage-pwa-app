@@ -97,7 +97,7 @@ export const cartSlice = createSlice({
       })
       .addCase(addItemToCartAPI.fulfilled, (state, action) => {
         state.loading = false;
-        console.log('Item added to cart successfully:', action.payload);
+        // console.log('Item added to cart successfully:', action.payload);
       })
       .addCase(addItemToCartAPI.rejected, (state, action) => {
         state.loading = false;

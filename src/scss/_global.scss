@@ -10,10 +10,12 @@
   overflow: hidden;
   border: 13px solid #060606;
   border-radius: 30px;
+
   @media screen and (max-width: 768px) {
     border: none;
     border-radius: 0;
   }
+
   // &::after {
   //   content: "";
   //   position: absolute;
@@ -143,22 +145,28 @@ details summary {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+
   .inputWrap {
     display: flex;
     gap: 10px;
+
     .col-2 {
       width: 12%;
     }
+
     .col-5 {
       width: 44%;
     }
+
     .col-6 {
       width: 50%;
     }
   }
+
   .submitBtnWrap {
     display: flex;
     justify-content: center;
+
     .submit-btn {
       background-color: #1a712e;
       display: flex;
@@ -255,18 +263,21 @@ details summary {
   justify-content: center;
   position: relative;
   margin-bottom: 20px;
+
   .upload-circle {
     width: 200px;
     height: 200px;
     cursor: pointer;
     border: 4px solid #1a712e;
     border-radius: 50%;
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 50%;
     }
+
     .upload-icon {
       position: absolute;
       top: 90%;
@@ -288,6 +299,7 @@ details summary {
   justify-content: flex-end;
   margin-top: 20px;
   padding: 0 20px;
+
   .newAddressBtn {
     background-color: #1a712e;
     display: flex;
@@ -310,8 +322,10 @@ details summary {
     }
   }
 }
+
 .editAddressBoxWrap {
   padding: 0 20px 20px;
+
   h3 {
     font-size: 20px;
     font-family: "SF Pro Display Medium";
@@ -321,6 +335,7 @@ details summary {
       font-size: 18px;
     }
   }
+
   .myAddressBoxWrap {
     display: flex;
     flex-wrap: wrap;
@@ -344,6 +359,7 @@ details summary {
           font-size: 16px;
         }
       }
+
       p {
         line-height: 1.5;
         @media screen and (max-width: 767px) {
@@ -356,11 +372,13 @@ details summary {
         color: #1a712e;
         line-height: 3;
       }
+
       .myAddressActionBtnWrap {
         display: flex;
         justify-content: flex-end;
         gap: 10px;
         margin-top: 10px;
+
         .btns {
           border-radius: 50%;
           display: flex;
@@ -368,9 +386,11 @@ details summary {
           align-items: center;
           width: 35px;
           height: 35px;
+
           &.editBtn {
             background-color: #1a712e;
             cursor: pointer;
+
             i {
               font-size: 16px;
               color: #ffff;
@@ -378,14 +398,17 @@ details summary {
                 font-size: 14px;
               }
             }
+
             &:hover {
               transition: box-shadow 0.3s;
               box-shadow: inset 0px 0px 4px 2px #092c11;
             }
           }
+
           &.deleteBtn {
             background-color: #e3e3e3;
             cursor: pointer;
+
             i {
               font-size: 16px;
               color: #9e2323;
@@ -393,6 +416,7 @@ details summary {
                 font-size: 14px;
               }
             }
+
             &:hover {
               transition: box-shadow 0.3s;
               box-shadow: inset 0px 0px 4px 2px #616161;
@@ -403,6 +427,7 @@ details summary {
     }
   }
 }
+
 .checkBoxWrap {
   display: flex;
   align-items: center;
@@ -412,10 +437,12 @@ details summary {
   .form-label {
     margin-bottom: 0;
   }
+
   input {
     cursor: pointer;
   }
 }
+
 // **************notification ************
 .notification-client {
   border-radius: 10px;
@@ -424,6 +451,7 @@ details summary {
   background-color: var(--white-color);
   padding: 20px;
 }
+
 .searchItemWrap {
   display: flex;
   align-items: center;
@@ -434,15 +462,18 @@ details summary {
   padding: 10px;
   border-radius: 8px;
   border: 0.3px solid #e1e0e0ee;
+
   &:hover {
     background-color: #daf0f7;
   }
+
   .searchitmImg {
     width: 80px;
     height: 80px;
     background: #fff;
     overflow: hidden;
     border-radius: 8px;
+
     img {
       width: 100%;
       height: 100%;
@@ -450,6 +481,7 @@ details summary {
     }
   }
 }
+
 .proListItemWrap {
   display: flex;
   align-items: center;
@@ -462,12 +494,15 @@ details summary {
   border-radius: 8px;
   border: 0.3px solid rgba(225, 224, 224, 0.9333333333);
   position: relative;
+
   .proLeftBox {
     display: flex;
     gap: 20px;
+
     @media screen and (max-width: 767px) {
       gap: 8px;
     }
+
     .proItemImgWrap {
       width: 120px;
       height: 120px;
@@ -477,10 +512,12 @@ details summary {
       justify-content: center;
       align-items: center;
       overflow: hidden;
+
       @media screen and (max-width: 767px) {
         width: 70px;
         height: 70px;
       }
+
       img {
         width: 100%;
         height: 100%;
@@ -488,9 +525,11 @@ details summary {
         object-position: center;
       }
     }
+
     .proItemDetailsWrap {
       display: flex;
       flex-direction: column;
+
       .proName {
         font-size: 16px;
         color: #1a712e;
@@ -502,36 +541,44 @@ details summary {
         text-overflow: ellipsis;
         font-weight: 600;
         margin-bottom: 5px;
+
         @media screen and (max-width: 767px) {
           font-size: 14px;
         }
       }
+
       .proWeigh {
         font-size: 14px;
         margin-bottom: 10px;
+
         @media screen and (max-width: 767px) {
           font-size: 12px;
         }
       }
+
       .proPrice {
         font-size: 18px;
         font-weight: 600;
         color: #1a712e;
+
         @media screen and (max-width: 767px) {
           font-size: 16px;
         }
       }
     }
   }
+
   .wishListBtn {
     position: absolute;
     top: 15px;
     right: 25px;
+
     @media screen and (max-width: 767px) {
       top: 8px;
       right: 8px;
     }
   }
+
   .lastBox {
     .cartButtonWrap {
       display: flex;
@@ -542,25 +589,30 @@ details summary {
       width: 100%;
       margin: 15px 0 0 auto;
       overflow: hidden;
+
       .cartButton {
         padding: 8px;
         font-size: 16px;
         color: #fff;
+
         @media screen and (max-width: 767px) {
           padding: 3.5px;
           font-size: 16px;
         }
+
         &.addBtnText {
           background-color: #242424;
           width: 100%;
           align-items: center;
           justify-content: center;
           padding: 9.5px;
+
           @media screen and (max-width: 767px) {
             padding: 6.5px;
             font-size: 12px;
           }
         }
+
         svg {
           path {
             stroke: #fff;
@@ -568,25 +620,30 @@ details summary {
           }
         }
       }
+
       .countNum {
         font-size: 18px;
         font-weight: 500;
         color: #fff;
+
         @media screen and (max-width: 767px) {
           font-size: 14px;
         }
       }
     }
+
     .smallText {
       padding-top: 5px;
       font-size: 14px;
       color: #c80000;
+
       @media screen and (max-width: 767px) {
         font-size: 12px;
       }
     }
   }
 }
+
 .cartLitItem {
   display: flex;
   // align-items: center;
@@ -598,10 +655,12 @@ details summary {
   border-radius: 8px;
   border: 0.3px solid rgba(225, 224, 224, 0.9333333333);
   position: relative;
+
   .cartLeftBox {
     gap: 15px;
     display: flex;
     justify-content: space-between;
+
     .cartItmImgWrap {
       width: 80px;
       height: 80px;
@@ -611,6 +670,7 @@ details summary {
       justify-content: center;
       align-items: center;
       overflow: hidden;
+
       img {
         width: 100%;
         height: 100%;
@@ -618,10 +678,12 @@ details summary {
         object-position: center;
       }
     }
+
     .cartItemDetailsWrap {
       display: flex;
       flex-direction: column;
       gap: 3px;
+
       .cartLable {
         font-size: 14px;
         font-weight: 600;
@@ -629,6 +691,7 @@ details summary {
       }
     }
   }
+
   .cartRightBox {
     .cartButtonWrap {
       display: flex;
@@ -637,10 +700,12 @@ details summary {
       justify-content: space-evenly;
       border-radius: 50px;
       margin-top: 15px;
+
       &.modifyBtn {
         background-color: #fff;
         border: 1px solid #1a712e;
       }
+
       .cartButton {
         padding: 8px;
         font-size: 16px;
@@ -656,6 +721,7 @@ details summary {
             font-size: 12px;
           }
         }
+
         svg {
           path {
             stroke: #fff;
@@ -663,6 +729,7 @@ details summary {
           }
         }
       }
+
       .countNum {
         font-size: 18px;
         font-weight: 500;
@@ -677,11 +744,13 @@ details summary {
 
 .upperBox {
   position: relative;
+
   .productImgWrap {
     width: 230px;
     height: 230px;
     margin: 0 auto;
     position: relative;
+
     img {
       width: 100%;
       height: 100%;
@@ -690,22 +759,26 @@ details summary {
     }
   }
 }
+
 .productInfoBox {
   .infoWrap {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     h3 {
       font-family: "SF Pro Display Regular";
       font-size: 18px;
       letter-spacing: 1px;
     }
+
     .t16 {
       font-family: "SF Pro Display Light";
       color: #0c1d2e;
       font-size: 14px;
       letter-spacing: 1px;
     }
+
     .ppdBox {
       width: 100%;
       display: flex;
@@ -717,6 +790,7 @@ details summary {
         font-family: "SF Pro Display Light";
         font-size: 14px;
       }
+
       .cartButtonWrap {
         display: flex;
         align-items: center;
@@ -724,17 +798,21 @@ details summary {
         justify-content: space-evenly;
         border-radius: 50px;
         width: 25%;
+
         &.modifyBtn {
           background-color: #f8d907;
           border: 1px solid #333;
         }
+
         .cartButton {
           padding: 8px;
           font-size: 16px;
           color: #fff;
+
           &.modifyText {
             color: #333;
           }
+
           svg {
             path {
               stroke: #fff;
@@ -742,6 +820,7 @@ details summary {
             }
           }
         }
+
         .countNum {
           font-size: 18px;
           font-weight: 500;
@@ -774,6 +853,7 @@ details summary {
     }
   }
 }
+
 // Customer Care
 
 /* External CSS for better styling */
@@ -818,17 +898,21 @@ details summary {
   font-size: 16px;
   margin: 10px auto;
 }
+
 .cutomercare-submit-button:disabled {
   background-color: #cccccc;
 }
+
 .cutomercare-submit-button:hover:not(:disabled) {
   background-color: #0056b3;
 }
+
 .Choose-your-delivery-plan {
   text-align: center;
   padding: 10px;
   font-size: 18px;
 }
+
 .main-card-daily-delivery {
   display: flex;
   flex-direction: column;

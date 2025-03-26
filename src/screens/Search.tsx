@@ -27,7 +27,7 @@ export const Search: React.FC = () => {
         formData
       );
 
-      console.log("responseresponseqqqqaaaqqaaaqaaaqqqqaaq", response);
+      // console.log("responseresponseqqqqaaaqqaaaqaaaqqqqaaq", response);
 
       setDishes(response.data.search_data || []);
     } catch (error) {
