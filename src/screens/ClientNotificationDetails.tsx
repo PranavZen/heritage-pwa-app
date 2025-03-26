@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { hooks } from '../hooks';
-import { components } from '../components';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { hooks } from "../hooks";
+import { components } from "../components";
+import { useLocation } from "react-router-dom";
 
 export const ClientNotificationDetails: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
   const location = useLocation();
 
-  console.log('Location state:', location.state);
+  console.log("Location state:", location.state);
 
   // Destructuring notification_id from location.state
   const { notification_id } = location.state || {};
@@ -21,34 +21,35 @@ export const ClientNotificationDetails: React.FC = () => {
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
-  hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
+  hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
   useEffect(() => {
     const fetchNotifications = async () => {
       setLoading(true);
-      const cityId = localStorage.getItem('c_id');
+      const cityId = localStorage.getItem("c_id");
       const formData = new FormData();
-      formData.append('c_id', cityId || 'null');
-      formData.append('next_id', '0');
+      formData.append("c_id", cityId || "null");
+      formData.append("next_id", "0");
 
       try {
         const response = await axios.post(
-          'https://heritage.bizdel.in/app/consumer/services_v11/notificationList',
+          "https://heritage.bizdel.in/app/consumer/services_v11/notificationList",
           formData
         );
-        console.log('Notification response:', response.data.notificationList);
+        console.log("Notification response:", response.data.notificationList);
 
         // Filter notifications if notification_id is available
         const filteredNotifications = notification_id
           ? response.data.notificationList.filter(
-              (notification: any) => notification.notification_id === notification_id
+              (notification: any) =>
+                notification.notification_id === notification_id
             )
           : response.data.notificationList;
 
         // Set the filtered notifications
         setNotifications(filteredNotifications || []);
       } catch (error) {
-        setError('Failed to fetch notifications.');
+        setError("Failed to fetch notifications.");
         console.error(error);
       } finally {
         setLoading(false);
@@ -68,14 +69,14 @@ export const ClientNotificationDetails: React.FC = () => {
 
     return (
       <main className="scrollable x">
-        <section className="accordion" style={{ paddingTop: 10 }}>
+        <section className="clientNotificationWrap" style={{ paddingTop: 10 }}>
           {notifications.length === 0 ? (
             <div
               style={{
                 borderRadius: 10,
                 marginBottom: 10,
-                border: '1px solid red',
-                backgroundColor: 'var(--white-color)',
+                border: "1px solid red",
+                backgroundColor: "var(--white-color)",
                 padding: 20,
               }}
             >
@@ -84,9 +85,29 @@ export const ClientNotificationDetails: React.FC = () => {
           ) : (
             notifications.map((notification, index) => (
               <div key={index} className="notification-client">
-                <h3>{notification.title}</h3>
-                <p>{notification.message}</p>
-                <p style={{ textAlign: 'end' }}>{notification.created_date}</p>
+                <h3 className="mainText">{notification.title}</h3>
+                {notification.message
+                  .split("\r\n\r\n")
+                  .map(
+                    (
+                      sentence:
+                        | string
+                        | number
+                        | boolean
+                        | React.ReactElement<
+                            any,
+                            string | React.JSXElementConstructor<any>
+                          >
+                        | Iterable<React.ReactNode>
+                        | React.ReactPortal
+                        | null
+                        | undefined,
+                      index: React.Key | null | undefined
+                    ) => (
+                      <p key={index} className="subText">{sentence}</p>
+                    )
+                  )}
+                <p className="notifyDate">{notification.created_date}</p>
               </div>
             ))
           )}

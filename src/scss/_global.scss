@@ -11,7 +11,7 @@
   border: 13px solid #060606;
   border-radius: 30px;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 767px) {
     border: none;
     border-radius: 0;
   }
@@ -299,7 +299,6 @@ details summary {
   justify-content: flex-end;
   margin-top: 20px;
   padding: 0 20px;
-
   .newAddressBtn {
     background-color: #1a712e;
     display: flex;
@@ -322,10 +321,8 @@ details summary {
     }
   }
 }
-
 .editAddressBoxWrap {
   padding: 0 20px 20px;
-
   h3 {
     font-size: 20px;
     font-family: "SF Pro Display Medium";
@@ -335,7 +332,6 @@ details summary {
       font-size: 18px;
     }
   }
-
   .myAddressBoxWrap {
     display: flex;
     flex-wrap: wrap;
@@ -359,7 +355,6 @@ details summary {
           font-size: 16px;
         }
       }
-
       p {
         line-height: 1.5;
         @media screen and (max-width: 767px) {
@@ -372,13 +367,11 @@ details summary {
         color: #1a712e;
         line-height: 3;
       }
-
       .myAddressActionBtnWrap {
         display: flex;
         justify-content: flex-end;
         gap: 10px;
         margin-top: 10px;
-
         .btns {
           border-radius: 50%;
           display: flex;
@@ -386,11 +379,9 @@ details summary {
           align-items: center;
           width: 35px;
           height: 35px;
-
           &.editBtn {
             background-color: #1a712e;
             cursor: pointer;
-
             i {
               font-size: 16px;
               color: #ffff;
@@ -398,17 +389,14 @@ details summary {
                 font-size: 14px;
               }
             }
-
             &:hover {
               transition: box-shadow 0.3s;
               box-shadow: inset 0px 0px 4px 2px #092c11;
             }
           }
-
           &.deleteBtn {
             background-color: #e3e3e3;
             cursor: pointer;
-
             i {
               font-size: 16px;
               color: #9e2323;
@@ -416,7 +404,6 @@ details summary {
                 font-size: 14px;
               }
             }
-
             &:hover {
               transition: box-shadow 0.3s;
               box-shadow: inset 0px 0px 4px 2px #616161;
@@ -444,13 +431,48 @@ details summary {
 }
 
 // **************notification ************
-.notification-client {
-  border-radius: 10px;
-  margin-bottom: 10px;
-  border: 1px solid gray;
-  background-color: var(--white-color);
+.clientNotificationWrap{
   padding: 20px;
+  .notification-client {
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background-color: #3498db1f;
+    padding: 10px;
+    box-shadow: 0px 0px 5px 0px #3498db1f;
+    .mainText{
+      font-size: 16px;
+      font-family: "SF Pro Display Medium";
+      color: #1a712e;
+      margin-bottom: 10px;
+    }
+    .subText{
+      font-size: 14px;
+      font-family: "SF Pro Display Regular";
+      color: #1b1b1b;
+      margin-bottom: 10px;
+      line-height: 2;
+    }
+    .notifytext{
+      font-size: 14px;
+      font-family: "SF Pro Display Regular";
+      color: #1a712e;
+      margin-bottom: 15px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-height: 1.4;
+    }
+    .notifyDate{
+      font-size: 14px;
+      font-family: "SF Pro Display Regular";
+      color: #838383;
+      text-align: right;
+    }
+  }
 }
+
 
 .searchItemWrap {
   display: flex;
@@ -1013,7 +1035,7 @@ select {
   .leftBox {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     cursor: pointer;
     .userImg {
       width: 40px;
@@ -1022,7 +1044,7 @@ select {
       border: 2px solid #1a712e;
     }
     .userName {
-      font-size: 18px;
+      font-size: 14px;
       font-family: "SF Pro Display Semibold";
       color: #1a712e;
     }
@@ -1262,6 +1284,8 @@ select {
 .mb5 {
   margin-bottom: 20px;
 }
+
+
 // Pranav added new css end
 
 .explore-btn {

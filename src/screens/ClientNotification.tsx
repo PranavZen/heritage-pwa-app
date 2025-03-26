@@ -55,7 +55,7 @@ export const ClientNotification: React.FC = () => {
 
     return (
       <main className="scrollable s">
-        <section className="accordion" style={{ paddingTop: 10 }}>
+        <div className="clientNotificationWrap">
           {notifications.length === 0 ? (
             <div
               style={{
@@ -77,12 +77,12 @@ export const ClientNotification: React.FC = () => {
                   navigate(Routes.ClientNotificationDetails, { state: { notification_id: notification.notification_id } }); 
                 }}
               >
-                <p>{notification.message.substring(0, 22)}...</p>
-                <p style={{ textAlign: 'end' }}>{notification.created_date}</p>
+                <p className='notifytext'>{notification.message}</p>
+                <p className='notifyDate'>{notification.created_date}</p>
               </div>
             ))
           )}
-        </section>
+        </div>
       </main>
     );
   };
