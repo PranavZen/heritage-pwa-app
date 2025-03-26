@@ -116,7 +116,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           formData
         );
 
-        console.log('bbbbbbbbb', response.data)
+        console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
+        
         SetSetCartData(response.data.optionListing.map((elem: any) => elem.no_of_deliveries));
       } catch (error) {
         console.error(error);
@@ -228,7 +229,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         <div className="cartRightBox">
           <div className="cartButtonWrap">
             {noOfDeliveries > 0 && (
-              <div onClick={handleOpenModal} className="cartButton modifyText">Modify</div>
+              <div onClick={handleOpenModal} className="cartButton"
+              style={{cursor:"pointer"}}
+              >Modify</div>
             )}
           </div>
           {/* Remove (Decrease Quantity) */}

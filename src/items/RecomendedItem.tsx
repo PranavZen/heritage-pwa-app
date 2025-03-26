@@ -34,15 +34,20 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     const c_id = localStorage.getItem('c_id');
 
     if (!c_id) {
-      Modal.info({
+      Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
           navigate('/');
         },
+        onCancel(){
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
       });
       return;
     }
+
     try {
       const formData = new FormData();
       formData.append('c_id', c_id);
@@ -57,7 +62,6 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       formData.append('no_of_deliveries', '0');
       formData.append('order_date', getTomorrowDate());
       formData.append('order_type', '2');
-
       const response = await axios.post(
         'https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart',
         formData

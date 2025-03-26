@@ -71,7 +71,7 @@ export const Dish: React.FC = () => {
 
     fetchCartData();
   }, [cityId, c_id, dish.product_option_value_id]);
-  
+
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
 
@@ -90,7 +90,7 @@ export const Dish: React.FC = () => {
 
         if (response.data.status === 'success') {
           notification.success({ message: 'Success', description: response.data.message });
-          
+
           setQuantity(0);
           // setCartItemId(null);
         } else {
@@ -114,12 +114,16 @@ export const Dish: React.FC = () => {
     const c_id = localStorage.getItem('c_id');
 
     if (!c_id) {
-      Modal.info({
+      Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
           navigate('/');
         },
+        onCancel() {
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
       });
       return;
     }
@@ -166,6 +170,21 @@ export const Dish: React.FC = () => {
 
   // ***************************************ADDddddddddddddddddddddddddddddddddddddd
   const addToCartApi = async (cartData: any) => {
+
+    if (!c_id) {
+      Modal.confirm({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {
+          navigate('/');
+        },
+        onCancel() {
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
+      });
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append('c_id', String(c_id || '1'));
@@ -217,12 +236,16 @@ export const Dish: React.FC = () => {
     const c_id = localStorage.getItem('c_id');
 
     if (!c_id) {
-      Modal.info({
+      Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
-          navigate('/sign-in');
+          navigate('/');
         },
+        onCancel() {
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
       });
       return;
     }
@@ -308,16 +331,17 @@ export const Dish: React.FC = () => {
 
   const handleOpenModal = () => {
     const c_id = localStorage.getItem('c_id');
-
     if (!c_id) {
-      Modal.info({
+      Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
-
-
-          navigate('/sign-in');
+          navigate('/');
         },
+        onCancel() {
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
       });
       return;
     }
@@ -340,14 +364,16 @@ export const Dish: React.FC = () => {
     const c_id = localStorage.getItem('c_id');
 
     if (!c_id) {
-      Modal.info({
+      Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
-
-
-          navigate('/sign-in');
+          navigate('/');
         },
+        onCancel() {
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
       });
       return;
     }
@@ -604,11 +630,11 @@ export const Dish: React.FC = () => {
             onChange={(e) => setDeliveryPreference(e.target.value)}
           >
             {deliveryOptionsPreference &&
-            deliveryOptionsPreference.length > 0 ? (
+              deliveryOptionsPreference.length > 0 ? (
               deliveryOptionsPreference.map((elem) => (
                 <>
                   {elem.deliveryPreference &&
-                  elem.deliveryPreference.length > 0 ? (
+                    elem.deliveryPreference.length > 0 ? (
                     elem.deliveryPreference.map((option: any) => (
                       <option key={option.id} value={option.id}>
                         {option.name}
@@ -640,16 +666,16 @@ export const Dish: React.FC = () => {
                 deliveryOptionsPreference.map((elem) => {
                   return elem.packages && elem.packages.length > 0
                     ? elem.packages.map((option: any) => {
-                        if (option.package_name === "Daily") {
-                          return option.no_of_deliveries
-                            .split(",")
-                            .map((delivery: string, index: number) => (
-                              <option key={index} value={delivery}>
-                                {`${delivery}`}
-                              </option>
-                            ));
-                        }
-                      })
+                      if (option.package_name === "Daily") {
+                        return option.no_of_deliveries
+                          .split(",")
+                          .map((delivery: string, index: number) => (
+                            <option key={index} value={delivery}>
+                              {`${delivery}`}
+                            </option>
+                          ));
+                      }
+                    })
                     : null;
                 })}
             </select>
@@ -690,11 +716,11 @@ export const Dish: React.FC = () => {
             onChange={(e) => setDeliveryPreference(e.target.value)}
           >
             {deliveryOptionsPreference &&
-            deliveryOptionsPreference.length > 0 ? (
+              deliveryOptionsPreference.length > 0 ? (
               deliveryOptionsPreference.map((elem) => (
                 <>
                   {elem.deliveryPreference &&
-                  elem.deliveryPreference.length > 0 ? (
+                    elem.deliveryPreference.length > 0 ? (
                     elem.deliveryPreference.map((option: any) => (
                       <option key={option.id} value={option.id}>
                         {option.name}
@@ -725,16 +751,16 @@ export const Dish: React.FC = () => {
                 deliveryOptionsPreference.map((elem) => {
                   return elem.packages && elem.packages.length > 0
                     ? elem.packages.map((option: any) => {
-                        if (option.package_name === "Alternate Days") {
-                          return option.no_of_deliveries
-                            .split(",")
-                            .map((delivery: string, index: number) => (
-                              <option key={index} value={delivery}>
-                                {`${delivery}`}
-                              </option>
-                            ));
-                        }
-                      })
+                      if (option.package_name === "Alternate Days") {
+                        return option.no_of_deliveries
+                          .split(",")
+                          .map((delivery: string, index: number) => (
+                            <option key={index} value={delivery}>
+                              {`${delivery}`}
+                            </option>
+                          ));
+                      }
+                    })
                     : null;
                 })}
             </select>
@@ -761,7 +787,7 @@ export const Dish: React.FC = () => {
       </section>
     );
   };
-  
+
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
