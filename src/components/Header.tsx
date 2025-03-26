@@ -202,7 +202,6 @@ export const Header: React.FC<Props> = ({
 
   const renderModal = (): JSX.Element | null => {
     if (!showModal) return null;
-
     return (
       <div className="modalWrapBox">
         <div
@@ -228,8 +227,8 @@ export const Header: React.FC<Props> = ({
                 profileData?.photo instanceof File
                   ? URL.createObjectURL(profileData?.photo)
                   : profileData?.photo_url && profileData?.photo
-                  ? `${profileData?.photo_url}${profileData?.photo}`
-                  : "https://george-fx.github.io/dinehub_api/assets/users/01.jpg"
+                    ? `${profileData?.photo_url}${profileData?.photo}`
+                    : "https://george-fx.github.io/dinehub_api/assets/users/01.jpg"
               }
               alt="user"
               style={{ width: 60, height: 60, borderRadius: 50, border: "2px solid #1a712e" }}
@@ -260,7 +259,9 @@ export const Header: React.FC<Props> = ({
                   }}
                   key={item.id}
                   onClick={() => {
-                    if (item.route !== "") {
+                    if (item.title === 'Sign out') {
+                      signOut();
+                    } else if (item.route !== '') {
                       navigate(item.route);
                     }
                   }}
@@ -268,18 +269,21 @@ export const Header: React.FC<Props> = ({
                   <span
                     className="t16 number-of-lines-1"
                     style={
-                      item.title === "Sign out"
-                        ? { color: "#FA5555" }
-                        : { color: "var(--main-color)" }
+                      item.title === 'Sign out'
+                        ? { color: '#FA5555' }
+                        : { color: 'var(--main-color)' }
                     }
                   >
-                    {item.title}
+                    {item.title === 'Sign out'
+                      ? (localStorage.getItem('c_id') ? 'Sign Out' : 'Sign In')
+                      : item.title}
                   </span>
-                  {item.route !== "" && item.title !== "Sign out" && (
+                  {item.route !== '' && item.title !== 'Sign out' && (
                     <svg.RightArrowSvg />
                   )}
                   {item.switch && <components.Switch />}
                 </li>
+
               );
             })}
           </ul>
