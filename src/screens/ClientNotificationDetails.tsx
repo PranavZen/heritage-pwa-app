@@ -67,7 +67,7 @@ export const ClientNotificationDetails: React.FC = () => {
     if (error) return <p>{error}</p>;
 
     return (
-      <main className="scrollable container">
+      <main className="scrollable x">
         <section className="accordion" style={{ paddingTop: 10 }}>
           {notifications.length === 0 ? (
             <div

@@ -916,11 +916,11 @@ select {
   &::before {
     content: "";
     background-image: url("../assets/icons/pwa-logo.jpg");
-    background-position: center;
     background-repeat: no-repeat;
-    background-size: 100%;
-    width: 130px;
-    height: 100%;
+    background-size: contain; /* Ensures the entire image is visible */
+    width: 30vw; /* 30% of the viewport width */
+    max-width: 130px; /* Limit maximum size */
+    height: auto; /* Maintain aspect ratio */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -964,7 +964,20 @@ select {
     }
   }
 }
-
+.notificationListWrap{
+  .notofiationList{
+    padding: 20px;
+    background-color: #3498db1a;
+    .t12{
+      &.clickable{
+        background-color: #1a712e;
+        color: #fff;
+        padding: 3px 10px;
+        border-radius: 6px;
+      }
+    }
+  }
+}
 .sideMenu {
   position: absolute;
   z-index: 102;
@@ -987,6 +1000,12 @@ select {
     align-items: center;
     gap: 10px;
     border-bottom: 0.2px solid #1a712e;
+    img{
+      @media screen and (max-width: 767px) {
+        width: 40px !important;
+        height: 40px !important;
+      }
+    }
     .sideMenuHeaderContent {
       display: flex;
       flex-direction: column;
@@ -996,11 +1015,19 @@ select {
           font-size: 18px;
           font-family: "SF Pro Display Semibold";
           color: #1a712e;
+          @media  screen and (max-width: 767px) {
+            font-size: 16px;
+            
+          }
         }
         &:nth-child(2) {
           font-size: 16px;
           font-family: "SF Pro Display Light";
           color: #1a712e;
+          @media  screen and (max-width: 767px) {
+            font-size: 14px;
+            
+          }
         }
       }
     }
@@ -1008,6 +1035,14 @@ select {
   .sideMenuList {
     padding: 20px 20px 0 20px;
     li {
+      .t16{
+        &.number-of-lines-1{
+          @media screen and (max-width: 767px) {
+            font-size: 14px;
+            
+          }
+        }
+      }
       &:last-child {
         span {
           background-color: #1a712e;
@@ -1041,6 +1076,7 @@ select {
     max-width: 280px;
     @media screen and (max-width: 767px) {
       width: 100%;
+      max-width: 100%;
     }
     .itemImg {
       border-radius: 18px;
