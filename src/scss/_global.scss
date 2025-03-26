@@ -669,7 +669,6 @@ details summary {
         color: #fff;
         @media screen and (max-width: 767px) {
           font-size: 14px;
-          
         }
       }
     }
@@ -1144,3 +1143,25 @@ select {
   margin-bottom: 20px;
 }
 // Pranav added new css end
+
+.explore-btn {
+  height: 50px;
+  background-color: rgb(26, 113, 46);
+  color: var(--white-color);
+  font-family: "SF Pro Display Medium";
+  font-size: 14px;
+  line-height: 1.7;
+  cursor: pointer;
+  margin: 0px auto;
+  text-align: center;
+  border: 1px solid rgb(26, 113, 46);
+  text-transform: capitalize;
+  width: auto;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 0px 20px;
+  margin-top: 20px;
+}

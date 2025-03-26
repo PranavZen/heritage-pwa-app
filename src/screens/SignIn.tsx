@@ -93,7 +93,7 @@ export const SignIn: React.FC = () => {
         formData
       );
 
-      console.log("pppppppppppppppppppppppAAAAAAAAAAAA",  response);
+      console.log("pppppppppppppppppppppppAAAAAAAAAAAA", response);
 
       console.log(
         "pppppppppppppppppppppppAAAAAAAAAAAA",
@@ -143,13 +143,13 @@ export const SignIn: React.FC = () => {
   };
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header showGoBack={true} />;
+    return <components.Header showGoBack={false} />;
   };
 
-  const redirectToCity =()=>{
-        navigate('/city-choose');
-  }
- 
+  const redirectToCity = () => {
+    navigate("/city-choose");
+  };
+
   const renderContent = (): JSX.Element => {
     return (
       <main className="scrollable container">
@@ -203,7 +203,7 @@ export const SignIn: React.FC = () => {
           {/* terms & conditions */}
           {
             <div className="mb5">
-            <components.Button text="Generate OTP" onClick={handleLogin} />
+              <components.Button text="Generate OTP" onClick={handleLogin} />
             </div>
           }
           {!isOtpSent ? (
@@ -222,12 +222,11 @@ export const SignIn: React.FC = () => {
               <components.Button text="Verify OTP" onClick={handleVerifyOtp} />
             </>
           )}
-          <div style={{ gap: 4 }} className="row-center">
-
-            <button  onClick={redirectToCity} style={{textAlign:"center"}}>
-                  Explore Now
+          
+            <button onClick={redirectToCity} className="explore-btn">
+              Explore Now
             </button>
-          </div>
+         
         </section>
       </main>
     );
