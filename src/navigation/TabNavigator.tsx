@@ -10,7 +10,7 @@ import { Favorite } from '../screens/tabs/Favorite';
 import { Notification } from '../screens/tabs/Notification';
 import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
 
-export const TabNavigator: React.FC = () => {
+export const TabNavigator: React.FC = () =>{
   const currentTabScreen = useSelector(
     (state: RootState) => state.tabSlice.screen,
   );

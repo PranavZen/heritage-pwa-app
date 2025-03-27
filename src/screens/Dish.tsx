@@ -20,19 +20,88 @@ export const Dish: React.FC = () => {
   const [cartId, setCartId] = useState<string[]>([]);
 
   const [cartItemId, setCartItemId] = useState<string | null>(null);
-  console.log("cartIdcartIdcartIdcartId", cartItemId);
+
+  const [opacity, setOpacity] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
+  const [isAlternateModalOpen, setIsAlternateModalOpen] =
+    useState<boolean>(false);
+  const [startDate, setStartDate] = useState<string>("");
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [deliveryPreference, setDeliveryPreference] = useState<string>("");
+  const [deliveries, setDeliveries] = useState<number>(15);
+  const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
+
+  interface CartItem {
+    quantity: number;
+  }
+  
+  const [cartData, setCartData] = useState<CartItem[] | undefined>(undefined);
+  
+
+  console.log("ccccccccccccccccc", cartData);
 
   const dish: DishType = location.state.dish;
-
-  // console.log("ppppppp", dish);
-
   const c_id = localStorage.getItem("c_id");
   const cityId = localStorage.getItem("cityId");
 
-  // console.log("kkkkk", quantity)
+  // **************************************Modify cart data*************************************************************
 
-  // ***************************************************************************************************
+  useEffect(() => {
+    const getAddToCartData = async () => {
+      const formData = new FormData();
+      formData.append('city_id', cityId || '');
+      formData.append('c_id', c_id || '');
+      formData.append('next_id', '0');
+      try {
+        const response = await axios.post(
+          `https://heritage.bizdel.in/app/consumer/services_v11/getCartData`,
+          formData
+        );
 
+        console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
+
+        setCartData(response.data.optionListing);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getAddToCartData();
+  }, [cityId, c_id]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // **************************************Modify cart data*************************************************************
   useEffect(() => {
     const fetchCartData = async () => {
       try {
@@ -90,7 +159,7 @@ export const Dish: React.FC = () => {
 
         if (response.data.status === 'success') {
           notification.success({ message: 'Success', description: response.data.message });
-
+          window.location.reload();
           setQuantity(0);
           // setCartItemId(null);
         } else {
@@ -102,13 +171,13 @@ export const Dish: React.FC = () => {
       }
     }
   };
-
   // *******************************************************************************************************
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0];
   };
+
   const handleAddToCart = async (cartData: any) => {
 
     const c_id = localStorage.getItem('c_id');
@@ -232,8 +301,19 @@ export const Dish: React.FC = () => {
 
   // ******************update api start*****************************
   const handleUpdateCart = async (newQuantity: number) => {
+    if (newQuantity < 1) return;
 
     const c_id = localStorage.getItem('c_id');
+    if (!cartItemId) {
+      Modal.confirm({
+        title: 'Please Add the Item',
+        content: 'You need to add to cart first.',
+        onCancel() { },
+        cancelText: 'Cancel',
+        okText: 'Ok',
+      });
+      return;
+    }
 
     if (!c_id) {
       Modal.confirm({
@@ -242,29 +322,28 @@ export const Dish: React.FC = () => {
         onOk() {
           navigate('/');
         },
-        onCancel() {
-        },
+        onCancel() { },
         cancelText: 'Cancel',
         okText: 'Sign In',
       });
       return;
     }
 
-    if (newQuantity < 1) return;
-
     const formData = new FormData();
 
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const formattedDate = tomorrow.toISOString().split('T')[0];
+
     formData.append('id', cartItemId || '');
-    formData.append('c_id', localStorage.getItem('c_id') || '');
+    formData.append('c_id', c_id);
     formData.append('package_id', '13');
     formData.append('quantity', String(newQuantity));
     formData.append('delivery_preference', '0');
     formData.append('no_of_deliveries', '0');
     formData.append('order_date', formattedDate);
     formData.append('order_type', '2');
+
     try {
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
@@ -274,16 +353,19 @@ export const Dish: React.FC = () => {
       if (response.data.status === "success") {
         setQuantity(newQuantity);
         notification.success({ message: response.data.message });
-        // window.location.reload();
+        window.location.reload();
       } else {
         notification.error({ message: "Please 1st add the item." });
       }
     } catch (error) {
-      console.error("Error updating cart:", error);
+      notification.error({ message: "Error updating cart:" });
     }
   };
+
   //*******************************************update api end**********************************************
+
   useEffect(() => {
+
     const deliveryData = async () => {
       const formData = new FormData();
       formData.append("c_id", c_id || "null");
@@ -306,16 +388,6 @@ export const Dish: React.FC = () => {
   }, []);
 
   //********************************************************************
-  const [opacity, setOpacity] = useState<number>(0);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
-  const [isAlternateModalOpen, setIsAlternateModalOpen] =
-    useState<boolean>(false);
-  const [startDate, setStartDate] = useState<string>("");
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const [deliveryPreference, setDeliveryPreference] = useState<string>("");
-  const [deliveries, setDeliveries] = useState<number>(15);
-  const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
 
   const today = new Date();
   today.setDate(today.getDate() + 1);
@@ -544,7 +616,16 @@ export const Dish: React.FC = () => {
                 -
               </button>
 
-              <span className="countNum">{quantity}</span>
+
+              {!cartData ? <> <span className="countNum">{quantity}</span> </>
+                :
+                <>
+                  <span className="countNum">
+                    {quantity || cartData?.map((elem:any) => elem.quantity)}
+                  </span>
+
+                </>
+              }
 
               <button
                 onClick={() => handleUpdateCart(quantity + 1)}

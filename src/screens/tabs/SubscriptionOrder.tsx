@@ -287,10 +287,14 @@ export const SubscriptionOrder: React.FC = () => {
                           height={100}
                         />
                       </div>
+                      <p>Order ID #{order.order_id}</p>
+                      <p>Order date #{order.delivery_date}</p>
                       <h3> Product:{order.product_name}</h3>
                       <p>Quantity: {order.quantity}</p>
                       <p>Price: ₹{order.price}</p>
-                      <p>Status: {order.status}</p>
+                      <p>{order.status_name}</p>
+                      <p> Subtotal ₹{order.price}</p>
+                      <p> Total ₹{order.price}</p>
                     </div>
                   ))
                 ) : (

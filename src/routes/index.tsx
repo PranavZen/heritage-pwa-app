@@ -6,8 +6,8 @@ export enum TabScreens {
   Favorite = 'Favorite',
   Notification = 'Notification',
 }
-
 export enum Routes {
+  WalletHistory='/wallet-history',
   Onboarding = '/city-choose',
   SignIn = '/',
   OrderHistory = '/profile/orders',

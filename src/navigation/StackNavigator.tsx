@@ -128,6 +128,10 @@ const stack = createBrowserRouter([
   {   
     path: Routes.OrderSubscription,
     element:<screens.SubscriptionOrder/>
+  },
+  {   
+    path: Routes.WalletHistory,
+    element:<screens.WalletHistory/>
   }
 ]);
 export const StackNavigator: React.FC = () => {
