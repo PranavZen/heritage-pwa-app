@@ -98,6 +98,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
       Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
+        centered: true,
         onOk() {
           navigate('/');
         },

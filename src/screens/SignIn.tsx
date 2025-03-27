@@ -156,12 +156,8 @@ export const SignIn: React.FC = () => {
       <main className="scrollable signInWrap">
         <section
           style={{
-            backgroundColor: "#007bff0d",
-            paddingLeft: 20,
-            paddingRight: 20,
-            height: "100%",
-            paddingTop: "5%",
-            borderRadius: 10,
+            padding: 20,
+            width: "100%",
           }}
         >
           <h1 style={{ marginBottom: 30, textAlign: "center" }}>Welcome Back!</h1>
