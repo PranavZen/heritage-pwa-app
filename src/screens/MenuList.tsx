@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import { hooks } from "../hooks";
 import { items } from "../items";
 import { MenuType } from "../types";
