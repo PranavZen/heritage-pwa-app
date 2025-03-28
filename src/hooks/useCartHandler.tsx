@@ -9,7 +9,7 @@ export const useCartHandler = () => {
 
   const cart = useSelector((state: RootState) =>  state.cartSlice);
 
-  console.log("cart", cart);
+  // console.log("cart", cart);
 
   const addToCart = (
     dish: DishType,
