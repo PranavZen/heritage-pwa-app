@@ -23,7 +23,7 @@ export const SubscriptionOrder: React.FC = () => {
 
   const [subscriptionData, setSubscriptionData] = useState<any[]>([]);
   const [oneTimeOrderData, setOneTimeOrderData] = useState<any[]>([]);
-  console.log("oneTimeOrderDataoneTimeOrderData", oneTimeOrderData);
+  // console.log("oneTimeOrderDataoneTimeOrderData", oneTimeOrderData);
   const [activeTab, setActiveTab] = useState('subscriptions');
   const [isLoading, setIsLoading] = useState(false);
   const [subscriptionID, SetSubscriptionID] = useState<number | null>(null);
@@ -75,7 +75,7 @@ export const SubscriptionOrder: React.FC = () => {
         setOneTimeOrderData(response.data.ordersListing);
         setIsLoading(false);
 
-      console.log("kkkkkkkkkkkkkkkkkkk", response);
+      // console.log("kkkkkkkkkkkkkkkkkkk", response);
       })
       .catch((error) => {
         console.error("Error fetching one-time order data", error);
@@ -106,7 +106,7 @@ export const SubscriptionOrder: React.FC = () => {
             notification.success({ message: response.data.message });
           }
         } catch (error) {
-          console.log("Error while renewing order:", error);
+          // console.log("Error while renewing order:", error);
         }
       };
 
