@@ -10,7 +10,7 @@ export const CustomerCare: React.FC = () => {
   const navigate = hooks.useNavigate();
   const location = useLocation();
 
-  console.log('Location state:', location.state);
+  // console.log('Location state:', location.state);
 
   const { notification_id } = location.state || {};
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -53,7 +53,7 @@ export const CustomerCare: React.FC = () => {
         'https://heritage.bizdel.in/app/consumer/services_v11/generateTicket',
         formData
       );
-      console.log('Ticket generation response:', response.data);
+      // console.log('Ticket generation response:', response.data);
 
       if (response.data.status === 'fail' && response.data.message === 'We already received your request, we are working on it.') {
         notification.success({message:response.data.message}); 

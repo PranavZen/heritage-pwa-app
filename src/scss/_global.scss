@@ -431,7 +431,7 @@ details summary {
 }
 
 // **************notification ************
-.clientNotificationWrap{
+.clientNotificationWrap {
   padding: 20px;
   .notification-client {
     border-radius: 10px;
@@ -439,20 +439,20 @@ details summary {
     background-color: #3498db1f;
     padding: 10px;
     box-shadow: 0px 0px 5px 0px #3498db1f;
-    .mainText{
+    .mainText {
       font-size: 16px;
       font-family: "SF Pro Display Medium";
       color: #1a712e;
       margin-bottom: 10px;
     }
-    .subText{
+    .subText {
       font-size: 14px;
       font-family: "SF Pro Display Regular";
       color: #1b1b1b;
       margin-bottom: 10px;
       line-height: 2;
     }
-    .notifytext{
+    .notifytext {
       font-size: 14px;
       font-family: "SF Pro Display Regular";
       color: #1a712e;
@@ -464,7 +464,7 @@ details summary {
       -webkit-box-orient: vertical;
       line-height: 1.4;
     }
-    .notifyDate{
+    .notifyDate {
       font-size: 14px;
       font-family: "SF Pro Display Regular";
       color: #838383;
@@ -472,7 +472,6 @@ details summary {
     }
   }
 }
-
 
 .searchItemWrap {
   display: flex;
@@ -516,7 +515,7 @@ details summary {
   border-radius: 8px;
   border: 0.3px solid rgba(225, 224, 224, 0.9333333333);
   position: relative;
-
+  height: 120px;
   .proLeftBox {
     display: flex;
     gap: 20px;
@@ -653,7 +652,23 @@ details summary {
         }
       }
     }
-
+    .subscriptionButton {
+      display: flex;
+      align-items: center;
+      background-color: #1a712e;
+      justify-content: space-evenly;
+      border-radius: 50px;
+      width: 100%;
+      margin: 15px 0 0 auto;
+      overflow: hidden;
+      padding: 8px;
+      font-size: 16px;
+      color: #fff;
+      @media screen and (max-width: 767px) {
+        padding: 6.5px;
+        font-size: 12px;
+      }
+    }
     .smallText {
       padding-top: 5px;
       font-size: 14px;
@@ -1070,12 +1085,12 @@ select {
     }
   }
 }
-.notificationListWrap{
-  .notofiationList{
+.notificationListWrap {
+  .notofiationList {
     padding: 20px;
     background-color: #3498db1a;
-    .t12{
-      &.clickable{
+    .t12 {
+      &.clickable {
         background-color: #1a712e;
         color: #fff;
         padding: 3px 10px;
@@ -1106,7 +1121,7 @@ select {
     align-items: center;
     gap: 10px;
     border-bottom: 0.2px solid #1a712e;
-    img{
+    img {
       @media screen and (max-width: 767px) {
         width: 40px !important;
         height: 40px !important;
@@ -1121,18 +1136,16 @@ select {
           font-size: 18px;
           font-family: "SF Pro Display Semibold";
           color: #1a712e;
-          @media  screen and (max-width: 767px) {
+          @media screen and (max-width: 767px) {
             font-size: 16px;
-            
           }
         }
         &:nth-child(2) {
           font-size: 16px;
           font-family: "SF Pro Display Light";
           color: #1a712e;
-          @media  screen and (max-width: 767px) {
+          @media screen and (max-width: 767px) {
             font-size: 14px;
-            
           }
         }
       }
@@ -1141,11 +1154,10 @@ select {
   .sideMenuList {
     padding: 20px 20px 0 20px;
     li {
-      .t16{
-        &.number-of-lines-1{
+      .t16 {
+        &.number-of-lines-1 {
           @media screen and (max-width: 767px) {
             font-size: 14px;
-            
           }
         }
       }
@@ -1285,7 +1297,335 @@ select {
   margin-bottom: 20px;
 }
 
-
+.signInWrap {
+  width: 75%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+}
+.ordersScreenWrapper {
+  .tabs {
+    margin: 20px 0;
+    .tab-button {
+      margin: 0;
+      border-radius: 0;
+      border: 1px solid #1a712e;
+      color: #1a712e;
+      @media screen and (max-width: 767px) {
+        font-size: 14px;
+      }
+      &:hover {
+        background-color: #1a712e;
+        color: #fff;
+      }
+      &.active {
+        background-color: #1a712e;
+        color: #fff;
+        &:nth-child(1) {
+          border-top-left-radius: 50px;
+          border-bottom-left-radius: 50px;
+        }
+        &:nth-child(2) {
+          border-top-right-radius: 50px;
+          border-bottom-right-radius: 50px;
+        }
+      }
+      &:nth-child(1) {
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+      }
+      &:nth-child(2) {
+        border-top-right-radius: 50px;
+        border-bottom-right-radius: 50px;
+      }
+    }
+  }
+  .ordersContainer {
+    h2 {
+      font-size: 20px;
+      font-family: "SF Pro Display Medium";
+      color: #1a712e;
+      margin-bottom: 20px;
+      @media screen and (max-width: 767px) {
+        font-size: 18px;
+      }
+    }
+    .scrollable-container {
+      padding: 0;
+      .card-list {
+        padding: 0 20px;
+        .card {
+          width: 100%;
+          background-color: #e9f3f6;
+          padding: 10px;
+          border-radius: 8px;
+          border: 0.3px solid rgba(225, 224, 224, 0.9333333333);
+          position: relative;
+          &:hover{
+            transform: none;
+          }
+          .topCardDataWrap {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            .orderImagWrap {
+              width: 120px;
+              height: 120px;
+              background-color: #fff;
+              border-radius: 8px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              overflow: hidden;
+              @media screen and (max-width: 767px) {
+                width: 70px;
+                height: 70px;
+              }
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+              }
+            }
+            .card-info {
+              margin: 0;
+              flex: 1 0;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              align-items: flex-start;
+              .orderItmName {
+                font-size: 18px;
+                font-family: "SF Pro Display Medium";
+                color: #1a712e;
+                margin-bottom: 0;
+                @media screen and (max-width: 767px) {
+                  font-size: 14px;
+                }
+              }
+              .orderItmWieght {
+                font-size: 14px;
+                margin-bottom: 5px;
+                @media screen and (max-width: 767px) {
+                  font-size: 12px;
+                }
+              }
+              .orderQuantity {
+                font-size: 14px;
+                font-family: "SF Pro Display Regular";
+                margin-bottom: 5px;
+                @media screen and (max-width: 767px) {
+                  font-size: 12px;
+                }
+              }
+              .orderLD {
+                font-size: 14px;
+                font-family: "SF Pro Display Regular";
+                color: #555;
+                margin-bottom: 5px;
+                @media screen and (max-width: 767px) {
+                  font-size: 12px;
+                }
+              }
+              .orderPrice {
+                font-size: 18px;
+                font-family: "SF Pro Display Medium";
+                color: #1a712e;
+                margin-bottom: 5px;
+                @media screen and (max-width: 767px) {
+                  font-size: 16px;
+                }
+              }
+              .orderBalAmt {
+                font-size: 14px;
+                font-family: "SF Pro Display Regular";
+                color: #555;
+                margin-bottom: 5px;
+                @media screen and (max-width: 767px) {
+                  font-size: 12px;
+                }
+              }
+            }
+          }
+          .dataWraps {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+            .wrap {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 5px;
+              position: relative;
+              p {
+                font-size: 14px;
+                font-family: "SF Pro Display Regular";
+                color: #1a712e;
+                margin-bottom: 0;
+                @media screen and (max-width: 767px) {
+                  font-size: 12px;
+                }
+              }
+              span {
+                font-size: 18px;
+                font-family: "SF Pro Display Semibold";
+                color: #555;
+                margin-bottom: 0;
+                @media screen and (max-width: 767px) {
+                  font-size: 16px;
+                }
+              }
+              &:nth-child(2) {
+                &::before {
+                  content: "";
+                  position: absolute;
+                  top: 0;
+                  left: -20%;
+                  height: 100%;
+                  width: 1px;
+                  background-color: #1a712e;
+                }
+              }
+            }
+          }
+          .orderDateWrap {
+            display: flex;
+            margin-top: 20px;
+            .box50 {
+              width: 50%;
+              display: flex;
+              justify-content: flex-start;
+              gap: 15px;
+              align-items: center;
+              .svgWrap {
+                svg {
+                  path {
+                    fill: #1a712e;
+                  }
+                }
+              }
+              .innerBox {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                p {
+                  font-size: 14px;
+                  font-family: "SF Pro Display Regular";
+                  color: #1a712e;
+                  margin-bottom: 0;
+                  @media screen and (max-width: 767px) {
+                    font-size: 12px;
+                  }
+                }
+                span {
+                  font-size: 18px;
+                  font-family: "SF Pro Display Semibold";
+                  color: #555;
+                  margin-bottom: 0;
+                  @media screen and (max-width: 767px) {
+                    font-size: 16px;
+                  }
+                }
+              }
+              &.orderDateRightBox{
+                .innerBox{
+                  p{
+                    color: #ff0404;
+                  }
+                  span{
+                    color: #ff0404;
+                  }
+                }
+              }
+            }
+          }
+          .subExpiredText{
+            text-align: center;
+            display: block;
+            margin-top: 20px;
+            color: #ff0604;
+            font-size: 16px;
+            font-family: "SF Pro Display Regular";
+            @media screen and (max-width: 767px) {
+              font-size: 14px;
+            }
+          }
+          .orderBtnsWraps {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            // @media screen and (max-width: 767px) {
+            //   flex-direction: column;
+            // }
+            .btn {
+              width: 65%;
+              height: 50px;
+              display: flex;
+              align-items: center;
+              background-color: #1a712e;
+              justify-content: space-evenly;
+              border-radius: 50px;
+              padding: 8px;
+              font-size: 18px;
+              color: #fff;
+              margin: 0 auto;
+              @media screen and (max-width: 767px) {
+                font-size: 14px;
+                width: 35%;
+                height: 35px;
+              }
+              &:nth-child(1){
+                background-color: #ff0404;
+              }
+              &:nth-child(2){
+                background-color: #fff;
+                color: #1a712e;
+                border: 1px solid #1a712e;
+              }
+            }
+          }
+          .subscription_idWrap{
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            height: 30px;
+            width: auto;
+            font-size: 16px;
+            font-family: "SF Pro Display Semibold";
+            color: #555;
+            @media screen and (max-width: 767px) {
+              font-size: 14px;
+              
+            }
+          }
+          .statusWrap {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 30px;
+            width: auto;
+            padding: 0 10px;
+            background-color: #ff0404;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom-left-radius: 8px;
+            span {
+              color: #fff;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 // Pranav added new css end
 
 .explore-btn {

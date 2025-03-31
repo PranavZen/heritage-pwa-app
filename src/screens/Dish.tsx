@@ -26,7 +26,8 @@ export const Dish: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
 
 
-  // console.log("aaaaaaa", quantity);
+  console.log("aaaaaaa", quantity);
+
   const [cartId, setCartId] = useState<string[]>([]);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
   const [opacity, setOpacity] = useState<number>(0);
@@ -38,12 +39,14 @@ export const Dish: React.FC = () => {
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [deliveryPreference, setDeliveryPreference] = useState<string>("");
 
-  // console.log("deliveryPreference", deliveryPreference);
+
 
   const [deliveries, setDeliveries] = useState<number>(15);
   const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
 
   const [checkCartData, SetCheckCartData] = useState<CheckCartData>({});
+
+    // console.log("checkCartData", checkCartData);
 
   interface CartItem {
     quantity: number;
@@ -89,7 +92,7 @@ export const Dish: React.FC = () => {
               )
           );
 
-          console.log("eeeeeeeeeeeeeee", matchedItem);
+          // console.log("eeeeeeeeeeeeeee", matchedItem);
 
           if (matchedItem) {
             setQuantity(Number(matchedItem.quantity) || 1);
@@ -240,7 +243,7 @@ export const Dish: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
         formData
       );
-      console.log("rrrrrrrrrrrrrrr", response);
+      // console.log("rrrrrrrrrrrrrrr", response);
       if (response.data.status === "success") {
         notification.success({
           message: "Success",
@@ -372,11 +375,10 @@ export const Dish: React.FC = () => {
     const formattedDate = startDate
       ? new Date(startDate).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0];
-
     formData.append('id', cartItemId || '');
     formData.append('c_id', c_id);
     formData.append('package_id', '13');
-    formData.append('quantity', String(deliveries));
+    formData.append('quantity', String(quantity));
     formData.append('delivery_preference', deliveryPreference || '0');
     formData.append('no_of_deliveries', String(deliveries));
     formData.append('order_date', formattedDate);
@@ -847,7 +849,7 @@ export const Dish: React.FC = () => {
       >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
-            <label>Start Date :- </label>
+            <label>Start Date:- </label>
             <input
               type="date"
               value={startDate}

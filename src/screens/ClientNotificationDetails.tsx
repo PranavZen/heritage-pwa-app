@@ -9,7 +9,7 @@ export const ClientNotificationDetails: React.FC = () => {
   const navigate = hooks.useNavigate();
   const location = useLocation();
 
-  console.log("Location state:", location.state);
+  // console.log("Location state:", location.state);
 
   // Destructuring notification_id from location.state
   const { notification_id } = location.state || {};
@@ -36,7 +36,7 @@ export const ClientNotificationDetails: React.FC = () => {
           "https://heritage.bizdel.in/app/consumer/services_v11/notificationList",
           formData
         );
-        console.log("Notification response:", response.data.notificationList);
+        // console.log("Notification response:", response.data.notificationList);
 
         // Filter notifications if notification_id is available
         const filteredNotifications = notification_id

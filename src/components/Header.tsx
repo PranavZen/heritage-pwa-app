@@ -101,7 +101,7 @@ export const Header: React.FC<Props> = ({
           SetProfileData(response.data.CustomerDetail[0]);
           setCartCount(response.data.cart_count);
         } else {
-          console.log("Error:", response.data.message);
+          // console.log("Error:", response.data.message);
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);

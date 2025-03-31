@@ -88,7 +88,7 @@ export const AddressAdd: React.FC = () => {
     }
   };
 
-  console.log("aaaaaaa", newAddress);
+  // console.log("aaaaaaa", newAddress);
 
   const updateAddress = async () => {
     const formData = new FormData();
@@ -119,7 +119,7 @@ export const AddressAdd: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/updateAddress",
         formData
       );
-      console.log("ResponseUpdate: ", response);
+      // console.log("ResponseUpdate: ", response);
       if (response.data.status === "success") {
         navigate(Routes.MyAddress);
         notification.success({ message: response.data.message });
@@ -163,7 +163,7 @@ export const AddressAdd: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/addAddress",
         formData
       );
-      console.log("Response: ", response);
+      // console.log("Response: ", response);
       if (response.data.status === "success") {
         navigate(Routes.MyAddress);
         notification.success({ message: response.data.message });
@@ -203,7 +203,7 @@ export const AddressAdd: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting with city_id:", newAddress.city_id);
+    // console.log("Submitting with city_id:", newAddress.city_id);
     if (newAddress.id) {
       updateAddress();
     } else {

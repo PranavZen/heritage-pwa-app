@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { components } from "../../components";
 import { hooks } from "../../hooks";
 import { items } from "../../items";
-import { actions } from "../../store/actions";
-import { components } from "../../components";
 import { Routes, TabScreens } from "../../routes";
-import type { CarouselType, DishType, MenuType } from "../../types";
-import { Route } from "react-router-dom";
+import { actions } from "../../store/actions";
+import type { DishType, MenuType } from "../../types";
 
 export const Home: React.FC = () => {
   const dispatch = hooks.useDispatch();

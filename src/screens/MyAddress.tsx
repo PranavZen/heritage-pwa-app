@@ -95,7 +95,7 @@ export const MyAddress: React.FC = () => {
         setDeleteAddressId(id);
       },
       onCancel: () => {
-        console.log("Delete canceled");
+        // console.log("Delete canceled");
       },
     });
   };

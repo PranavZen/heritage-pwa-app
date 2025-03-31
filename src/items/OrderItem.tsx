@@ -39,14 +39,14 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [quantity, setQuantity] = useState<number>(Number(dish.quantity) || 1);
   const [deliveryPreference, setDeliveryPreference] = useState<string>(String(dish.delivery_preference) || '');
   const [noOfDeliveries, setNoOfDeliveries] = useState<number>(Number(dish.no_of_deliveries));
-  console.log('[noOfDeliveries[noOfDeliveries[noOfDeliveries', noOfDeliveries);
+  // console.log('[noOfDeliveries[noOfDeliveries[noOfDeliveries', noOfDeliveries);
   const [selectedPackage, setSelectedPackage] = useState<string>(dish.packages_name || '');
   const [selectedPackageDetails, setSelectedPackageDetails] = useState<string>();
   const [cartData, SetSetCartData] = useState<string>();
 
   // console.log('zzzzzzzzzzzzzzzz', cartData);
 
-  console.log("dis", dish);
+  // console.log("dis", dish);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -116,7 +116,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           formData
         );
 
-        console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
+        // console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
         
         SetSetCartData(response.data.optionListing.map((elem: any) => elem.no_of_deliveries));
       } catch (error) {
