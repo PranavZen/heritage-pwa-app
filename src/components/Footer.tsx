@@ -29,7 +29,7 @@ const tabs = [
   {
     id: 5,
     screen: TabScreens.Notification,
-    icon: <svg.BellTabSvg />,
+    icon: <svg.WalletSvg />,
   },
 ];
 
