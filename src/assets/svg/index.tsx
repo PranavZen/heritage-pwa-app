@@ -35,6 +35,9 @@ import {HomeTabSvg} from './tabs/HomeTabSvg';
 import {HeartTabSvg} from './tabs/HeartTabSvg';
 import {OrderTabSvg} from './tabs/OrderTabSvg';
 import {SearchTabSvg} from './tabs/SearchTabSvg';
+import { WalletSvg } from './tabs/WalletSvg';
+import { DiamondSvg } from './tabs/DiamondSvg';
+import { TrophySvg } from './tabs/TrophySvg';
 
 export const svg = {
   KeySvg,
@@ -73,4 +76,7 @@ export const svg = {
   HeaderBasketSvg,
   RememberCheckSvg,
   NotificationCheckSvg,
+  WalletSvg,
+  DiamondSvg,
+  TrophySvg
 };
