@@ -121,6 +121,9 @@ export const SubscriptionOrder: React.FC = () => {
   const renderContent = (): JSX.Element => {
     if (loading || isLoading) return <components.Loader />;
 
+    const onChange = (key: string | string[]) => {
+      console.log(key);
+    };
     return (
       <main className="scrollable ordersScreenWrapper">
         <div className="tabs">
@@ -271,10 +274,13 @@ export const SubscriptionOrder: React.FC = () => {
         )}
 
         {activeTab === "one-time-orders" && (
-          <div className="card-container">
+          <div className="ordersContainer">
             <h2>One-Time Orders</h2>
-            <div className="scrollable-container">
-              <div className="card-list">
+            <div className="otoWrap">
+              <div
+                className="scrollable-container"
+                style={{ padding: "0 20px" }}
+              >
                 {Array.isArray(oneTimeOrderData) &&
                 oneTimeOrderData.length > 0 ? (
                   oneTimeOrderData.map((order) => (

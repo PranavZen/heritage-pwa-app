@@ -748,14 +748,14 @@ details summary {
         font-size: 16px;
         color: #fff;
         @media screen and (max-width: 767px) {
-          padding: 3.5px;
-          font-size: 16px;
+          padding: 6.5px 10px;
+          font-size: 14px;
         }
         &.modifyText {
           color: #1a712e;
           @media screen and (max-width: 767px) {
-            padding: 6.5px;
-            font-size: 12px;
+            padding: 6.5px 10px;
+            font-size: 14px;
           }
         }
 
@@ -1558,6 +1558,7 @@ select {
           }
           .orderBtnsWraps {
             display: flex;
+            align-items: center;
             gap: 10px;
             margin-top: 20px;
             // @media screen and (max-width: 767px) {
@@ -1587,6 +1588,16 @@ select {
                 background-color: #fff;
                 color: #1a712e;
                 border: 1px solid #1a712e;
+              }
+            }
+            .swithcWrap {
+              display: flex;
+              flex-direction: column;
+              .ant-switch {
+                width: fit-content;
+                &.ant-switch-checked {
+                  background: #1a712e;
+                }
               }
             }
           }
@@ -1623,6 +1634,43 @@ select {
         }
       }
     }
+  }
+}
+.dateWrapper {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  .pauseDateWrap {
+    .ant-picker-outlined {
+      width: 100%;
+    }
+  }
+}
+.otoWrap {
+  .ant-collapse {
+    .ant-collapse-item {
+      .ant-collapse-header {
+        border: 1px solid #1a712e;
+        margin-bottom: 10px;
+        align-items: center;
+        border-radius: 8px;
+      }
+    }
+  }
+}
+.accordionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .accordionLeftBox {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    gap: 5px;
+  }
+  .accordionRightBox {
+    width: 50%;
+    text-align: end;
   }
 }
 .walletSection {
@@ -1722,8 +1770,8 @@ select {
           flex-direction: column;
           align-items: center;
           gap: 5px;
-          span{
-            &:nth-child(1){
+          span {
+            &:nth-child(1) {
               font-size: 16px;
               font-family: "SF Pro Display Semibold";
               color: #fff;
@@ -1731,7 +1779,7 @@ select {
                 font-size: 14px;
               }
             }
-            &:nth-child(2){
+            &:nth-child(2) {
               font-size: 26px;
               font-family: "SF Pro Display Regular";
               color: #fff;
