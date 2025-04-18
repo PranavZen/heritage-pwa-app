@@ -26,13 +26,16 @@ export const Promocodes: React.FC = () => {
   useEffect(() => {
     const storeLocator = async () => {
       const formData = new FormData();
-      formData.append("c_id", "120979");
+      formData.append("c_id", localStorage.getItem('c_id')|| '');
+      formData.append('latitude', '17.4654686')
+      formData.append('longitude', '78.4277117')
       try {
         const response = await axios.post(
           `https://heritage.bizdel.in/app/consumer/services_v11/store_locator`,
           formData
         );
         // console.log("responseresponseLocator", response);
+
         setLocator(response.data.distributors);
       } catch (error) {
         // console.log(error);

@@ -38,6 +38,7 @@ export const Menu: React.FC = () => {
                   src={menu.image}
                   alt={menu.name}
                   className="itemImg"
+                  style={{cursor:"pointer"}}
                 />
                <span
                     className="home_product_category"

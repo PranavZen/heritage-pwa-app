@@ -1,0 +1,91 @@
+h1 {
+  font-size: 24px;
+  color: #4c8a1d;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 10px 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: box-shadow 0.3s ease-in-out;
+  margin: 0 auto;
+}
+.card:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+.card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.card .card-header h3 {
+  font-size: 20px;
+  color: #333;
+  margin: 0;
+}
+.card .card-header .discount {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff6f61;
+}
+.card .card-body p {
+  font-size: 14px;
+  color: #555;
+  margin: 5px 0;
+}
+.card .card-body .description {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 15px;
+}
+.card .card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card .card-footer .max-amount,
+.card .card-footer .uses-left {
+  font-size: 12px;
+  color: #888;
+}
+.card .card-footer button {
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+.card .card-footer button:hover {
+  background-color: #e55b4e;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+}
+
+.error {
+  text-align: center;
+  font-size: 18px;
+  color: #ff6f61;
+}
+
+.NoCoupons-available {
+  font-size: 20px;
+  height: 380px;
+  line-height: 380px;
+  text-align: center;
+  font-weight: 900;
+}/*# sourceMappingURL=CouponList.css.map */

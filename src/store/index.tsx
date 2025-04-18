@@ -13,7 +13,7 @@ import {
   PERSIST,
   REGISTER,
   REHYDRATE,
-  persistStore,
+  // persistStore,
   persistReducer,
 } from 'redux-persist';
 
@@ -77,7 +77,7 @@ export interface RootState {
   verificationSlice: VerificationStateType;
 }
 
-export const persistor = persistStore(store);
+// export const persistor = persistStore(store);
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,

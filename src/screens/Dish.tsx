@@ -7,10 +7,11 @@ import { components } from '../components';
 import { actions } from '../store/actions';
 import axios from 'axios';
 import { Modal, notification } from 'antd';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 export const Dish: React.FC = () => {
-
-
   interface CheckCartData {
     delivery_preference?: string;
     no_of_deliveries?: string;
@@ -20,13 +21,16 @@ export const Dish: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const location = hooks.useLocation();
   const [packageOptions, setPackageOptions] = useState<any[]>([]);
-  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<
-    any[]
-  >([]);
+  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
+
+
+  console.log("deliveryOptionsPreference", deliveryOptionsPreference);
+
+
   const [quantity, setQuantity] = useState<number>(1);
 
 
-  console.log("aaaaaaa", quantity);
+  // console.log("aaaaaaa", quantity);
 
   const [cartId, setCartId] = useState<string[]>([]);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
@@ -35,7 +39,11 @@ export const Dish: React.FC = () => {
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
   const [isAlternateModalOpen, setIsAlternateModalOpen] =
     useState<boolean>(false);
-  const [startDate, setStartDate] = useState<string>("");
+  // const [startDate, setStartDate] = useState<string>("");
+
+
+  // console.log("opopopopopopopoppopop", startDate);
+
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [deliveryPreference, setDeliveryPreference] = useState<string>("");
 
@@ -46,7 +54,7 @@ export const Dish: React.FC = () => {
 
   const [checkCartData, SetCheckCartData] = useState<CheckCartData>({});
 
-    // console.log("checkCartData", checkCartData);
+  // console.log("checkCartData", checkCartData);
 
   interface CartItem {
     quantity: number;
@@ -146,9 +154,12 @@ export const Dish: React.FC = () => {
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0];
   };
+  const [startDate, setStartDate] = useState(getTomorrowDate());  
+
+  // console.log("getTomorrowDategetTomorrowDate",getTomorrowDate);
+
 
   const handleAddToCart = async (cartData: any) => {
-
     const c_id = localStorage.getItem('c_id');
 
     if (!c_id) {
@@ -209,6 +220,7 @@ export const Dish: React.FC = () => {
   // ***************************************ADDddddddddddddddddddddddddddddddddddddd
   const addToCartApi = async (cartData: any) => {
 
+    // console.log("cartData", cartData)
     if (!c_id) {
       Modal.confirm({
         title: 'Please Sign In',
@@ -223,19 +235,21 @@ export const Dish: React.FC = () => {
       });
       return;
     }
+
     try {
       const formData = new FormData();
       formData.append('c_id', String(c_id || '1'));
       formData.append('product_id', String(cartData.product_id));
       formData.append('package_id', '13');
+      formData.append('package_days', '0');
       formData.append('product_option_id', String(cartData.product_option_id));
       formData.append('product_option_value_id', String(cartData.product_option_value_id));
       formData.append('quantity', '1');
       formData.append('weight', String(cartData.weight));
       formData.append('weight_unit', String(cartData.weight_unit));
-      formData.append('delivery_preference', String(cartData.deliveryPreference));
+      formData.append('delivery_preference', String(cartData.deliveryPreference) || '1');
       formData.append('no_of_deliveries', String(cartData.deliveries));
-      formData.append('order_date', getTomorrowDate());
+      formData.append('order_date', startDate);
       formData.append('order_type', '1');
 
       // console.log("formData", formData);
@@ -249,8 +263,11 @@ export const Dish: React.FC = () => {
           message: "Success",
           description: response.data.message,
         });
-        window.location.reload();
+         setTimeout(()=>{
+          window.location.reload();
+         },1000)
         return response.data.cart_count;
+       
       } else {
         notification.error({
           message: "Error",
@@ -334,8 +351,7 @@ export const Dish: React.FC = () => {
     }
   };
 
-
-
+  
   // ((*(((((((((((((((((((((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))))))))))))))))))))))
   const handleupdatetheAddToCart = async () => {
     if (deliveries < 1) {
@@ -413,6 +429,7 @@ export const Dish: React.FC = () => {
       const formData = new FormData();
       formData.append("c_id", c_id || "null");
       formData.append("city_id", cityId || "null");
+   
       formData.append("product_option_value_id", "50");
       try {
         const response = await axios.post(
@@ -420,7 +437,7 @@ export const Dish: React.FC = () => {
           formData
         );
 
-        // console.log("paaaaaaaaaaaaaaa", response.data.productDetails);
+        // console.log("paaaaaaaaaaaaaaa", response);
 
         setDeliveryOptionsPreference(response.data.productDetails);
       } catch (error) {
@@ -720,10 +737,10 @@ export const Dish: React.FC = () => {
             containerStyle={{ marginBottom: 10 }}
           />
           </> : <div> <components.Button
-              text="update "
-              onClick={handleupdatetheAddToCart}
-              containerStyle={{marginBottom: 10}}
-            /> </div>
+            text="update "
+            onClick={handleupdatetheAddToCart}
+            containerStyle={{ marginBottom: 10 }}
+          /> </div>
         }
 
         {/* add quantity */}
@@ -754,13 +771,21 @@ export const Dish: React.FC = () => {
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
             <label>Start Date:- </label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              min={minDate}
-              required
-            />
+            <DatePicker
+            selected={startDate ? new Date(startDate) : null}
+            onChange={(date: Date | null) => {
+              if (date) {
+                setStartDate(date.toISOString().split('T')[0]);
+              } else {
+                setStartDate('');
+              }
+            }}
+            minDate={new Date(minDate)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Select a date"
+  
+            required
+          />
           </div>
           <select
             value={deliveryPreference}
@@ -850,13 +875,21 @@ export const Dish: React.FC = () => {
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
             <label>Start Date:- </label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              min={minDate}
-              required
-            />
+            <DatePicker
+            selected={startDate ? new Date(startDate) : null}
+            onChange={(date: Date | null) => {
+              if (date) {
+                setStartDate(date.toISOString().split('T')[0]);
+              } else {
+                setStartDate('');
+              }
+            }}
+            minDate={new Date(minDate)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Select a date"
+  
+            required
+          />
           </div>
           <select
             value={deliveryPreference}

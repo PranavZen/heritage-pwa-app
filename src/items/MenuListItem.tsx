@@ -14,7 +14,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
   const [cartId, setCartId] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(0);
 
-  // console.log("qqqqqqqqqqqqqqqqqqqqqqqqmmmm", quantity);
+  // console.log("qqqqqqqqqqqqqqqqqqqqqqqqmmmm", dish);
 
   const c_id = localStorage.getItem('c_id') || '1';
   const cityId = localStorage.getItem('cityId') || '';
@@ -37,7 +37,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
 
         if (response.data.status === 'success') {
           notification.success({ message: 'Success', description: response.data.message });
-          window.location.reload(); // Reload page after successful deletion
+          window.location.reload(); 
         } else {
           notification.error({ message: 'Error', description: response.data.message || 'Failed to remove item.' });
         }
@@ -47,8 +47,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
       }
     }
   };
-
-
 
   const getTomorrowDate = () => {
     const tomorrow = new Date();
@@ -163,7 +161,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
 
       if (response.data.status === 'success') {
         if (newQuantity === 0) {
-          setQuantity(0); // Reset to 0 if quantity reaches 0
+          setQuantity(0); 
         } else {
           setQuantity(newQuantity);
         }
@@ -219,7 +217,8 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
           <span className="proName">{dish.option_value_name}</span>
           <span className="proWeigh">
             {/* {dish.kcal} kcal - {dish.weight}g */}
-            {dish.weight}ml
+           
+            {dish.weight} {dish.weight_unit}
           </span>
           <span className="proPrice">₹ {dish.price}</span>
         </div>
@@ -281,8 +280,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
             <span className="smallText">Deliver once</span>
           </>)
         }
-
-
       </div>
     </li>
   );

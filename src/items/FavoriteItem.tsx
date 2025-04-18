@@ -23,7 +23,7 @@ export const FavoriteItem: React.FC<Props> = ({dish}) => {
   const cartHandler = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    console.log('Added to cart:', dish);
+    // console.log('Added to cart:', dish);
     event.stopPropagation();
     dispatch(actions.addToCart(dish));
   };

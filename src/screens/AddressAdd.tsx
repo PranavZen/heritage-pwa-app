@@ -21,8 +21,8 @@ interface Address {
   lastname: string;
   area_name: string;
   building_name: string;
-  flat_plot_no: string;
-  wing: string;
+  // flat_plot_no: string;
+  // wing: string;
   building_id?: string;
 }
 
@@ -33,14 +33,14 @@ export const AddressAdd: React.FC = () => {
   const { cityID } = location.state || {};
 
   const [opacity, setOpacity] = useState<number>(0);
-  const [addresses, setAddresses] = useState<Address[]>([]);
+  // const [addresses, setAddresses] = useState<Address[]>([]);
   const [newAddress, setNewAddress] = useState<Address>({
     address1: "",
     address2: "",
     pincode: "",
     building_name: "",
-    flat_plot_no: "",
-    wing: "",
+    // flat_plot_no: "",
+    // wing: "",
     firstname: "",
     lastname: "",
     is_default: "0",
@@ -51,6 +51,8 @@ export const AddressAdd: React.FC = () => {
     area_id: "",
     area_name: "NallaSupara (West)",
   });
+
+  // console.log("newAddressnewAddressnewAddressnewAddress", newAddress);
   const [loading, setLoading] = useState<boolean>(false);
   const [states, setStates] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
@@ -97,7 +99,7 @@ export const AddressAdd: React.FC = () => {
     formData.append("country_id", newAddress.country_id);
     formData.append("state_id", newAddress.state_id);
     formData.append("city_id", newAddress.city_id);
-    formData.append("area_id", newAddress.area_id);
+    formData.append("area_id", localStorage.getItem('area_id') || '');
     formData.append("address1", newAddress.address1);
     formData.append("address2", newAddress.address2);
     formData.append("pincode", newAddress.pincode);
@@ -105,8 +107,8 @@ export const AddressAdd: React.FC = () => {
     formData.append("firstname", newAddress.firstname);
     formData.append("lastname", newAddress.lastname);
     formData.append("building_name", newAddress.building_name);
-    formData.append("flat_plot_no", newAddress.flat_plot_no);
-    formData.append("wing", newAddress.wing);
+    // formData.append("flat_plot_no", newAddress.flat_plot_no);
+    // formData.append("wing", newAddress.wing);
 
     // Handle building_id only if it is not empty
     if (newAddress.building_id) {
@@ -135,12 +137,12 @@ export const AddressAdd: React.FC = () => {
 
   const addAddress = async () => {
     const formData = new FormData();
-    formData.append("id", "");
-    formData.append("c_id", newAddress.c_id);
+    // formData.append("id", "");
+    formData.append("c_id", localStorage.getItem('c_id') || '');
     formData.append("country_id", newAddress.country_id);
     formData.append("state_id", newAddress.state_id);
     formData.append("city_id", newAddress.city_id);
-    formData.append("area_id", newAddress.area_id);
+    formData.append("area_id", localStorage.getItem('area_id') || '')
     formData.append("address1", newAddress.address1);
     formData.append("address2", newAddress.address2);
     formData.append("pincode", newAddress.pincode);
@@ -149,8 +151,8 @@ export const AddressAdd: React.FC = () => {
     formData.append("lastname", newAddress.lastname);
     formData.append("area_name", newAddress.area_name);
     formData.append("building_name", newAddress.building_name);
-    formData.append("flat_plot_no", newAddress.flat_plot_no);
-    formData.append("wing", newAddress.wing);
+    // formData.append("flat_plot_no", newAddress.flat_plot_no);
+    // formData.append("wing", newAddress.wing);
 
     // Handle building_id only if it is not empty
     if (newAddress.building_id) {
@@ -164,6 +166,7 @@ export const AddressAdd: React.FC = () => {
         formData
       );
       // console.log("Response: ", response);
+      
       if (response.data.status === "success") {
         navigate(Routes.MyAddress);
         notification.success({ message: response.data.message });
@@ -297,19 +300,26 @@ export const AddressAdd: React.FC = () => {
                 name="city_id"
                 value={newAddress.city_id}
                 onChange={(e) => {
+                  const selectedCityId = e.target.value;
                   setNewAddress((prev) => ({
                     ...prev,
-                    city_id: e.target.value,
+                    city_id: selectedCityId,
                   }));
                 }}
                 className="form-input"
               >
+              
+                <option value="" disabled>
+                  Choose your City
+                </option>
+
                 {cities.map((city) => (
                   <option key={city.id} value={city.id}>
                     {city.name}
                   </option>
                 ))}
               </select>
+
             </div>
             <div className="col-6">
               <label className="form-label">Building Name</label>
@@ -343,21 +353,20 @@ export const AddressAdd: React.FC = () => {
               className="form-input"
             />
             <div className="checkBoxWrap">
-                <label className="form-label">Default Address</label>
-                <input
-                  type="checkbox"
-                  name="is_default"
-                  checked={newAddress.is_default === "1"}
-                  onChange={(e) =>
-                    setNewAddress((prev) => ({
-                      ...prev,
-                      is_default: e.target.checked ? "1" : "0",
-                    }))
-                  }
-                />
-              </div>
+              <label className="form-label">Default Address</label>
+              <input
+                type="checkbox"
+                name="is_default"
+                checked={newAddress.is_default === "1"}
+                onChange={(e) =>
+                  setNewAddress((prev) => ({
+                    ...prev,
+                    is_default: e.target.checked ? "1" : "0",
+                  }))
+                }
+              />
+            </div>
           </div>
-
           <div className="inputWrap">
             <div className="col-6">
               <label className="form-label">Pincode</label>

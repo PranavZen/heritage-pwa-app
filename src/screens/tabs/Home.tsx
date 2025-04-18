@@ -20,6 +20,8 @@ export const Home: React.FC = () => {
   const { menuLoadingBanner, banner } = hooks.useGetMenu();
 
   // console.log("aqaqaqaqaqaqaqaqaqaqaq",banner);
+  
+  // {console.log('dishesdishes',dishes)}
 
   const loading: boolean =
     menuLoading || dishesLoading || reviewsLoading || carouselLoading;
@@ -96,6 +98,7 @@ export const Home: React.FC = () => {
       </section>
     );
   };
+  
   const renderMenu = (): JSX.Element => {
     return (
       <section style={{ marginBottom: 30 }}>
@@ -106,6 +109,7 @@ export const Home: React.FC = () => {
           }}
           containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}
         />
+
         <div style={{ width: "100%"}}>
           <Swiper
             spaceBetween={10}
@@ -170,10 +174,12 @@ export const Home: React.FC = () => {
               },
             }}
           >
+         
             {dishes.map((dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;
               return (
                 <SwiperSlide key={dish.id} style={{ width: "auto" }}>
+                  
                   <items.RecomendedItem
                     index={index}
                     isLast={isLast}

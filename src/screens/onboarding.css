@@ -1,81 +1,27 @@
 
 
-.container {
-  max-width: 600px;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
 .search-input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
+  padding: 12px;
+  margin-top: 12px;
   font-size: 16px;
-  border-radius: 8px;
   border: 1px solid #ccc;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
+  border-radius: 6px;
 }
 
-.search-input:focus {
-  border-color: #3498db; 
-  outline: none;
-}
-
-.embla {
-  position: relative;
-  height: 80vh;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  overflow-y: auto;
-  flex-direction: column;
-  gap: 15px;
-  padding: 20px;
-}
-
-
-.city-item {
-  width: 90%;
-  padding: 15px 20px;
-  border-radius: 10px;
-  background-color: #f7f7f7;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  text-align: center;
-  font-weight: bold;
-}
-
-.city-item:hover {
-  background-color: #efefef;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-
-.city-item.selected {
-  background-color: #3498db;
+.continue-btn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #1976d2;
   color: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border: none;
+  margin: 32px auto;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-
-.city-item p {
-  font-size: 18px;
-  margin: 0;
-  color: #333;
-}
-
-.city-item.selected p {
-  color: #fff;
+.continue-btn:hover {
+  background-color: #0d47a1;
 }

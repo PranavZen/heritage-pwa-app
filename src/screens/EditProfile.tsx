@@ -4,6 +4,7 @@ import { hooks } from "../hooks";
 import { Routes } from "../routes";
 import { components } from "../components";
 import { notification } from "antd";
+import placeholderImg from '../assets/icons/placeholder.jpg';
 
 interface User {
   id: string;
@@ -37,7 +38,7 @@ export const EditProfile: React.FC = () => {
     salutation: "Mr.",
     firstname: "",
     lastname: "",
-    gender: "male",
+    gender: "",
     dob: "",
     email: "",
     mobile: "",
@@ -133,13 +134,14 @@ export const EditProfile: React.FC = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setUserDetails((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
+  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -177,7 +179,7 @@ export const EditProfile: React.FC = () => {
               className="upload-circle"
               style={{ cursor: "pointer" }}
             >
-              {imagePreview || userDetails.photo ? (
+              {imagePreview || userDetails.photo ?(
                 <img
                   src={
                     imagePreview ||
@@ -195,7 +197,7 @@ export const EditProfile: React.FC = () => {
                     color: "#fff",
                   }}
                 >
-                  +
+                  <img src={placeholderImg} alt="" width={100} height={100}/>
                 </span>
               )}
               <span className="upload-icon">
@@ -282,6 +284,7 @@ export const EditProfile: React.FC = () => {
               <select
                 name="gender"
                 value={userDetails.gender}
+                onChange={handleInputChange}
                 className="form-input"
               >
                 <option value="male">Male</option>

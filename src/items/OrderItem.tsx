@@ -4,6 +4,7 @@ import { svg } from '../assets/svg';
 import axios from 'axios';
 import type { DishType } from '../types';
 import { notification, Button, Modal, Input } from 'antd';
+import { Route, Routes } from 'react-router-dom';
 
 type Props = {
   dish: DishType;
@@ -16,6 +17,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const { removeFromCart } = hooks.useCartHandler();
   const [deliveryPreferenceInModal, setDeliveryPreferenceInModal] = useState<any[]>([]);
   const [deliveriesInModal, setDeliveriesInModal] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // console.log("deliveriesInModaldeliveriesInModal", deliveriesInModal);
 
@@ -52,6 +54,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
 
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 1) return;
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('id', String(dish.cart_id));
     formData.append('c_id', localStorage.getItem('c_id') || '');
@@ -69,11 +72,15 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       if (response.data.status === 'success') {
         setQuantity(newQuantity);
         notification.success({ message: response.data.message });
+         navigate(0);
+
       } else {
         notification.error({ message: response.data.message });
       }
     } catch (error) {
       console.error("Error updating cart:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -81,29 +88,71 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     event.stopPropagation();
     if (quantity > 1) {
       handleUpdateCart(quantity - 1);
+      setIsLoading(true);
+    } else if (quantity === 1) {
+      Modal.confirm({
+        content: 'Are you sure you want to remove the item from the cart?',
+        onOk: async () => {
+          try {
+            const formData = new FormData();
+            formData.append('id', String(dish.cart_id));
+            formData.append('c_id', localStorage.getItem('c_id') || '');
+            const response = await axios.post(
+              'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
+              formData
+            );
+            if (response.data.status === 'success'){
+              notification.success({message:response.data.message});
+              navigate(0)
+              setIsLoading(true);
+            } else {
+              notification.error({ message: response.data.message });
+            }
+          } catch (error) {
+            notification.error({ message: 'Failed to remove item from cart. Please try again later.' });
+          } finally {
+            setIsLoading(false);
+          }
+        },
+        onCancel() {
+        },
+        cancelText: 'Cancel',
+        okText: 'Okay',
+      });
+      return;
     } else {
+
       try {
         const formData = new FormData();
         formData.append('id', String(dish.cart_id));
         formData.append('c_id', localStorage.getItem('c_id') || '');
-        const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem', formData);
+
+        // console.log('Sending data to API:', formData);
+        
+        const response = await axios.post(
+          'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
+          formData
+        );
         if (response.data.status === 'success') {
-          notification.success({ message: response.data.message });
-          window.location.reload();
+          notification.success({message:response.data.message});
+         navigate(0);
+    
         } else {
           notification.error({ message: response.data.message });
         }
       } catch (error) {
-        console.error("Error removing item from cart:", error);
+        console.error('Error removing item from cart:', error);
+        notification.error({ message: 'Failed to remove item from cart. Please try again later.' });
+      } finally {
+        setIsLoading(false);
       }
     }
   };
 
-
-  // **************************************************************************
+  //**************************************************************************
   const c_id = localStorage.getItem('c_id');
   const cityId = localStorage.getItem('cityId');
-
+   
   useEffect(() => {
     const getAddToCartData = async () => {
       const formData = new FormData();
@@ -117,7 +166,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         );
 
         // console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
-        
+
         SetSetCartData(response.data.optionListing.map((elem: any) => elem.no_of_deliveries));
       } catch (error) {
         console.error(error);
@@ -137,7 +186,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     await handleUpdateCart(quantity);
     setIsModalOpen(false);
   };
-
+  
   // Handle modal Cancel click
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -154,8 +203,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               className="cartItemImg"
             />
           </div>
-
-
 
           <div className="cartItemDetailsWrap">
             <span
@@ -189,31 +236,22 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             >
               <span className="cartLable">Qty :</span> {quantity}
             </span>
-
-
             {noOfDeliveries > 0 && (
               <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
                 Deliveries : {noOfDeliveries}
               </span>
             )}
-
-
-
             {dish.preferenceName && (
               <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
                 Preference : {dish.preferenceName}
               </span>
             )}
 
-
-
-
             {dish.packages_name && dish.packages_name !== '0' && (
               <span className="t14" style={{ color: 'var(--main-color)', fontWeight: 500 }}>
                 Package : {dish.packages_name}
               </span>
             )}
-
 
             <span
               className="t14"
@@ -224,13 +262,12 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             </span>
           </div>
 
-
         </div>
         <div className="cartRightBox">
           <div className="cartButtonWrap">
             {noOfDeliveries > 0 && (
               <div onClick={handleOpenModal} className="cartButton"
-              style={{cursor:"pointer"}}
+                style={{ cursor: "pointer" }}
               >Modify</div>
             )}
           </div>
@@ -253,9 +290,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           </div>
         </div>
       </li>
-
-
-
       <div>
         {/* Cart Item Display */}
         <div

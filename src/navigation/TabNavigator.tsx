@@ -10,16 +10,15 @@ import { Favorite } from '../screens/tabs/Favorite';
 import { Notification } from '../screens/tabs/Notification';
 import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
 
-export const TabNavigator: React.FC = () =>{
+export const TabNavigator: React.FC = () => {
   const currentTabScreen = useSelector(
     (state: RootState) => state.tabSlice.screen,
   );
+
   const renderTitle = (): string => {
     switch (currentTabScreen) {
       case TabScreens.Home:
-        return '';
       case TabScreens.Menu:
-        return '';
       case TabScreens.Subscription:
         return '';
       case TabScreens.Order:
@@ -32,6 +31,7 @@ export const TabNavigator: React.FC = () =>{
         return 'Home';
     }
   };
+
   const renderScreens = (): JSX.Element | null => {
     switch (currentTabScreen) {
       case TabScreens.Home:
@@ -50,36 +50,29 @@ export const TabNavigator: React.FC = () =>{
         return null;
     }
   };
+
   const renderUserPhoto = (): boolean => {
     switch (currentTabScreen) {
       case TabScreens.Home:
-        return true;
       case TabScreens.Menu:
-        return true;
       case TabScreens.Subscription:
-        return  true;
       case TabScreens.Order:
-        return true;
       case TabScreens.Favorite:
-        return true;
       case TabScreens.Notification:
         return true;
       default:
         return false;
     }
   };
+
   const renderUserName = (): boolean => {
     switch (currentTabScreen) {
       case TabScreens.Home:
-        return true;
       case TabScreens.Menu:
+      case TabScreens.Subscription:
         return true;
-        case TabScreens.Subscription:
-          return  true;
       case TabScreens.Order:
-        return false;
       case TabScreens.Favorite:
-        return false;
       case TabScreens.Notification:
         return false;
       default:
@@ -98,10 +91,13 @@ export const TabNavigator: React.FC = () =>{
     );
   };
 
-
-  const renderFooter = (): JSX.Element => {
+  const renderFooter = (): JSX.Element | null => {
+    if (currentTabScreen === TabScreens.Order) {
+      return null;
+    }
     return <components.Footer />;
   };
+
   return (
     <>
       {renderHeader()}

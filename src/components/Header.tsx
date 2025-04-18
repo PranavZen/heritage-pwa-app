@@ -7,6 +7,8 @@ import { components } from '../components';
 import { TabScreens, Routes } from '../routes';
 import { setScreen } from '../store/slices/tabSlice';
 import axios from 'axios';
+import pic1 from '../assets/icons/pwa-logo.jpg'
+import { Modal } from 'antd';
 
 type Props = {
   title?: string;
@@ -44,12 +46,12 @@ const modalMenu = [
     route: Routes.ClientNotification,
     switch: false,
   },
-  {
-    id: 4,
-    title: "Store Locator",
-    route: Routes.Promocodes,
-    switch: false,
-  },
+  // {
+  //   id: 4,
+  //   title: "Store Locator",
+  //   route: Routes.Promocodes,
+  //   switch: false,
+  // },
   {
     id: 6,
     title: "Customer Care",
@@ -58,7 +60,7 @@ const modalMenu = [
   },
   {
     id: 7,
-    title: "FAQ",
+    // title: "FAQ",
     route: "",
     switch: false,
   },
@@ -85,8 +87,10 @@ export const Header: React.FC<Props> = ({
   const [themeColor, setThemeColor] = useState('#F6F9F9');
   const cart = useSelector((state: RootState) => state.cartSlice);
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
-  const [cartCount, setCartCount] = useState<number>(0);
+  const [cartCount, setCartCount] = useState<string>('0');
   const cityId = localStorage.getItem('c_id');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   useEffect(() => {
     const GetProfileData = async () => {
@@ -114,6 +118,7 @@ export const Header: React.FC<Props> = ({
   const signOut = () => {
     localStorage.clear();
     navigate(Routes.SignIn);
+    window.location.reload();
   };
 
   const renderUser = (): JSX.Element | null => {
@@ -136,7 +141,6 @@ export const Header: React.FC<Props> = ({
           }
           className="userImg"
         />
-
 
         <span className="userName"> {profileData?.firstname}</span>
       </div>
@@ -168,37 +172,73 @@ export const Header: React.FC<Props> = ({
 
   const renderTitle = (): JSX.Element | null => {
     return (
-      <div className="middleBox">
-        {/* <span
-          className="t16"
-          style={{
-            color: "var(--main-color)",
-            display: "block",
-            fontWeight: 500,
-          }}
-        >
-         cadcdcsdcds
-        </span> */}
-        {/* <img src="" alt="Heritage Vet +" /> */}
+      <div className="middleBox" style={{ background: "red" }}>
+
+
+        <img className='logo-header' src={pic1} alt="" width={150}
+          onClick={() => navigate('/tab-navigator')}
+        />
+
       </div>
     );
   };
 
   const renderBasket = (): JSX.Element | null => {
     if (!showBasket) return null;
+    const ShowNoData = () => {
+      setIsModalOpen(true);
+    }
+    const handleOk = () => {
+      setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+      setIsModalOpen(false);
+    };
     return (
-      <button
-        onClick={() => {
-          dispatch(setScreen(TabScreens.Order));
-          navigate(Routes.TabNavigator);
-        }}
-        className="rightBox"
-      >
-        <div className="basketCount">
-          <span>{cartCount}</span>
+      <>
+        <div className="basketContainer">
+          {cartCount >= '1' ? (
+            <button
+              onClick={() => {
+                dispatch(setScreen(TabScreens.Order));
+                navigate(Routes.TabNavigator);
+              }}
+              className="rightBox"
+            >
+              <div className="basketCount">
+                <span>{cartCount}</span>
+              </div>
+              <svg.HeaderBasketSvg />
+            </button>
+          ) : (
+            <>
+              {/* <div >
+              <div className="basketCount">
+                <span>{cartCount}</span>
+              </div>
+              <svg.HeaderBasketSvg />
+              </div> */}
+
+              <button
+                onClick={ShowNoData}
+                className="rightBox"
+              >
+                <div className="basketCount">
+                  <span>{cartCount}</span>
+                </div>
+                <svg.HeaderBasketSvg />
+              </button>
+            </>
+          )}
         </div>
-        <svg.HeaderBasketSvg />
-      </button>
+        <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <>
+            <div className='NoDataAvailable'>
+              No Data Available
+            </div>
+          </>
+        </Modal>
+      </>
     );
   };
 
@@ -241,9 +281,9 @@ export const Header: React.FC<Props> = ({
               <span>
                 {profileData
                   ? `${profileData.firstname} ${profileData.lastname}`
-                  : "Loading..."}
+                  : ""}
               </span>
-              <span>{profileData?.email || "Loading..."}</span>
+              <span>{profileData?.email || ""}</span>
             </div>
           </div>
           <ul
@@ -263,9 +303,9 @@ export const Header: React.FC<Props> = ({
                   key={item.id}
                   onClick={() => {
                     if (item.title === 'Sign out') {
-                      signOut();
+                      signOut();  
                     } else if (item.route !== '') {
-                      navigate(item.route);
+                      navigate(item.route); 
                     }
                   }}
                 >
@@ -278,12 +318,12 @@ export const Header: React.FC<Props> = ({
                     }
                   >
                     {item.title === 'Sign out'
-                      ? (localStorage.getItem('c_id') ? 'Sign Out' : 'Sign In')
+                      ? (localStorage.getItem('c_id') ? 'Log Out' : 'Sign In')
                       : item.title}
                   </span>
-                  {item.route !== '' && item.title !== 'Sign out' && (
-                    <svg.RightArrowSvg />
-                  )}
+
+                  {item.route !== '' && item.title !== 'Sign out' && <svg.RightArrowSvg />}
+
                   {item.switch && <components.Switch />}
                 </li>
               );
@@ -293,7 +333,6 @@ export const Header: React.FC<Props> = ({
       </div>
     );
   };
-
   return (
     <>
       <header className="topHeader">

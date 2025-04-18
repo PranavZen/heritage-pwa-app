@@ -180,6 +180,7 @@ details summary {
       font-size: 16px;
       font-family: "SF Pro Display Medium";
       letter-spacing: 0.6px;
+
       @media screen and (max-width: 767px) {
         width: 40%;
         font-size: 14px;
@@ -196,6 +197,7 @@ details summary {
   font-size: 16px;
   font-family: "SF Pro Display Regular";
   width: 100%;
+
   @media screen and (max-width: 767px) {
     font-size: 14px;
   }
@@ -208,6 +210,7 @@ details summary {
   font-family: "SF Pro Display Medium";
   margin-bottom: 5px;
   display: inline-block;
+
   @media screen and (max-width: 767px) {
     font-size: 14px;
   }
@@ -235,6 +238,7 @@ details summary {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
+
   @media screen and (max-width: 767px) {
     font-size: 14px;
   }
@@ -283,9 +287,11 @@ details summary {
       top: 90%;
       left: 65%;
       transform: translate(-50%, -50%);
+
       @media screen and (max-width: 767px) {
         left: 70%;
       }
+
       i {
         font-size: 32px;
         color: #1a712e;
@@ -299,6 +305,7 @@ details summary {
   justify-content: flex-end;
   margin-top: 20px;
   padding: 0 20px;
+
   .newAddressBtn {
     background-color: #1a712e;
     display: flex;
@@ -311,9 +318,11 @@ details summary {
     font-size: 16px;
     font-weight: 500;
     gap: 6px;
+
     @media screen and (max-width: 767px) {
       font-size: 14px;
     }
+
     i {
       &::before {
         font-weight: 500;
@@ -321,17 +330,21 @@ details summary {
     }
   }
 }
+
 .editAddressBoxWrap {
   padding: 0 20px 20px;
+
   h3 {
     font-size: 20px;
     font-family: "SF Pro Display Medium";
     color: #1a712e;
     margin-bottom: 10px;
+
     @media screen and (max-width: 767px) {
       font-size: 18px;
     }
   }
+
   .myAddressBoxWrap {
     display: flex;
     flex-wrap: wrap;
@@ -343,35 +356,43 @@ details summary {
       border: 1px solid #1a712e;
       padding: 10px;
       max-width: 49%;
+
       @media screen and (max-width: 767px) {
         max-width: 100%;
       }
+
       h4 {
         text-transform: capitalize;
         margin-bottom: 5px;
         font-size: 18px;
         font-family: "SF Pro Display Medium";
+
         @media screen and (max-width: 767px) {
           font-size: 16px;
         }
       }
+
       p {
         line-height: 1.5;
+
         @media screen and (max-width: 767px) {
           font-size: 14px;
         }
       }
+
       .defaultAddressLabel {
         font-size: 14px;
         font-weight: 600;
         color: #1a712e;
         line-height: 3;
       }
+
       .myAddressActionBtnWrap {
         display: flex;
         justify-content: flex-end;
         gap: 10px;
         margin-top: 10px;
+
         .btns {
           border-radius: 50%;
           display: flex;
@@ -379,31 +400,39 @@ details summary {
           align-items: center;
           width: 35px;
           height: 35px;
+
           &.editBtn {
             background-color: #1a712e;
             cursor: pointer;
+
             i {
               font-size: 16px;
               color: #ffff;
+
               @media screen and (max-width: 767px) {
                 font-size: 14px;
               }
             }
+
             &:hover {
               transition: box-shadow 0.3s;
               box-shadow: inset 0px 0px 4px 2px #092c11;
             }
           }
+
           &.deleteBtn {
             background-color: #e3e3e3;
             cursor: pointer;
+
             i {
               font-size: 16px;
               color: #9e2323;
+
               @media screen and (max-width: 767px) {
                 font-size: 14px;
               }
             }
+
             &:hover {
               transition: box-shadow 0.3s;
               box-shadow: inset 0px 0px 4px 2px #616161;
@@ -433,18 +462,21 @@ details summary {
 // **************notification ************
 .clientNotificationWrap {
   padding: 20px;
+
   .notification-client {
     border-radius: 10px;
     margin-bottom: 10px;
     background-color: #3498db1f;
     padding: 10px;
     box-shadow: 0px 0px 5px 0px #3498db1f;
+
     .mainText {
       font-size: 16px;
       font-family: "SF Pro Display Medium";
       color: #1a712e;
       margin-bottom: 10px;
     }
+
     .subText {
       font-size: 14px;
       font-family: "SF Pro Display Regular";
@@ -452,6 +484,7 @@ details summary {
       margin-bottom: 10px;
       line-height: 2;
     }
+
     .notifytext {
       font-size: 14px;
       font-family: "SF Pro Display Regular";
@@ -464,6 +497,7 @@ details summary {
       -webkit-box-orient: vertical;
       line-height: 1.4;
     }
+
     .notifyDate {
       font-size: 14px;
       font-family: "SF Pro Display Regular";
@@ -516,6 +550,7 @@ details summary {
   border: 0.3px solid rgba(225, 224, 224, 0.9333333333);
   position: relative;
   height: auto;
+
   .proLeftBox {
     display: flex;
     gap: 20px;
@@ -652,6 +687,7 @@ details summary {
         }
       }
     }
+
     .subscriptionButton {
       display: flex;
       align-items: center;
@@ -664,11 +700,13 @@ details summary {
       padding: 8px;
       font-size: 16px;
       color: #fff;
+
       @media screen and (max-width: 767px) {
         padding: 6.5px;
         font-size: 12px;
       }
     }
+
     .smallText {
       padding-top: 5px;
       font-size: 14px;
@@ -747,12 +785,15 @@ details summary {
         padding: 8px;
         font-size: 16px;
         color: #fff;
+
         @media screen and (max-width: 767px) {
           padding: 3.5px;
           font-size: 16px;
         }
+
         &.modifyText {
           color: #1a712e;
+
           @media screen and (max-width: 767px) {
             padding: 6.5px;
             font-size: 12px;
@@ -771,6 +812,7 @@ details summary {
         font-size: 18px;
         font-weight: 500;
         color: #fff;
+
         @media screen and (max-width: 767px) {
           font-size: 14px;
         }
@@ -823,6 +865,7 @@ details summary {
       align-items: center;
       gap: 5px;
       margin-top: 10px;
+
       span {
         font-family: "SF Pro Display Light";
         font-size: 14px;
@@ -865,23 +908,28 @@ details summary {
         }
       }
     }
+
     .priceWrap {
       margin: 15px 0 5px;
+
       small {
         font-family: "SF Pro Display Light";
         font-size: 14px;
       }
+
       span {
         font-family: "SF Pro Display Medium";
         font-size: 20px;
       }
     }
+
     .ppText {
       font-family: "SF Pro Display Light";
       font-size: 14px;
       display: inline-block;
       margin-bottom: 5px;
     }
+
     .fatText {
       font-family: "SF Pro Display Light";
       font-size: 16px;
@@ -1034,38 +1082,45 @@ select {
   padding: 0 20px;
   border-bottom: 0.2px solid #1a712e;
   position: relative;
+
   &::before {
     content: "";
-    background-image: url("../assets/icons/pwa-logo.jpg");
-    background-repeat: no-repeat;
-    background-size: contain; /* Ensures the entire image is visible */
-    width: 30vw; /* 30% of the viewport width */
-    max-width: 130px; /* Limit maximum size */
-    height: 100%; /* Maintain aspect ratio */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    // background-image: url("../assets/icons/pwa-logo.jpg");
+    // background-repeat: no-repeat;
+    // background-size: contain; /* Ensures the entire image is visible */
+    // width: 30vw; /* 30% of the viewport width */
+    // max-width: 130px; /* Limit maximum size */
+    // height: 100%; /* Maintain aspect ratio */
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
   }
+
   .leftBox {
     display: flex;
     align-items: center;
     gap: 5px;
+    position: absolute;
     cursor: pointer;
+
     .userImg {
       width: 40px;
       height: 40px;
       border-radius: 50%;
       border: 2px solid #1a712e;
     }
+
     .userName {
       font-size: 14px;
       font-family: "SF Pro Display Semibold";
       color: #1a712e;
     }
   }
+
   .rightBox {
     position: relative;
+
     .basketCount {
       width: 20px;
       height: 20px;
@@ -1078,6 +1133,7 @@ select {
       display: flex;
       justify-content: center;
       align-items: center;
+
       span {
         font-size: 12px;
         font-weight: 600;
@@ -1085,10 +1141,12 @@ select {
     }
   }
 }
+
 .notificationListWrap {
   .notofiationList {
     padding: 20px;
     background-color: #3498db1a;
+
     .t12 {
       &.clickable {
         background-color: #1a712e;
@@ -1099,6 +1157,7 @@ select {
     }
   }
 }
+
 .sideMenu {
   position: absolute;
   z-index: 102;
@@ -1109,24 +1168,29 @@ select {
   top: 0;
   transition: left 0.5s linear;
   overflow: hidden;
+
   @media screen and (max-width: 767px) {
     width: 75%;
   }
+
   &.hidden {
     left: -100%;
   }
+
   .sideMwnuHeader {
     padding: 20px 0 15px 20px;
     display: flex;
     align-items: center;
     gap: 10px;
     border-bottom: 0.2px solid #1a712e;
+
     img {
       @media screen and (max-width: 767px) {
         width: 40px !important;
         height: 40px !important;
       }
     }
+
     .sideMenuHeaderContent {
       display: flex;
       flex-direction: column;
@@ -1136,14 +1200,17 @@ select {
           font-size: 18px;
           font-family: "SF Pro Display Semibold";
           color: #1a712e;
+
           @media screen and (max-width: 767px) {
             font-size: 16px;
           }
         }
+
         &:nth-child(2) {
           font-size: 16px;
           font-family: "SF Pro Display Light";
           color: #1a712e;
+
           @media screen and (max-width: 767px) {
             font-size: 14px;
           }
@@ -1151,8 +1218,10 @@ select {
       }
     }
   }
+
   .sideMenuList {
     padding: 20px 20px 0 20px;
+
     li {
       .t16 {
         &.number-of-lines-1 {
@@ -1161,6 +1230,7 @@ select {
           }
         }
       }
+
       &:last-child {
         span {
           background-color: #1a712e;
@@ -1172,6 +1242,7 @@ select {
           color: #fff !important;
           height: 40px;
           margin: 0 auto;
+
           @media screen and (max-width: 767px) {
             font-size: 14px;
           }
@@ -1180,35 +1251,42 @@ select {
     }
   }
 }
+
 .menuItemsWrap {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   justify-content: space-between;
   row-gap: 40px;
+
   .innerMenu {
     width: 100%;
     height: 145px;
     border: 1px solid #1a712e;
     border-radius: 18px;
     max-width: 280px;
+
     @media screen and (max-width: 767px) {
       width: 100%;
       max-width: 100%;
     }
+
     .itemImg {
       border-radius: 18px;
       object-fit: inherit;
     }
+
     .home_product_category {
       font-size: 22px;
       font-family: "SF Pro Display Medium";
+
       @media screen and (max-width: 768px) {
         font-size: 18px;
       }
     }
   }
 }
+
 .itemWrap {
   height: 115px;
 
@@ -1217,6 +1295,7 @@ select {
     height: 100%;
     object-fit: cover;
   }
+
   button {
     width: 120px;
     height: 90px;
@@ -1224,12 +1303,14 @@ select {
     position: relative;
     overflow: hidden;
     border: 2px solid #1a712e;
+
     .itemImg {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
+
   .home_product_category {
     // position: absolute;
     // bottom: 0px;
@@ -1246,6 +1327,7 @@ select {
     // transform: translateX(-50%);
   }
 }
+
 .proCardWrap {
   border-radius: 10px;
   position: relative;
@@ -1253,19 +1335,23 @@ select {
   background-color: #fff;
   overflow: hidden;
   width: 100%;
+
   .itemImgWrap {
     height: 180px;
     width: 100%;
     display: flex;
+
     img {
       width: 100%;
       max-width: 100%;
       height: 100%;
     }
   }
+
   .boxWrap {
     padding: 10px 10px 15px;
   }
+
   .cartButtonWrap {
     display: flex;
     align-items: center;
@@ -1275,10 +1361,12 @@ select {
     margin-top: 15px;
     width: 65%;
     margin: 15px auto 0 auto;
+
     .cartButton {
       padding: 8px;
       font-size: 16px;
       color: #fff;
+
       svg {
         path {
           stroke: #fff;
@@ -1286,6 +1374,7 @@ select {
         }
       }
     }
+
     .countNum {
       font-size: 18px;
       font-weight: 500;
@@ -1293,6 +1382,7 @@ select {
     }
   }
 }
+
 .mb5 {
   margin-bottom: 20px;
 }
@@ -1303,61 +1393,77 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
+
   @media screen and (max-width: 767px) {
     width: 100%;
   }
 }
+
 .ordersScreenWrapper {
   .tabs {
     margin: 20px 0;
+
     .tab-button {
       margin: 0;
       border-radius: 0;
       border: 1px solid #1a712e;
       color: #1a712e;
+
       @media screen and (max-width: 767px) {
         font-size: 14px;
       }
+
       &:hover {
         background-color: #1a712e;
         color: #fff;
       }
+
       &.active {
         background-color: #1a712e;
         color: #fff;
+
         &:nth-child(1) {
           border-top-left-radius: 50px;
           border-bottom-left-radius: 50px;
         }
+
         &:nth-child(2) {
           border-top-right-radius: 50px;
           border-bottom-right-radius: 50px;
         }
       }
+
       &:nth-child(1) {
         border-top-left-radius: 50px;
         border-bottom-left-radius: 50px;
       }
+
       &:nth-child(2) {
         border-top-right-radius: 50px;
         border-bottom-right-radius: 50px;
       }
     }
   }
+
   .ordersContainer {
     h2 {
       font-size: 20px;
       font-family: "SF Pro Display Medium";
       color: #1a712e;
       margin-bottom: 20px;
+      text-align: center;
+
       @media screen and (max-width: 767px) {
         font-size: 18px;
       }
     }
+
     .scrollable-container {
       padding: 0;
+
       .card-list {
         padding: 0 20px;
+
         .card {
           width: 100%;
           background-color: #e9f3f6;
@@ -1365,13 +1471,16 @@ select {
           border-radius: 8px;
           border: 0.3px solid rgba(225, 224, 224, 0.9333333333);
           position: relative;
+
           &:hover {
             transform: none;
           }
+
           .topCardDataWrap {
             margin-top: 30px;
             display: flex;
             gap: 20px;
+
             .orderImagWrap {
               width: 120px;
               height: 120px;
@@ -1381,10 +1490,12 @@ select {
               justify-content: center;
               align-items: center;
               overflow: hidden;
+
               @media screen and (max-width: 767px) {
                 width: 70px;
                 height: 70px;
               }
+
               img {
                 width: 100%;
                 height: 100%;
@@ -1392,6 +1503,7 @@ select {
                 object-position: center;
               }
             }
+
             .card-info {
               margin: 0;
               flex: 1 0;
@@ -1399,87 +1511,106 @@ select {
               flex-direction: column;
               justify-content: flex-start;
               align-items: flex-start;
+
               .orderItmName {
                 font-size: 18px;
                 font-family: "SF Pro Display Medium";
                 color: #1a712e;
                 margin-bottom: 0;
+
                 @media screen and (max-width: 767px) {
                   font-size: 14px;
                 }
               }
+
               .orderItmWieght {
                 font-size: 14px;
                 margin-bottom: 5px;
+
                 @media screen and (max-width: 767px) {
                   font-size: 12px;
                 }
               }
+
               .orderQuantity {
                 font-size: 14px;
                 font-family: "SF Pro Display Regular";
                 margin-bottom: 5px;
+
                 @media screen and (max-width: 767px) {
                   font-size: 12px;
                 }
               }
+
               .orderLD {
                 font-size: 14px;
                 font-family: "SF Pro Display Regular";
                 color: #555;
                 margin-bottom: 5px;
+
                 @media screen and (max-width: 767px) {
                   font-size: 12px;
                 }
               }
+
               .orderPrice {
                 font-size: 18px;
                 font-family: "SF Pro Display Medium";
                 color: #1a712e;
                 margin-bottom: 5px;
+
                 @media screen and (max-width: 767px) {
                   font-size: 16px;
                 }
               }
+
               .orderBalAmt {
                 font-size: 14px;
                 font-family: "SF Pro Display Regular";
                 color: #555;
                 margin-bottom: 5px;
+
                 @media screen and (max-width: 767px) {
                   font-size: 12px;
                 }
               }
             }
           }
+
           .dataWraps {
             display: flex;
             gap: 30px;
             margin-top: 10px;
+
             .wrap {
               display: flex;
               flex-direction: column;
               align-items: flex-start;
               gap: 5px;
               position: relative;
+
               p {
                 font-size: 14px;
                 font-family: "SF Pro Display Regular";
                 color: #1a712e;
                 margin-bottom: 0;
+
                 @media screen and (max-width: 767px) {
                   font-size: 12px;
                 }
               }
+
               span {
                 font-size: 18px;
                 font-family: "SF Pro Display Semibold";
                 color: #555;
                 margin-bottom: 0;
+
                 @media screen and (max-width: 767px) {
                   font-size: 16px;
                 }
               }
+
               &:nth-child(2) {
                 &::before {
                   content: "";
@@ -1493,15 +1624,18 @@ select {
               }
             }
           }
+
           .orderDateWrap {
             display: flex;
             margin-top: 20px;
+
             .box50 {
               width: 50%;
               display: flex;
               justify-content: flex-start;
               gap: 15px;
               align-items: center;
+
               .svgWrap {
                 svg {
                   path {
@@ -1509,35 +1643,42 @@ select {
                   }
                 }
               }
+
               .innerBox {
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 5px;
+
                 p {
                   font-size: 14px;
                   font-family: "SF Pro Display Regular";
                   color: #1a712e;
                   margin-bottom: 0;
+
                   @media screen and (max-width: 767px) {
                     font-size: 12px;
                   }
                 }
+
                 span {
                   font-size: 18px;
                   font-family: "SF Pro Display Semibold";
                   color: #555;
                   margin-bottom: 0;
+
                   @media screen and (max-width: 767px) {
                     font-size: 16px;
                   }
                 }
               }
+
               &.orderDateRightBox {
                 .innerBox {
                   p {
                     color: #ff0404;
                   }
+
                   span {
                     color: #ff0404;
                   }
@@ -1545,6 +1686,7 @@ select {
               }
             }
           }
+
           .subExpiredText {
             text-align: center;
             display: block;
@@ -1552,14 +1694,17 @@ select {
             color: #ff0604;
             font-size: 16px;
             font-family: "SF Pro Display Regular";
+
             @media screen and (max-width: 767px) {
               font-size: 14px;
             }
           }
+
           .orderBtnsWraps {
             display: flex;
             gap: 10px;
             margin-top: 20px;
+
             // @media screen and (max-width: 767px) {
             //   flex-direction: column;
             // }
@@ -1575,14 +1720,17 @@ select {
               font-size: 18px;
               color: #fff;
               margin: 0 auto;
+
               @media screen and (max-width: 767px) {
                 font-size: 14px;
                 width: 35%;
                 height: 35px;
               }
+
               &:nth-child(1) {
                 background-color: #ff0404;
               }
+
               &:nth-child(2) {
                 background-color: #fff;
                 color: #1a712e;
@@ -1590,6 +1738,7 @@ select {
               }
             }
           }
+
           .subscription_idWrap {
             position: absolute;
             left: 10px;
@@ -1599,10 +1748,12 @@ select {
             font-size: 16px;
             font-family: "SF Pro Display Semibold";
             color: #555;
+
             @media screen and (max-width: 767px) {
               font-size: 14px;
             }
           }
+
           .statusWrap {
             position: absolute;
             right: 0;
@@ -1615,6 +1766,7 @@ select {
             justify-content: center;
             align-items: center;
             border-bottom-left-radius: 8px;
+
             span {
               color: #fff;
               font-size: 14px;
@@ -1625,8 +1777,10 @@ select {
     }
   }
 }
+
 .walletSection {
   padding: 20px;
+
   .walletContainer {
     h3 {
       font-size: 20px;
@@ -1634,34 +1788,41 @@ select {
       color: #1a712e;
       margin-bottom: 20px;
       text-align: center;
+
       @media screen and (max-width: 767px) {
         font-size: 18px;
       }
     }
+
     .topSection {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+
       .waltLeftBox {
         span {
           font-size: 16px;
           font-family: "SF Pro Display Regular";
           color: #555;
+
           @media screen and (max-width: 767px) {
             font-size: 14px;
           }
         }
+
         p {
           font-size: 20px;
           font-family: "SF Pro Display Medium";
           color: #555;
           text-transform: capitalize;
+
           @media screen and (max-width: 767px) {
             font-size: 18px;
           }
         }
       }
+
       .waltRightBox {
         width: 50px;
         height: 50px;
@@ -1670,6 +1831,7 @@ select {
         display: flex;
         justify-content: center;
         align-items: center;
+
         span {
           svg {
             path {
@@ -1679,26 +1841,32 @@ select {
         }
       }
     }
+
     .walletBalanceText {
       font-size: 18px;
       font-family: "SF Pro Display Regular";
       color: #1a712e;
       margin-bottom: 20px;
+
       span {
         font-size: 20px;
         font-family: "SF Pro Display Semibold";
+
         @media screen and (max-width: 767px) {
           font-size: 18px;
         }
       }
+
       @media screen and (max-width: 767px) {
         font-size: 16px;
       }
     }
+
     .pointsWrap {
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       .pointsBox {
         width: 48%;
         display: flex;
@@ -1708,6 +1876,7 @@ select {
         padding: 15px 0;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
+
         .spanSvgBox {
           display: flex;
           justify-content: center;
@@ -1717,24 +1886,29 @@ select {
           background: #f3f3f3;
           border-radius: 50%;
         }
+
         .rightPart {
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 5px;
-          span{
-            &:nth-child(1){
+
+          span {
+            &:nth-child(1) {
               font-size: 16px;
               font-family: "SF Pro Display Semibold";
               color: #fff;
+
               @media screen and (max-width: 767px) {
                 font-size: 14px;
               }
             }
-            &:nth-child(2){
+
+            &:nth-child(2) {
               font-size: 26px;
               font-family: "SF Pro Display Regular";
               color: #fff;
+
               @media screen and (max-width: 767px) {
                 font-size: 24px;
               }
@@ -1745,6 +1919,7 @@ select {
     }
   }
 }
+
 // Pranav added new css end
 
 .explore-btn {
@@ -1768,3 +1943,157 @@ select {
   padding: 0px 20px;
   margin-top: 20px;
 }
+
+.logo-header {
+  background-repeat: no-repeat;
+  background-size: contain;
+  height:90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+.NoDataAvailable{
+  width: 100%;
+  height: 47px;
+  color: #4b9e46;
+  line-height: 88px;
+  font-weight: 900;
+  font-size: 20px;
+  text-align: center;
+}
+// *******************************************
+
+.couponApply-main{
+     height: 46px;
+    border-radius: 10px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+    background-color: #1a712e;
+    color: white;
+}
+.removeCoupon{
+  border-radius: 10px;
+  // background-color: red;
+  padding: 5px;
+}
+
+
+// ***********************************************
+.couponApplied-main {
+  background-color: #f0fff4;
+  border: 1px solid #b2dfdb;
+  padding: 16px 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #2e7d32;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.coupon-details {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.discount-text {
+  font-size: 16px;
+  margin: 0 0 8px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #b2dfdb;
+  margin: 8px 0 10px;
+}
+
+.view-cart {
+  font-size: 14px;
+  font-weight: 500;
+  color: #00796b;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+  font-size: 15px;
+}
+
+.view-cart:hover {
+  color: #004d40;
+}
+
+.removeCoupon {
+  color: #c62828;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.removeCoupon:hover {
+  color: #b71c1c;
+}
+
+
+// ***********************************order on address*****************************************
+.myAddressBoxWrap {
+  padding: 10px;
+}
+
+.myaddress-getting-separate {
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+.address-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.address-label input[type='checkbox'] {
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.toggle-more {
+  text-align: center;
+  color: #00796b;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+.myAddressBoxWrap{
+  position: relative;
+}
+.myAddressBoxWrap-Order-Edit{
+  position:absolute;
+  top:3px;
+  right: 19px;
+  cursor:pointer;
+}
+
+
