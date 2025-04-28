@@ -86,6 +86,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
         order_id: string;
         order_status_id: string;
         payment_method: string;
+        order_option_id: string;
     }
     const [orderToDelete, setOrderToDelete] = useState<orderToDelete | null>(null);
 
@@ -125,7 +126,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
         if (selectedReason && orderToDelete) {
             const formData = new FormData();
             formData.append("c_id", localStorage.getItem('c_id') || '');
-            formData.append("order_option_id", orderToDelete.order_id);
+            formData.append("order_option_id", orderToDelete.order_option_id);
             formData.append("order_status_id", orderToDelete.order_status_id
             );
             formData.append("cancel_reason_id", String(selectedReason));
@@ -523,8 +524,8 @@ export const SubscriptionOrderCheck: React.FC = () => {
                                                         {subscription.weight} {subscription.weight_unit}
                                                     </p>
                                                     <p className="orderQuantity">
-                                                        Pack: {subscription.quantity} Per day (
-                                                        {subscription.package_name})
+                                                        Pack: {subscription.quantity} Per day
+                                                        ({subscription.package_name})
                                                     </p>
                                                     <p className="orderLD">
                                                         Last Delivered:{" "}
@@ -535,8 +536,9 @@ export const SubscriptionOrderCheck: React.FC = () => {
                                                         <span>per pack</span>
                                                     </p>
                                                     <p className="orderBalAmt">
-                                                        Balance Amount : ₹ {subscription.price}
+                                                        Total Amount : ₹ {(subscription.price * subscription.quantity).toLocaleString("en-IN")}
                                                     </p>
+
                                                 </div>
                                             </div>
                                             <div className="dataWraps">
@@ -624,11 +626,11 @@ export const SubscriptionOrderCheck: React.FC = () => {
                                                         className="btn"
                                                     >
                                                         Renew
-                                                    </button> 
-                                                    </> : 
-                                                    <>
-                                                          
-                                                    </>
+                                                    </button>
+                                                    </> :
+                                                        <>
+
+                                                        </>
                                                 }
                                             </div>
                                             <div className="subscription_idWrap">
@@ -726,8 +728,8 @@ export const SubscriptionOrderCheck: React.FC = () => {
                                                         {order.weight} {order.weight_unit}
                                                     </p>
                                                     <p className="orderQuantity">
-                                                        Pack: {order.quantity} Per day (
-                                                        {order.package_name})
+                                                        Pack: {order.quantity} Per day
+                                                        {/* ({order.package_name}) */}
                                                     </p>
                                                     {/* <p className="orderLD">
                             Last Delivered:{" "}
@@ -738,7 +740,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                                                         <span>per pack</span>
                                                     </p>
                                                     <p className="orderBalAmt">
-                                                        Balance Amount : ₹ {order.price}
+                                                        Total Amount : ₹ {order.price * order.quantity}
                                                     </p>
                                                 </div>
                                             </div>

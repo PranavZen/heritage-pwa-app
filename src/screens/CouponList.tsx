@@ -3,23 +3,26 @@ import { hooks } from "../hooks";
 import { components } from "../components";
 import { useNavigate } from "react-router-dom";
 import './CouponList.scss';
+import Lottie from "lottie-react";
+import CouponApply from "../components/Animation/CouponApply.json";
 
 export const CouponList: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const [opacity, setOpacity] = useState<number>(0);
-  const [coupons, setCoupons] = useState<any[]>([]); // Store coupon data
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
+  const [coupons, setCoupons] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [showModal, setShowModal] = useState<boolean>(false); // To control popup visibility
+  const [isApplying, setIsApplying] = useState<boolean>(false); // Prevent multiple clicks
 
   const navigate = useNavigate();
-  const today = new Date().toISOString().split("T")[0];
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
   hooks.useGetNotifications();
 
-  // Fetch coupons from the API using FormData
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
@@ -42,6 +45,7 @@ export const CouponList: React.FC = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
+        setError('Unable to load coupons.');
       }
     };
 
@@ -62,6 +66,7 @@ export const CouponList: React.FC = () => {
     if (error) {
       return <div className="error">{`Error: ${error}`}</div>;
     }
+
     return (
       <>
         <div>
@@ -81,15 +86,24 @@ export const CouponList: React.FC = () => {
                   <div className="uses-left">Uses Left: {coupon.uses_total_coupon}</div>
                   <button
                     onClick={() => {
-                      localStorage.setItem('couponCode', coupon.code); 
-                      navigate('/tab-navigator', {
-                        state: { couponCode: coupon.code }
-                      });
+                      if (isApplying) return;
+                      setIsApplying(true);
+                      localStorage.setItem('couponCode', coupon.code);
+
+                      setShowModal(true);
+
+
+                      setTimeout(() => {
+                        setShowModal(false);
+                        setIsApplying(false);
+                        navigate('/tab-navigator', {
+                          state: { couponCode: coupon.code }
+                        });
+                      }, 3000); 
                     }}
                   >
                     Apply Coupon
                   </button>
-
                 </div>
               </div>
             ))
@@ -105,6 +119,16 @@ export const CouponList: React.FC = () => {
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
       {renderContent()}
+
+      {/* Popup Modal */}
+      {showModal && (
+        <div className="popup-modal">
+          <div className="popup-content">
+            <Lottie animationData={CouponApply} style={{ width: 150, height: 150 }} />
+            <p>Coupon Applied Successfully!</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

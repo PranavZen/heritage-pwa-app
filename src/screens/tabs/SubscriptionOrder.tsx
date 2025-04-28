@@ -533,7 +533,7 @@ export const SubscriptionOrder: React.FC = () => {
                             <span>per pack</span>
                           </p>
                           <p className="orderBalAmt">
-                            Balance Amount : ₹ {subscription.price}
+                            Total Amount : ₹ {subscription.price * subscription.quantity}
                           </p>
                         </div>
                       </div>
@@ -720,8 +720,8 @@ export const SubscriptionOrder: React.FC = () => {
                             {order.weight} {order.weight_unit}
                           </p>
                           <p className="orderQuantity">
-                            Pack: {order.quantity} Per day (
-                            {order.package_name})
+                            Pack: {order.quantity} Per day 
+                            {order.package_name}
                           </p>
                           {/* <p className="orderLD">
                             Last Delivered:{" "}
@@ -732,7 +732,7 @@ export const SubscriptionOrder: React.FC = () => {
                             <span>per pack</span>
                           </p>
                           <p className="orderBalAmt">
-                            Balance Amount : ₹ {order.price}
+                            Total Amount : ₹ {order.price * order.quantity}
                           </p>
                         </div>
                       </div>

@@ -12,9 +12,7 @@ import { notification } from 'antd';
 import { SubscriptionOrder } from './SubscriptionOrder';
 import { SubscriptionOrderCheck } from './SubscriptionOrderCheck';
 import { useLocation } from 'react-router-dom';
-import { createJsxClosingElement } from 'typescript';
-
-
+import { setShouldRefresh } from '../../store/slices/cartSlice';
 
 interface Address {
   id: string;
@@ -55,12 +53,12 @@ export const Order: React.FC = () => {
 
   // console.log("superPoint", superPoint);
 
+
+
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [coupons, setCoupons] = useState<any[]>([]);
   const [cartDetails, setCartDetails] = useState<any>(null);
-
-
 
   const [deliveries, SetDeliveries] = useState<any[]>([]);
   // console.log("deliveriesdeliveries", deliveries)
@@ -70,37 +68,35 @@ export const Order: React.FC = () => {
 
 
 
-  console.log("getrewardbalance", getrewardbalance);
-
-
   const [showAll, setShowAll] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
 
-  // console.log("xxxxxxxxxxxxxxxxxxxxxxxxx", selectedId)
-
-  const defaultAddress = addresses.find((addr) => addr.is_default === "1");
-  const otherAddresses = addresses.filter((addr) => addr.is_default !== "1");
+  const defaultAddress = Array.isArray(addresses) ? addresses.find((addr) => addr.is_default === "1") : null;
+  const otherAddresses = Array.isArray(addresses) ? addresses.filter((addr) => addr.is_default !== "1") : [];
+  
 
   const [isChecked, setIsChecked] = useState(false);
   const [redeemedAmount, setRedeemedAmount] = useState(0);
 
+  const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
-  // console.log("redeemedAmount", redeemedAmount);
 
-  const handleCheckboxChange = (e:any) => {
+
+  // console.log("shouldRefresh", shouldRefresh);
+
+  const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
     setIsChecked(checked);
 
     if (checked && superPoint) {
-      setRedeemedAmount(superPoint.redeemed_amount);
+      setRedeemedAmount(superPoint.
+        available_amount
+      );
     } else {
       setRedeemedAmount(0);
     }
   };
-
-
-
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
@@ -126,11 +122,11 @@ export const Order: React.FC = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.error("Error fetching addresses:", error);
+        // console.error("Error fetching addresses:", error);
       }
     };
     fetchAddresses();
-  }, [c_id]);
+  }, [c_id, shouldRefresh]);
 
   // *************************************************************************************
 
@@ -153,8 +149,15 @@ export const Order: React.FC = () => {
         console.error(error);
       }
     };
+
+    if (shouldRefresh) {
+      getAddToCartData().finally(() => {
+        dispatch(setShouldRefresh(false));
+      });
+    }
     getAddToCartData();
-  }, [cityId, c_id]);
+
+  }, [cityId, c_id, shouldRefresh]);
 
   useEffect(() => {
     const getAddress = async () => {
@@ -169,21 +172,31 @@ export const Order: React.FC = () => {
         const addresses = response.data.addresses;
 
 
-        const defaultAddress = addresses.find((addr: any) => addr.is_default === 1);
+        // const defaultAddress = addresses.find((addr: any) => addr.is_default === 1);
 
-        if (defaultAddress) {
-          SetAddressId(defaultAddress.id);
-        } else if (addresses.length > 0) {
-          SetAddressId(addresses[0].id);
+        // if (defaultAddress) {
+        //   SetAddressId(defaultAddress.id);
+        // } else if (addresses.length > 0) {
+        //   SetAddressId(addresses[0].id);
+        // }
+        if (Array.isArray(addresses)) {
+          const defaultAddress = addresses.find((addr: any) => addr.is_default === 1);
+        
+          if (defaultAddress) {
+            SetAddressId(defaultAddress.id);
+          } else if (addresses.length > 0) {
+            SetAddressId(addresses[0].id);
+          }
+        } else {
+          // console.warn('addresses is not an array', addresses);
         }
-
       } catch (error) {
-        console.error("Failed to fetch addresses", error);
+        // console.error("Failed to fetch addresses", error);
       }
     };
 
     getAddress();
-  }, [c_id]);
+  }, [c_id, shouldRefresh]);
 
   const handleCheckout = async () => {
     setLoading(true);
@@ -199,7 +212,7 @@ export const Order: React.FC = () => {
         notification.success({ message: response.data.message });
         // setOrderPlaced(true); 
         navigate('/your-order');
-        window.location.reload();
+        localStorage.removeItem('couponCode')
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message || 'Order placement failed' });
       }
@@ -227,6 +240,9 @@ export const Order: React.FC = () => {
           formData
         );
         const data = response.data;
+
+
+        // console.log("iiiiiiiiiiiiiii", response);
 
         if (data) {
           setCoupons(data);
@@ -256,8 +272,7 @@ export const Order: React.FC = () => {
     };
 
     fetchCoupons();
-  }, [couponCode]);
-
+  }, [couponCode, shouldRefresh]);
 
 
   // ********************Super Coupons*********************************
@@ -267,21 +282,21 @@ export const Order: React.FC = () => {
         const formData = new FormData();
         formData.append("c_id", localStorage.getItem('c_id') || '');
         // formData.append("c_id",  '123207');
-         formData.append("city_id", localStorage.getItem('cityId') || '')
+        formData.append("city_id", localStorage.getItem('cityId') || '')
         formData.append("area_id", localStorage.getItem('area_id') || '');
         formData.append('next_id', '0');
-        
+
         const response = await axios.post(
           'https://heritage.bizdel.in/app/consumer/services_v11/getrewardbalance',
           formData
         );
-      //  console.log("rrtttttttttt", response)
-       if(response.data.status === "success"){
-        setGetrewardBalance(response.data.points);
-       localStorage.setItem("reward_balance", response.data.points);
-       }
-       
+        //  console.log("rrtttttttttt", response)
 
+
+        if (response.data.status === "success") {
+          setGetrewardBalance(response.data.points);
+          localStorage.setItem("reward_balance", response.data.points);
+        }
 
         setLoading(false);
       } catch (error) {
@@ -291,6 +306,16 @@ export const Order: React.FC = () => {
     };
 
     fetchCoupons();
+  }, [shouldRefresh]);
+
+
+  const [cId, setCId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedCId = localStorage.getItem('c_id');
+    if (storedCId) {
+      setCId(storedCId);
+    }
   }, []);
 
 
@@ -313,30 +338,28 @@ export const Order: React.FC = () => {
           formData
         );
 
-        // console.log("vvvvvvvvvvv", response);
-
         const data = response.data;
+        // console.log("vvvvvvvvvvv", data);
 
-        if (data) {
-          setSuperPoint({
-            redeemed_points: data.redeemed_points,
-            redeemed_amount: data.redeemed_amount
-          });
-         
-        }
 
-        setLoading(false);
+        // if (data && data.redeemed_points && data.redeemed_amount) {
+        //   setSuperPoint({
+        //     redeemed_points: data.redeemed_points,
+        //     redeemed_amount: data.redeemed_amount,
+        //   });
+        // }
+        setSuperPoint(data)
+
+        // setLoading(false);
       } catch (error) {
         console.error('Error fetching coupons:', error);
         setLoading(false);
       }
     };
-
     fetchCoupons();
-  }, []);
+  }, [cId]);
 
   // *******************Super Coupons *******************************
-
   const { menuLoading, menu } = hooks.useGetMenu();
 
   const { list, subtotal, delivery, total } = useSelector(
@@ -361,6 +384,7 @@ export const Order: React.FC = () => {
   };
 
 
+
   // const couponApply = (): JSX.Element => {
   //   return (
   //     <div className='couponApply-main'>
@@ -382,8 +406,11 @@ export const Order: React.FC = () => {
 
   const discountSuccessfull = localStorage.getItem('discount_total') || '';
 
+
   const couponApplied = (): JSX.Element => {
     const cleanedDiscount = stripHtmlTags(discountSuccessfull);
+
+    // console.log("cleanedDiscountcleanedDiscount", cleanedDiscount)
     return (
       <div className='couponApplied-main'>
         <div className='coupon-details'>
@@ -499,28 +526,39 @@ export const Order: React.FC = () => {
   };
 
   // ********************************************************Address*******************************
+  const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
+
+
+  // console.log("shouldRefresh", shouldRefresh);
+
+  // useEffect(() => {
+  //   if (cartCount === 0) {
+  //     localStorage.removeItem('curScreen');
+  //   }
+  // },[]);
 
   const renderContent = (): JSX.Element | null => {
-    if (orderPlaced) {
-      return (
-        <main className="scrollable">
-          {/* <SubscriptionOrder /> */}
-          {/* <SubscriptionOrderCheck/> */}
-        </main>
-      );
-    }
 
-    if (totalPrice.length === 0 && !menuLoading) return null;
     return (
       <main className="container scrollable">
-        {renderDishes()}
-        {couponApplied()}
-
-        {renderSummary()}
-        {AddressWithButton()}
-        {renderButton()}
+        {cartCount > 0 ? (
+          <>
+            {renderDishes()}
+            {couponApplied()}
+            {renderSummary()}
+            {AddressWithButton()}
+            {renderButton()}
+          </>
+        ) : (
+          <p style={{
+            display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: "20px",
+            height: "340px"
+          }}>No cart Data</p>
+        )}
       </main>
     );
+
+
   };
 
   const renderDishes = (): JSX.Element => {
@@ -606,7 +644,7 @@ export const Order: React.FC = () => {
             {localStorage.getItem('couponCode') ? <><span className='t14'>₹{cartDetails?.gst_tax_total}</span> </> : <>  ₹{' '} 0 </>}
           </div>
 
-          {/* **********************************************Orderrrrrrrrrrr */}
+          {/* ***************************yyyy*******************Orderrrrrrrrrrr */}
           <div
             className="row-center-space-between"
             style={{
@@ -619,13 +657,14 @@ export const Order: React.FC = () => {
               <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
               <span className="t14" style={{ paddingLeft: '4px' }}>Super Coins</span>
               <span className="t14" style={{ paddingLeft: '4px' }}>
-                ({superPoint?.redeemed_points ? <> {superPoint?.redeemed_points} </> : <> 0</>})
+
+                ({superPoint?.available_points ? <> {superPoint?.available_points} </> : <> 0</>})
               </span>
             </div>
             <span className="t14">
-              ₹{redeemedAmount ? <> {redeemedAmount}</>:<> 0 </>}
+              ₹{redeemedAmount ? <> {redeemedAmount}</> : <> 0 </>}
 
-              </span>
+            </span>
           </div>
 
           {/* ***********************Ordereeeeeeeeeeeeeee***************** */}
@@ -635,60 +674,75 @@ export const Order: React.FC = () => {
             <h4>Total</h4>
 
             {/* Case when no cart total is available */}
-            {!cartDetails?.cart_final_grand_total ?  
-             (
-              <h4>
-                ₹{' '}
-                {totalPrice
-                  .reduce((total, elem) => {
-                    const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
-                    return total + elem.quantity * elem.price * deliveryCount;
-                  }, 0)
-                  .toFixed(2)}
-              </h4>
-             ) : localStorage.getItem('couponCode') ?(
-              <h4>
-                ₹{' '}
-                {(() => {
-                  const cartTotal = totalPrice
+            {!cartDetails?.cart_final_grand_total ?
+              (
+                <h4>
+                  ₹{' '}
+                  {
+                    (
+                      totalPrice.reduce((total, elem) => {
+                        if (
+                          !elem ||
+                          isNaN(Number(elem.quantity)) ||
+                          isNaN(Number(elem.price)) ||
+                          typeof elem.no_of_deliveries === 'undefined'
+                        ) {
+                          return total;
+                        }
+
+                        const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
+                        const lineTotal = Number(elem.quantity) * Number(elem.price) * deliveryCount;
+
+                        return total + lineTotal;
+                      }, 0) - (redeemedAmount > 0 ? redeemedAmount : 0)
+                    ).toFixed(2)
+                  }
+
+                </h4>
+              ) : localStorage.getItem('couponCode') || redeemedAmount > 1 ? (
+                <h4>
+                  ₹{' '}
+                  {(() => {
+                    const cartTotal = totalPrice
+                      .reduce((total, elem) => {
+                        const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
+                        return total + elem.quantity * elem.price * deliveryCount;
+                      }, 0)
+                      .toFixed(2);
+
+                    let discount = 0;
+
+                    if (localStorage.getItem('couponCode')) {
+                      discount = Number(cartDetails?.after_discount_total || 0);
+                    }
+
+                    // console.log("bbb", discount)
+                    const gst = Number(cartDetails?.gst_tax_total || 0);
+
+                    // console.log("cccc", gst);
+
+                    const deliveryMultiplier = deliveries.reduce((total, currentValue) => total + Number(currentValue), 0);
+
+                    // console.log("ddddd", deliveryMultiplier)
+
+                    // const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
+
+                    const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
+
+                    return total.toLocaleString('en-IN');
+                  })()}
+                </h4>
+              ) : (
+                <h4>
+                  ₹{' '}
+                  {totalPrice
                     .reduce((total, elem) => {
                       const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
                       return total + elem.quantity * elem.price * deliveryCount;
                     }, 0)
-                    .toFixed(2);
-
-
-                  // console.log("aaa", cartTotal);
-
-                  const discount = Number(cartDetails?.after_discount_total || 0);
-                  // console.log("bbb", discount)
-                  const gst = Number(cartDetails?.gst_tax_total || 0);
-
-                  // console.log("cccc", gst);
-
-
-                  const deliveryMultiplier = deliveries.reduce((total, currentValue) => total + Number(currentValue), 0);
-
-                  // console.log("ddddd", deliveryMultiplier)
-
-                  // const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
-                  // console.log("yyyyyyyyyyy", redeemedAmount)
-                  const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
-
-                  return total.toLocaleString('en-IN');
-                })()}
-              </h4>
-            ) : (
-              <h4>
-                ₹{' '}
-                {totalPrice
-                  .reduce((total, elem) => {
-                    const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
-                    return total + elem.quantity * elem.price * deliveryCount;
-                  }, 0)
-                  .toFixed(2)}
-              </h4>
-            )}
+                    .toFixed(2)}
+                </h4>
+              )}
           </div>
 
         </section>
@@ -696,15 +750,21 @@ export const Order: React.FC = () => {
     );
   };
 
+
+
   const handleCoupon = () => {
     navigate('/coupon-list');
   };
+
+
+
   const renderLoading = (): JSX.Element | null => {
     if (loading || menuLoading) return <components.Loader />;
     return null;
   };
   return (
     <div id="screen" style={{ opacity }}>
+   
       {renderContent()}
       {renderLoading()}
     </div>

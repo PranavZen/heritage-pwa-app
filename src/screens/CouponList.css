@@ -10,13 +10,14 @@ h1 {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  width: 90%;
   margin: 10px 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: box-shadow 0.3s ease-in-out;
-  margin: 0 auto;
+  margin: 14px auto;
 }
 .card:hover {
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);

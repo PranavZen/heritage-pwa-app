@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { hooks } from '../hooks';
 import { svg } from '../assets/svg';
 import { RootState } from '../store';
@@ -7,8 +6,10 @@ import { components } from '../components';
 import { TabScreens, Routes } from '../routes';
 import { setScreen } from '../store/slices/tabSlice';
 import axios from 'axios';
-import pic1 from '../assets/icons/pwa-logo.jpg'
+import pic1 from '../assets/icons/pwa-logo.jpg';
 import { Modal } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCartCount } from '../store/slices/cartSlice';
 
 type Props = {
   title?: string;
@@ -17,6 +18,7 @@ type Props = {
   showGoBack?: boolean;
   showBasket?: boolean;
   headerStyle?: React.CSSProperties;
+  onGoBack?: () => void;
 };
 
 interface ProfileData {
@@ -30,43 +32,31 @@ interface ProfileData {
 const modalMenu = [
   {
     id: 1,
-    title: "Edit Profile",
+    title: 'Edit Profile',
     route: Routes.EditProfile,
     switch: false,
   },
   {
     id: 2,
-    title: "My Addresses",
+    title: 'My Addresses',
     route: Routes.MyAddress,
     switch: false,
   },
   {
     id: 5,
-    title: "Notifications",
+    title: 'Notifications',
     route: Routes.ClientNotification,
     switch: false,
   },
-  // {
-  //   id: 4,
-  //   title: "Store Locator",
-  //   route: Routes.Promocodes,
-  //   switch: false,
-  // },
   {
     id: 6,
-    title: "Customer Care",
+    title: 'Customer Care',
     route: Routes.CustomerCare,
     switch: false,
   },
   {
-    id: 7,
-    // title: "FAQ",
-    route: "",
-    switch: false,
-  },
-  {
     id: 8,
-    title: "Sign out",
+    title: 'Sign out',
     route: Routes.SignIn,
     switch: false,
   },
@@ -79,6 +69,7 @@ export const Header: React.FC<Props> = ({
   showGoBack,
   showBasket,
   headerStyle,
+
 }) => {
   const navigate = hooks.useNavigate();
   const location = hooks.useLocation();
@@ -87,40 +78,71 @@ export const Header: React.FC<Props> = ({
   const [themeColor, setThemeColor] = useState('#F6F9F9');
   const cart = useSelector((state: RootState) => state.cartSlice);
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
-  const [cartCount, setCartCount] = useState<string>('0');
+
+  // Fetching the cartCount from Redux state (updated to cartCount instead of list.length)
+
+  const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
+
+  // console.log("qqqqqq", shouldRefresh);
+
+
+  const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
+
+
+  useEffect(() => {
+    if (cartCount === 0) {
+      localStorage.removeItem('couponCode');
+    }
+  }, [cartCount]);
+
+  // const removeCart = useSelector((state: RootState) => state.cartSlice.cartCount);
+
+  // console.log('xxxxxxxxxxxx', cartCount);
+
   const cityId = localStorage.getItem('c_id');
   const [isModalOpen, setIsModalOpen] = useState(false);
-
 
   useEffect(() => {
     const GetProfileData = async () => {
       const formData = new FormData();
-      formData.append("c_id", cityId || "null");
+      formData.append('c_id', cityId || 'null');
+
+      const initialCartCount = cartCount;
+
       try {
         const response = await axios.post(
-          "https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById",
+          'https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById',
           formData
         );
+
         if (response.data.status === 'success') {
           SetProfileData(response.data.CustomerDetail[0]);
-          setCartCount(response.data.cart_count);
+          const newCartCount = response.data.cart_count;
+
+          // Only update cart count if it changed
+          if (newCartCount !== undefined && newCartCount !== initialCartCount) {
+            dispatch(setCartCount(Number(newCartCount)));
+          }
         } else {
-          // console.log("Error:", response.data.message);
+          console.error('API call failed:', response.data.message);
         }
       } catch (error) {
-        console.error("Error fetching profile data:", error);
+        console.error('Error fetching profile data:', error);
+      } finally {
+        // setIsLoading(false);
       }
     };
 
     GetProfileData();
-  }, []);
+  }, [shouldRefresh, cartCount, cityId, dispatch]);
 
   const signOut = () => {
     localStorage.clear();
     navigate(Routes.SignIn);
-    window.location.reload();
+    navigate(0)
   };
 
+  // Render user profile section
   const renderUser = (): JSX.Element | null => {
     if (!userName && !userPhoto) return null;
 
@@ -129,7 +151,7 @@ export const Header: React.FC<Props> = ({
         className="leftBox"
         onClick={() => {
           setShowModal(true);
-          setThemeColor("#fff");
+          setThemeColor('#fff');
         }}
       >
         <img
@@ -141,23 +163,23 @@ export const Header: React.FC<Props> = ({
           }
           className="userImg"
         />
-
         <span className="userName"> {profileData?.firstname}</span>
       </div>
     );
   };
 
+  // Render the go back button if needed
   const renderGoBack = (): JSX.Element | null => {
-    if (showGoBack && location.key !== "default")
+    if (showGoBack && location.key !== 'default')
       return (
         <div
           onClick={() => navigate(-1)}
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: 0,
-            display: "flex",
-            alignItems: "center",
-            padding: "0 20px",
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 20px',
             gap: 10,
           }}
           className="clickable"
@@ -166,38 +188,41 @@ export const Header: React.FC<Props> = ({
           {title}
         </div>
       );
-
     return null;
   };
 
+  // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
     return (
-      <div className="middleBox" style={{ background: "red" }}>
-
-
-        <img className='logo-header' src={pic1} alt="" width={150}
+      <div className="middleBox" style={{ background: 'red' }}>
+        <img
+          className="logo-header"
+          src={pic1}
+          alt=""
+          width={150}
           onClick={() => navigate('/tab-navigator')}
         />
-
       </div>
     );
   };
+
 
   const renderBasket = (): JSX.Element | null => {
     if (!showBasket) return null;
     const ShowNoData = () => {
       setIsModalOpen(true);
-    }
+    };
     const handleOk = () => {
       setIsModalOpen(false);
     };
     const handleCancel = () => {
       setIsModalOpen(false);
     };
+
     return (
       <>
         <div className="basketContainer">
-          {cartCount >= '1' ? (
+          {cartCount >= 1 ? (
             <button
               onClick={() => {
                 dispatch(setScreen(TabScreens.Order));
@@ -211,37 +236,22 @@ export const Header: React.FC<Props> = ({
               <svg.HeaderBasketSvg />
             </button>
           ) : (
-            <>
-              {/* <div >
+            <button onClick={ShowNoData} className="rightBox">
               <div className="basketCount">
                 <span>{cartCount}</span>
               </div>
               <svg.HeaderBasketSvg />
-              </div> */}
-
-              <button
-                onClick={ShowNoData}
-                className="rightBox"
-              >
-                <div className="basketCount">
-                  <span>{cartCount}</span>
-                </div>
-                <svg.HeaderBasketSvg />
-              </button>
-            </>
+            </button>
           )}
         </div>
         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-          <>
-            <div className='NoDataAvailable'>
-              No Data Available
-            </div>
-          </>
+          <div className="NoDataAvailable">No Data Available</div>
         </Modal>
       </>
     );
   };
 
+  // Render the modal for user profile actions
   const renderModal = (): JSX.Element | null => {
     if (!showModal) return null;
 
@@ -249,21 +259,21 @@ export const Header: React.FC<Props> = ({
       <div className="modalWrapBox">
         <div
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(30, 37, 56, 0.6)",
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(30, 37, 56, 0.6)',
             zIndex: 101,
-            cursor: "pointer",
+            cursor: 'pointer',
           }}
           onClick={() => {
-            setThemeColor("#F6F9F9");
+            setThemeColor('#F6F9F9');
             setShowModal(false);
           }}
         />
-        <div className={showModal ? "sideMenu" : "sideMenu hidden"}>
+        <div className={showModal ? 'sideMenu' : 'sideMenu hidden'}>
           <div className="sideMwnuHeader">
             <img
               src={
@@ -274,24 +284,18 @@ export const Header: React.FC<Props> = ({
                     : require('../assets/icons/placeholder.jpg')
               }
               alt="user"
-              style={{ width: 60, height: 60, borderRadius: 50, border: "2px solid #1a712e" }}
+              style={{ width: 60, height: 60, borderRadius: 50, border: '2px solid #1a712e' }}
             />
-
             <div className="sideMenuHeaderContent">
-              <span>
-                {profileData
-                  ? `${profileData.firstname} ${profileData.lastname}`
-                  : ""}
-              </span>
-              <span>{profileData?.email || ""}</span>
+              <span>{profileData ? `${profileData.firstname} ${profileData.lastname}` : ''}</span>
+              <span>{profileData?.email || ''}</span>
             </div>
           </div>
-          <ul
-            className="sideMenuList"
-          >
+
+
+          <ul className="sideMenuList">
             {modalMenu.map((item, index, array) => {
               const isLast = index === array.length - 1;
-
               return (
                 <li
                   className="row-center-space-between clickable"
@@ -302,10 +306,26 @@ export const Header: React.FC<Props> = ({
                   }}
                   key={item.id}
                   onClick={() => {
+
+                    const c_id = localStorage.getItem("c_id");
+                    if (!c_id) {
+                      Modal.confirm({
+                        title: 'Please Sign In',
+                        content: 'You need to sign in to add items to your cart.',
+                        onOk() {
+                          navigate('/');
+                        },
+                        onCancel() { },
+                        cancelText: 'Cancel',
+                        okText: 'Sign In',
+                      });
+                      return;
+                    }
+
                     if (item.title === 'Sign out') {
-                      signOut();  
-                    } else if (item.route !== '') {
-                      navigate(item.route); 
+                      signOut();
+                    } else if (item.route) {
+                      navigate(item.route);
                     }
                   }}
                 >
@@ -318,21 +338,23 @@ export const Header: React.FC<Props> = ({
                     }
                   >
                     {item.title === 'Sign out'
-                      ? (localStorage.getItem('c_id') ? 'Log Out' : 'Sign In')
+                      ? localStorage.getItem('c_id')
+                        ? 'Log Out'
+                        : 'Sign In'
                       : item.title}
                   </span>
-
-                  {item.route !== '' && item.title !== 'Sign out' && <svg.RightArrowSvg />}
-
-                  {item.switch && <components.Switch />}
+                  {item.switch && <svg.RightArrowSvg />}
                 </li>
               );
             })}
           </ul>
+
+
         </div>
       </div>
     );
   };
+
   return (
     <>
       <header className="topHeader">

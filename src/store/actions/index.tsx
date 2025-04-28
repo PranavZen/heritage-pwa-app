@@ -2,8 +2,11 @@ import {setColor} from '../slices/bgSlice';
 import {setUser} from '../slices/userSlice';
 import {setScreen} from '../slices/tabSlice';
 import {addToCart} from '../slices/cartSlice';
+import {removeItemCompletely} from '../slices/cartSlice';
 import {resetCart} from '../slices/cartSlice';
 import {setDiscount} from '../slices/cartSlice';
+import {setCartCount} from '../slices/cartSlice';
+
 import {setPromoCode} from '../slices/cartSlice';
 import {resetFilters} from '../slices/filterSlice';
 import {removeFromCart} from '../slices/cartSlice';
@@ -16,6 +19,9 @@ import {removeFromWishlist} from '../slices/wishlistSlice';
 import {setSelectedCategories} from '../slices/filterSlice';
 import {setPhoneVerified} from '../slices/verificationSlice';
 import {setEmailVerified} from '../slices/verificationSlice';
+
+
+import { refreshHeaderData } from '../actions/headerSlice'; 
 
 export const actions = {
   setUser,
@@ -36,5 +42,9 @@ export const actions = {
   setSelectedColors,
   removeFromWishlist,
   setSelectedCategories,
-  
+  removeItemCompletely,
+  refreshHeaderData,
+  setCartCount,
 };
+
+

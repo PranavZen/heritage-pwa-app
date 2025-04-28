@@ -101,7 +101,7 @@ export const FavoriteItem: React.FC<Props> = ({dish}) => {
         containerStyle={{marginBottom: 3}}
       />
       <components.Price dish={dish} />
-      <button
+      {/* <button
         onClick={cartHandler}
         style={{
           position: 'absolute',
@@ -112,7 +112,7 @@ export const FavoriteItem: React.FC<Props> = ({dish}) => {
         }}
       >
         <svg.PlusSvg />
-      </button>
+      </button> */}
     </li>
   );
 };

@@ -35,15 +35,15 @@ export const TabNavigator: React.FC = () => {
   const renderScreens = (): JSX.Element | null => {
     switch (currentTabScreen) {
       case TabScreens.Home:
-        return <Home />;
+        return <Home/>;
       case TabScreens.Menu:
         return <Menu />;
       case TabScreens.Subscription:
-        return <SubscriptionOrder />;
+        return <SubscriptionOrder/>;
       case TabScreens.Order:
-        return <Order />;
+        return <Order/>;
       case TabScreens.Favorite:
-        return <Favorite />;
+        return <Favorite/>;
       case TabScreens.Notification:
         return <Notification />;
       default:
@@ -92,9 +92,9 @@ export const TabNavigator: React.FC = () => {
   };
 
   const renderFooter = (): JSX.Element | null => {
-    if (currentTabScreen === TabScreens.Order) {
-      return null;
-    }
+    // if (currentTabScreen === TabScreens.Order) {
+    //   return null;
+    // }
     return <components.Footer />;
   };
 

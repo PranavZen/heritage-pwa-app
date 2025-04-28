@@ -72,6 +72,7 @@ export const SignIn: React.FC = () => {
           });
           localStorage.setItem("c_id", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
+        
         } else {
           notification.error({
             message: response.data.message || "Failed to send OTP",

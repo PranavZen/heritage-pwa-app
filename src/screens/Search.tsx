@@ -19,16 +19,13 @@ export const Search: React.FC = () => {
     // console.log("searchQuery",searchQuery)
     const formData = new FormData();
     formData.append("search_key", searchQuery);
-    formData.append("city_id", "325");
+    formData.append("city_id", localStorage.getItem('cityId')|| '');
     setDishesLoading(true);
     try {
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/search",
         formData
       );
-
-      // console.log("responseresponseqqqqaaaqqaaaqaaaqqqqaaq", response);
-
       setDishes(response.data.search_data || []);
     } catch (error) {
       console.error("Error fetching dishes:", error);
@@ -41,7 +38,7 @@ export const Search: React.FC = () => {
     if (searchQuery) {
       fetchDishes(searchQuery);
     } else {
-      setDishes([]); // Clear dishes if search query is empty
+      setDishes([]); 
     }
   }, [searchQuery]);
 
@@ -50,7 +47,7 @@ export const Search: React.FC = () => {
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header title="Filter" showGoBack={true} />;
+    return <components.Header showGoBack={true} />;
   };
 
   const renderSearch = (): JSX.Element => {

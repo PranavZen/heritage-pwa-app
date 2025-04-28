@@ -16,20 +16,29 @@ export const MenuList: React.FC = () => {
 
   const { menuLoading, menu, selectedProductId } = hooks.useGetMenu();
 
+
+
   // console.log("menueeeeeeeeeeeeeeeeeeeeeeeeeeeeee", menu);
 
   const location = hooks.useLocation();
   const product_cat_id: string = location.state.menuName;
+
   const searchId: string = location.state.id;
+
+  // console.log("searchIdsearchId", searchId);
+
 
   const [opacity, setOpacity] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] =
     useState<string>(product_cat_id);
 
   const [categoryLoading, setCategoryLoading] = useState<boolean>(false);
-  const [productId, setProductId] = useState<string | null>(null);  
+  const [productId, setProductId] = useState<string | null>(null);
 
-  const [filterData, setFilterData] = useState<DishType[]>([]);
+  const [filterData, setFilterData] = useState<DishType[] | null>(null);
+
+  // console.log("filterDatafilterData", filterData);
+
   const [filterDataLoading, setFilterDataDishesLoading] =
     useState<boolean>(false);
 
@@ -46,23 +55,24 @@ export const MenuList: React.FC = () => {
     formData.append('building_id', '980');
     formData.append('c_id', c_id || 'null');
     formData.append('category_id', selectedCategory || '');
-    // formData.append('product_id', productId || ''); 
+    formData.append('product_id', searchId || '');
     formData.append('next_id', '0');
     try {
       const response = await axios.post(
         `https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,
         formData
       );
-      setFilterData(response.data?.optionListing || []);
+      
+      setFilterData(response.data?.optionListing || null);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setFilterDataDishesLoading(false);
     }
   };
 
   useEffect(() => {
-    setFilterData([]); 
+    setFilterData(null);
     setCategoryLoading(true);
     getDishes().finally(() => {
       setCategoryLoading(false);
@@ -132,7 +142,7 @@ export const MenuList: React.FC = () => {
                   }}
                   onClick={() => {
                     setSelectedCategory(category.product_cat_id);
-                    setProductId(category.product_id);  
+                    setProductId(category.product_id);
                   }}
                 >
                   <div
@@ -156,7 +166,7 @@ export const MenuList: React.FC = () => {
                             ? "var(--main-turquoise)"
                             : "var(--main-color)",
                       }}
-                    >  
+                    >
                       {category.name} ({category.totalProducts})
                     </h5>
                   </div>
@@ -169,19 +179,21 @@ export const MenuList: React.FC = () => {
     );
   };
 
+
+
   const renderContent = (): JSX.Element | null => {
     if (menuLoading || dishesLoading || menu.length === 0 || dishes.length === 0) {
       return null;
     }
     return (
       <main className="scrollable container">
-        {filterData.length === 0 ? (
+        {filterDataLoading ?  false : (Array.isArray(filterData) && filterData!.length === 0 ? (
           <div className="NoData-Found">
-            {/* <div>Product Not Available</div> */}
+            <div>Product Not Available</div>
           </div>
         ) : (
           <ul style={{ paddingBottom: 20 }}>
-            {filterData.map((dish: DishType, index: number, array: DishType[]) => {
+            {filterData!.map((dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;
               return (
                 <items.MenuListItem
@@ -192,10 +204,14 @@ export const MenuList: React.FC = () => {
               );
             })}
           </ul>
-        )}
+        ) )}
       </main>
     );
   };
+   
+  
+
+
   const renderLoader = (): JSX.Element | null => {
     if (categoryLoading) {
       return <components.Loader />;

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { hooks } from '../hooks';
 import { components } from '../components';
 import { useLocation } from 'react-router-dom';
-import {notification} from 'antd'
+import { Modal, notification } from 'antd'
 
 export const CustomerCare: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -17,21 +17,36 @@ export const CustomerCare: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [opacity, setOpacity] = useState<number>(0);
-  const [message, setMessage] = useState<string>(''); 
+  const [message, setMessage] = useState<string>('');
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
 
   const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value); 
+    setMessage(e.target.value);
   };
 
   const handleOptionClick = (message: string) => {
     setMessage(message);
   };
+  
+  const c_id =localStorage.getItem('c_id');
+  const handleSubmit = async (e: React.FormEvent) =>{
+    if (!c_id){
+      Modal.confirm({
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
+        onOk() {
+          navigate('/');
+        },
+        onCancel() { },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
+      });
+      return;
+    }
 
-  const handleSubmit = async (e: React.FormEvent) => {
 
     e.preventDefault();
     if (!message) {
@@ -40,8 +55,8 @@ export const CustomerCare: React.FC = () => {
     }
     setLoading(true);
     const cityId = localStorage.getItem('c_id');
-    const questionId = 5; 
-    const note = message; 
+    const questionId = 5;
+    const note = message;
 
     const formData = new FormData();
     formData.append('cId', cityId || 'null');
@@ -54,11 +69,13 @@ export const CustomerCare: React.FC = () => {
         formData
       );
       // console.log('Ticket generation response:', response.data);
-
-      if (response.data.status === 'fail' && response.data.message === 'We already received your request, we are working on it.') {
-        notification.success({message:response.data.message}); 
+      if (response.data.status === 'success') {
+        notification.success({ message: response.data.message });
+      }
+      else if (response.data.status === 'fail' && response.data.message === 'We already received your request, we are working on it.') {
+        notification.success({ message: response.data.message });
       } else {
-        
+
         setNotifications([response.data]);
       }
     } catch (error) {
@@ -91,17 +108,17 @@ export const CustomerCare: React.FC = () => {
             Product got spoiled at the time of delivery
           </div>
 
-          <input   
-         
+          <input
+
             type="text"
             value={message}
             onChange={handleMessageChange}
             placeholder="Enter your message"
             className="message-input-box"
           />
-          <button 
-          className='cutomercare-submit-button'
-          onClick={handleSubmit} disabled={loading}>
+          <button
+            className='cutomercare-submit-button'
+            onClick={handleSubmit} disabled={loading}>
             Submit
           </button>
         </section>

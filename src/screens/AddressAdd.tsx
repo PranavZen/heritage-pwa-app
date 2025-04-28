@@ -170,7 +170,7 @@ export const AddressAdd: React.FC = () => {
       if (response.data.status === "success") {
         navigate(Routes.MyAddress);
         notification.success({ message: response.data.message });
-      } else {
+      } else if(response.data.status === "fail"){
         notification.error({ message: response.data.message });
       }
       setLoading(false);
