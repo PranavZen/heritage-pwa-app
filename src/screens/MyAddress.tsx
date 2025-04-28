@@ -95,7 +95,7 @@ export const MyAddress: React.FC = () => {
         setDeleteAddressId(id);
       },
       onCancel: () => {
-        console.log("Delete canceled");
+        // console.log("Delete canceled");
       },
     });
   };
@@ -108,7 +108,7 @@ export const MyAddress: React.FC = () => {
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
-          navigate('/sign-in');
+          navigate('/');
         },
       });
       return;
@@ -152,50 +152,23 @@ export const MyAddress: React.FC = () => {
         {/* Display existing addresses in a separate div if more than one address */}
         <div className="editAddressBoxWrap">
           <h3>Existing Addresses</h3>
-          {addresses.length > 0 ? (
+          {addresses?.length > 0 ? (
             <div className="myAddressBoxWrap">
               {addresses.map((elem) => (
                 <div className="myaddress-getting-separate" key={elem.id}>
-                  <h4>
-                    {elem.firstname} {elem.lastname}
-                  </h4>
-                  <p>
-                    {elem.flat_plot_no} {elem.wing} {elem.building_name},{" "}
-                    {elem.address1} {elem.address2}, {elem.area_name},{" "}
-                    {elem.city_name}, {elem.state_name} {elem.pincode}
-                  </p>
+                  <h4>{elem.firstname} {elem.lastname}</h4>
+                  <p>{elem.flat_plot_no} {elem.wing} {elem.building_name}, {elem.address1} {elem.address2}, {elem.area_name}, {elem.city_name}, {elem.state_name} {elem.pincode}</p>
                   <div className="myAddressActionBtnWrap">
-                    {/* Edit Button */}
-                    <span
-                      onClick={() => {
-                        navigate(Routes.AddressAdd, {
-                          state: { cityID: elem },
-                        });
-                      }}
-                      className="editBtn btns"
-                    >
+                    <span onClick={() => navigate(Routes.AddressAdd, { state: { cityID: elem } })} className="editBtn btns">
                       <i className="fa fa-edit"></i>
                     </span>
-
-                    {/* Delete Button */}
-                    <span
-                      onClick={() => {
-                        confirmDelete(elem.id);
-                      }}
-                      className="deleteBtn btns"
-                    >
+                    <span onClick={() => confirmDelete(elem.id)} className="deleteBtn btns">
                       <i className="fa fa-trash"></i>
                     </span>
-
-                    {/* Show Default Address Label */}
                     {elem.is_default === "1" ? (
-                      <p className="defaultAddressLabel">
-                        Default Address
-                      </p>
+                      <p className="defaultAddressLabel">Default Address</p>
                     ) : (
-                      <span
-                        className="setDefaultBtn btns"
-                      >
+                      <span className="setDefaultBtn btns">
                         <i className="fa fa-check-circle"></i> Set as Default
                       </span>
                     )}
@@ -204,17 +177,11 @@ export const MyAddress: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div
-              style={{
-                borderRadius: 10,
-                marginBottom: 10,
-                backgroundColor: "var(--white-color)",
-                padding: 20,
-              }}
-            >
-              <h3>No data found</h3>
+            <div style={{ borderRadius: 10, marginBottom: 10, backgroundColor: "var(--white-color)", padding: 20 }}>
+            <p style={{textAlign:"center"}}>  No addresses found. </p>    
             </div>
           )}
+
         </div>
 
       </section>

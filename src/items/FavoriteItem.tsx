@@ -23,7 +23,7 @@ export const FavoriteItem: React.FC<Props> = ({dish}) => {
   const cartHandler = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    console.log('Added to cart:', dish);
+    // console.log('Added to cart:', dish);
     event.stopPropagation();
     dispatch(actions.addToCart(dish));
   };
@@ -101,7 +101,7 @@ export const FavoriteItem: React.FC<Props> = ({dish}) => {
         containerStyle={{marginBottom: 3}}
       />
       <components.Price dish={dish} />
-      <button
+      {/* <button
         onClick={cartHandler}
         style={{
           position: 'absolute',
@@ -112,7 +112,7 @@ export const FavoriteItem: React.FC<Props> = ({dish}) => {
         }}
       >
         <svg.PlusSvg />
-      </button>
+      </button> */}
     </li>
   );
 };

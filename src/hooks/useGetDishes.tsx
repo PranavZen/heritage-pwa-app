@@ -19,14 +19,15 @@ export const useGetDishes = (categoryId?: string) => {
     formData.append('city_id', cityId  || 'null');
     formData.append('building_id', '980');
     formData.append('c_id',  c_id  || 'null');
-    formData.append('category_id', categoryId || '31');
+    formData.append('category_id', categoryId || '28');
     formData.append('next_id', '0');
 
     try {
       const response = await axios.post(`https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,
         formData
       );
-      // console.log("aaaaaaaaaaaaaa",response);
+      // console.log("222222222222222",response);
+
       setDishes(response.data?.optionListing);
     } catch (error) {
       console.error(error);

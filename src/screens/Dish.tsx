@@ -7,19 +7,34 @@ import { components } from '../components';
 import { actions } from '../store/actions';
 import axios from 'axios';
 import { Modal, notification } from 'antd';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { setCartCount } from '../store/slices/cartSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/index';
+import { setShouldRefresh } from '../store/slices/cartSlice';
+
 
 export const Dish: React.FC = () => {
+<<<<<<< HEAD
 
 
   interface CheckCartData {
     delivery_preference?: string;
     no_of_deliveries?: string;
+=======
+  interface CheckCartData {
+    delivery_preference?: string;
+    no_of_deliveries?: string;
+    order_type: string;
+>>>>>>> roshan
   }
 
   const navigate = hooks.useNavigate();
   const dispatch = hooks.useDispatch();
   const location = hooks.useLocation();
   const [packageOptions, setPackageOptions] = useState<any[]>([]);
+<<<<<<< HEAD
   const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<
     any[]
   >([]);
@@ -29,13 +44,38 @@ export const Dish: React.FC = () => {
   // console.log("aaaaaaa", quantity);
   const [cartId, setCartId] = useState<string[]>([]);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
+=======
+  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
+
+
+  const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
+  // console.log("deliveryOptionsPreference", shouldRefresh);
+  const [quantity, setQuantity] = useState<number>(1);
+  // console.log("aaaaaaa", quantity);
+
+  const [cartId, setCartId] = useState<string[]>([]);
+  const [cartItemId, setCartItemId] = useState<string | null>(null);
+
+
+  // console.log("cartItemIdz", cartItemId);
+
+>>>>>>> roshan
   const [opacity, setOpacity] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
   const [isAlternateModalOpen, setIsAlternateModalOpen] =
     useState<boolean>(false);
-  const [startDate, setStartDate] = useState<string>("");
+  // const [startDate, setStartDate] = useState<string>("");
+
+  // console.log("isAlternateModalOpen", isAlternateModalOpen);
+
+  const setIsModalOpenDaily = () => {
+    setIsModalOpen(false);
+  }
+  // console.log("isModalOpen", isModalOpen);
+
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+<<<<<<< HEAD
   const [deliveryPreference, setDeliveryPreference] = useState<string>("");
 
   // console.log("deliveryPreference", deliveryPreference);
@@ -44,6 +84,21 @@ export const Dish: React.FC = () => {
   const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
 
   const [checkCartData, SetCheckCartData] = useState<CheckCartData>({});
+=======
+  const [deliveryPreference, setDeliveryPreference] = useState<string>('1');
+
+  const [deliveries, setDeliveries] = useState<number>(30);
+
+  const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
+
+  // const [checkCartData, SetCheckCartData] = useState<CheckCartData>({});
+
+  const [checkCartData, SetCheckCartData] = useState<CheckCartData>({
+    order_type: '',  // Initial value for `order_type`, adjust as needed
+  });
+
+  // console.log("checkCartData", checkCartData);
+>>>>>>> roshan
 
   interface CartItem {
     quantity: number;
@@ -55,6 +110,16 @@ export const Dish: React.FC = () => {
   // console.log("ccccccccccccccccc", cartData);
 
   const dish: DishType = location.state.dish;
+
+  // Ensure dish and the properties exist
+  if (dish && dish.product_option_id && dish.product_option_value_id) {
+    localStorage.setItem('product_option_id', dish.product_option_id.toString());
+    localStorage.setItem('product_option_value_id', dish.product_option_value_id.toString());
+  } else {
+    console.error('Error: Missing product_option_id or product_option_value_id in dish', dish);
+  }
+
+
   const c_id = localStorage.getItem("c_id");
   const cityId = localStorage.getItem("cityId");
 
@@ -104,11 +169,25 @@ export const Dish: React.FC = () => {
         console.error('Error fetching cart data:', error);
       }
     };
+<<<<<<< HEAD
+=======
+
+
+    // if (shouldRefresh) {
+    //   fetchCartData().finally(() => {
+    //     dispatch(setShouldRefresh(true));
+    //   });
+    // }
+>>>>>>> roshan
     fetchCartData();
-  }, [cityId, c_id, dish.product_option_value_id]);
+
+
+  }, [cityId, c_id, dish.product_option_value_id, shouldRefresh]);
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
+
+    if (!cartItemId) return;
 
     if (quantity > 1) {
       handleUpdateCart(quantity - 1);
@@ -125,9 +204,11 @@ export const Dish: React.FC = () => {
 
         if (response.data.status === 'success') {
           notification.success({ message: 'Success', description: response.data.message });
-          window.location.reload();
-          setQuantity(0);
-          // setCartItemId(null);
+          dispatch(actions.removeItemCompletely({ ...dish }));
+          setQuantity(1);
+          setCartItemId(null);
+          dispatch(setCartCount(Number(response.data.cart_count)));
+          dispatch(setShouldRefresh(true));
         } else {
           notification.error({ message: 'Error', description: response.data.message || 'Failed to remove item.' });
         }
@@ -143,11 +224,9 @@ export const Dish: React.FC = () => {
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0];
   };
+  const [startDate, setStartDate] = useState(getTomorrowDate());
 
   const handleAddToCart = async (cartData: any) => {
-
-    const c_id = localStorage.getItem('c_id');
-
     if (!c_id) {
       Modal.confirm({
         title: 'Please Sign In',
@@ -155,57 +234,89 @@ export const Dish: React.FC = () => {
         onOk() {
           navigate('/');
         },
-        onCancel() {
-        },
+        onCancel() { },
         cancelText: 'Cancel',
         okText: 'Sign In',
       });
       return;
     }
+
     try {
       const formData = new FormData();
-      formData.append("c_id", String(c_id || "1"));
-      formData.append("product_id", String(cartData.product_id ?? ""));
-      formData.append("package_id", "13");
-      formData.append(
-        "product_option_id",
-        String(cartData.product_option_id ?? "")
-      );
-      formData.append(
-        "product_option_value_id",
-        String(cartData.product_option_value_id ?? "")
-      );
-      formData.append("quantity", "1");
-      formData.append("weight", String(cartData.weight ?? ""));
-      formData.append("weight_unit", String(cartData.weight_unit ?? ""));
 
+      const productOptionId = dish.product_option_id || localStorage.getItem('product_option_id');
+      const productOptionValueId = dish.product_option_value_id || localStorage.getItem('product_option_value_id');
+
+      if (!productOptionId || !productOptionValueId) {
+        console.error('Error: product_option_id or product_option_value_id is missing');
+        notification.error({
+          message: 'Error',
+          description: 'Missing product options. Please try again.',
+        });
+        return;
+      }
+
+      formData.append('c_id', c_id);
+      formData.append('product_id', String(dish.product_id));
+      formData.append('package_id', '13');
+      formData.append('product_option_id', String(productOptionId));  // Use the fallback value here
+      formData.append('product_option_value_id', String(productOptionValueId));  // Use the fallback value here
+      formData.append('quantity', String(localQuantity));
+      formData.append('weight', String(dish.weight));
+      formData.append('weight_unit', String(dish.weight_unit));
       formData.append('delivery_preference', '0');
       formData.append('no_of_deliveries', '0');
       formData.append('order_date', getTomorrowDate());
       formData.append('order_type', '2');
 
       const response = await axios.post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
+        'https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart',
         formData
       );
-      // console.log("wwwwwww", response)
-      if (response.data.status) {
-        notification.success({ message: response.data.message });
-        window.location.reload();
-        dispatch(actions.addToCart(response.data.cartItem));
+
+      if (response.data.status === 'success') {
+        notification.success({
+          message: 'Success',
+          description: response.data.message,
+        });
+
+        dispatch(actions.addToCart({ ...dish, quantity: 1 }));
+        setQuantity(1);
+        dispatch(setShouldRefresh(true));
+
+        const newCartId =
+          response.data.cart_id ||
+          response.data.data?.cart_id ||
+          response.data.data?.id ||
+          null;
+
+        if (newCartId) {
+          setCartItemId(String(newCartId));
+        } else {
+          // await fetchCartData(); 
+        }
       } else {
-        console.error("Failed to add item to cart:", response.data.message);
+        notification.error({
+          message: 'Error',
+          description: response.data.message || 'Something went wrong.',
+        });
       }
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      console.error('Error adding to cart:', error);
+      notification.error({
+        message: 'Error',
+        description: 'Failed to add item to cart.',
+      });
     }
   };
+
+
+
 
   // console.log("deliveryOptionsPreferencedeliveryOptionsPreference", deliveryOptionsPreference);
 
   // ***************************************ADDddddddddddddddddddddddddddddddddddddd
   const addToCartApi = async (cartData: any) => {
-
     if (!c_id) {
       Modal.confirm({
         title: 'Please Sign In',
@@ -213,40 +324,62 @@ export const Dish: React.FC = () => {
         onOk() {
           navigate('/');
         },
-        onCancel() {
-        },
+        onCancel() { },
         cancelText: 'Cancel',
         okText: 'Sign In',
       });
       return;
     }
+
     try {
       const formData = new FormData();
       formData.append('c_id', String(c_id || '1'));
       formData.append('product_id', String(cartData.product_id));
       formData.append('package_id', '13');
-      formData.append('product_option_id', String(cartData.product_option_id));
-      formData.append('product_option_value_id', String(cartData.product_option_value_id));
-      formData.append('quantity', '1');
+      formData.append('package_days', '0');
+
+      // Apply fallback for product_option_id and product_option_value_id
+      const productOptionId = cartData.product_option_id || localStorage.getItem('product_option_id');
+      const productOptionValueId = cartData.product_option_value_id || localStorage.getItem('product_option_value_id');
+
+      // If both are still missing, handle the error
+      if (!productOptionId || !productOptionValueId) {
+        console.error('Error: product_option_id or product_option_value_id is missing');
+        notification.error({
+          message: 'Error',
+          description: 'Missing product options. Please try again.',
+        });
+        return null;
+      }
+
+      formData.append('product_option_id', String(productOptionId));  
+      formData.append('product_option_value_id', String(productOptionValueId)); 
+      formData.append('quantity', String(localQuantity));
       formData.append('weight', String(cartData.weight));
       formData.append('weight_unit', String(cartData.weight_unit));
-      formData.append('delivery_preference', String(cartData.deliveryPreference));
+      formData.append('delivery_preference', String(cartData.deliveryPreference) || String(1));
       formData.append('no_of_deliveries', String(cartData.deliveries));
-      formData.append('order_date', getTomorrowDate());
+      formData.append('order_date', startDate);
       formData.append('order_type', '1');
 
-      // console.log("formData", formData);
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
         formData
       );
+<<<<<<< HEAD
       console.log("rrrrrrrrrrrrrrr", response);
+=======
+
+>>>>>>> roshan
       if (response.data.status === "success") {
         notification.success({
           message: "Success",
           description: response.data.message,
         });
-        window.location.reload();
+        dispatch(actions.addToCart({ ...dish, quantity: 1 }));
+        setQuantity(1);
+        dispatch(setShouldRefresh(true));
+
         return response.data.cart_count;
       } else {
         notification.error({
@@ -265,24 +398,27 @@ export const Dish: React.FC = () => {
     }
   };
 
+
+
   // ******************update api start*****************************
+<<<<<<< HEAD
   const handleUpdateCart = async (
     newQuantity: number,
 
   ) => {
+=======
+  const [localQuantity, setLocalQuantity] = useState<number>(1);
+
+
+  // console.log("localQuantitylocalQuantity", localQuantity);
+
+  const isInCart = !!cartItemId;
+
+  const handleUpdateCart = async (newQuantity: number) => {
+>>>>>>> roshan
     if (newQuantity < 1) return;
 
     const c_id = localStorage.getItem('c_id');
-    if (!cartItemId) {
-      Modal.confirm({
-        title: 'Please Add the Item',
-        content: 'You need to add to cart first.',
-        onCancel() { },
-        cancelText: 'Cancel',
-        okText: 'Ok',
-      });
-      return;
-    }
 
     if (!c_id) {
       Modal.confirm({
@@ -308,30 +444,38 @@ export const Dish: React.FC = () => {
     formData.append('c_id', c_id);
     formData.append('package_id', '13');
     formData.append('quantity', String(newQuantity));
+<<<<<<< HEAD
     formData.append('delivery_preference', checkCartData.delivery_preference || '0');
     formData.append('no_of_deliveries', checkCartData.no_of_deliveries || '0');
+=======
+    formData.append(
+      'delivery_preference',
+      checkCartData.delivery_preference || '0'
+    );
+    formData.append(
+      'no_of_deliveries',
+      checkCartData.no_of_deliveries || '0'
+    );
     formData.append('order_date', formattedDate);
-    formData.append('order_type', '2');
+    const orderType = checkCartData.delivery_preference !== '0' ? '1' : '2';
+    formData.append('order_type', orderType);
 
     try {
       const response = await axios.post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
+        'https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem',
         formData
       );
 
-      if (response.data.status === "success") {
+      if (response.data.status === 'success') {
         setQuantity(newQuantity);
         notification.success({ message: response.data.message });
-        window.location.reload();
       } else {
-        notification.error({ message: "Please 1st add the item." });
+        notification.error({ message: 'Please first add the item.' });
       }
     } catch (error) {
-      notification.error({ message: "Error updating cart:" });
+      notification.error({ message: 'Error updating cart.' });
     }
   };
-
-
 
   // ((*(((((((((((((((((((((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))))))))))))))))))))))
   const handleupdatetheAddToCart = async () => {
@@ -352,6 +496,7 @@ export const Dish: React.FC = () => {
       return;
     }
 
+
     if (!c_id) {
       Modal.confirm({
         title: 'Please Sign In',
@@ -365,20 +510,21 @@ export const Dish: React.FC = () => {
       });
       return;
     }
+    setIsModalOpen(false);
+    setIsAlternateModalOpen(false);
 
     const formData = new FormData();
-
     // Date validation
     const formattedDate = startDate
       ? new Date(startDate).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0];
-
     formData.append('id', cartItemId || '');
     formData.append('c_id', c_id);
     formData.append('package_id', '13');
-    formData.append('quantity', String(deliveries));
-    formData.append('delivery_preference', deliveryPreference || '0');
-    formData.append('no_of_deliveries', String(deliveries));
+    formData.append('quantity', String(quantity));
+    formData.append('delivery_preference', '0');
+    formData.append('no_of_deliveries', '0');
+>>>>>>> roshan
     formData.append('order_date', formattedDate);
     formData.append('order_type', '2');
 
@@ -390,7 +536,111 @@ export const Dish: React.FC = () => {
 
       if (response.data.status === "success") {
         notification.success({ message: response.data.message });
+        // window.location.reload();
+      } else {
+        notification.error({ message: "Failed to update cart. Try again!" });
+      }
+    } catch (error) {
+      notification.error({ message: "Error updating cart!" });
+    }
+  };
+
+<<<<<<< HEAD
+
+
+  // ((*(((((((((((((((((((((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))))))))))))))))))))))
+  const handleupdatetheAddToCart = async () => {
+=======
+  const handleupdatetheAddToCartt = async () => {
+>>>>>>> roshan
+    if (deliveries < 1) {
+      notification.error({ message: "Please select valid delivery days." });
+      return;
+    }
+
+    const c_id = localStorage.getItem('c_id');
+    if (!cartItemId) {
+      Modal.confirm({
+        title: 'Please Add the Item',
+        content: 'You need to add to cart first.',
+        onCancel() { },
+        cancelText: 'Cancel',
+        okText: 'Ok',
+      });
+      return;
+    }
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> roshan
+    if (!c_id) {
+      Modal.confirm({
+        title: 'Please Sign In',
+        content: 'You need to sign in to update the cart.',
+        onOk() {
+          navigate('/');
+        },
+        onCancel() { },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
+      });
+      return;
+    }
+<<<<<<< HEAD
+
+    const formData = new FormData();
+
+=======
+    setIsModalOpen(false);
+    setIsAlternateModalOpen(false);
+
+    const formData = new FormData();
+>>>>>>> roshan
+    // Date validation
+    const formattedDate = startDate
+      ? new Date(startDate).toISOString().split('T')[0]
+      : new Date().toISOString().split('T')[0];
+<<<<<<< HEAD
+
+    formData.append('id', cartItemId || '');
+    formData.append('c_id', c_id);
+    formData.append('package_id', '13');
+    formData.append('quantity', String(deliveries));
+    formData.append('delivery_preference', deliveryPreference || '0');
+    formData.append('no_of_deliveries', String(deliveries));
+    formData.append('order_date', formattedDate);
+    formData.append('order_type', '2');
+
+=======
+    formData.append('id', cartItemId || '');
+    formData.append('c_id', c_id);
+    formData.append('package_days', 'mon,tue,wed,thu,fri,sat,sun');
+    formData.append('package_id', '13');
+    formData.append('quantity', String(quantity));
+    formData.append('delivery_preference', String(deliveryPreference));
+    formData.append('no_of_deliveries', String(deliveries));
+    formData.append('order_date', formattedDate);
+    const orderType = deliveryPreference !== '0' ? '1' : '2';
+    formData.append('order_type', orderType);
+>>>>>>> roshan
+    try {
+      const response = await axios.post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
+        formData
+      );
+
+<<<<<<< HEAD
+      if (response.data.status === "success") {
+        notification.success({ message: response.data.message });
         window.location.reload();
+=======
+      // console.log('zzz', response);
+
+      if (response.data.status === "success") {
+        notification.success({ message: response.data.message });
+        // window.location.reload();
+>>>>>>> roshan
       } else {
         notification.error({ message: "Failed to update cart. Try again!" });
       }
@@ -406,19 +656,18 @@ export const Dish: React.FC = () => {
   //*******************************************update api end**********************************************
 
   useEffect(() => {
-
     const deliveryData = async () => {
       const formData = new FormData();
       formData.append("c_id", c_id || "null");
       formData.append("city_id", cityId || "null");
-      formData.append("product_option_value_id", "50");
+      formData.append("product_option_value_id" , String(localStorage.getItem('product_option_value_id')));
       try {
         const response = await axios.post(
           `https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`,
           formData
         );
-
-        // console.log("paaaaaaaaaaaaaaa", response.data.productDetails);
+    
+        // console.log("paaaaaaaaaaaaaaa", response);
 
         setDeliveryOptionsPreference(response.data.productDetails);
       } catch (error) {
@@ -465,13 +714,15 @@ export const Dish: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const handleOpenCustomModal = () => {
-    setIsCustomModalOpen(true);
-  };
 
-  const handleCloseCustomModal = () => {
-    setIsCustomModalOpen(false);
-  };
+
+  // const handleOpenCustomModal = () => {
+  //   setIsCustomModalOpen(true);
+  // };
+
+  // const handleCloseCustomModal = () => {
+  //   setIsCustomModalOpen(false);
+  // };
 
   const handleOpenModalAlternateDays = () => {
     const c_id = localStorage.getItem('c_id');
@@ -492,6 +743,8 @@ export const Dish: React.FC = () => {
     }
 
     setIsAlternateModalOpen(true);
+    setIsModalOpen(true);
+
   };
 
   const handleCloseModalAlternateDays = () => {
@@ -508,13 +761,17 @@ export const Dish: React.FC = () => {
       deliveries: deliveries ?? 0,
     };
     const cartCount = await addToCartApi(dishWithPreferences);
+    // console.log('lllllll', cartData);
     if (cartCount) {
       dispatch(actions.addToCart(dishWithPreferences));
-      handleCloseModal();
+      setIsModalOpen(false);
     }
   };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> roshan
   // *********************************Alternate add to cart*********************************************
   const handleAddToCartWithAlternate = async () => {
     const dishWithPreferences = {
@@ -527,7 +784,7 @@ export const Dish: React.FC = () => {
     const cartCount = await addToCartApi(dishWithPreferences);
     if (cartCount) {
       dispatch(actions.addToCart(dishWithPreferences));
-      handleCloseModal();
+      setIsAlternateModalOpen(false);
     }
   };
 
@@ -634,6 +891,9 @@ export const Dish: React.FC = () => {
     );
   };
 
+
+
+
   const renderDetails = (): JSX.Element => {
     return (
       <div className="productInfoBox">
@@ -649,16 +909,23 @@ export const Dish: React.FC = () => {
             <span>Packs</span>
             <div className="cartButtonWrap">
               <button
-                onClick={(event) =>
-                  quantity === 1
-                    ? handleRemoveFromCart(event)
-                    : handleUpdateCart(quantity - 1)
-                }
+                onClick={(event) => {
+                  if (isInCart) {
+                    quantity === 1
+                      ? handleRemoveFromCart(event)
+                      : handleUpdateCart(quantity - 1);
+                  } else {
+                    if (localQuantity > 1) {
+                      setLocalQuantity(localQuantity - 1);
+                    }
+                  }
+                }}
                 className="cartButton"
               >
-                -
+                <svg.MinusSvg />
               </button>
 
+<<<<<<< HEAD
               <span className="countNum">{quantity}</span>
 
               {/* {!cartData ? <> <span className="countNum">{quantity}</span> </>
@@ -670,26 +937,52 @@ export const Dish: React.FC = () => {
 
                 </>
               } */}
+=======
+              <span className="countNum">
+                {isInCart ? quantity : localQuantity}
+
+
+              </span>
+>>>>>>> roshan
 
               <button
-                onClick={() => handleUpdateCart(quantity + 1)}
+                onClick={() => {
+                  if (isInCart) {
+                    handleUpdateCart(quantity + 1);
+                  } else {
+                    setLocalQuantity(localQuantity + 1);
+                  }
+                }}
                 className="cartButton"
               >
-                +
+                <svg.AddSvg />
               </button>
             </div>
             <span>Per Day</span>
           </div>
+
+          {/* Add to Cart button only if not in cart */}
+          {!isInCart && (
+            <button
+              onClick={() => handleUpdateCart(localQuantity)}
+              className="addToCartButton"
+            >
+              {/* Add to Cart */}
+            </button>
+          )}
+
           <div className="priceWrap">
-            <span><small>MRP</small> ₹ {dish.price}</span>
+            <span>
+              <small>MRP</small> ₹ {dish.price}
+            </span>
           </div>
           <span className="ppText">Per Pack</span>
           <p className="fatText">Fat 3.0%, SNF 8.5%</p>
         </div>
-        {/* <p className="t16">{dish.description}</p> */}
       </div>
     );
   };
+
 
   const renderButtons = (): JSX.Element => {
     return (
@@ -699,7 +992,10 @@ export const Dish: React.FC = () => {
         </div>
 
         {/* add quantity */}
+<<<<<<< HEAD
 
+=======
+>>>>>>> roshan
         {
           !cartItemId ? <>   <components.Button
             text="+ Add to cart"
@@ -718,10 +1014,17 @@ export const Dish: React.FC = () => {
             containerStyle={{ marginBottom: 10 }}
           />
           </> : <div> <components.Button
+<<<<<<< HEAD
               text="update "
               onClick={handleupdatetheAddToCart}
               containerStyle={{marginBottom: 10}}
             /> </div>
+=======
+            text="update "
+            onClick={handleupdatetheAddToCart}
+            containerStyle={{ marginBottom: 10 }}
+          /> </div>
+>>>>>>> roshan
         }
 
         {/* add quantity */}
@@ -731,11 +1034,11 @@ export const Dish: React.FC = () => {
           onClick={handleOpenModal}
           containerStyle={{ marginBottom: 10 }}
         />
-        <components.Button
+        {/* <components.Button
           text="Alternate Days"
           onClick={handleOpenModalAlternateDays}
           containerStyle={{ marginBottom: 10 }}
-        />
+        /> */}
         {/* <components.Button
           text="Custom"
           onClick={handleOpenCustomModal}
@@ -748,15 +1051,33 @@ export const Dish: React.FC = () => {
   const renderModal = (): JSX.Element => {
     if (!isModalOpen) return <> </>;
     return (
-      <components.Modal title="Delivery Preferences" onClose={handleCloseModal}>
+      <components.Modal title="Delivery Preferences"
+        onClose={setIsModalOpenDaily}
+      >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
             <label>Start Date:- </label>
+<<<<<<< HEAD
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               min={minDate}
+=======
+            <DatePicker
+              selected={startDate ? new Date(startDate) : null}
+              onChange={(date: Date | null) => {
+                if (date) {
+                  setStartDate(date.toISOString().split('T')[0]);
+                } else {
+                  setStartDate('');
+                }
+              }}
+              minDate={new Date(minDate)}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Select a date"
+
+>>>>>>> roshan
               required
             />
           </div>
@@ -819,6 +1140,7 @@ export const Dish: React.FC = () => {
         <div>
 
           {
+<<<<<<< HEAD
             !cartItemId ? <> <components.Button
               text="Confirm and Add to Cart"
               onClick={handleAddToCartWithPreferences}
@@ -826,6 +1148,21 @@ export const Dish: React.FC = () => {
               text="update and Add to Cart"
               onClick={handleupdatetheAddToCart}
             /></>
+=======
+            !cartItemId
+              ? <>
+                <components.Button
+                  text="Confirm and Add to Cart"
+                  onClick={handleAddToCartWithPreferences}
+                />
+              </> : 
+              <>
+                <components.Button
+                  text="update and Add to Cart"
+                  onClick={handleupdatetheAddToCartt}
+                />
+              </>
+>>>>>>> roshan
           }
 
 
@@ -847,12 +1184,20 @@ export const Dish: React.FC = () => {
       >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
-            <label>Start Date :- </label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              min={minDate}
+            <label>Start Date:- </label>
+            <DatePicker
+              selected={startDate ? new Date(startDate) : null}
+              onChange={(date: Date | null) => {
+                if (date) {
+                  setStartDate(date.toISOString().split('T')[0]);
+                } else {
+                  setStartDate('');
+                }
+              }}
+              minDate={new Date(minDate)}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Select a date"
+
               required
             />
           </div>
@@ -926,6 +1271,7 @@ export const Dish: React.FC = () => {
       </components.Modal>
     );
   };
+
 
   // ***************************Custom************************************************
   const renderContent = (): JSX.Element => {

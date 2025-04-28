@@ -4,4 +4,6 @@ export type MenuType = {
   image?: string;
   product_cat_id:string;
   banner:string;
+  product_id:string;
+  totalProducts:string;
 };

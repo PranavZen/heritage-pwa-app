@@ -10,16 +10,15 @@ import { svg } from "../assets/svg";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-// console.log("itemsitems", items);
-
 export const MenuList: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
-  const { menuLoading, menu } = hooks.useGetMenu();
 
-  const { id } = useParams();
+  const { menuLoading, menu, selectedProductId } = hooks.useGetMenu();
 
-  // console.log('URL Param (id):', id);
+
+
+  // console.log("menueeeeeeeeeeeeeeeeeeeeeeeeeeeeee", menu);
 
   const location = hooks.useLocation();
   const product_cat_id: string = location.state.menuName;
@@ -28,30 +27,27 @@ export const MenuList: React.FC = () => {
 
   // console.log("searchIdsearchId", searchId);
 
+
   const [opacity, setOpacity] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] =
     useState<string>(product_cat_id);
 
-  // console.log("selectedCategory", selectedCategory);
+  const [categoryLoading, setCategoryLoading] = useState<boolean>(false);
+  const [productId, setProductId] = useState<string | null>(null);
 
-  // ********************************
-  const [filterData, setFilterData] = useState<DishType[]>([]);
+  const [filterData, setFilterData] = useState<DishType[] | null>(null);
+
+  // console.log("filterDatafilterData", filterData);
+
   const [filterDataLoading, setFilterDataDishesLoading] =
     useState<boolean>(false);
 
-  // console.log("filterData", filterData);
-
-  // ********************************
-
   const { dishesLoading, dishes } = hooks.useGetDishes(selectedCategory);
 
-  // console.log("selectedCategoryselectedCategory", selectedCategory);
-  const c_id = localStorage.getItem('c_id')
-  // Fetch dishes based on selectedCategory
+  const c_id = localStorage.getItem('c_id');
+
   const getDishes = async () => {
     const cityId = localStorage.getItem("cityId");
-
-    // console.log("cityIdcityIdcityIdcityId", cityId);
 
     setFilterDataDishesLoading(true);
     const formData = new FormData();
@@ -66,29 +62,22 @@ export const MenuList: React.FC = () => {
         `https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,
         formData
       );
-
-      // console.log("qwqwqwqwqwqwqwqwqwq", response);
-
-      setFilterData(response.data?.optionListing || []);
+      
+      setFilterData(response.data?.optionListing || null);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setFilterDataDishesLoading(false);
     }
   };
 
   useEffect(() => {
-    getDishes();
-  }, [selectedCategory]);
-
-  // useEffect(() => {
-  //   if (searchId) {
-  //     const categoryFromSearch = menu.find((category) => category.product_cat_id !== searchId);
-  //     if (categoryFromSearch) {
-  //       setSelectedCategory(categoryFromSearch.product_cat_id);
-  //     }
-  //   }
-  // }, [searchId, menu]);
+    setFilterData(null);
+    setCategoryLoading(true);
+    getDishes().finally(() => {
+      setCategoryLoading(false);
+    });
+  }, [selectedCategory, productId]);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
@@ -101,19 +90,11 @@ export const MenuList: React.FC = () => {
   };
 
   const renderSearch = (): JSX.Element | null => {
-    if (
-      menuLoading ||
-      dishesLoading ||
-      menu.length === 0 ||
-      dishes.length === 0
-    ) {
+    if (menuLoading || dishesLoading || menu.length === 0 || dishes.length === 0) {
       return null;
     }
     return (
-      <section
-        className="row-center container"
-        style={{ gap: 5, marginTop: 10 }}
-      >
+      <section className="row-center container" style={{ gap: 5, marginTop: 10 }}>
         <button
           style={{
             height: 50,
@@ -130,140 +111,113 @@ export const MenuList: React.FC = () => {
           <svg.SearchSvg />
           <span className="t16">Search ...</span>
         </button>
-        {/* <button
-          style={{
-            width: 50,
-            height: 50,
-            backgroundColor: 'var(--white-color)',
-            borderRadius: 10,
-          }}
-          className='center'
-          onClick={() => navigate(Routes.Filter)}
-        >  
-          <svg.FilterSvg />
-        </button> */}
       </section>
     );
   };
 
   const renderCategories = (): JSX.Element | null => {
-    if (
-      menuLoading ||
-      dishesLoading ||
-      menu.length === 0 ||
-      dishes.length === 0
-    ) {
+    if (menuLoading || dishesLoading || menu.length === 0 || dishes.length === 0) {
       return null;
     }
 
     return (
       <section style={{ width: "100%", marginTop: 14, paddingBottom: 20 }}>
-        {!searchId ? (
-          <>
-            <Swiper
-              spaceBetween={8}
-              slidesPerView={"auto"}
-              pagination={{ clickable: true }}
-              navigation={true}
-              mousewheel={true}
-            >
-              {menu.map((category: MenuType, index, array) => {
-                const isLast = index === array.length - 1;
-                return (
-                  <SwiperSlide
-                    key={category.product_cat_id}
+        {!searchId && (
+          <Swiper
+            spaceBetween={8}
+            slidesPerView={"auto"}
+            pagination={{ clickable: true }}
+            navigation={true}
+            mousewheel={true}
+          >
+            {menu.map((category: MenuType, index, array) => {
+              const isLast = index === array.length - 1;
+              return (
+                <SwiperSlide
+                  key={category.product_cat_id}
+                  style={{
+                    width: "auto",
+                    marginLeft: index === 0 ? 20 : 0,
+                    marginRight: isLast ? 20 : 0,
+                  }}
+                  onClick={() => {
+                    setSelectedCategory(category.product_cat_id);
+                    setProductId(category.product_id);
+                  }}
+                >
+                  <div
                     style={{
-                      width: "auto",
-                      marginLeft: index === 0 ? 20 : 0,
-                      marginRight: isLast ? 20 : 0,
+                      padding: "10px 20px",
+                      borderRadius: 10,
+                      border: "1px solid red",
+                      borderColor:
+                        selectedCategory === category.product_cat_id
+                          ? "var(--main-turquoise)"
+                          : "var(--white-color)",
+                      backgroundColor: "var(--white-color)",
                     }}
-                    onClick={() => setSelectedCategory(category.product_cat_id)}
                   >
-                    <div
+                    <h5
                       style={{
-                        padding: "10px 20px",
-                        borderRadius: 10,
-                        border: "1px solid red",
-                        borderColor:
+                        textTransform: "capitalize",
+                        cursor: "pointer",
+                        color:
                           selectedCategory === category.product_cat_id
                             ? "var(--main-turquoise)"
-                            : "var(--white-color)",
-                        backgroundColor: "var(--white-color)",
+                            : "var(--main-color)",
                       }}
                     >
-                      <h5
-                        style={{
-                          textTransform: "capitalize",
-                          color:
-                            selectedCategory === category.product_cat_id
-                              ? "var(--main-turquoise)"
-                              : "var(--main-color)",
-                        }}
-                      >
-                        {category.name}
-                      </h5>
-                    </div>
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </>
-        ) : (
-          <></>
+                      {category.name} ({category.totalProducts})
+                    </h5>
+                  </div>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         )}
       </section>
     );
   };
 
+
+
   const renderContent = (): JSX.Element | null => {
-    if (
-      menuLoading ||
-      dishesLoading ||
-      menu.length === 0 ||
-      dishes.length === 0
-    ) {
+    if (menuLoading || dishesLoading || menu.length === 0 || dishes.length === 0) {
       return null;
     }
     return (
       <main className="scrollable container">
-        {filterData.length === 0 ? (
-          <>
-            <div className="NoData-Found">
-              <div>Product Not Available</div>
-            </div>
-          </>
+        {filterDataLoading ?  false : (Array.isArray(filterData) && filterData!.length === 0 ? (
+          <div className="NoData-Found">
+            <div>Product Not Available</div>
+          </div>
         ) : (
           <ul style={{ paddingBottom: 20 }}>
-            {filterData.map(
-              (dish: DishType, index: number, array: DishType[]) => {
-                const isLast = index === array.length - 1;
-                return (
-                  <items.MenuListItem
-                    dish={dish}
-                    key={dish.cart_id}
-                    isLast={isLast}
-                  />
-                );
-              }
-            )}
+            {filterData!.map((dish: DishType, index: number, array: DishType[]) => {
+              const isLast = index === array.length - 1;
+              return (
+                <items.MenuListItem
+                  dish={dish}
+                  key={dish.cart_id}
+                  isLast={isLast}
+                />
+              );
+            })}
           </ul>
-        )}
+        ) )}
       </main>
     );
   };
+   
+  
+
 
   const renderLoader = (): JSX.Element | null => {
-    if (
-      menuLoading ||
-      dishesLoading ||
-      menu.length === 0 ||
-      dishes.length === 0
-    ) {
+    if (categoryLoading) {
       return <components.Loader />;
     }
     return null;
   };
-
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}

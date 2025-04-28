@@ -1,0 +1,89 @@
+.coupon-cart-wrapper {
+  margin-top: 30px;
+}
+.coupon-cart-wrapper .coupon-cart-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 12px 20px;
+  background-color: #e3f2fd;
+  border-radius: 8px;
+  border: 1px solid #90caf9;
+  margin: 13px;
+}
+.coupon-cart-wrapper .coupon-cart-toggle h2 {
+  font-size: 20px;
+  margin: 0;
+  color: #1976d2;
+}
+.coupon-cart-wrapper .coupon-cart-toggle span {
+  font-size: 18px;
+  color: #1976d2;
+}
+.coupon-cart-wrapper .coupon-cart-details {
+  background-color: #ffffff;
+  border: 1px solid #dbefff;
+  border-radius: 8px;
+  margin-top: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  animation: fadeIn 0.3s ease-in-out;
+  margin: 13px;
+}
+.coupon-cart-wrapper .coupon-cart-details .coupon-cart-summary-item {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.coupon-cart-wrapper .coupon-cart-details .coupon-cart-summary-item strong {
+  width: 200px;
+  display: inline-block;
+  color: #333;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+.coupon-animation {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background: white;
+  padding: 25px 51px;
+  border-radius: 8px;
+  margin: 0 auto;
+  text-align: center;
+  box-sizing: border-box;
+  width: 250px;
+}
+
+.popup-content p {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}/*# sourceMappingURL=CouponSummary.css.map */

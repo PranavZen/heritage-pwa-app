@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { addItemToCartAPI } from './addItemToCartApi';  
+import { addItemToCartAPI } from './addItemToCartApi';
 import { DishType } from '../../types';
 
 export type CartStateType = {
@@ -10,8 +10,10 @@ export type CartStateType = {
   promoCode: string;
   list: DishType[];
   discountAmount: number;
-  loading: boolean;  
-  error: string | null; 
+  loading: boolean;
+  error: string | null;
+  cartCount: number;
+  shouldRefresh: boolean;
 };
 
 const initialState: CartStateType = {
@@ -22,8 +24,10 @@ const initialState: CartStateType = {
   subtotal: 0,
   promoCode: '',
   discountAmount: 0,
-  loading: false,  
-  error: null, 
+  loading: false,
+  error: null,
+  cartCount: 0,
+  shouldRefresh: false,
 };
 
 type StateType = typeof initialState;
@@ -32,72 +36,108 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCart: (
-      state: StateType,
-      action: PayloadAction<DishType>,
-    ) => {
+    addToCart: (state: StateType, action: PayloadAction<DishType>) => {
       const inCart = state.list.find(
-        (item) => item.option_value_name === action.payload.option_value_name,
-      );
-      
-      if (inCart) {
-        state.list.map((item) => {
-          if (item.option_value_name === action.payload.option_value_name) {
-            (item.quantity as number) += 1;
-          }
-          return item;
-        });
-        state.subtotal += Number(action.payload.price);
-        state.total += Number(action.payload.price) * (1 - state.discount / 100);
-      } else {
-        state.list.push({ ...action.payload, quantity: 1 });
-        state.subtotal += Number(action.payload.price);
-        state.total += Number(action.payload.price) * (1 - state.discount / 100);
-      }
-    },
-    removeFromCart: (state, action: PayloadAction<DishType>) => {
-      const inCart = state.list.find(
-        (item) => item.option_value_name === action.payload.option_value_name,
+        (item) => item.option_value_name === action.payload.option_value_name
       );
 
+      const price = Number(action.payload.price);
+
       if (inCart) {
-        state.list.map((item) => {
-          if (item.option_value_name === action.payload.option_value_name && (item.quantity as number) > 1) {
-            (item.quantity as number) -= 1;
-          } else {
-            state.list.splice(state.list.indexOf(item), 1);
-          }
-          return item;
-        });
-        state.subtotal -= Number(action.payload.price);
-        state.total -= Number(action.payload.price) * (1 - state.discount / 100);
+        inCart.quantity = (inCart.quantity);
+      } else {
+        state.list.push({ ...action.payload});
+      }
+
+      state.subtotal += price;
+      state.total = state.subtotal * (1 - state.discount / 100);
+      state.cartCount = state.list.reduce((acc, item) => acc + (item.quantity || 0), 0);
+    },
+
+    removeFromCart: (state: StateType, action: PayloadAction<DishType>) => {
+      const index = state.list.findIndex(
+        (item) => item.option_value_name === action.payload.option_value_name
+      );
+
+      if (index !== -1) {
+        const item = state.list[index];
+        const price = Number(action.payload.price);
+
+        if ((item.quantity || 1) > 1) {
+          item.quantity = (item.quantity || 1) - 1;
+          state.subtotal -= price;
+        } else {
+          state.subtotal -= price;
+          state.list.splice(index, 1);
+        }
+
+        state.total = state.subtotal * (1 - state.discount / 100);
+        state.cartCount = state.list.reduce((acc, item) => acc + (item.quantity || 0), 0);
+
+        state.shouldRefresh = true;
       }
     },
+
+    removeItemCompletely: (state: StateType, action: PayloadAction<DishType>) => {
+      const index = state.list.findIndex(
+        (item) => item.option_value_name === action.payload.option_value_name
+      );
+
+      if (index !== -1) {
+        const item = state.list[index];
+        const price = Number(item.price);
+        const qty = item.quantity || 1;
+
+        state.subtotal -= price * qty;
+        state.list.splice(index, 1);
+        state.total = state.subtotal * (1 - state.discount / 100);
+        state.cartCount = state.list.reduce((acc, item) => acc + (item.quantity || 0), 0);
+
+        state.shouldRefresh = true;
+      }
+    },
+
     setDiscount: (state, action: PayloadAction<number>) => {
       state.discount = action.payload;
-      const newTotal = state.subtotal * (1 - state.discount / 100);
-      state.total = newTotal;
+      state.total = state.subtotal * (1 - state.discount / 100);
     },
+
+    setPromoCode: (state, action: PayloadAction<string>) => {
+      state.promoCode = action.payload;
+    },
+
     resetCart: (state) => {
       state.list = [];
       state.subtotal = 0;
       state.total = 0;
       state.discount = 0;
       state.promoCode = '';
+      state.cartCount = 0;
+      state.shouldRefresh = false;
     },
-    setPromoCode: (state, action: PayloadAction<string>) => {
-      state.promoCode = action.payload;
+
+    setCartCount: (state, action: PayloadAction<number>) => {
+      state.cartCount = action.payload;
+    },
+
+    resetHeaderRefresh: (state) => {
+      state.shouldRefresh = false;
+    },
+
+    // New action to set `shouldRefresh`
+    setShouldRefresh: (state, action: PayloadAction<boolean>) => {
+      state.shouldRefresh = action.payload;
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(addItemToCartAPI.pending, (state) => {
         state.loading = true;
-        state.error = null; 
+        state.error = null;
       })
       .addCase(addItemToCartAPI.fulfilled, (state, action) => {
         state.loading = false;
-        // console.log('Item added to cart successfully:', action.payload);
       })
       .addCase(addItemToCartAPI.rejected, (state, action) => {
         state.loading = false;
@@ -110,9 +150,13 @@ export const cartSlice = createSlice({
 export const {
   addToCart,
   removeFromCart,
+  removeItemCompletely,
   setDiscount,
   setPromoCode,
   resetCart,
+  setCartCount,
+  resetHeaderRefresh,
+  setShouldRefresh,  // Exported here
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

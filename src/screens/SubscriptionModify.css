@@ -1,0 +1,111 @@
+.subscription-section {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    margin-top: 39px;
+    border-radius: 8px;
+    overflow: scroll;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .section-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .date-picker-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .date-picker-container label {
+    font-size: 16px;
+    color: #555;
+    margin-right: 10px;
+  }
+  
+  .date-picker {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .order-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 500px; /* Add a max height to limit the container's size */
+    overflow-y: auto; /* Enable vertical scrolling when the content overflows */
+  }
+  
+  .order-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: pointer;
+  }
+  
+  .order-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .order-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .order-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .order-info {
+    text-align: center;
+  }
+  
+  .order-status,
+  .order-name {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+  
+  .no-orders {
+    font-size: 18px;
+    color: #999;
+    text-align: center;
+  }
+  
+  .spinner {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .modify-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .modify-button:hover {
+    background-color: #0056b3;
+  }
+  

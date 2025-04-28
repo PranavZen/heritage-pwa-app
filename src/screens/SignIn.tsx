@@ -59,7 +59,7 @@ export const SignIn: React.FC = () => {
           "https://heritage.bizdel.in/app/consumer/services_v11/login",
           formData
         );
-
+        // console.log("area_id", response);
         if (
           response.data.status === "success" &&
           response.data.action === "existing user"
@@ -72,6 +72,7 @@ export const SignIn: React.FC = () => {
           });
           localStorage.setItem("c_id", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
+        
         } else {
           notification.error({
             message: response.data.message || "Failed to send OTP",
@@ -102,6 +103,8 @@ export const SignIn: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP",
         formData
       );
+      // console.log("otppppppppppppppp", response);
+
 
       if (response.data.status === "success") {
         const addressDetails = response.data.CustomerDetail[0].address_details;
@@ -111,9 +114,7 @@ export const SignIn: React.FC = () => {
         );
         localStorage.setItem(
           "area_id",
-          JSON.stringify(
-            response.data.CustomerDetail[0].address_details[0].area_id
-          )
+          response.data.CustomerDetail[0].address_details[0].area_id
         );
         if (addressDetails.length === 0) {
           notification.success({
@@ -148,7 +149,7 @@ export const SignIn: React.FC = () => {
   };
 
   const redirectToCity = () => {
-    navigate("/city-choose");
+    navigate("/pincode");
   };
 
   const renderContent = (): JSX.Element => {
@@ -180,7 +181,7 @@ export const SignIn: React.FC = () => {
           )}
 
           <div style={{ margin: 10, marginBottom: 20 }}>
-            <span style={{fontSize: 16}}>
+            <span style={{ fontSize: 16 }}>
               <input
                 type="checkbox"
                 checked={isTermsAccepted}
@@ -241,11 +242,11 @@ export const SignIn: React.FC = () => {
               <components.Button text="Verify OTP" onClick={handleVerifyOtp} />
             </>
           )}
-          
-            <button onClick={redirectToCity} className="explore-btn">
-              Explore Now
-            </button>
-         
+
+          <button onClick={redirectToCity} className="explore-btn">
+            Enter Your PinCode
+          </button>
+
         </section>
       </main>
     );

@@ -11,8 +11,10 @@ export const Checkout: React.FC = () => {
   const dispatch = hooks.useDispatch();
 
   const {list, delivery, total, discount} = useSelector(
+    
     (state: RootState) => state.cartSlice,
   );
+
 
   const navigate = hooks.useNavigate();
 
@@ -87,7 +89,7 @@ export const Checkout: React.FC = () => {
           <span className='t14'>- ₹ {discount}</span>
         </div>
         <div className='row-center-space-between'>
-          <span className='t14'>Delivery</span>
+          <span className='t14'>Delivery Charges</span>
           <span className='t14'>₹ {delivery}</span>
         </div>
       </section>

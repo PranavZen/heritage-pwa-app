@@ -29,7 +29,15 @@ import {ClientNotificationDetails} from './ClientNotificationDetails'
 import { CustomerCare } from './CustomerCare';
 import {SubscriptionOrder} from './tabs/SubscriptionOrder'
 import {WalletHistory} from '../screens/WalletHistory'
+import {SubscriptionModify} from '../screens/SubscriptionModify'
+import {CouponList} from './CouponList'
+import { CouponSummary } from './CouponSummary';
+import {SubscriptionOrderCheck} from '../screens/tabs/SubscriptionOrderCheck'
+import { OrderItemCoupon} from '../items/OrderItemCoupon';
+import {SelectMyAddress} from './SelectMyAddress';
+
 export const screens = {
+  OrderItemCoupon,
   Dish,
   SignIn,
   Search,
@@ -61,4 +69,9 @@ export const screens = {
   CustomerCare,
   SubscriptionOrder,
   WalletHistory,
+  SubscriptionModify,
+  CouponList,
+  CouponSummary,
+  SubscriptionOrderCheck,
+  SelectMyAddress,
 };

@@ -6,9 +6,10 @@ export enum TabScreens {
   Favorite = 'Favorite',
   Notification = 'Notification',
 }
-export enum Routes {
+export enum Routes{
+  SubscriptionModify='/subscription-modify',
   WalletHistory='/wallet-history',
-  Onboarding = '/city-choose',
+  Onboarding = '/pincode',
   SignIn = '/',
   OrderHistory = '/profile/orders',
   OrderHistoryEmpty = '/profile/orders-empty',
@@ -61,4 +62,10 @@ export enum Routes {
   ClientNotificationDetails='/notification-message',
   CustomerCare='/customer-care',
   OrderSubscription='/orderSubscription',
+  SubsCriptionOrder='/subscription-Order',
+  CouponList='/coupon-list',
+  CouponSummary='/coupon-summary',
+  SubscriptionOrderCheck='/your-order',
+  OrderItemCoupon='/order-item',
+  SelectMyAddress='/select-Address'
 }
