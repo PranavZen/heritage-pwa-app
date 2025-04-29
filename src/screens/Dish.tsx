@@ -36,9 +36,10 @@ export const Dish: React.FC = () => {
 
   const [cartId, setCartId] = useState<string[]>([]);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
+  const [cartType, setCartType] = useState<string | null>(null);
 
 
-  // console.log("cartItemIdz", cartItemId);
+  // console.log("cartItemIdz", cartType);
 
   const [opacity, setOpacity] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -103,9 +104,11 @@ export const Dish: React.FC = () => {
         const formData = new FormData();
         formData.append('city_id', cityId || '');
         formData.append('c_id', c_id || '');
+        formData.append('area_id', localStorage.getItem('area_id') || '');
         formData.append('next_id', '0');
+        formData.append('cart_type', '2');
         const response = await axios.post(
-          'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
+          'https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv',
           formData
         );
 
@@ -126,6 +129,7 @@ export const Dish: React.FC = () => {
           if (matchedItem) {
             setQuantity(Number(matchedItem.quantity) || 1);
             setCartItemId(String(matchedItem.cart_id));
+            setCartType(matchedItem.order_type)
             SetCheckCartData(matchedItem);
           } else {
             setQuantity(1);
@@ -316,8 +320,8 @@ export const Dish: React.FC = () => {
         return null;
       }
 
-      formData.append('product_option_id', String(productOptionId));  
-      formData.append('product_option_value_id', String(productOptionValueId)); 
+      formData.append('product_option_id', String(productOptionId));
+      formData.append('product_option_value_id', String(productOptionValueId));
       formData.append('quantity', String(localQuantity));
       formData.append('weight', String(cartData.weight));
       formData.append('weight_unit', String(cartData.weight_unit));
@@ -369,6 +373,8 @@ export const Dish: React.FC = () => {
   const isInCart = !!cartItemId;
 
   const handleUpdateCart = async (newQuantity: number) => {
+
+
     if (newQuantity < 1) return;
 
     const c_id = localStorage.getItem('c_id');
@@ -428,6 +434,58 @@ export const Dish: React.FC = () => {
 
   // ((*(((((((((((((((((((((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))))))))))))))))))))))
   const handleupdatetheAddToCart = async () => {
+    if (cartType === '1') {
+      Modal.confirm({
+        content: 'Are you sure do you want to convert Subscription Order to One Time  Order.',
+        onOk: async () => {
+          const c_id = localStorage.getItem('c_id');
+          if (!c_id) {
+            notification.error({ message: 'User not signed in.' });
+            return;
+          }
+
+          if (!cartItemId) {
+            notification.error({ message: 'Please add the item to cart first.' });
+            return;
+          }
+
+          const formData = new FormData();
+          const formattedDate = startDate
+            ? new Date(startDate).toISOString().split('T')[0]
+            : new Date().toISOString().split('T')[0];
+
+          formData.append('id', cartItemId || '');
+          formData.append('c_id', c_id);
+          formData.append('package_id', '13');
+          formData.append('quantity', String(quantity));
+          formData.append('delivery_preference', '0');
+          formData.append('no_of_deliveries', '0');
+          formData.append('order_date', formattedDate);
+          formData.append('order_type', '2');
+
+          try {
+            const response = await axios.post(
+              'https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem',
+              formData
+            );
+
+            if (response.data.status === 'success') {
+              notification.success({ message: response.data.message });
+              navigate('/');
+            } else {
+              notification.error({ message: 'Failed to update cart. Try again!' });
+            }
+          } catch (error) {
+            notification.error({ message: 'Error updating cart!' });
+          }
+        },
+        onCancel() { },
+        cancelText: 'Cancel',
+        okText: 'Yes',
+      });
+      return;
+    }
+
     if (deliveries < 1) {
       notification.error({ message: "Please select valid delivery days." });
       return;
@@ -445,7 +503,6 @@ export const Dish: React.FC = () => {
       return;
     }
 
-
     if (!c_id) {
       Modal.confirm({
         title: 'Please Sign In',
@@ -459,14 +516,15 @@ export const Dish: React.FC = () => {
       });
       return;
     }
+
     setIsModalOpen(false);
     setIsAlternateModalOpen(false);
 
     const formData = new FormData();
-    // Date validation
     const formattedDate = startDate
       ? new Date(startDate).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0];
+
     formData.append('id', cartItemId || '');
     formData.append('c_id', c_id);
     formData.append('package_id', '13');
@@ -484,7 +542,6 @@ export const Dish: React.FC = () => {
 
       if (response.data.status === "success") {
         notification.success({ message: response.data.message });
-        // window.location.reload();
       } else {
         notification.error({ message: "Failed to update cart. Try again!" });
       }
@@ -492,6 +549,9 @@ export const Dish: React.FC = () => {
       notification.error({ message: "Error updating cart!" });
     }
   };
+
+
+
 
   const handleupdatetheAddToCartt = async () => {
     if (deliveries < 1) {
@@ -573,13 +633,13 @@ export const Dish: React.FC = () => {
       const formData = new FormData();
       formData.append("c_id", c_id || "null");
       formData.append("city_id", cityId || "null");
-      formData.append("product_option_value_id" , String(localStorage.getItem('product_option_value_id')));
+      formData.append("product_option_value_id", String(localStorage.getItem('product_option_value_id')));
       try {
         const response = await axios.post(
           `https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`,
           formData
         );
-    
+
         // console.log("paaaaaaaaaaaaaaa", response);
 
         setDeliveryOptionsPreference(response.data.productDetails);
@@ -905,7 +965,7 @@ export const Dish: React.FC = () => {
             containerStyle={{ marginBottom: 10 }}
           />
           </> : <div> <components.Button
-            text="update "
+            text="Update One Time Order"
             onClick={handleupdatetheAddToCart}
             containerStyle={{ marginBottom: 10 }}
           /> </div>
@@ -1022,7 +1082,7 @@ export const Dish: React.FC = () => {
                   text="Confirm and Add to Cart"
                   onClick={handleAddToCartWithPreferences}
                 />
-              </> : 
+              </> :
               <>
                 <components.Button
                   text="update and Add to Cart"

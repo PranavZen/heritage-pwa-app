@@ -88,10 +88,11 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
        formData.append('city_id', cityId);
        formData.append('c_id', c_id);
        formData.append('next_id', '0');
+       formData.append('area_id', localStorage.getItem('area_id') || '');
        formData.append('cart_type', '2');
  
        const response = await axios.post(
-         'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
+         'https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv',
          formData
        );
 

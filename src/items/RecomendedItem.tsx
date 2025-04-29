@@ -45,11 +45,12 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       const formData = new FormData();
       formData.append('city_id', cityId);
       formData.append('c_id', c_id);
+      formData.append('area_id', localStorage.getItem('area_id') || '');
       formData.append('next_id', '0');
       formData.append('cart_type', '2');
 
       const response = await axios.post(
-        'https://heritage.bizdel.in/app/consumer/services_v11/getCartData',
+        'https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv',
         formData
       );
 

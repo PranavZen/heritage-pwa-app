@@ -13,8 +13,8 @@ export const CouponList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [showModal, setShowModal] = useState<boolean>(false); // To control popup visibility
-  const [isApplying, setIsApplying] = useState<boolean>(false); // Prevent multiple clicks
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isApplying, setIsApplying] = useState<boolean>(false); 
 
   const navigate = useNavigate();
 
@@ -91,8 +91,6 @@ export const CouponList: React.FC = () => {
                       localStorage.setItem('couponCode', coupon.code);
 
                       setShowModal(true);
-
-
                       setTimeout(() => {
                         setShowModal(false);
                         setIsApplying(false);
@@ -125,7 +123,7 @@ export const CouponList: React.FC = () => {
         <div className="popup-modal">
           <div className="popup-content">
             <Lottie animationData={CouponApply} style={{ width: 150, height: 150 }} />
-            <p>Coupon Applied Successfully!</p>
+            {/* <p>Coupon Applied Successfully!</p> */}
           </div>
         </div>
       )}

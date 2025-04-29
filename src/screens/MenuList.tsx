@@ -21,12 +21,13 @@ export const MenuList: React.FC = () => {
   // console.log("menueeeeeeeeeeeeeeeeeeeeeeeeeeeeee", menu);
 
   const location = hooks.useLocation();
+  
   const product_cat_id: string = location.state.menuName;
+  // console.log("zzzz", product_cat_id);
 
   const searchId: string = location.state.id;
 
   // console.log("searchIdsearchId", searchId);
-
 
   const [opacity, setOpacity] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] =
@@ -62,8 +63,9 @@ export const MenuList: React.FC = () => {
         `https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,
         formData
       );
-      
+      // console.log("responseresponse",response);
       setFilterData(response.data?.optionListing || null);
+      localStorage.setItem("product_option_value_id", response.data?.optionListing.product_option_value_id);
     } catch (error) {
       // console.error(error);
     } finally {

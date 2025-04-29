@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { hooks } from '../../hooks';
 import { items } from '../../items';
-import { Routes } from '../../routes';
+import { Routes, TabScreens } from '../../routes';
 import { RootState } from '../../store';
 import type { DishType } from '../../types';
 import { components } from '../../components';
@@ -13,6 +13,10 @@ import { SubscriptionOrder } from './SubscriptionOrder';
 import { SubscriptionOrderCheck } from './SubscriptionOrderCheck';
 import { useLocation } from 'react-router-dom';
 import { setShouldRefresh } from '../../store/slices/cartSlice';
+import SuperCoins from '../../components/Animation/SuperCoinsApply.json'
+import Lottie from 'lottie-react';
+import { actions } from '../../store/actions';
+import FaBackward from "../../assets/icons/left.png";
 
 interface Address {
   id: string;
@@ -48,10 +52,15 @@ export const Order: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const [opacity, setOpacity] = useState<number>(0);
   const [totalPrice, SetTotalPrice] = useState<any[]>([]);
+  const [freeNoOfdeliveries, SetfreeNoOfdeliveries] = useState<any[]>([]);
+
+
+  console.log("freeNoOfdeliveries", totalPrice);
+
   const [addressId, SetAddressId] = useState('');
   const [superPoint, setSuperPoint] = useState<any>(null);
 
-  // console.log("superPoint", superPoint);
+  console.log("superPoint", superPoint);
 
 
 
@@ -74,13 +83,14 @@ export const Order: React.FC = () => {
 
   const defaultAddress = Array.isArray(addresses) ? addresses.find((addr) => addr.is_default === "1") : null;
   const otherAddresses = Array.isArray(addresses) ? addresses.filter((addr) => addr.is_default !== "1") : [];
-  
+
 
   const [isChecked, setIsChecked] = useState(false);
   const [redeemedAmount, setRedeemedAmount] = useState(0);
 
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
-
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isApplying, setIsApplying] = useState<boolean>(false);
 
 
   // console.log("shouldRefresh", shouldRefresh);
@@ -88,7 +98,8 @@ export const Order: React.FC = () => {
   const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
     setIsChecked(checked);
-
+    setIsApplying(true);
+    setShowModal(true);
     if (checked && superPoint) {
       setRedeemedAmount(superPoint.
         available_amount
@@ -97,6 +108,23 @@ export const Order: React.FC = () => {
       setRedeemedAmount(0);
     }
   };
+
+  // const handleCheckboxChange = (e: any) => {
+  //   const checked = e.target.checked;
+  //   setIsChecked(checked);
+  //   setIsApplying(true);
+  //   if (checked && superPoint > 10) {
+  //     setShowModal(true);
+  //     setRedeemedAmount(superPoint.available_amount);
+  //   } else {
+  //     setRedeemedAmount(0);
+  //   }
+  // };
+
+  setTimeout(() => {
+    setShowModal(false);
+    setIsApplying(false);
+  }, 5000);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
@@ -135,16 +163,19 @@ export const Order: React.FC = () => {
       const formData = new FormData();
       formData.append('city_id', cityId || '');
       formData.append('c_id', c_id || '');
+      formData.append('area_id', localStorage.getItem('area_id') || '');
       formData.append('next_id', '0');
+      formData.append('cart_type', '2');
       try {
         const response = await axios.post(
-          `https://heritage.bizdel.in/app/consumer/services_v11/getCartData`,
+          `https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv`,
           formData
         );
-        // console.log("nmnmnmnmnmnmnmnmmnxxx", response);
+        console.log("nmnmnmnmnmnmnmnmmnxxx", response);
 
         SetTotalPrice(response.data.optionListing);
         SetDeliveries(response.data.optionListing.map((elem: any) => elem.no_of_deliveries))
+        SetfreeNoOfdeliveries(response.data.optionListing.map((elem: any) => elem.no_of_free_deliveries));
       } catch (error) {
         console.error(error);
       }
@@ -181,7 +212,7 @@ export const Order: React.FC = () => {
         // }
         if (Array.isArray(addresses)) {
           const defaultAddress = addresses.find((addr: any) => addr.is_default === 1);
-        
+
           if (defaultAddress) {
             SetAddressId(defaultAddress.id);
           } else if (addresses.length > 0) {
@@ -339,6 +370,7 @@ export const Order: React.FC = () => {
         );
 
         const data = response.data;
+
         // console.log("vvvvvvvvvvv", data);
 
 
@@ -543,6 +575,7 @@ export const Order: React.FC = () => {
       <main className="container scrollable">
         {cartCount > 0 ? (
           <>
+            {renderBackButton()}
             {renderDishes()}
             {couponApplied()}
             {renderSummary()}
@@ -577,6 +610,28 @@ export const Order: React.FC = () => {
           })}
         </ul>
       </section>
+    );
+  };
+
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    setShowButton(true);
+  }, []);
+
+  const handleHomeMenu = (screen: TabScreens) => {
+    if (screen) {
+      dispatch(actions.setScreen(screen));
+    } else {
+      console.error("Screen is not defined");
+    }
+  };
+
+  const renderBackButton = (): JSX.Element => {
+    return (
+      <button onClick={() => handleHomeMenu(TabScreens.Home)}>
+        <img src={FaBackward} alt="" width={30} />
+      </button>
     );
   };
 
@@ -627,8 +682,7 @@ export const Order: React.FC = () => {
               borderBottom: '1px solid #DBE9F5',
             }}
           >
-
-            <span className='t14'>Discount</span>
+            <span className='t14'>Discount ({localStorage.getItem('couponCode')}) of ₹{cartDetails?.after_discount_total} applied!</span>
             {localStorage.getItem('couponCode') ? <><span className='t14'>₹{cartDetails?.after_discount_total}</span> </> : <>  ₹{' '} 0 </>}
           </div>
 
@@ -690,13 +744,17 @@ export const Order: React.FC = () => {
                           return total;
                         }
 
-                        const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
+                        const deliveryCount = elem.no_of_deliveries === '0'
+                          ? 1
+                          : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
+
                         const lineTotal = Number(elem.quantity) * Number(elem.price) * deliveryCount;
 
                         return total + lineTotal;
                       }, 0) - (redeemedAmount > 0 ? redeemedAmount : 0)
                     ).toFixed(2)
                   }
+
 
                 </h4>
               ) : localStorage.getItem('couponCode') || redeemedAmount > 1 ? (
@@ -705,10 +763,14 @@ export const Order: React.FC = () => {
                   {(() => {
                     const cartTotal = totalPrice
                       .reduce((total, elem) => {
-                        const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
+                        const deliveryCount = elem.no_of_deliveries === '0'
+                          ? 1
+                          : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
                         return total + elem.quantity * elem.price * deliveryCount;
                       }, 0)
                       .toFixed(2);
+
+                    console.log("aaaaa", cartTotal);
 
                     let discount = 0;
 
@@ -730,6 +792,7 @@ export const Order: React.FC = () => {
                     const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
 
                     return total.toLocaleString('en-IN');
+
                   })()}
                 </h4>
               ) : (
@@ -764,9 +827,16 @@ export const Order: React.FC = () => {
   };
   return (
     <div id="screen" style={{ opacity }}>
-   
+
       {renderContent()}
       {renderLoading()}
+      {showModal && (
+        <div className="popup-modal">
+          <div className="popup-content">
+            <Lottie animationData={SuperCoins} style={{ width: 150, height: 150 }} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

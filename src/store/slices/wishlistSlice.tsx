@@ -13,7 +13,7 @@ export const wishlistSlice = createSlice({
   name: 'wishlist',
   initialState,
   reducers: {
-    addToWishlist: (state, action: PayloadAction<DishType>) => {
+    addToWishlist: (state, action: PayloadAction<DishType>) =>{
       const inWishlist = state.list.find(
         (item) => item.option_value_name === action.payload.option_value_name,
       );
@@ -31,9 +31,8 @@ export const wishlistSlice = createSlice({
 
         return item.option_value_name === action.payload.option_value_name;
       });
-  
-     
-    
+
+
       if (inWishlist) {
         state.list = state.list.filter(
           (item) => item.option_value_name !== action.payload.option_value_name
