@@ -16,35 +16,16 @@ import { setShouldRefresh } from '../store/slices/cartSlice';
 
 
 export const Dish: React.FC = () => {
-<<<<<<< HEAD
-
-
-  interface CheckCartData {
-    delivery_preference?: string;
-    no_of_deliveries?: string;
-=======
   interface CheckCartData {
     delivery_preference?: string;
     no_of_deliveries?: string;
     order_type: string;
->>>>>>> roshan
   }
 
   const navigate = hooks.useNavigate();
   const dispatch = hooks.useDispatch();
   const location = hooks.useLocation();
   const [packageOptions, setPackageOptions] = useState<any[]>([]);
-<<<<<<< HEAD
-  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<
-    any[]
-  >([]);
-  const [quantity, setQuantity] = useState<number>(1);
-
-
-  // console.log("aaaaaaa", quantity);
-  const [cartId, setCartId] = useState<string[]>([]);
-  const [cartItemId, setCartItemId] = useState<string | null>(null);
-=======
   const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
 
 
@@ -59,7 +40,6 @@ export const Dish: React.FC = () => {
 
   // console.log("cartItemIdz", cartItemId);
 
->>>>>>> roshan
   const [opacity, setOpacity] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
@@ -75,16 +55,6 @@ export const Dish: React.FC = () => {
   // console.log("isModalOpen", isModalOpen);
 
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
-<<<<<<< HEAD
-  const [deliveryPreference, setDeliveryPreference] = useState<string>("");
-
-  // console.log("deliveryPreference", deliveryPreference);
-
-  const [deliveries, setDeliveries] = useState<number>(15);
-  const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
-
-  const [checkCartData, SetCheckCartData] = useState<CheckCartData>({});
-=======
   const [deliveryPreference, setDeliveryPreference] = useState<string>('1');
 
   const [deliveries, setDeliveries] = useState<number>(30);
@@ -98,7 +68,6 @@ export const Dish: React.FC = () => {
   });
 
   // console.log("checkCartData", checkCartData);
->>>>>>> roshan
 
   interface CartItem {
     quantity: number;
@@ -154,8 +123,6 @@ export const Dish: React.FC = () => {
               )
           );
 
-          console.log("eeeeeeeeeeeeeee", matchedItem);
-
           if (matchedItem) {
             setQuantity(Number(matchedItem.quantity) || 1);
             setCartItemId(String(matchedItem.cart_id));
@@ -169,8 +136,6 @@ export const Dish: React.FC = () => {
         console.error('Error fetching cart data:', error);
       }
     };
-<<<<<<< HEAD
-=======
 
 
     // if (shouldRefresh) {
@@ -178,7 +143,6 @@ export const Dish: React.FC = () => {
     //     dispatch(setShouldRefresh(true));
     //   });
     // }
->>>>>>> roshan
     fetchCartData();
 
 
@@ -366,11 +330,7 @@ export const Dish: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
         formData
       );
-<<<<<<< HEAD
-      console.log("rrrrrrrrrrrrrrr", response);
-=======
 
->>>>>>> roshan
       if (response.data.status === "success") {
         notification.success({
           message: "Success",
@@ -401,12 +361,6 @@ export const Dish: React.FC = () => {
 
 
   // ******************update api start*****************************
-<<<<<<< HEAD
-  const handleUpdateCart = async (
-    newQuantity: number,
-
-  ) => {
-=======
   const [localQuantity, setLocalQuantity] = useState<number>(1);
 
 
@@ -415,7 +369,6 @@ export const Dish: React.FC = () => {
   const isInCart = !!cartItemId;
 
   const handleUpdateCart = async (newQuantity: number) => {
->>>>>>> roshan
     if (newQuantity < 1) return;
 
     const c_id = localStorage.getItem('c_id');
@@ -444,10 +397,6 @@ export const Dish: React.FC = () => {
     formData.append('c_id', c_id);
     formData.append('package_id', '13');
     formData.append('quantity', String(newQuantity));
-<<<<<<< HEAD
-    formData.append('delivery_preference', checkCartData.delivery_preference || '0');
-    formData.append('no_of_deliveries', checkCartData.no_of_deliveries || '0');
-=======
     formData.append(
       'delivery_preference',
       checkCartData.delivery_preference || '0'
@@ -524,7 +473,6 @@ export const Dish: React.FC = () => {
     formData.append('quantity', String(quantity));
     formData.append('delivery_preference', '0');
     formData.append('no_of_deliveries', '0');
->>>>>>> roshan
     formData.append('order_date', formattedDate);
     formData.append('order_type', '2');
 
@@ -545,14 +493,7 @@ export const Dish: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
-
-
-  // ((*(((((((((((((((((((((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))))))))))))))))))))))))
-  const handleupdatetheAddToCart = async () => {
-=======
   const handleupdatetheAddToCartt = async () => {
->>>>>>> roshan
     if (deliveries < 1) {
       notification.error({ message: "Please select valid delivery days." });
       return;
@@ -570,10 +511,7 @@ export const Dish: React.FC = () => {
       return;
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> roshan
     if (!c_id) {
       Modal.confirm({
         title: 'Please Sign In',
@@ -587,32 +525,14 @@ export const Dish: React.FC = () => {
       });
       return;
     }
-<<<<<<< HEAD
-
-    const formData = new FormData();
-
-=======
     setIsModalOpen(false);
     setIsAlternateModalOpen(false);
 
     const formData = new FormData();
->>>>>>> roshan
     // Date validation
     const formattedDate = startDate
       ? new Date(startDate).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0];
-<<<<<<< HEAD
-
-    formData.append('id', cartItemId || '');
-    formData.append('c_id', c_id);
-    formData.append('package_id', '13');
-    formData.append('quantity', String(deliveries));
-    formData.append('delivery_preference', deliveryPreference || '0');
-    formData.append('no_of_deliveries', String(deliveries));
-    formData.append('order_date', formattedDate);
-    formData.append('order_type', '2');
-
-=======
     formData.append('id', cartItemId || '');
     formData.append('c_id', c_id);
     formData.append('package_days', 'mon,tue,wed,thu,fri,sat,sun');
@@ -623,24 +543,17 @@ export const Dish: React.FC = () => {
     formData.append('order_date', formattedDate);
     const orderType = deliveryPreference !== '0' ? '1' : '2';
     formData.append('order_type', orderType);
->>>>>>> roshan
     try {
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
         formData
       );
 
-<<<<<<< HEAD
-      if (response.data.status === "success") {
-        notification.success({ message: response.data.message });
-        window.location.reload();
-=======
       // console.log('zzz', response);
 
       if (response.data.status === "success") {
         notification.success({ message: response.data.message });
         // window.location.reload();
->>>>>>> roshan
       } else {
         notification.error({ message: "Failed to update cart. Try again!" });
       }
@@ -768,10 +681,6 @@ export const Dish: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> roshan
   // *********************************Alternate add to cart*********************************************
   const handleAddToCartWithAlternate = async () => {
     const dishWithPreferences = {
@@ -925,25 +834,11 @@ export const Dish: React.FC = () => {
                 <svg.MinusSvg />
               </button>
 
-<<<<<<< HEAD
-              <span className="countNum">{quantity}</span>
-
-              {/* {!cartData ? <> <span className="countNum">{quantity}</span> </>
-                :
-                <>
-                  <span className="countNum">
-                    {quantity || cartData?.map((elem:any) => elem.quantity)}
-                  </span>
-
-                </>
-              } */}
-=======
               <span className="countNum">
                 {isInCart ? quantity : localQuantity}
 
 
               </span>
->>>>>>> roshan
 
               <button
                 onClick={() => {
@@ -992,10 +887,6 @@ export const Dish: React.FC = () => {
         </div>
 
         {/* add quantity */}
-<<<<<<< HEAD
-
-=======
->>>>>>> roshan
         {
           !cartItemId ? <>   <components.Button
             text="+ Add to cart"
@@ -1014,17 +905,10 @@ export const Dish: React.FC = () => {
             containerStyle={{ marginBottom: 10 }}
           />
           </> : <div> <components.Button
-<<<<<<< HEAD
-              text="update "
-              onClick={handleupdatetheAddToCart}
-              containerStyle={{marginBottom: 10}}
-            /> </div>
-=======
             text="update "
             onClick={handleupdatetheAddToCart}
             containerStyle={{ marginBottom: 10 }}
           /> </div>
->>>>>>> roshan
         }
 
         {/* add quantity */}
@@ -1057,13 +941,6 @@ export const Dish: React.FC = () => {
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
             <label>Start Date:- </label>
-<<<<<<< HEAD
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              min={minDate}
-=======
             <DatePicker
               selected={startDate ? new Date(startDate) : null}
               onChange={(date: Date | null) => {
@@ -1077,7 +954,6 @@ export const Dish: React.FC = () => {
               dateFormat="yyyy-MM-dd"
               placeholderText="Select a date"
 
->>>>>>> roshan
               required
             />
           </div>
@@ -1140,15 +1016,6 @@ export const Dish: React.FC = () => {
         <div>
 
           {
-<<<<<<< HEAD
-            !cartItemId ? <> <components.Button
-              text="Confirm and Add to Cart"
-              onClick={handleAddToCartWithPreferences}
-            /> </> : <> <components.Button
-              text="update and Add to Cart"
-              onClick={handleupdatetheAddToCart}
-            /></>
-=======
             !cartItemId
               ? <>
                 <components.Button
@@ -1162,7 +1029,6 @@ export const Dish: React.FC = () => {
                   onClick={handleupdatetheAddToCartt}
                 />
               </>
->>>>>>> roshan
           }
 
 

@@ -41,9 +41,6 @@ export type DishType = {
   deleteId:number;
   packages_name:string;
   cart_product_option_value_id:string;
-<<<<<<< HEAD
-=======
   prod_description:string;
 
->>>>>>> roshan
 };
