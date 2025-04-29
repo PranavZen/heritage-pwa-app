@@ -14,6 +14,7 @@ type Props = {
 };
 
 export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
+  // console.log("dishdishdishdishdish", dish)
   const dispatch = hooks.useDispatch();
   const [cartId, setCartId] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(0);
@@ -27,7 +28,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
   // console.log("qqqqqqqqqqqqqqqqqqqqqqqqmmmm", quantity);
 
   const c_id = localStorage.getItem('c_id') || '';
-  
+
   const cityId = localStorage.getItem('cityId') || '';
 
 
@@ -82,62 +83,62 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
     return tomorrow.toISOString().split('T')[0];
   };
 
-   const fetchCartData = async () => {
-     try {
-       const formData = new FormData();
-       formData.append('city_id', cityId);
-       formData.append('c_id', c_id);
-       formData.append('next_id', '0');
-       formData.append('area_id', localStorage.getItem('area_id') || '');
-       formData.append('cart_type', '2');
- 
-       const response = await axios.post(
-         'https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv',
-         formData
-       );
+  const fetchCartData = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('city_id', cityId);
+      formData.append('c_id', c_id);
+      formData.append('next_id', '0');
+      formData.append('area_id', localStorage.getItem('area_id') || '');
+      formData.append('cart_type', '2');
+
+      const response = await axios.post(
+        'https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv',
+        formData
+      );
 
       //  console.log("responsez", response);
- 
-       if (response.data.optionListing) {
-         const matchedItem = response.data.optionListing.find(
-           (item: any) =>
-             item.cart_product_option_value_id === dish.product_option_value_id
-         );
-         setLoading(true);
- 
-         if (matchedItem) {
-           setQuantity(Number(matchedItem.quantity
-            
-           ) || 1);
-           setCartItemId(String(matchedItem.cart_id));
-         } else {
-           setQuantity(0);
-           setCartItemId(null);
-         }
-       }
-     } catch (error) {
+
+      if (response.data.optionListing) {
+        const matchedItem = response.data.optionListing.find(
+          (item: any) =>
+            item.cart_product_option_value_id === dish.product_option_value_id
+        );
+        setLoading(true);
+
+        if (matchedItem) {
+          setQuantity(Number(matchedItem.quantity
+
+          ) || 1);
+          setCartItemId(String(matchedItem.cart_id));
+        } else {
+          setQuantity(0);
+          setCartItemId(null);
+        }
+      }
+    } catch (error) {
       //  console.error('Error fetching cart data:', error);
-     }
-   };
-   useEffect(() => {
-     fetchCartData();
-   }, [cityId, c_id, dish]);
+    }
+  };
+  useEffect(() => {
+    fetchCartData();
+  }, [cityId, c_id, dish]);
 
   const HandleAddToCart = async () => {
-    if (! c_id) {
+    if (!c_id) {
       Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
         onOk() {
           navigate('/');
         },
-        onCancel() {},
+        onCancel() { },
         cancelText: 'Cancel',
         okText: 'Sign In',
       });
       return;
     }
-    
+
     try {
       setLoading(true);
       const formData = new FormData();
@@ -165,7 +166,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
           description: response.data.message,
         });
 
-        dispatch(actions.addToCart({ ...dish, quantity: 1}));
+        dispatch(actions.addToCart({ ...dish, quantity: 1 }));
         setQuantity(1);
 
         const newCartId =
@@ -184,7 +185,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
           message: 'Error',
           description: response.data.message || 'Something went wrong.',
         });
-      
+
       }
     } catch (error) {
       // console.error('Error adding to cart:', error);
@@ -241,7 +242,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
     hooks.useWishlistHandler();
 
 
-    
+
   // if (loading) {
   //   return <components.Loader />;
   // }
@@ -284,10 +285,26 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
           <span className="proName">{dish.option_value_name}</span>
           <span className="proWeigh">
             {/* {dish.kcal} kcal - {dish.weight}g */}
-
             {dish.weight} {dish.weight_unit}
           </span>
-          <span className="proPrice">₹ {dish.price}</span>
+
+
+          {Number(dish.discount ?? 0) > 0 ? (
+            <>
+              <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
+                ₹ {dish.price}
+              </span>
+              <span className="proPrice" style={{ marginLeft: '8px'}}>
+                ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+              </span>
+            </>
+          ) : (
+            <span className="proPrice">
+              ₹ {dish.price}
+            </span>
+          )}
+
+
         </div>
       </div>
 
@@ -306,10 +323,10 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
 
 
         <div className="cartButtonWrap">
-          {  quantity < 1 ? (
+          {quantity < 1 ? (
             <button className="cartButton" onClick={HandleAddToCart}>
-            + Add
-          </button>
+              + Add
+            </button>
           ) : (
             <>
               <button

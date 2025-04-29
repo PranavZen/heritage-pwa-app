@@ -55,12 +55,13 @@ export const Order: React.FC = () => {
   const [freeNoOfdeliveries, SetfreeNoOfdeliveries] = useState<any[]>([]);
 
 
-  console.log("freeNoOfdeliveries", totalPrice);
+  // console.log("freeNoOfdeliveries", totalPrice);
 
   const [addressId, SetAddressId] = useState('');
   const [superPoint, setSuperPoint] = useState<any>(null);
 
-  console.log("superPoint", superPoint);
+  // console.log("superPoint", superPoint.optionListing
+  // );
 
 
 
@@ -68,12 +69,12 @@ export const Order: React.FC = () => {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [coupons, setCoupons] = useState<any[]>([]);
   const [cartDetails, setCartDetails] = useState<any>(null);
-
+  // console.log("cartDetails", cartDetails)
   const [deliveries, SetDeliveries] = useState<any[]>([]);
-  // console.log("deliveriesdeliveries", deliveries)
+
   const [addresses, setAddresses] = useState<any[]>([]);
 
-  const [getrewardbalance, setGetrewardBalance] = useState<any[]>([]);;
+  const [getrewardbalance, setGetrewardBalance] = useState<any[]>([]);
 
 
 
@@ -88,38 +89,38 @@ export const Order: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [redeemedAmount, setRedeemedAmount] = useState(0);
 
+  // console.log("sssssss", redeemedAmount);
+
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isApplying, setIsApplying] = useState<boolean>(false);
 
+  const [extraDiscount, setExtraDiscount] = useState<any[]>([]);
 
-  // console.log("shouldRefresh", shouldRefresh);
+
+  // console.log("extraDiscount", extraDiscount);
+
+  const [superPointCoins, SetSuperPoint] = useState<number>(0);
+
+
+  // console.log("superPointCoins", superPointCoins);
 
   const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
     setIsChecked(checked);
-    setIsApplying(true);
-    setShowModal(true);
+    // setIsApplying(true);
+    // setShowModal(true);
     if (checked && superPoint) {
-      setRedeemedAmount(superPoint.
-        available_amount
-      );
+      setRedeemedAmount(superPoint.available_amount);
+      SetSuperPoint(superPoint.available_points)
+
     } else {
       setRedeemedAmount(0);
+      SetSuperPoint(0);
     }
   };
 
-  // const handleCheckboxChange = (e: any) => {
-  //   const checked = e.target.checked;
-  //   setIsChecked(checked);
-  //   setIsApplying(true);
-  //   if (checked && superPoint > 10) {
-  //     setShowModal(true);
-  //     setRedeemedAmount(superPoint.available_amount);
-  //   } else {
-  //     setRedeemedAmount(0);
-  //   }
-  // };
+
 
   setTimeout(() => {
     setShowModal(false);
@@ -171,11 +172,16 @@ export const Order: React.FC = () => {
           `https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv`,
           formData
         );
-        console.log("nmnmnmnmnmnmnmnmmnxxx", response);
+        // console.log("nmnmnmnmnmnmnmnmmnxxx", response);
 
         SetTotalPrice(response.data.optionListing);
         SetDeliveries(response.data.optionListing.map((elem: any) => elem.no_of_deliveries))
         SetfreeNoOfdeliveries(response.data.optionListing.map((elem: any) => elem.no_of_free_deliveries));
+        setExtraDiscount(
+          response.data.optionListing.map((elem: any) =>
+            (elem.no_of_deliveries - elem.no_of_free_deliveries) * elem.discount * elem.quantity
+          ) 
+        );
       } catch (error) {
         console.error(error);
       }
@@ -234,6 +240,8 @@ export const Order: React.FC = () => {
     const formData = new FormData();
     formData.append('c_id', c_id || '');
     formData.append('addresses_id', String(addressId) || selectedAddressId || '');
+    formData.append('redeem_reward_points', String(superPointCoins));
+
     try {
       const response = await axios.post(
         `https://heritage.bizdel.in/app/consumer/services_v11/placeOrder`,
@@ -242,7 +250,7 @@ export const Order: React.FC = () => {
       if (response.data.status === 'success') {
         notification.success({ message: response.data.message });
         // setOrderPlaced(true); 
-        navigate('/your-order');
+        navigate('/thank-you');
         localStorage.removeItem('couponCode')
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message || 'Order placement failed' });
@@ -360,7 +368,7 @@ export const Order: React.FC = () => {
         formData.append("area_id", localStorage.getItem('area_id') || '');
         formData.append('next_id', '0');
         formData.append('cart_type', '2');
-        formData.append('redeem_points', localStorage.getItem('reward_balance') || '');
+        formData.append('redeem_points', String(localStorage.getItem('reward_balance') || ''));
 
         // console.log('Passing redeem_points:', getrewardbalance);
 
@@ -389,7 +397,7 @@ export const Order: React.FC = () => {
       }
     };
     fetchCoupons();
-  }, [cId]);
+  }, []);
 
   // *******************Super Coupons *******************************
   const { menuLoading, menu } = hooks.useGetMenu();
@@ -480,8 +488,6 @@ export const Order: React.FC = () => {
   const selectedAddress = selectedAddressId
     ? addresses?.find((a) => a.id === selectedAddressId)
     : null;
-
-
   const AddressWithButton = (): JSX.Element => {
     return (
       <>
@@ -661,7 +667,7 @@ export const Order: React.FC = () => {
             </span>
           </div>
 
-          {/* <div
+          <div
             className='row-center-space-between'
             style={{
               paddingBottom: 13,
@@ -669,9 +675,11 @@ export const Order: React.FC = () => {
               borderBottom: '1px solid #DBE9F5',
             }}
           >
-            <span className='t14'>Delivery charges</span>
-            <span className='t14'>₹{delivery}</span>
-          </div> */}
+            <span className='t14'>Extra Discount of {extraDiscount ? extraDiscount : '0'} applied </span>
+
+            <span className='t14'>₹{extraDiscount}</span>
+          </div>
+          {/* ******************************************************* */}
 
 
           <div
@@ -682,10 +690,44 @@ export const Order: React.FC = () => {
               borderBottom: '1px solid #DBE9F5',
             }}
           >
-            <span className='t14'>Discount ({localStorage.getItem('couponCode')}) of ₹{cartDetails?.after_discount_total} applied!</span>
-            {localStorage.getItem('couponCode') ? <><span className='t14'>₹{cartDetails?.after_discount_total}</span> </> : <>  ₹{' '} 0 </>}
+            <span className='t14'> Discount on Free Deliveries</span>
+
+            <span className='t14'>
+              ₹ {
+                superPoint && superPoint.optionListing && superPoint.optionListing.length > 0
+                  ? superPoint.optionListing.map((elem: any) => {
+                    return (elem.price - elem.discount ) * elem.no_of_free_deliveries ;
+                  }).reduce((acc: number, current: number) => acc + current, 0)
+                  : 0
+              }
+            </span>
+
+
           </div>
 
+
+          {/* *************************************************** */}
+
+
+
+          {localStorage.getItem('coupon') ? <> <div
+            className='row-center-space-between'
+            style={{
+              paddingBottom: 13,
+              marginBottom: 20,
+              borderBottom: '1px solid #DBE9F5',
+            }}
+          >
+
+            {localStorage.getItem('coupon') ? <> </> : <></>}
+
+            <span className='t14'>
+              Coupon {localStorage.getItem('couponCode') || '₹ 0'} applied
+              {localStorage.getItem('couponCode') && ` of ₹${cartDetails?.after_discount_total || 0}`}
+              !
+            </span>
+            {localStorage.getItem('couponCode') ? <><span className='t14'>₹{cartDetails?.after_discount_total}</span> </> : <>  ₹{' '} 0 </>}
+          </div> </> : <></>}
           <div
             className='row-center-space-between'
             style={{
@@ -750,12 +792,10 @@ export const Order: React.FC = () => {
 
                         const lineTotal = Number(elem.quantity) * Number(elem.price) * deliveryCount;
 
-                        return total + lineTotal;
+                        return total + lineTotal - (Number(extraDiscount) || 0);
                       }, 0) - (redeemedAmount > 0 ? redeemedAmount : 0)
                     ).toFixed(2)
                   }
-
-
                 </h4>
               ) : localStorage.getItem('couponCode') || redeemedAmount > 1 ? (
                 <h4>
@@ -770,7 +810,7 @@ export const Order: React.FC = () => {
                       }, 0)
                       .toFixed(2);
 
-                    console.log("aaaaa", cartTotal);
+                    // console.log("aaaaa", cartTotal);
 
                     let discount = 0;
 
@@ -779,6 +819,7 @@ export const Order: React.FC = () => {
                     }
 
                     // console.log("bbb", discount)
+
                     const gst = Number(cartDetails?.gst_tax_total || 0);
 
                     // console.log("cccc", gst);
@@ -788,9 +829,9 @@ export const Order: React.FC = () => {
                     // console.log("ddddd", deliveryMultiplier)
 
                     // const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
+                    const total = (Number(cartTotal) - discount - (Number(extraDiscount) || 0)) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
 
-                    const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
-
+                    // console.log("bbbb", total);
                     return total.toLocaleString('en-IN');
 
                   })()}

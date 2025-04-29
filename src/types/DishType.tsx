@@ -42,5 +42,8 @@ export type DishType = {
   packages_name:string;
   cart_product_option_value_id:string;
   prod_description:string;
+  
+no_of_free_deliveries:string;
+discount:string;
 
 };

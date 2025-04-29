@@ -125,7 +125,6 @@ export const Dish: React.FC = () => {
               String(item.cart_product_option_value_id) === String(dish.cart_product_option_value_id || dish.product_option_value_id
               )
           );
-
           if (matchedItem) {
             setQuantity(Number(matchedItem.quantity) || 1);
             setCartItemId(String(matchedItem.cart_id));
@@ -140,8 +139,6 @@ export const Dish: React.FC = () => {
         console.error('Error fetching cart data:', error);
       }
     };
-
-
     // if (shouldRefresh) {
     //   fetchCartData().finally(() => {
     //     dispatch(setShouldRefresh(true));
@@ -277,9 +274,6 @@ export const Dish: React.FC = () => {
       });
     }
   };
-
-
-
 
   // console.log("deliveryOptionsPreferencedeliveryOptionsPreference", deliveryOptionsPreference);
 
@@ -928,7 +922,20 @@ export const Dish: React.FC = () => {
 
           <div className="priceWrap">
             <span>
-              <small>MRP</small> ₹ {dish.price}
+            {Number(dish.discount ?? 0) > 0 ? (
+            <>
+              <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
+                ₹ {dish.price}
+              </span>
+              <span className="proPrice" style={{ marginLeft: '8px'}}>
+                ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+              </span>
+            </>
+          ) : (
+            <span className="proPrice">
+              ₹ {dish.price}
+            </span>
+          )}
             </span>
           </div>
           <span className="ppText">Per Pack</span>

@@ -524,16 +524,16 @@ export const SubscriptionOrder: React.FC = () => {
                             Pack: {subscription.quantity} Per day (
                             {subscription.package_name})
                           </p>
-                          <p className="orderLD">
+                          {/* <p className="orderLD">
                             Last Delivered:{" "}
                             {subscription.lastDeliveryDate || "-"}
-                          </p>
+                          </p> */}
                           <p className="orderPrice">
                             <small>MRP</small> ₹{subscription.price}{" "}
                             <span>per pack</span>
-                          </p>
-                          <p className="orderBalAmt">
-                            Total Amount : ₹ {subscription.price * subscription.quantity}
+                          </p>  
+                          <p className="orderBalAmt"> 
+                            Total Amount : ₹ {subscription.subscription_block_amount}
                           </p>
                         </div>
                       </div>
@@ -594,7 +594,7 @@ export const SubscriptionOrder: React.FC = () => {
                       <div className="orderBtnsWraps">
                         {/* <button className="btn">Pause Delivery</button> */}
 
-                        {
+                        {/* {
                           subscription.status === 'Payment pending' ? <> <Switch
                             checked={pauseToggle[subscription.subscription_id] || false}
                             onClick={toggle(subscription)}
@@ -603,7 +603,7 @@ export const SubscriptionOrder: React.FC = () => {
                             checked={pauseToggle[subscription.subscription_id] || false}
                             onClick={toggle(subscription)}
                           /></>
-                        }
+                        } */}
 
                         {/* <button
                           onClick={() => navigate('/subscription-modify', { state: { subscription: subscription } })}
@@ -611,7 +611,7 @@ export const SubscriptionOrder: React.FC = () => {
                         >
                           Modify
                         </button> */}
-                        {
+                        {/* {
                           subscription.status === 'expire' ? <>  <button
                         
                             onClick={() =>
@@ -623,7 +623,7 @@ export const SubscriptionOrder: React.FC = () => {
                           </button> </> : <>
                               
                           </>
-                        }
+                        } */}
                       </div>
                       <div className="subscription_idWrap">
                         <p>Subscription Id: #{subscription.subscription_id}</p>
@@ -647,7 +647,7 @@ export const SubscriptionOrder: React.FC = () => {
           </div>
         )}
 
-        <Modal
+        {/* <Modal
           title="Pause Subscription"
           open={isModalVisiblePause}
           onOk={handleOk || handlePauseConfirm}
@@ -677,10 +677,10 @@ export const SubscriptionOrder: React.FC = () => {
               disabledDate={(current) => current && current < moment().add(1, 'days').startOf('day')} 
             />
           </div>
-        </Modal>
+        </Modal> */}
 
         {/* Modal for resuming the subscription */}
-        <Modal
+        {/* <Modal
           title="Resume Subscription"
           open={isModalVisibleResume}
           onOk={handleResumeConfirm}   // Confirm button
@@ -691,7 +691,7 @@ export const SubscriptionOrder: React.FC = () => {
         >
           <p>Subscription will resume from tomorrow: <strong>{pauseDate}</strong>.</p>
           <p>Are you sure you want to resume this subscription?</p>
-        </Modal>
+        </Modal> */}
         {/* ************************************************One time Order******************************************* */}
 
         {activeTab === "one-time-orders" && (
@@ -844,6 +844,8 @@ export const SubscriptionOrder: React.FC = () => {
     <div id="screen" style={{ opacity }}>
       {/* {renderHeader()} */}
       {renderContent()}
+
+      
       {/* {renderFooter()} */}
     </div>
   );

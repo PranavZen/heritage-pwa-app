@@ -167,6 +167,10 @@ const stack = createBrowserRouter([
     path: Routes.SelectMyAddress,
     element:<screens.SelectMyAddress/>
   },
+  {
+    path: Routes.ThankYouPage,
+    element:<screens.ThankYouPage/>
+  },
   // {
   //   path: Routes.OrderItemCoupon,
   //   element:<screens.OrderItemCoupon />

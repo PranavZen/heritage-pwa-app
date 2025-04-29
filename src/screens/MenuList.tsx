@@ -211,8 +211,6 @@ export const MenuList: React.FC = () => {
     );
   };
    
-  
-
 
   const renderLoader = (): JSX.Element | null => {
     if (categoryLoading) {
