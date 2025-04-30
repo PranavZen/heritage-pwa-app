@@ -155,6 +155,7 @@ export const SubscriptionOrder: React.FC = () => {
     };
 
 
+<<<<<<< HEAD
     const handleCancelModal = () => {
         setIsModalVisible(false);
     };
@@ -591,6 +592,117 @@ export const SubscriptionOrder: React.FC = () => {
                                                 </div>
                                             </div>
                                             {/* <span className="subExpiredText">
+=======
+    return (
+      <main className="scrollable ordersScreenWrapper">
+        <div className="tabs">
+          <button
+            className={`tab-button ${activeTab === "subscriptions" ? "active" : ""
+              }`}
+            onClick={() => setActiveTab("subscriptions")}
+          >
+            Subscriptions
+          </button>
+          <button
+            className={`tab-button ${activeTab === "one-time-orders" ? "active" : ""
+              }`}
+            onClick={() => setActiveTab("one-time-orders")}
+          >
+            One-Time Orders
+          </button>
+        </div>
+        {activeTab === "subscriptions" && (
+          <div className="ordersContainer">
+            <h2>Subscription Orders</h2>
+            <div className="scrollable-container">
+              <div className="card-list">
+                {Array.isArray(subscriptionData) &&
+                  subscriptionData.length > 0 ? (
+                  subscriptionData.map((subscription) => (
+                    <div key={subscription.subscription_id} className="card">
+                      <div className="topCardDataWrap">
+                        <div className="orderImagWrap">
+                          <img
+                            src={subscription.image}
+                            alt={subscription.product_name}
+                            className="card-img"
+                          />
+                        </div>
+                        <div className="card-info">
+                          <h3 className="orderItmName">
+                            {subscription.product_name}
+                          </h3>
+                          <p className="orderItmWieght">
+                            {subscription.weight} {subscription.weight_unit}
+                          </p>
+                          <p className="orderQuantity">
+                            Pack: {subscription.quantity} Per day (
+                            {subscription.package_name})
+                          </p>
+                          {/* <p className="orderLD">
+                            Last Delivered:{" "}
+                            {subscription.lastDeliveryDate || "-"}
+                          </p> */}
+                          <p className="orderPrice">
+                            <small>MRP</small> ₹{subscription.price}{" "}
+                            <span>per pack</span>
+                          </p>  
+                          <p className="orderBalAmt"> 
+                            Total Amount : ₹ {subscription.subscription_block_amount}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="dataWraps">
+                        <div className="wrap">
+                          <p>Delivered</p>
+                          <span>
+                            {subscription.totalDeliveredOrder +
+                              "/" +
+                              subscription.totalDeliveries}
+                          </span>
+                        </div>
+                        <div className="wrap">
+                          <p>Next Delivery</p>
+                          <span>{subscription.nextDeliveryDate || "-"}</span>
+                        </div>
+                      </div>
+                      <div className="orderDateWrap">
+                        <div className="orderDateLeftBox box50">
+                          <div className="svgWrap">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width={24}
+                              height={24}
+                            >
+                              <path d="M19,2h-1V1c0-.552-.447-1-1-1s-1,.448-1,1v1H8V1c0-.552-.447-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5ZM5,4h14c1.654,0,3,1.346,3,3v1H2v-1c0-1.654,1.346-3,3-3Zm14,18H5c-1.654,0-3-1.346-3-3V10H22v9c0,1.654-1.346,3-3,3Zm0-8c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h12c.553,0,1,.448,1,1Zm-7,4c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h5c.553,0,1,.448,1,1Z" />
+                            </svg>
+                          </div>
+                          <div className="innerBox">
+                            {" "}
+                            <p>Start Date</p>
+                            <span>{subscription.start_date || "-"}</span>
+                          </div>
+                        </div>
+                        <div className="orderDateRightBox box50">
+                          <div className="svgWrap">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width={24}
+                              height={24}
+                            >
+                              <path d="M19,2h-1V1c0-.552-.447-1-1-1s-1,.448-1,1v1H8V1c0-.552-.447-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5ZM5,4h14c1.654,0,3,1.346,3,3v1H2v-1c0-1.654,1.346-3,3-3Zm14,18H5c-1.654,0-3-1.346-3-3V10H22v9c0,1.654-1.346,3-3,3Zm0-8c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h12c.553,0,1,.448,1,1Zm-7,4c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h5c.553,0,1,.448,1,1Z" />
+                            </svg>
+                          </div>
+                          <div className="innerBox">
+                            <p>Delivery End Date </p>
+                            <span>{subscription.end_date || "-"}</span>
+                          </div>
+                        </div>
+                      </div>
+                      {/* <span className="subExpiredText">
+>>>>>>> roshan
                         Subscription Expired
                       </span> */}
 
@@ -598,6 +710,7 @@ export const SubscriptionOrder: React.FC = () => {
                                             <div className="orderBtnsWraps">
                                                 {/* <button className="btn">Pause Delivery</button> */}
 
+<<<<<<< HEAD
                                                 {
                                                     subscription.status === 'Payment pending' ? <> <Switch
                                                         checked={pauseToggle[subscription.subscription_id] || false}
@@ -622,6 +735,71 @@ export const SubscriptionOrder: React.FC = () => {
                                                         onClick={() =>
                                                             handleSubscriptionID(subscription.subscription_id)
                                                         }
+=======
+                        {/* {
+                          subscription.status === 'Payment pending' ? <> <Switch
+                            checked={pauseToggle[subscription.subscription_id] || false}
+                            onClick={toggle(subscription)}
+                            disabled
+                          /> </> : <> <Switch
+                            checked={pauseToggle[subscription.subscription_id] || false}
+                            onClick={toggle(subscription)}
+                          /></>
+                        } */}
+
+                        {/* <button
+                          onClick={() => navigate('/subscription-modify', { state: { subscription: subscription } })}
+                          className="btn"
+                        >
+                          Modify
+                        </button> */}
+                        {/* {
+                          subscription.status === 'expire' ? <>  <button
+                        
+                            onClick={() =>
+                              handleSubscriptionID(subscription.subscription_id)
+                            }
+                            className="btn"
+                          >
+                            Renew
+                          </button> </> : <>
+                              
+                          </>
+                        } */}
+                      </div>
+                      <div className="subscription_idWrap">
+                        <p>Subscription Id: #{subscription.subscription_id}</p>
+                      </div>
+                      <div
+                        className="statusWrap"
+                        style={{
+                          backgroundColor:
+                            subscription.status === "Active" ? "green" : "red",
+                        }}
+                      >
+                        <span>{subscription.status}</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>No subscriptions found.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* <Modal
+          title="Pause Subscription"
+          open={isModalVisiblePause}
+          onOk={handleOk || handlePauseConfirm}
+          onCancel={handlePauseCancel}
+          confirmLoading={loading}
+          okText="Pause Subscription"
+          cancelText="Cancel"
+        >
+          <p>Are you sure you want to pause the subscription?</p>
+>>>>>>> roshan
 
                                                         className="btn"
                                                     >
@@ -630,6 +808,7 @@ export const SubscriptionOrder: React.FC = () => {
                                                     </> :
                                                         <>
 
+<<<<<<< HEAD
                                                         </>
                                                 }
                                             </div>
@@ -651,6 +830,51 @@ export const SubscriptionOrder: React.FC = () => {
                                     <p>No subscriptions found.</p>
                                 )}
                             </div>
+=======
+          <div style={{ marginTop: '10px' }}>
+            <label>Resume Date:</label>
+            <DatePicker
+              value={resumeDate ? moment(resumeDate) : null} 
+              onChange={(date) => setResumeDate(date ? date.format('YYYY-MM-DD') : '')}
+              format="YYYY-MM-DD"
+              disabledDate={(current) => current && current < moment().add(1, 'days').startOf('day')} 
+            />
+          </div>
+        </Modal> */}
+
+        {/* Modal for resuming the subscription */}
+        {/* <Modal
+          title="Resume Subscription"
+          open={isModalVisibleResume}
+          onOk={handleResumeConfirm}   // Confirm button
+          onCancel={handleResumeCancel} // Cancel button
+          confirmLoading={loading}
+          okText="Resume Subscription"
+          cancelText="Cancel"
+        >
+          <p>Subscription will resume from tomorrow: <strong>{pauseDate}</strong>.</p>
+          <p>Are you sure you want to resume this subscription?</p>
+        </Modal> */}
+        {/* ************************************************One time Order******************************************* */}
+
+        {activeTab === "one-time-orders" && (
+          <div className="ordersContainer">
+            <h2>One Time Orders</h2>
+            <div className="scrollable-container">
+              <div className="card-list">
+                {Array.isArray(oneTimeOrderData) &&
+                  oneTimeOrderData.length > 0 ? (
+                  oneTimeOrderData.map((order) => (
+                    <div key={order.subscription_id} className="card">
+
+                      <div className="topCardDataWrap">
+                        <div className="orderImagWrap">
+                          <img
+                            src={order.image}
+                            alt={order.product_name}
+                            className="card-img"
+                          />
+>>>>>>> roshan
                         </div>
                     </div>
                 )}
@@ -850,6 +1074,7 @@ export const SubscriptionOrder: React.FC = () => {
     //     return <components.Footer />;
     // };
 
+<<<<<<< HEAD
     return (
         <div id="screen" style={{ opacity }}>
             {renderHeader()}
@@ -858,3 +1083,15 @@ export const SubscriptionOrder: React.FC = () => {
         </div>
     );
 }; 
+=======
+  return (
+    <div id="screen" style={{ opacity }}>
+      {/* {renderHeader()} */}
+      {renderContent()}
+
+      
+      {/* {renderFooter()} */}
+    </div>
+  );
+};
+>>>>>>> roshan

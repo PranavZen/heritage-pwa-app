@@ -10,9 +10,6 @@ import { addToCart, removeFromCart, setShouldRefresh } from '../store/slices/car
 import { RootState } from '../store';
 import { TabScreens } from '../routes';
 import { actions } from '../store/actions';
-import  FaBackward  from "../assets/icons/left.png";
-
-
 
 type Props = {
   dish: DishType;
@@ -20,6 +17,8 @@ type Props = {
 };
 
 export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
+
+  // console.log("dishzzzzzzzzzz", dish.product_option_value_id);
   const dispatch = useDispatch();
   const navigate = hooks.useNavigate();
   const [deliveryPreferenceInModal, setDeliveryPreferenceInModal] = useState<any[]>([]);
@@ -27,14 +26,12 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
 
-  // console.log("dishzzzzzzzzzz", dish);
-
   useEffect(() => {
     const getData = async () => {
       const formData = new FormData();
       formData.append('c_id', localStorage.getItem('c_id') || '');
       formData.append('city_id', localStorage.getItem('cityId') || '');
-      formData.append('product_option_value_id', '50');
+      formData.append('product_option_value_id', (dish.product_option_value_id ? dish.product_option_value_id.toString() : ''));
       try {
         const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption', formData);
         setDeliveryPreferenceInModal(response.data.productDetails);
@@ -58,7 +55,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const c_id = localStorage.getItem('c_id');
   const cityId = localStorage.getItem('cityId');
 
-  
+
 
   // console.log("dis", dish);
 
@@ -109,10 +106,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   };
 
 
-
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
-  
+
     if (quantity > 1) {
       const newQuantity = quantity - 1;
       try {
@@ -192,9 +188,11 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       formData.append('city_id', cityId || '');
       formData.append('c_id', c_id || '');
       formData.append('next_id', '0');
+      formData.append('area_id', localStorage.getItem('area_id') || '');
+      formData.append('cart_type', '2');
       try {
         const response = await axios.post(
-          `https://heritage.bizdel.in/app/consumer/services_v11/getCartData`,
+          `https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv`,
           formData
         );
 
@@ -241,23 +239,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   //     localStorage.removeItem('curScreen');
   //   }
   // }, [cartCount]);
-  const handleHomeMenu = (screen: TabScreens) => {
-    if (screen) {
-      dispatch(actions.setScreen(screen));
-    } else {
-      console.error("Screen is not defined");
-    }
-  }
-  
+
   return (
     <>
-
       <div className="itemListBox">
-
-
-      <button onClick={() => handleHomeMenu(TabScreens.Home)}>
-        <img src={FaBackward} alt=""  width={30}/>
-      </button>
 
         <li className="cartLitItem">
           <div className="cartLeftBox">
@@ -297,8 +282,20 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                   fontSize: 16,
                 }}
               >
-                ₹ {dish.price}
+                MRP  ₹ {dish.price}
               </span>
+              <span
+                className="t14"
+                style={{
+                  color: "var(--main-color)",
+                  fontWeight: 600,
+                  fontSize: 16,
+                }}
+              >
+                  ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+              </span>
+
+
 
               <span
                 className="t14"
@@ -316,6 +313,12 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 </span>
               )}
 
+              <span
+                className="t14"
+                style={{ color: "var(--main-color)", fontWeight: 500 }}
+              >
+                <span className="cartLable">Free Deliveries :</span> {dish.no_of_free_deliveries}
+              </span>
               {dish.preferenceName && (
                 <span
                   className="t14"

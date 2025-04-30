@@ -156,10 +156,11 @@ export const OrderItemCoupon: React.FC<Props> = ({ dish}) => {
       const formData = new FormData();
       formData.append('city_id', cityId || '');
       formData.append('c_id', c_id || '');
+      formData.append('area_id', localStorage.getItem('area_id') || '');
       formData.append('next_id', '0');
       try {
         const response = await axios.post(
-          `https://heritage.bizdel.in/app/consumer/services_v11/getCartData`,
+          `https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv`,
           formData
         );
 

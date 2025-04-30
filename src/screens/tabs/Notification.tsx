@@ -18,7 +18,6 @@ export const Notification: React.FC = () => {
   const fetchWalletBalance = async () => {
     const formData = new FormData();
     formData.append("c_id", localStorage.getItem("c_id") || "");
-    // formData.append("c_id", "123207");
 
     try {
       const response = await fetch(

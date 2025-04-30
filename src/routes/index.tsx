@@ -67,5 +67,6 @@ export enum Routes{
   CouponSummary='/coupon-summary',
   SubscriptionOrderCheck='/your-order',
   OrderItemCoupon='/order-item',
-  SelectMyAddress='/select-Address'
+  SelectMyAddress='/select-Address',
+  ThankYouPage='/thank-you'
 }
