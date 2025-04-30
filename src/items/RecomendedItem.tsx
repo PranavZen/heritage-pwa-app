@@ -26,7 +26,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const [cartItemId, setCartItemId] = useState<string | null>(null);
 
   const c_id = localStorage.getItem('c_id') || '';
-  
+
   const cityId = localStorage.getItem('cityId') || '';
 
   const wishlist = useSelector((state: RootState) => state.wishlistSlice);
@@ -85,7 +85,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         onOk() {
           navigate('/');
         },
-        onCancel() {},
+        onCancel() { },
         cancelText: 'Cancel',
         okText: 'Sign In',
       });
@@ -300,7 +300,23 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           {dish.option_value_name}
         </span>
 
-        <components.Price dish={dish} />
+        {/* <components.Price dish={dish} /> */}
+
+        {Number(dish.discount ?? 0) > 0 ? (
+          <>
+            <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
+              ₹ {dish.price}
+            </span>
+            <span className="proPrice" style={{ marginLeft: '8px' }}>
+              ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+            </span>
+          </>
+        ) : (
+          <span className="proPrice">
+            ₹ {dish.price}
+          </span>
+        )}
+
 
         <div className="cartButtonWrap">
           {quantity < 1 ? (
@@ -332,7 +348,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           )}
         </div>
 
-        
+
       </div>
     </div>
   );

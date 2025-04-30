@@ -17,6 +17,7 @@ import SuperCoins from '../../components/Animation/SuperCoinsApply.json'
 import Lottie from 'lottie-react';
 import { actions } from '../../store/actions';
 import FaBackward from "../../assets/icons/left.png";
+import NoCartData from '../NoCartData';
 
 interface Address {
   id: string;
@@ -589,10 +590,9 @@ export const Order: React.FC = () => {
             {renderButton()}
           </>
         ) : (
-          <p style={{
-            display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: "20px",
-            height: "340px"
-          }}>No cart Data</p>
+           <>
+            <NoCartData/>
+           </>
         )}
       </main>
     );

@@ -21,9 +21,9 @@ interface Address {
   lastname: string;
   area_name: string;
   building_name: string;
-  // flat_plot_no: string;
-  // wing: string;
   building_id?: string;
+  city_name?: string;
+  state_name?: string;
 }
 
 export const AddressAdd: React.FC = () => {
@@ -32,15 +32,24 @@ export const AddressAdd: React.FC = () => {
   const location = useLocation();
   const { cityID } = location.state || {};
 
+
+  // console.log("cityIDcityID", cityID)
+
+  useEffect(() => {
+    if (cityID) {
+      setNewAddress({
+        ...newAddress,
+        ...cityID,
+      });
+    }
+  }, [cityID]);
+
   const [opacity, setOpacity] = useState<number>(0);
-  // const [addresses, setAddresses] = useState<Address[]>([]);
   const [newAddress, setNewAddress] = useState<Address>({
     address1: "",
     address2: "",
     pincode: "",
     building_name: "",
-    // flat_plot_no: "",
-    // wing: "",
     firstname: "",
     lastname: "",
     is_default: "0",
@@ -49,48 +58,80 @@ export const AddressAdd: React.FC = () => {
     state_id: "",
     city_id: "",
     area_id: "",
+    city_name: "",
+    state_name: "",
     area_name: "NallaSupara (West)",
   });
 
-  // console.log("newAddressnewAddressnewAddressnewAddress", newAddress);
+
+  // console.log("newAddress", newAddress);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [states, setStates] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
+  const [isPincodeVerified, setIsPincodeVerified] = useState<boolean>(false);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
-  const fetchStates = async (countryId: string) => {
-    const formData = new FormData();
-    formData.append("country_id", countryId);
+  const verifyPincode = async (pincode: string) => {
     try {
+      const formData = new FormData();
+      formData.append("pincode", String(pincode));
       const response = await axios.post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/getStateByCountryId",
+        "https://heritage.bizdel.in/app/consumer/services_v11/pincodeverify",
         formData
       );
-      setStates(response.data.stateDetails);
+
+      // console.log("uuuuuu", response);
+
+      if (response.data.status === "success") {
+        const cityData = response.data.search_data?.[0];
+        if (cityData) {
+          setNewAddress((prev) => ({
+            ...prev,
+            state_id: cityData.state_id || "",
+            state_name:cityData.state_name ||"",
+            city_id: cityData.city_id || "",
+            city_name: cityData.city_name || "",
+          }));
+          setIsPincodeVerified(true);
+          notification.success({ message: response.data.message });
+        } else {
+          setIsPincodeVerified(false);
+          notification.error({ message: response.data.message });
+        }
+      } else {
+        setIsPincodeVerified(false);
+        notification.error({ message: response.data.message });
+      }
     } catch (error) {
-      console.error("Error fetching states:", error);
+      setIsPincodeVerified(false);
+      console.error("Error verifying pincode:", error);
+      notification.error({ message: "Error verifying pincode" });
     }
   };
 
-  const fetchCities = async (stateId: string) => {
-    const formData = new FormData();
-    formData.append("state_id", stateId);
+  const handlePincodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setNewAddress((prev) => ({
+      ...prev,
+      pincode: value,
+    }));
 
-    try {
-      const response = await axios.post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/getCityByStateId",
-        formData
-      );
-      setCities(response.data.cityDetails);
-    } catch (error) {
-      console.error("Error fetching cities:", error);
+    if (value.length === 6) {
+      verifyPincode(value);
     }
   };
 
-  // console.log("aaaaaaa", newAddress);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewAddress((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const updateAddress = async () => {
     const formData = new FormData();
@@ -107,10 +148,7 @@ export const AddressAdd: React.FC = () => {
     formData.append("firstname", newAddress.firstname);
     formData.append("lastname", newAddress.lastname);
     formData.append("building_name", newAddress.building_name);
-    // formData.append("flat_plot_no", newAddress.flat_plot_no);
-    // formData.append("wing", newAddress.wing);
 
-    // Handle building_id only if it is not empty
     if (newAddress.building_id) {
       formData.append("building_id", newAddress.building_id);
     }
@@ -121,7 +159,7 @@ export const AddressAdd: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/updateAddress",
         formData
       );
-      // console.log("ResponseUpdate: ", response);
+
       if (response.data.status === "success") {
         navigate(Routes.MyAddress);
         notification.success({ message: response.data.message });
@@ -137,12 +175,11 @@ export const AddressAdd: React.FC = () => {
 
   const addAddress = async () => {
     const formData = new FormData();
-    // formData.append("id", "");
     formData.append("c_id", localStorage.getItem('c_id') || '');
     formData.append("country_id", newAddress.country_id);
     formData.append("state_id", newAddress.state_id);
     formData.append("city_id", newAddress.city_id);
-    formData.append("area_id", localStorage.getItem('area_id') || '')
+    formData.append("area_id", localStorage.getItem('area_id') || '');
     formData.append("address1", newAddress.address1);
     formData.append("address2", newAddress.address2);
     formData.append("pincode", newAddress.pincode);
@@ -151,10 +188,7 @@ export const AddressAdd: React.FC = () => {
     formData.append("lastname", newAddress.lastname);
     formData.append("area_name", newAddress.area_name);
     formData.append("building_name", newAddress.building_name);
-    // formData.append("flat_plot_no", newAddress.flat_plot_no);
-    // formData.append("wing", newAddress.wing);
 
-    // Handle building_id only if it is not empty
     if (newAddress.building_id) {
       formData.append("building_id", newAddress.building_id);
     }
@@ -165,12 +199,11 @@ export const AddressAdd: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/addAddress",
         formData
       );
-      // console.log("Response: ", response);
-      
+
       if (response.data.status === "success") {
         navigate(Routes.MyAddress);
         notification.success({ message: response.data.message });
-      } else if(response.data.status === "fail"){
+      } else if (response.data.status === "fail") {
         notification.error({ message: response.data.message });
       }
       setLoading(false);
@@ -180,33 +213,11 @@ export const AddressAdd: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (cityID) {
-      setNewAddress({
-        ...newAddress,
-        ...cityID,
-      });
-    }
-    fetchStates(newAddress.country_id);
-  }, [cityID]);
 
-  useEffect(() => {
-    if (newAddress.state_id) {
-      fetchCities(newAddress.state_id);
-    }
-  }, [newAddress.state_id]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewAddress((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("Submitting with city_id:", newAddress.city_id);
     if (newAddress.id) {
       updateAddress();
     } else {
@@ -253,85 +264,47 @@ export const AddressAdd: React.FC = () => {
               />
             </div>
           </div>
+
+
           <div className="inputWrap">
-            <div className="col-6">
-              <label className="form-label">Country</label>
-              <select
-                name="country_id"
-                value={newAddress.country_id}
-                onChange={(e) => {
-                  setNewAddress((prev) => ({
-                    ...prev,
-                    country_id: e.target.value,
-                  }));
-                  fetchStates(e.target.value);
-                }}
-                className="form-input"
-              >
-                <option value="1">India</option>
-              </select>
-            </div>
 
             <div className="col-6">
-              <label className="form-label">State</label>
-              <select
-                name="state_id"
-                value={newAddress.state_id}
-                onChange={(e) => {
-                  setNewAddress((prev) => ({
-                    ...prev,
-                    state_id: e.target.value,
-                  }));
-                }}
-                className="form-input"
-              >
-                {states.map((state) => (
-                  <option key={state.id} value={state.id}>
-                    {state.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="inputWrap">
-            <div className="col-6">
-              <label className="form-label">City</label>
-              <select
-                name="city_id"
-                value={newAddress.city_id}
-                onChange={(e) => {
-                  const selectedCityId = e.target.value;
-                  setNewAddress((prev) => ({
-                    ...prev,
-                    city_id: selectedCityId,
-                  }));
-                }}
-                className="form-input"
-              >
-              
-                <option value="" disabled>
-                  Choose your City
-                </option>
-
-                {cities.map((city) => (
-                  <option key={city.id} value={city.id}>
-                    {city.name}
-                  </option>
-                ))}
-              </select>
-
-            </div>
-            <div className="col-6">
-              <label className="form-label">Building Name</label>
+              <label className="form-label">Pincode</label>
               <input
                 type="text"
-                name="building_name"
-                value={newAddress.building_name}
-                onChange={handleInputChange}
+                name="pincode"
+                value={newAddress.pincode}
+                onChange={handlePincodeChange}
+                className="form-input"
+                maxLength={6}
+              />
+            </div>
+
+            <div className="col-6">
+              <label className="form-label">City</label>
+              <input
+                type="text"
+                name="city_name"
+                value={newAddress.state_name}
                 className="form-input"
               />
             </div>
           </div>
+
+
+
+          <div className="col-6">
+            <label className="form-label">City</label>
+            <input
+              type="text"
+              name="city_name"
+              value={newAddress.city_name}
+              className="form-input"
+            />
+          </div>
+
+
+
           <div>
             <label className="form-label">Address Line 1</label>
             <input
@@ -367,19 +340,7 @@ export const AddressAdd: React.FC = () => {
               />
             </div>
           </div>
-          <div className="inputWrap">
-            <div className="col-6">
-              <label className="form-label">Pincode</label>
-              <input
-                type="text"
-                name="pincode"
-                value={newAddress.pincode}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
-            </div>
-          </div>
+
 
           <div className="submitBtnWrap">
             <button type="submit" className="submit-btn">

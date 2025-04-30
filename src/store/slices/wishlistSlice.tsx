@@ -14,6 +14,7 @@ export const wishlistSlice = createSlice({
   initialState,
   reducers: {
     addToWishlist: (state, action: PayloadAction<DishType>) =>{
+      // console.log('vvvvv',action.payload)
       const inWishlist = state.list.find(
         (item) => item.option_value_name === action.payload.option_value_name,
       );
