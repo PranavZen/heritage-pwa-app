@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { hooks } from "../hooks";
-import { Routes } from "../routes";
+import { Routes, TabScreens } from "../routes";
 import { components } from "../components";
 import { notification } from "antd";
 import { useLocation } from "react-router-dom";
@@ -26,7 +26,7 @@ interface Address {
   state_name?: string;
 }
 
-export const AddressAdd: React.FC = () => {
+export const NewUsereAddAddress: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
   const location = useLocation();
@@ -73,7 +73,7 @@ export const AddressAdd: React.FC = () => {
   const [areaIdByPincode, setAreaIdByPincode] = useState<any[]>([]);
   const [selectedAreaId, setSelectedAreaId] = useState('');
 
-  // console.log("areaIdByPincode", areaIdByPincode)
+  console.log("areaIdByPincode", areaIdByPincode)
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
@@ -107,7 +107,7 @@ export const AddressAdd: React.FC = () => {
         formData
       );
 
-      // console.log("uuuuuu", response);
+      console.log("uuuuuu", response);
 
       if (response.data.status === "success") {
         const cityData = response.data.search_data?.[0];
@@ -226,7 +226,7 @@ export const AddressAdd: React.FC = () => {
       // console.log("responserrrrrr", response);
 
       if (response.data.status === "success") {
-        navigate(Routes.MyAddress);
+        navigate('/tab-navigator');
         notification.success({ message: response.data.message });
       } else if (response.data.status === "fail") {
         notification.error({ message: response.data.message });
@@ -237,6 +237,7 @@ export const AddressAdd: React.FC = () => {
       console.error("Error adding address:", error);
     }
   };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -266,7 +267,7 @@ export const AddressAdd: React.FC = () => {
         // console.log("kkkkkkk", response);
         setAreaIdByPincode(response.data.areaDetails)
       } catch (eror) {
-        // console.log(eror)
+        console.log(eror)
       }
     }
     GetAreaId();
@@ -274,7 +275,7 @@ export const AddressAdd: React.FC = () => {
 
   const handleAreaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAreaId(event.target.value);
-    // console.log('Selected Area ID:', event.target.value);
+    console.log('Selected Area ID:', event.target.value);
   };
 
 
@@ -342,8 +343,6 @@ export const AddressAdd: React.FC = () => {
                 )}
               </select>
             </div>
-
-
 
           </div>
           <div className="inputWrap">

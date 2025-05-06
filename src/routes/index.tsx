@@ -68,5 +68,6 @@ export enum Routes{
   SubscriptionOrderCheck='/your-order',
   OrderItemCoupon='/order-item',
   SelectMyAddress='/select-Address',
-  ThankYouPage='/thank-you'
+  ThankYouPage='/thank-you',
+  NewUsereAddAddress='new-address'
 }

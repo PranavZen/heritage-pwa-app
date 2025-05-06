@@ -7,6 +7,7 @@ import { Input } from "../components/Input";
 import { components } from "../components";
 import { notification } from "antd";
 import { useDispatch } from "react-redux";
+import { fetchWishlist } from "../store/slices/wishlistSlice";
 
 export const SignIn: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -63,8 +64,11 @@ export const SignIn: React.FC = () => {
         if (
           response.data.status === "success" &&
           response.data.action === "existing user"
-        ) {
+        ) 
+        
+        {
           setIsOtpSent(true);
+          dispatch(fetchWishlist());
           setOtpSentTime(Math.floor(Date.now() / 1000));
           notification.success({
             message: response.data.message || "OTP sent to your mobile number",
@@ -72,6 +76,7 @@ export const SignIn: React.FC = () => {
           });
           localStorage.setItem("c_id", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
+         
         
         } else {
           notification.error({
@@ -103,11 +108,12 @@ export const SignIn: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP",
         formData
       );
-      // console.log("otppppppppppppppp", response);
 
+      // console.log("otppppppppppppppp", response);
 
       if (response.data.status === "success") {
         const addressDetails = response.data.CustomerDetail[0].address_details;
+        navigate(Routes.NewUsereAddAddress);
         localStorage.setItem(
           "profileId",
           JSON.stringify(response.data.CustomerDetail[0].id)
@@ -121,13 +127,14 @@ export const SignIn: React.FC = () => {
             message: "OTP Verified. Please add your address.",
             placement: "bottomRight",
           });
-          navigate(Routes.AddressAdd);
+         
         } else {
           notification.success({
             message: "OTP Verified.",
             placement: "bottomRight",
           });
           navigate(Routes.TabNavigator);
+          dispatch(fetchWishlist());
         }
       } else {
         notification.error({

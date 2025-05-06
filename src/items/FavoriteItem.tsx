@@ -10,34 +10,74 @@ import { actions } from '../store/actions';
 import { Modal, notification } from 'antd';
 import axios from 'axios';
 import { setCartCount } from '../store/slices/cartSlice';
+import { fetchWishlist, toggleWishlistItem } from '../store/slices/wishlistSlice';
 
 type Props = {
   dish: DishType;
 };
 
 export const FavoriteItem: React.FC<Props> = ({ dish }) => {
+
+  // console.log("wwwwwwwwww", dish);
+
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
 
-  const wishlist = useSelector((state: RootState) => state.wishlistSlice);
-
-  const ifInWishlist = wishlist.list.find((item) => item.id === dish.id);
-
-
   const [quantity, setQuantity] = useState<number>(0);
-
-  // console.log("eeee", quantity);
-
   const [cartItemId, setCartItemId] = useState<string | null>(null);
 
   const c_id = localStorage.getItem('c_id') || '';
-
   const cityId = localStorage.getItem('cityId') || '';
+  const [wishlistData, setWishlistData] = useState([])
+
+
+  // console.log("wishlistDatawishlistData", wishlistData);
+
+  const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
+
+  // console.log("wishlistccccc", wishlist);
+
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0];
   };
+
+  // *************************************************************
+  useEffect(() => {
+    const functionData = async () => {
+      try {
+        const c_id = localStorage.getItem('c_id');
+        const area_id = localStorage.getItem('area_id');
+        const city_id = localStorage.getItem('cityId');
+
+        if (!c_id || !area_id || !city_id) {
+          throw new Error('Missing required values in localStorage');
+        }
+
+        const formData = new FormData();
+        formData.append('c_id', c_id);
+        formData.append('area_id', area_id);
+        formData.append('city_id', city_id);
+        formData.append('next_id', '0');
+
+        const response = await axios.post(
+          'https://heritage.bizdel.in/app/consumer/services_v11/getWishlistData',
+          formData
+        );
+        const wishlistData = response.data.wishlistListing
+        setWishlistData(wishlistData);
+
+        // console.log("rrrrr", response);
+      } catch (error) {
+        // console.log("error")
+      }
+    }
+    functionData()
+  }, [])
+
+
+  // ********************************************************************
 
   const fetchCartData = async () => {
     try {
@@ -71,6 +111,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
       console.error('Error fetching cart data:', error);
     }
   };
+  // console.log("product_option_value_id", dish);
 
   useEffect(() => {
     fetchCartData();
@@ -84,7 +125,6 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
         onOk() {
           navigate('/');
         },
-        onCancel() { },
         cancelText: 'Cancel',
         okText: 'Sign In',
       });
@@ -96,7 +136,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
       formData.append('c_id', c_id);
       formData.append('product_id', String(dish.product_id));
       formData.append('package_id', '13');
-      formData.append('product_option_id', String(dish.product_option_id));
+      formData.append('product_option_id', String(dish.option_id));
       formData.append('product_option_value_id', String(dish.product_option_value_id));
       formData.append('quantity', '1');
       formData.append('weight', String(dish.weight));
@@ -187,7 +227,6 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
-
     if (!cartItemId) return;
 
     if (quantity > 1) {
@@ -229,33 +268,74 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
     }
   };
 
+  // ******************************************************************************************************************
 
-  const wishlistHandler = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
+  const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // alert("helooooooooooooooooooo");
     event.stopPropagation();
-    if (ifInWishlist) {
-      dispatch(actions.removeFromWishlist(dish));
-    } else {
-      dispatch(actions.addToWishlist(dish));
+    const c_id_num = parseInt(localStorage.getItem('c_id') || '0');
+    if (!c_id_num) {
+      Modal.confirm({
+        title: 'Please Sign In',
+        content: 'You need to sign in to manage your wishlist.',
+        onOk() {
+          navigate('/');
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
+      });
+      return;
+    }
+    // console.log("dddddddd", dish)
+
+    const isInWishlist = wishlist.some(
+      (item) => item.product_option_value_id === dish.product_option_value_id
+    );
+
+    // console.log("tttttt", isInWishlist);
+
+
+    const type = isInWishlist ? 2 : 1;
+    
+    // console.log("hhhh", dish.option_value_id);
+    try {
+      const resultAction = await dispatch(toggleWishlistItem({
+        product_id: dish.product_id,
+        product_option_id:  Number(dish.product_id),
+        product_option_value_id: dish.product_option_value_id,
+        c_id: c_id_num,
+        type
+      }));
+
+      if (toggleWishlistItem.fulfilled.match(resultAction)) {
+        dispatch(fetchWishlist());
+      }
+    } catch (error) {
+      console.error('Wishlist action failed:', error);
     }
   };
 
+  // ********************************************************************************************************************
+
+  const isInWishlist = wishlist.some((item) => {
+    // console.log('Item product_option_value_id:', item.product_option_value_id);
+
+    // console.log('Dish product_option_value_id:', dish.product_option_value_id);
+
+    return item.product_option_value_id === dish.product_option_value_id;
+  });
+
+  // console.log("mmmm", isInWishlist);
+    
   return (
-
     <>
-
-
-      <div
-        className='proCardWrap'
-        // onClick={() => navigate(`/dish/${dish.id}`, { state: { dish } })}
-      >
+      <div className="proCardWrap">
         <div className="itemImgWrap">
           <img
             src={dish.option_value_image}
             alt={dish.name}
             onClick={() =>
-              navigate(`/dish/${dish.option_value_name}`, { state: { dish } })
+              navigate(`/dish/${dish.option_name}`, { state: { dish } })
             }
           />
         </div>
@@ -297,19 +377,32 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
             style={{
               position: 'absolute',
               right: 0,
-              bottom: 57,
+              bottom: 46,
               padding: 15,
               borderRadius: 10,
+              backgroundColor: 'transparent',
+              border: 'none',
             }}
           >
-            <svg.HeartSvg dish={dish} />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              style={{
+                fill: isInWishlist ? 'red' : 'gray',
+                transition: 'fill 0.3s ease',
+              }}
+            >
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
           </button>
 
           <span className="t14 number-of-lines-1" style={{ marginBottom: 5 }}>
             {dish.option_value_name}
           </span>
-
-          {/* <components.Price dish={dish} /> */}
 
           {Number(dish.discount ?? 0) > 0 ? (
             <>
@@ -325,7 +418,6 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
               ₹ {dish.price}
             </span>
           )}
-
 
           <div className="cartButtonWrap">
             {quantity < 1 ? (
@@ -356,21 +448,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
               </>
             )}
           </div>
-
-
         </div>
-        {/* <button
-        onClick={cartHandler}
-        style={{
-          position: 'absolute',
-          padding: 14,
-          right: 0,
-          bottom: 0,
-          borderRadius: 10,
-        }}
-      >
-        <svg.PlusSvg />
-      </button> */}
       </div>
     </>
   );

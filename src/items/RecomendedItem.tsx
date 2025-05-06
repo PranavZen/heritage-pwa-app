@@ -9,6 +9,8 @@ import { components } from '../components';
 import axios from 'axios';
 import { notification, Modal } from 'antd';
 import { setCartCount } from '../store/slices/cartSlice';
+import { toggleWishlistItem } from '../store/slices/wishlistSlice';
+import { fetchWishlist } from '../store/slices/wishlistSlice';
 
 type Props = {
   index: number;
@@ -19,20 +21,16 @@ type Props = {
 export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
+
   const [quantity, setQuantity] = useState<number>(0);
-
-  // console.log("eeee", quantity);
-
   const [cartItemId, setCartItemId] = useState<string | null>(null);
 
   const c_id = localStorage.getItem('c_id') || '';
-
   const cityId = localStorage.getItem('cityId') || '';
 
-  const wishlist = useSelector((state: RootState) => state.wishlistSlice);
-  const ifInWishlist = wishlist.list.find(
-    (item) => item.option_value_name === dish.option_value_name
-  );
+  const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
+
+  // console.log("wishlistccccc", wishlist);
 
   const getTomorrowDate = () => {
     const tomorrow = new Date();
@@ -85,7 +83,6 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         onOk() {
           navigate('/');
         },
-        onCancel() { },
         cancelText: 'Cancel',
         okText: 'Sign In',
       });
@@ -188,7 +185,6 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
-
     if (!cartItemId) return;
 
     if (quantity > 1) {
@@ -230,14 +226,51 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     }
   };
 
-  const wishlistHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+
+  const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    if (ifInWishlist) {
-      dispatch(actions.removeFromWishlist(dish));
-    } else {
-      dispatch(actions.addToWishlist(dish));
+
+    const c_id_num = parseInt(localStorage.getItem('c_id') || '0');
+    if (!c_id_num) {
+      Modal.confirm({
+        title: 'Please Sign In',
+        content: 'You need to sign in to manage your wishlist.',
+        onOk() {
+          navigate('/');
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
+      });
+      return;
+    }
+
+    const isInWishlist = wishlist.some(
+      (item) => item.option_value_id === dish.option_value_id
+    );
+
+    const type = isInWishlist ? 2 : 1;
+  //  console.log("product_option_value_id", dish.product_option_value_id)
+    try {
+      const resultAction = await dispatch(toggleWishlistItem({
+        product_id: dish.product_id,
+        product_option_id: dish.product_option_id,
+        product_option_value_id: dish.product_option_value_id,
+        c_id: c_id_num,
+        type
+      }));
+
+      if (toggleWishlistItem.fulfilled.match(resultAction)) {
+        dispatch(fetchWishlist());
+      }
+    } catch (error) {
+      console.error('Wishlist action failed:', error);
     }
   };
+
+  const isInWishlist = wishlist.some(
+    (item) => item.option_value_id === dish.option_value_id
+  );
 
   return (
     <div className="proCardWrap">
@@ -288,19 +321,32 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           style={{
             position: 'absolute',
             right: 0,
-            bottom: 57,
+            bottom:46,
             padding: 15,
             borderRadius: 10,
+            backgroundColor: 'transparent', 
+            border: 'none',
           }}
         >
-          <svg.HeartSvg dish={dish} />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            style={{
+              fill: isInWishlist ? 'red' : 'gray',
+              transition: 'fill 0.3s ease',
+            }}
+          >
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
         </button>
 
         <span className="t14 number-of-lines-1" style={{ marginBottom: 5 }}>
           {dish.option_value_name}
         </span>
-
-        {/* <components.Price dish={dish} /> */}
 
         {Number(dish.discount ?? 0) > 0 ? (
           <>
@@ -316,7 +362,6 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
             ₹ {dish.price}
           </span>
         )}
-
 
         <div className="cartButtonWrap">
           {quantity < 1 ? (
@@ -347,8 +392,6 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
             </>
           )}
         </div>
-
-
       </div>
     </div>
   );

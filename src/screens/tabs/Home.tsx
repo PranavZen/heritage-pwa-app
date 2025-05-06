@@ -20,7 +20,7 @@ export const Home: React.FC = () => {
   const { menuLoadingBanner, banner } = hooks.useGetMenu();
 
   // console.log("aqaqaqaqaqaqaqaqaqaqaq",banner);
-  
+
   // {console.log('dishesdishes',dishes)}
 
   const loading: boolean =
@@ -38,14 +38,16 @@ export const Home: React.FC = () => {
   };
 
   const renderCarousel = (): JSX.Element => {
-    const dish = dishes[2];
+    // const dish = dishes[2] || '';
+
+    const dish = Array.isArray(dishes) && dishes.length > 2 ? dishes[2] : null;
 
     return (
       <section
         style={{ marginBottom: 30, position: "relative" }}
       >
         <Swiper
-          modules={[Pagination]} 
+          modules={[Pagination]}
           slidesPerView={1}
           mousewheel={true}
           scrollbar={false}
@@ -98,7 +100,7 @@ export const Home: React.FC = () => {
       </section>
     );
   };
-  
+
   const renderMenu = (): JSX.Element => {
     return (
       <section style={{ marginBottom: 30 }}>
@@ -110,7 +112,7 @@ export const Home: React.FC = () => {
           containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}
         />
 
-        <div style={{ width: "100%"}}>
+        <div style={{ width: "100%" }}>
           <Swiper
             spaceBetween={10}
             slidesPerView={"auto"}
@@ -124,10 +126,10 @@ export const Home: React.FC = () => {
                 <SwiperSlide key={menu.id} style={{ width: "auto" }}>
                   <div className="itemWrap">
                     <button
-                        style={{
-                          marginRight: isLast ? 20 : 0,
-                          marginLeft: index === 0 ? 20 : 0
-                        }}
+                      style={{
+                        marginRight: isLast ? 20 : 0,
+                        marginLeft: index === 0 ? 20 : 0
+                      }}
                       onClick={() => {
                         navigate(Routes.MenuList, {
                           state: { menuName: menu.product_cat_id },
@@ -167,14 +169,14 @@ export const Home: React.FC = () => {
             mousewheel={true}
             breakpoints={{
               0: {
-                slidesPerView: 1.6, // For screens below 767px
+                slidesPerView: 1.6,
               },
               768: {
-                slidesPerView: 2.8, // For screens 768px and above
+                slidesPerView: 2.8,
               },
             }}
           >
-         
+            {/*          
             {dishes.map((dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;
               return (
@@ -187,7 +189,21 @@ export const Home: React.FC = () => {
                   />
                 </SwiperSlide>
               );
+            })} */}
+
+            {(dishes || []).map((dish: DishType, index: number, array: DishType[]) => {
+              const isLast = index === array.length - 1;
+              return (
+                <SwiperSlide key={dish.id} style={{ width: "auto" }}>
+                  <items.RecomendedItem
+                    index={index}
+                    isLast={isLast}
+                    dish={dish}
+                  />
+                </SwiperSlide>
+              );
             })}
+
           </Swiper>
         </div>
       </div>

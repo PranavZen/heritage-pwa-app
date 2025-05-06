@@ -11,11 +11,11 @@ import {setPromoCode} from '../slices/cartSlice';
 import {resetFilters} from '../slices/filterSlice';
 import {removeFromCart} from '../slices/cartSlice';
 import {setSelectedTags} from '../slices/filterSlice';
-import {addToWishlist} from '../slices/wishlistSlice';
+// import {addToWishlist} from '../slices/wishlistSlice';
 import {setSelectedSizes} from '../slices/filterSlice';
 import {setSelectedColors} from '../slices/filterSlice';
 import {setFirstLaunch} from '../slices/firstLaunchSlice';
-import {removeFromWishlist} from '../slices/wishlistSlice';
+// import {removeFromWishlist} from '../slices/wishlistSlice';
 import {setSelectedCategories} from '../slices/filterSlice';
 import {setPhoneVerified} from '../slices/verificationSlice';
 import {setEmailVerified} from '../slices/verificationSlice';
@@ -32,7 +32,7 @@ export const actions = {
   setDiscount,
   resetFilters,
   setPromoCode,
-  addToWishlist,
+  // addToWishlist,
   removeFromCart,
   setFirstLaunch,
   setSelectedTags,
@@ -40,11 +40,12 @@ export const actions = {
   setEmailVerified,
   setSelectedSizes,
   setSelectedColors,
-  removeFromWishlist,
+  // removeFromWishlist,
   setSelectedCategories,
   removeItemCompletely,
   refreshHeaderData,
   setCartCount,
+  
 };
 
 

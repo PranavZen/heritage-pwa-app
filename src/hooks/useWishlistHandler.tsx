@@ -1,53 +1,60 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { DishType } from "../types";
-import { RootState } from "../store";
-import { actions } from "../store/actions";
+import { RootState } from "../store"; 
+import { fetchWishlist, toggleWishlistItem } from "../store/slices/wishlistSlice";
 import { Modal } from "antd";
 import { hooks } from '../hooks';
 
+import { useAppDispatch } from "../store/actions/useAppDispatch"; 
+
+
+
 export const useWishlistHandler = () => {
-    const navigate = hooks.useNavigate();
-  const dispatch = useDispatch();
-  const wishlist = useSelector((state: RootState) => state.wishlistSlice);
+  const navigate = hooks.useNavigate();
+  const dispatch = useAppDispatch(); 
+  const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
 
-  const addToWishlist = (
+  useEffect(() => {
+    dispatch(fetchWishlist()); 
+  }, [dispatch]);
+
+  const addToWishlistHandler = (
     dish: DishType,
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    type: number 
   ) => {
     event.stopPropagation();
-     if (!localStorage.getItem('c_id')) {
-          Modal.confirm({
-            title: 'Please Sign In',
-            content: 'You need to sign in to add items to your cart.',
-            onOk() {
-              navigate('/');
-            },
-            onCancel() {},
-            cancelText: 'Cancel',
-            okText: 'Sign In',
-          });
-          return;
-        }
-    dispatch(actions.addToWishlist(dish));
+
+    const c_id = localStorage.getItem('c_id');
+    if (!c_id) {
+      Modal.confirm({
+        title: 'Please Sign In',
+        content: 'You need to sign in to manage your wishlist.',
+        onOk() {
+          navigate('/');
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
+      });
+      return;
+    }
+
+    dispatch(toggleWishlistItem({
+      product_id: dish.product_id,
+      product_option_id: dish.product_option_id,
+      product_option_value_id: dish.product_option_value_id,
+      c_id: parseInt(c_id),
+      type,
+    }));
   };
 
-  const removeFromWishlist = (
-    dish: DishType,
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.stopPropagation();
-    dispatch(actions.removeFromWishlist(dish));
+  const ifInWishlist = (id: number): boolean => {
+    return wishlist.some((dish) => dish.product_option_value_id === id);
   };
-
-  const ifInWishlist = (id: string): boolean => {
-    return wishlist.list.some((dish) => dish.option_value_name === id);
-  };
-  
-  
 
   return {
-    addToWishlist,
-    removeFromWishlist,
+    addToWishlistHandler,
     ifInWishlist,
   };
 };
