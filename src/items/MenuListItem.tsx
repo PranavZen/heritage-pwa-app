@@ -11,14 +11,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
 
-
 type Props = {
   dish: DishType;
   isLast: boolean;
+  selectedCategory: string;
 };
 
-export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
-  // console.log("dishdishdishdishdish", dish)
+export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }) => {
+  const showSubscribe = selectedCategory === '28' || selectedCategory === '29';
+  // console.log("dishdishdishdishdish", dish);
   const dispatch = hooks.useDispatch();
   const [cartId, setCartId] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(0);
@@ -299,7 +300,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
     (item) => item.option_value_id === dish.option_value_id
   );
 
-
   return (
     <li className="proListItemWrap">
       <div className="proLeftBox">
@@ -309,7 +309,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
             alt={dish.name}
             className="proItemImg"
             onClick={() =>
-              navigate(`/dish/${dish.option_name}`, { state: { dish } })
+              navigate(`/dish/${dish.option_name}`, { state: { dish , showSubscribe} })
             }
           />
         </div>
@@ -356,11 +356,8 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
               ₹ {dish.price}
             </span>
           )}
-
-
         </div>
       </div>
-
       <button
         onClick={wishlistHandler}
         style={{
@@ -389,8 +386,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
         </svg>
       </button>
       <div className="lastBox">
-
-
         <div className="cartButtonWrap">
           {quantity < 1 ? (
             <button className="cartButton" onClick={HandleAddToCart}>
@@ -420,11 +415,20 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
         </div>
         {
           quantity === 0 ? (<>
-            <button className="subscriptionButton"
+            {/* <button className="subscriptionButton"
               onClick={() =>
                 navigate(`/dish/${dish.option_name}`, { state: { dish } })
-              }
-            >Subscribe</button>
+              }>
+                Subscribe
+            </button> */}
+            {showSubscribe && (
+              <button className="subscriptionButton"
+                onClick={() =>
+                  navigate(`/dish/${dish.option_name}`, { state: { dish } })
+                }>
+                Subscribe
+              </button>
+            )}
           </>) : (<>
             <span className="smallText">Deliver once</span>
           </>)

@@ -38,7 +38,7 @@ export const MenuList: React.FC = () => {
 
   const [filterData, setFilterData] = useState<DishType[] | null>(null);
 
-  // console.log("filterDatafilterData", filterData);
+  console.log("filterDatafilterData", filterData);
 
   const [filterDataLoading, setFilterDataDishesLoading] =
     useState<boolean>(false);
@@ -47,9 +47,11 @@ export const MenuList: React.FC = () => {
 
   const c_id = localStorage.getItem('c_id');
 
+
+
+
   const getDishes = async () => {
     const cityId = localStorage.getItem("cityId");
-
     setFilterDataDishesLoading(true);
     const formData = new FormData();
     formData.append('city_id', cityId || 'null');
@@ -63,8 +65,11 @@ export const MenuList: React.FC = () => {
         `https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,
         formData
       );
-      // console.log("responseresponse",response);
+      console.log("responseewewewe",response);
+
       setFilterData(response.data?.optionListing || null);
+
+
       localStorage.setItem("product_option_value_id", response.data?.optionListing.product_option_value_id);
     } catch (error) {
       // console.error(error);
@@ -72,6 +77,12 @@ export const MenuList: React.FC = () => {
       setFilterDataDishesLoading(false);
     }
   };
+
+
+
+
+
+
 
   useEffect(() => {
     setFilterData(null);
@@ -195,13 +206,14 @@ export const MenuList: React.FC = () => {
           </div>
         ) : (
           <ul style={{ paddingBottom: 20 }}>
-            {filterData!.map((dish: DishType, index: number, array: DishType[]) => {
+            {filterData!.map((dish: DishType, index: number, array: DishType[]) =>{
               const isLast = index === array.length - 1;
-              return (
+              return(
                 <items.MenuListItem
                   dish={dish}
                   key={dish.cart_id}
                   isLast={isLast}
+                  selectedCategory={selectedCategory}
                 />
               );
             })}

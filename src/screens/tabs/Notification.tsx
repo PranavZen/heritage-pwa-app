@@ -9,7 +9,9 @@ export const Notification: React.FC = () => {
   const [rewardPoints, setRewardPoints] = useState<number>(0);
 
 
-  // console.log("rewardPointsrewardPoints", rewardPoints)
+  console.log("rewardPointsrewardPoints", rewardPoints)
+
+
   const [redeemPoints, setRedeemPoints] = useState<number>(0);
 
   // console.log("redeemPoints", redeemPoints)

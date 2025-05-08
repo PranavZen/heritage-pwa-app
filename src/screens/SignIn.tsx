@@ -111,7 +111,7 @@ export const SignIn: React.FC = () => {
 
       // console.log("otppppppppppppppp", response);
 
-      if (response.data.status === "success") {
+      if (response.data.status === "success"){
         const addressDetails = response.data.CustomerDetail[0].address_details;
         navigate(Routes.NewUsereAddAddress);
         localStorage.setItem(
@@ -144,10 +144,6 @@ export const SignIn: React.FC = () => {
       }
     } catch (error) {
       console.error("Error during OTP verification:", error);
-      notification.error({
-        message: "Something went wrong. Please try again.",
-        placement: "bottomRight",
-      });
     }
   };
 

@@ -82,19 +82,22 @@ export const Dish: React.FC = () => {
 
   const dish: DishType = location.state.dish;
 
+  const showSubscribe = location.state.showSubscribe
+
+  console.log("vvvvvvvvv", showSubscribe);
+
   // Ensure dish and the properties exist
   if (dish && dish.product_option_id && dish.product_option_value_id) {
     localStorage.setItem('product_option_id', dish.product_option_id.toString());
     localStorage.setItem('product_option_value_id', dish.product_option_value_id.toString());
   } else {
-    console.error('Error: Missing product_option_id or product_option_value_id in dish', dish);
+    // console.error('Error: Missing product_option_id or product_option_value_id in dish', dish);
   }
-
 
   const c_id = localStorage.getItem("c_id");
   const cityId = localStorage.getItem("cityId");
 
- const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
+  const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
 
   const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -122,7 +125,7 @@ export const Dish: React.FC = () => {
     try {
       const resultAction = await dispatch(toggleWishlistItem({
         product_id: dish.product_id,
-        product_option_id:  Number(dish.option_id),
+        product_option_id: Number(dish.option_id),
         product_option_value_id: dish.product_option_value_id,
         c_id: c_id_num,
         type
@@ -994,8 +997,8 @@ export const Dish: React.FC = () => {
               )}
             </span>
           </div>
-          <span className="ppText">Per Pack</span>
-          <p className="fatText">Fat 3.0%, SNF 8.5%</p>
+          {/* <span className="ppText">Per Pack</span>
+          <p className="fatText">Fat 3.0%, SNF 8.5%</p> */}
         </div>
       </div>
     );
@@ -1036,11 +1039,22 @@ export const Dish: React.FC = () => {
 
         {/* add quantity */}
 
-        <components.Button
-          text="Daily"
-          onClick={handleOpenModal}
-          containerStyle={{ marginBottom: 10 }}
-        />
+
+        {showSubscribe ?
+          <>
+            {!cartItemId ? <><components.Button
+              text="Subscription"
+              onClick={handleOpenModal}
+              containerStyle={{ marginBottom: 10 }}
+            /> </> :
+              <><components.Button
+                text="Update Subscription"
+                onClick={handleOpenModal}
+                containerStyle={{ marginBottom: 10 }}
+              /> </>
+            }
+          </> : <> </>}
+
         {/* <components.Button
           text="Alternate Days"
           onClick={handleOpenModalAlternateDays}

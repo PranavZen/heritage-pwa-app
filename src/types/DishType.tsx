@@ -46,5 +46,4 @@ export type DishType = {
 no_of_free_deliveries:string;
 discount:string;
 option_id:string;
-
 };

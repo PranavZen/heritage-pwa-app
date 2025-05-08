@@ -19,7 +19,7 @@ export const Home: React.FC = () => {
   const { carouselLoading, carousel } = hooks.useGetCarousel();
   const { menuLoadingBanner, banner } = hooks.useGetMenu();
 
-  // console.log("aqaqaqaqaqaqaqaqaqaqaq",banner);
+  console.log("aqaqaqaqaqaqaqaqaqaqaq", banner);
 
   // {console.log('dishesdishes',dishes)}
 
@@ -62,7 +62,7 @@ export const Home: React.FC = () => {
                 src={banner.image}
                 style={{ width: "100%", height: "100%" }}
                 className="clickable"
-                onClick={() => navigate(Routes.Dish, { state: { dish: dish } })}
+                onClick={() => navigate(Routes.MenuList, { state: {menuName: banner.banner_for_id } })}
               />
             </SwiperSlide>
           ))}
