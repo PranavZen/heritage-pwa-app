@@ -48,7 +48,6 @@ export const Home: React.FC = () => {
       <section style={{ position: "relative" }}>
         <Swiper
           modules={[Pagination]}
-          modules={[Pagination]}
           slidesPerView={1}
           mousewheel={true}
           scrollbar={false}
