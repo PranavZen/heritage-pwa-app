@@ -89,6 +89,7 @@ export const Header: React.FC<Props> = ({
 
 
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
+  console.log("cartCount", cartCount);
 
   // Add animation when cartCount changes
   useEffect(() => {

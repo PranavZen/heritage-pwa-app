@@ -25,6 +25,8 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
 
   const [quantity, setQuantity] = useState<number>(0);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [prevQuantity, setPrevQuantity] = useState<number>(0);
 
   const c_id = localStorage.getItem('c_id') || '';
   const cityId = localStorage.getItem('cityId') || '';
@@ -158,7 +160,10 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
         });
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
+        setPrevQuantity(quantity);
         setQuantity(1);
+        setIsAnimating(true);
+        setTimeout(() => setIsAnimating(false), 500);
 
         const newCartId =
           response.data.cart_id ||
@@ -205,7 +210,10 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
       );
 
       if (response.data.status === 'success') {
+        setPrevQuantity(quantity);
         setQuantity(newQuantity);
+        setIsAnimating(true);
+        setTimeout(() => setIsAnimating(false), 500);
         notification.success({
           message: 'Success',
           description: response.data.message,
@@ -249,7 +257,10 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
           });
 
           dispatch(actions.removeItemCompletely({ ...dish }));
+          setPrevQuantity(quantity);
           setQuantity(0);
+          setIsAnimating(true);
+          setTimeout(() => setIsAnimating(false), 500);
           setCartItemId(null);
           dispatch(setCartCount(Number(response.data.cart_count)));
         } else {
@@ -296,7 +307,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
 
 
     const type = isInWishlist ? 2 : 1;
-    
+
     // console.log("hhhh", dish.option_value_id);
     try {
       const resultAction = await dispatch(toggleWishlistItem({
@@ -326,7 +337,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
   });
 
   // console.log("mmmm", isInWishlist);
-    
+
   return (
     <>
       <div className="proCardWrap">
@@ -437,7 +448,18 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
                   <svg.MinusSvg />
                 </button>
 
-                <span className="countNum">{quantity}</span>
+                <div className="countNum">
+                  {isAnimating && (
+                    <span
+                      className={
+                        quantity > prevQuantity ? "scroll-up" : "scroll-down"
+                      }
+                    >
+                      {quantity}
+                    </span>
+                  )}
+                  {!isAnimating && <span>{quantity}</span>}
+                </div>
 
                 <button
                   className="cartButton"

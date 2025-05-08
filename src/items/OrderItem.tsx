@@ -25,6 +25,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [deliveriesInModal, setDeliveriesInModal] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
+ const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [prevQuantity, setPrevQuantity] = useState<number>(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -91,7 +93,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       // console.log("mmm", response);
 
       if (response.data.status === 'success') {
+        setPrevQuantity(quantity);
         setQuantity(newQuantity);
+        setIsAnimating(true);
+        setTimeout(() => setIsAnimating(false), 500);
         notification.success({ message: response.data.message });
         dispatch(addToCart(dish));
         dispatch(setShouldRefresh(true));
@@ -129,11 +134,11 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         );
 
         if (response.data.status === 'success') {
+          setPrevQuantity(quantity);
           setQuantity(newQuantity);
-          const updatedDish = { ...dish };
+          setIsAnimating(true);
+          setTimeout(() => setIsAnimating(false), 500);
           dispatch(actions.removeItemCompletely({ ...dish }));
-          setQuantity(0);
-          // setCartItemId(null);
           dispatch(setShouldRefresh(true));
           notification.success({ message: response.data.message });
         } else {
@@ -164,7 +169,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             if (response.data.status === 'success') {
               notification.success({ message: response.data.message });
               dispatch(removeFromCart({ ...dish }));
+              setPrevQuantity(quantity);
               setQuantity(1);
+              setIsAnimating(true);
+              setTimeout(() => setIsAnimating(false), 500);
               dispatch(setShouldRefresh(true));
             } else {
               notification.error({ message: response.data.message });
@@ -205,6 +213,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     };
     getAddToCartData();
   }, [cityId, c_id]);
+
+
 
   // *************************************************************************************
   const handleOpenModal = (option_name: any) => {
@@ -385,7 +395,18 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 <svg.MinusSvg />
               </button>
 
-              <span className="countNum">{quantity}</span>
+              <div className="countNum">
+                {isAnimating && (
+                  <span
+                    className={
+                      quantity > prevQuantity ? "scroll-up" : "scroll-down"
+                    }
+                  >
+                    {quantity}
+                  </span>
+                )}
+                {!isAnimating && <span>{quantity}</span>}
+              </div>
 
               <button
                 className="cartButton"
