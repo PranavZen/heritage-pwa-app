@@ -9,7 +9,6 @@ import { components } from '../components';
 import axios from 'axios';
 import { notification, Modal } from 'antd';
 import { setCartCount } from '../store/slices/cartSlice';
-
 type Props = {
   index: number;
   dish: DishType;
@@ -20,13 +19,15 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
   const [quantity, setQuantity] = useState<number>(0);
+  const [prevQuantity, setPrevQuantity] = useState<number>(0);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   // console.log("eeee", quantity);
 
   const [cartItemId, setCartItemId] = useState<string | null>(null);
 
   const c_id = localStorage.getItem('c_id') || '';
-  
+
   const cityId = localStorage.getItem('cityId') || '';
 
   const wishlist = useSelector((state: RootState) => state.wishlistSlice);
@@ -61,9 +62,11 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         );
 
         if (matchedItem) {
+          setPrevQuantity(quantity);
           setQuantity(Number(matchedItem.quantity) || 1);
           setCartItemId(String(matchedItem.cart_id));
         } else {
+          setPrevQuantity(quantity);
           setQuantity(0);
           setCartItemId(null);
         }
@@ -119,7 +122,17 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         });
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
+        setPrevQuantity(quantity);
         setQuantity(1);
+        // Reset animation state first if it's already animating
+        setIsAnimating(false);
+        // Use requestAnimationFrame to ensure the DOM has updated before starting a new animation
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsAnimating(true);
+            setTimeout(() => setIsAnimating(false), 500);
+          });
+        });
 
         const newCartId =
           response.data.cart_id ||
@@ -166,7 +179,17 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       );
 
       if (response.data.status === 'success') {
+        setPrevQuantity(quantity);
         setQuantity(newQuantity);
+        // Reset animation state first if it's already animating
+        setIsAnimating(false);
+        // Use requestAnimationFrame to ensure the DOM has updated before starting a new animation
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsAnimating(true);
+            setTimeout(() => setIsAnimating(false), 500);
+          });
+        });
         notification.success({
           message: 'Success',
           description: response.data.message,
@@ -211,6 +234,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           });
 
           dispatch(actions.removeItemCompletely({ ...dish }));
+          setPrevQuantity(quantity);
           setQuantity(0);
           setCartItemId(null);
           dispatch(setCartCount(Number(response.data.cart_count)));
@@ -305,7 +329,8 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         <div className="cartButtonWrap">
           {quantity < 1 ? (
             <button className="cartButton" onClick={HandleAddToCart}>
-              + Add
+              <span className='btnText'>+ Add</span>
+              <span className="wave"></span>
             </button>
           ) : (
             <>
@@ -320,7 +345,18 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
                 <svg.MinusSvg />
               </button>
 
-              <span className="countNum">{quantity}</span>
+              <div className="countNum">
+                {isAnimating && (
+                  <span className={quantity > prevQuantity ? 'scroll-up' : 'scroll-down'}>
+                    {quantity}
+                  </span>
+                )}
+                {!isAnimating && (
+                  <span>
+                    {quantity}
+                  </span>
+                )}
+              </div>
 
               <button
                 className="cartButton"
@@ -332,7 +368,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           )}
         </div>
 
-        
+
       </div>
     </div>
   );

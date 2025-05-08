@@ -21,7 +21,7 @@ export const WalletSvg: React.FC = () => {
         fill={
           currentTabScreen === TabScreens.Notification
             ? "var(--main-turquoise)"
-            : "var(--text-color)"
+            : "#fff"
         }
        
       />

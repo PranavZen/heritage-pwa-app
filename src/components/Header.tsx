@@ -6,7 +6,7 @@ import { components } from '../components';
 import { TabScreens, Routes } from '../routes';
 import { setScreen } from '../store/slices/tabSlice';
 import axios from 'axios';
-import pic1 from '../assets/icons/pwa-logo.jpg';
+import pic1 from '../assets/icons/logo.png';
 import { Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartCount } from '../store/slices/cartSlice';
@@ -78,6 +78,7 @@ export const Header: React.FC<Props> = ({
   const [themeColor, setThemeColor] = useState('#F6F9F9');
   const cart = useSelector((state: RootState) => state.cartSlice);
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Fetching the cartCount from Redux state (updated to cartCount instead of list.length)
 
@@ -88,6 +89,16 @@ export const Header: React.FC<Props> = ({
 
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
 
+  // Add animation when cartCount changes
+  useEffect(() => {
+    if (cartCount > 0) {
+      setIsAnimating(true);
+      const timer = setTimeout(() => {
+        setIsAnimating(false);
+      }, 500); // Animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [cartCount]);
 
   useEffect(() => {
     if (cartCount === 0) {
@@ -122,6 +133,7 @@ export const Header: React.FC<Props> = ({
           // Only update cart count if it changed
           if (newCartCount !== undefined && newCartCount !== initialCartCount) {
             dispatch(setCartCount(Number(newCartCount)));
+            // Animation will be triggered by the cartCount change in the useEffect
           }
         } else {
           console.error('API call failed:', response.data.message);
@@ -230,14 +242,20 @@ export const Header: React.FC<Props> = ({
               }}
               className="rightBox"
             >
-              <div className="basketCount">
+              <div
+                className="basketCount"
+                style={{ animation: isAnimating ? 'bounce 0.5s ease' : 'none' }}
+              >
                 <span>{cartCount}</span>
               </div>
               <svg.HeaderBasketSvg />
             </button>
           ) : (
             <button onClick={ShowNoData} className="rightBox">
-              <div className="basketCount">
+              <div
+                className="basketCount"
+                style={{ animation: isAnimating ? 'bounce 0.5s ease' : 'none' }}
+              >
                 <span>{cartCount}</span>
               </div>
               <svg.HeaderBasketSvg />

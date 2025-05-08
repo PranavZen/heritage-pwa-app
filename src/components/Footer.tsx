@@ -110,12 +110,12 @@ export const Footer: React.FC = () => {
   const dispatch = hooks.useDispatch();
 
   return (
-    <section>
+    <section className="fotterSection">
       <footer
         style={{
           zIndex: 100,
           height: "var(--footer-height)",
-          backgroundColor: "#5fab254a",
+          backgroundColor: "#010101",
         }}
       >
         <ul style={{ height: "100%" }} className="row-center-space-around">

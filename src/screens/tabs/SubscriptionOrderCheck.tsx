@@ -502,7 +502,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                 {activeTab === "subscriptions" && (
                     <div className="ordersContainer">
                         <h2>Subscription Orders</h2>
-                        <div className="scrollable-container">
+                        <div className="scrollable-container" >
                             <div className="card-list">
                                 {Array.isArray(subscriptionData) &&
                                     subscriptionData.length > 0 ? (

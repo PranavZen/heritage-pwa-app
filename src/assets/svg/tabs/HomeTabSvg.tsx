@@ -19,17 +19,17 @@ export const HomeTabSvg: React.FC = () => {
       <path
         fill={
           currentTabScreen === TabScreens.Home
-            ? 'var(--main-turquoise)'
-            : 'var(--text-color)'
+            ? 'var(--text-color)'
+            : '#fff'
         }
-        fillOpacity={0.15}
+        fillOpacity={0}
         d='M5.4 7.87 12 2.4l6.6 5.47V21H5.4V7.87Z'
       />
       <path
         stroke={
           currentTabScreen === TabScreens.Home
-            ? 'var(--main-turquoise)'
-            : 'var(--text-color)'
+            ? 'var(--text-color)'
+            : '#fff'
         }
         strokeLinecap='round'
         strokeLinejoin='round'
