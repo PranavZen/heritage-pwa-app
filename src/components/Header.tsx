@@ -10,6 +10,7 @@ import pic1 from '../assets/icons/logo.png';
 import { Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartCount } from '../store/slices/cartSlice';
+import NoCartData from '../screens/NoCartData';
 
 type Props = {
   title?: string;
@@ -218,7 +219,6 @@ export const Header: React.FC<Props> = ({
     );
   };
 
-
   const renderBasket = (): JSX.Element | null => {
     if (!showBasket) return null;
     const ShowNoData = () => {
@@ -263,13 +263,12 @@ export const Header: React.FC<Props> = ({
           )}
         </div>
         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-          <div className="NoDataAvailable">No Data Available</div>
+           <NoCartData/>
         </Modal>
       </>
     );
   };
 
-  // Render the modal for user profile actions
   const renderModal = (): JSX.Element | null => {
     if (!showModal) return null;
 

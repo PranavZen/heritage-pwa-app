@@ -11,9 +11,7 @@ function App() {
     Aos.init();
   }, []);
   return (
-    <div
-      id='app'
-    >
+    <div id="app">
       <StackNavigator />
     </div>
   );

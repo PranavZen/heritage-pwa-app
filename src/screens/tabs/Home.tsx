@@ -22,6 +22,7 @@ export const Home: React.FC = () => {
  
   // console.log("aqaqaqaqaqaqaqaqaqaqaq",banner);
 
+
   // {console.log('dishesdishes',dishes)}
 
   const loading: boolean =
@@ -39,11 +40,14 @@ export const Home: React.FC = () => {
   };
 
   const renderCarousel = (): JSX.Element => {
-    const dish = dishes[2];
+    // const dish = dishes[2] || '';
+
+    const dish = Array.isArray(dishes) && dishes.length > 2 ? dishes[2] : null;
 
     return (
       <section style={{ position: "relative" }}>
         <Swiper
+          modules={[Pagination]}
           modules={[Pagination]}
           slidesPerView={1}
           mousewheel={true}
@@ -97,6 +101,7 @@ export const Home: React.FC = () => {
       </section>
     );
   };
+
 
   const renderMenu = (): JSX.Element => {
     return (
@@ -174,10 +179,10 @@ export const Home: React.FC = () => {
             mousewheel={true}
             breakpoints={{
               0: {
-                slidesPerView: 1.6, // For screens below 767px
+                slidesPerView: 1.6,
               },
               768: {
-                slidesPerView: 2.8, // For screens 768px and above
+                slidesPerView: 2.8,
               },
             }}
           >
@@ -192,7 +197,21 @@ export const Home: React.FC = () => {
                   />
                 </SwiperSlide>
               );
+            })} 
+
+            {(dishes || []).map((dish: DishType, index: number, array: DishType[]) => {
+              const isLast = index === array.length - 1;
+              return (
+                <SwiperSlide key={dish.id} style={{ width: "auto" }}>
+                  <items.RecomendedItem
+                    index={index}
+                    isLast={isLast}
+                    dish={dish}
+                  />
+                </SwiperSlide>
+              );
             })}
+
           </Swiper>
         </div>
       </div>

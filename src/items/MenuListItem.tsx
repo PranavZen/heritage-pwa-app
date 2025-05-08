@@ -6,6 +6,10 @@ import axios from 'axios';
 import { DishType } from '../types';
 import { actions } from '../store/actions';
 import { setCartCount, setShouldRefresh } from '../store/slices/cartSlice';
+import { fetchWishlist, toggleWishlistItem } from '../store/slices/wishlistSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
+
 
 
 type Props = {
@@ -238,14 +242,63 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
 
 
   const navigate = hooks.useNavigate();
-  const { ifInWishlist, addToWishlist, removeFromWishlist } =
-    hooks.useWishlistHandler();
+  // const { ifInWishlist, addToWishlist, removeFromWishlist } =
+  hooks.useWishlistHandler();
 
 
 
   // if (loading) {
   //   return <components.Loader />;
   // }
+
+  const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
+
+
+  const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+
+    const c_id_num = parseInt(localStorage.getItem('c_id') || '0');
+    if (!c_id_num) {
+      Modal.confirm({
+        title: 'Please Sign In',
+        content: 'You need to sign in to manage your wishlist.',
+        onOk() {
+          navigate('/');
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
+      });
+      return;
+    }
+
+    const isInWishlist = wishlist.some(
+      (item) => item.option_value_id === dish.option_value_id
+    );
+
+    const type = isInWishlist ? 2 : 1;
+
+    try {
+      const resultAction = await dispatch(toggleWishlistItem({
+        product_id: dish.product_id,
+        product_option_id: dish.product_option_id,
+        product_option_value_id: dish.product_option_value_id,
+        c_id: c_id_num,
+        type
+      }));
+
+      if (toggleWishlistItem.fulfilled.match(resultAction)) {
+        dispatch(fetchWishlist());
+      }
+    } catch (error) {
+      console.error('Wishlist action failed:', error);
+    }
+  };
+
+
+  const isInWishlist = wishlist.some(
+    (item) => item.option_value_id === dish.option_value_id
+  );
+
 
   return (
     <li className="proListItemWrap">
@@ -294,7 +347,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
               <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
                 ₹ {dish.price}
               </span>
-              <span className="proPrice" style={{ marginLeft: '8px'}}>
+              <span className="proPrice" style={{ marginLeft: '8px' }}>
                 ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
               </span>
             </>
@@ -309,16 +362,32 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast }) => {
       </div>
 
       <button
-        className="wishListBtn"
-        onClick={(event) =>
-          ifInWishlist(dish.option_value_name ?? 0)
-            ? removeFromWishlist(dish, event)
-            : addToWishlist(dish, event)
-        }
+        onClick={wishlistHandler}
+        style={{
+          position: 'absolute',
+          right: 0,
+          top: -10,
+          padding: 15,
+          borderRadius: 10,
+          backgroundColor: 'transparent',
+          border: 'none',
+        }}
       >
-        <svg.HeartSvg dish={dish} />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          style={{
+            fill: isInWishlist ? 'red' : 'gray',
+            transition: 'fill 0.3s ease',
+          }}
+        >
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+          />
+        </svg>
       </button>
-
       <div className="lastBox">
 
 

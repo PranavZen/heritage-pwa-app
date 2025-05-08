@@ -17,6 +17,7 @@ import SuperCoins from '../../components/Animation/SuperCoinsApply.json'
 import Lottie from 'lottie-react';
 import { actions } from '../../store/actions';
 import FaBackward from "../../assets/icons/left.png";
+import NoCartData from '../NoCartData';
 
 interface Address {
   id: string;
@@ -55,7 +56,7 @@ export const Order: React.FC = () => {
   const [freeNoOfdeliveries, SetfreeNoOfdeliveries] = useState<any[]>([]);
 
 
-  // console.log("freeNoOfdeliveries", totalPrice);
+  // console.log("freeNoOfdeliveries", freeNoOfdeliveries);
 
   const [addressId, SetAddressId] = useState('');
   const [superPoint, setSuperPoint] = useState<any>(null);
@@ -96,9 +97,10 @@ export const Order: React.FC = () => {
   const [isApplying, setIsApplying] = useState<boolean>(false);
 
   const [extraDiscount, setExtraDiscount] = useState<any[]>([]);
+  const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
 
 
-  // console.log("extraDiscount", extraDiscount);
+  // console.log("extraDiscountShow", extraDiscountShow);
 
   const [superPointCoins, SetSuperPoint] = useState<number>(0);
 
@@ -180,8 +182,13 @@ export const Order: React.FC = () => {
         setExtraDiscount(
           response.data.optionListing.map((elem: any) =>
             (elem.no_of_deliveries - elem.no_of_free_deliveries) * elem.discount * elem.quantity
-          ) 
+          )
         );
+        setExtraDiscountShow(
+          response.data.optionListing.map((elem: any) =>
+            (elem.no_of_deliveries) * elem.discount * elem.quantity
+          )
+        )
       } catch (error) {
         console.error(error);
       }
@@ -589,10 +596,9 @@ export const Order: React.FC = () => {
             {renderButton()}
           </>
         ) : (
-          <p style={{
-            display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: "20px",
-            height: "340px"
-          }}>No cart Data</p>
+          <>
+            <NoCartData />
+          </>
         )}
       </main>
     );
@@ -675,13 +681,11 @@ export const Order: React.FC = () => {
               borderBottom: '1px solid #DBE9F5',
             }}
           >
-            <span className='t14'>Extra Discount of {extraDiscount ? extraDiscount : '0'} applied </span>
+            <span className='t14'>Extra Discount of {extraDiscountShow ? extraDiscountShow : '0'} applied </span>
 
-            <span className='t14'>₹{extraDiscount}</span>
+            <span className='t14'> ₹{extraDiscountShow} </span>
           </div>
-          {/* ******************************************************* */}
-
-
+          {/******************************************************** */}
           <div
             className='row-center-space-between'
             style={{
@@ -691,24 +695,17 @@ export const Order: React.FC = () => {
             }}
           >
             <span className='t14'> Discount on Free Deliveries</span>
-
             <span className='t14'>
               ₹ {
                 superPoint && superPoint.optionListing && superPoint.optionListing.length > 0
                   ? superPoint.optionListing.map((elem: any) => {
-                    return (elem.price - elem.discount ) * elem.no_of_free_deliveries ;
+                    return (elem.price - elem.discount) * elem.no_of_free_deliveries;
                   }).reduce((acc: number, current: number) => acc + current, 0)
                   : 0
               }
             </span>
-
-
           </div>
-
-
           {/* *************************************************** */}
-
-
 
           {localStorage.getItem('coupon') ? <> <div
             className='row-center-space-between'

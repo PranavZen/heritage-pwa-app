@@ -10,6 +10,8 @@ export const Favorite: React.FC = () => {
 
   const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
 
+  // console.log("wishlistwishlist", wishlist);
+
   const [opacity, setOpacity] = useState<number>(0);
 
   hooks.useScrollToTop();
@@ -41,7 +43,6 @@ export const Favorite: React.FC = () => {
       </main>
     );
   };
-
   const renderEmpty = (): JSX.Element | null => {
     if (wishlist.length > 0) return null;
 
@@ -89,7 +90,7 @@ export const Favorite: React.FC = () => {
             Your list of favorite dishes is currently <br /> empty. Why not
             start adding dishes <br /> that you love?
           </p>
-          {/* <p>Your favorite list is empty.</p> */}
+
         </section>
       </main>
     );

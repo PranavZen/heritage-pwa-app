@@ -274,28 +274,42 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 </span>
               </span>
 
-              <span
-                className="t14"
-                style={{
-                  color: "var(--main-color)",
-                  fontWeight: 600,
-                  fontSize: 16,
-                }}
-              >
-                MRP  ₹ {dish.price}
-              </span>
-              <span
-                className="t14"
-                style={{
-                  color: "var(--main-color)",
-                  fontWeight: 600,
-                  fontSize: 16,
-                }}
-              >
-                  ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
-              </span>
 
 
+              {dish.discount ? (
+                <>
+                  <del
+                    style={{
+                      color: "#999",
+                      marginRight: 8,
+                      fontSize: 14,
+                    }}
+                  >
+                    MRP ₹{dish.price}
+                  </del>
+                  <span
+                    className="t14"
+                    style={{
+                      color: "var(--main-color)",
+                      fontWeight: 600,
+                      fontSize: 16,
+                    }}
+                  >
+                    ₹ {Number(dish.price) - Number(dish.discount)}
+                  </span>
+                </>
+              ) : (
+                <span
+                  className="t14"
+                  style={{
+                    color: "var(--main-color)",
+                    fontWeight: 600,
+                    fontSize: 16,
+                  }}
+                >
+                  ₹ {dish.price}
+                </span>
+              )}
 
               <span
                 className="t14"

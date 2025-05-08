@@ -13,6 +13,7 @@ import { setCartCount } from '../store/slices/cartSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/index';
 import { setShouldRefresh } from '../store/slices/cartSlice';
+import { fetchWishlist, toggleWishlistItem } from '../store/slices/wishlistSlice';
 
 
 export const Dish: React.FC = () => {
@@ -92,6 +93,53 @@ export const Dish: React.FC = () => {
 
   const c_id = localStorage.getItem("c_id");
   const cityId = localStorage.getItem("cityId");
+
+ const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
+
+  const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+
+    const c_id_num = parseInt(localStorage.getItem('c_id') || '0');
+    if (!c_id_num) {
+      Modal.confirm({
+        title: 'Please Sign In',
+        content: 'You need to sign in to manage your wishlist.',
+        onOk() {
+          navigate('/');
+        },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
+      });
+      return;
+    }
+
+    const isInWishlist = wishlist.some(
+      (item) => item.option_value_id === dish.option_value_id
+    );
+
+    const type = isInWishlist ? 2 : 1;
+
+    try {
+      const resultAction = await dispatch(toggleWishlistItem({
+        product_id: dish.product_id,
+        product_option_id:  Number(dish.option_id),
+        product_option_value_id: dish.product_option_value_id,
+        c_id: c_id_num,
+        type
+      }));
+
+      if (toggleWishlistItem.fulfilled.match(resultAction)) {
+        dispatch(fetchWishlist());
+      }
+    } catch (error) {
+      console.error('Wishlist action failed:', error);
+    }
+  };
+
+  const isInWishlist = wishlist.some(
+    (item) => item.option_value_id === dish.option_value_id
+  );
+
 
 
   // console.log("roshannnnnnnnnnnn", dish);
@@ -544,9 +592,6 @@ export const Dish: React.FC = () => {
     }
   };
 
-
-
-
   const handleupdatetheAddToCartt = async () => {
     if (deliveries < 1) {
       notification.error({ message: "Please select valid delivery days." });
@@ -651,8 +696,8 @@ export const Dish: React.FC = () => {
   const minDate = today.toISOString().split("T")[0];
 
   const { getDishQty } = hooks.useCartHandler();
-  const { addToWishlist, removeFromWishlist, ifInWishlist } =
-    hooks.useWishlistHandler();
+  // const { addToWishlist, removeFromWishlist, ifInWishlist } =
+  //   hooks.useWishlistHandler();
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
@@ -835,20 +880,31 @@ export const Dish: React.FC = () => {
           )}
         </div>
         <button
+          onClick={wishlistHandler}
           style={{
-            padding: 14,
-            position: "absolute",
+            position: 'absolute',
             right: 0,
             top: 0,
-            borderRadius: 4,
-          }}
-          onClick={(event) => {
-            ifInWishlist(dish.option_value_name ?? 0)
-              ? removeFromWishlist(dish, event)
-              : addToWishlist(dish, event);
+            padding: 15,
+            borderRadius: 10,
+            backgroundColor: 'transparent',
+            border: 'none',
           }}
         >
-          <svg.HeartSvg dish={dish} />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            style={{
+              fill: isInWishlist ? 'red' : 'gray',
+              transition: 'fill 0.3s ease',
+            }}
+          >
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
         </button>
       </div>
     );
@@ -922,20 +978,20 @@ export const Dish: React.FC = () => {
 
           <div className="priceWrap">
             <span>
-            {Number(dish.discount ?? 0) > 0 ? (
-            <>
-              <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
-                ₹ {dish.price}
-              </span>
-              <span className="proPrice" style={{ marginLeft: '8px'}}>
-                ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
-              </span>
-            </>
-          ) : (
-            <span className="proPrice">
-              ₹ {dish.price}
-            </span>
-          )}
+              {Number(dish.discount ?? 0) > 0 ? (
+                <>
+                  <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
+                    ₹ {dish.price}
+                  </span>
+                  <span className="proPrice" style={{ marginLeft: '8px' }}>
+                    ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+                  </span>
+                </>
+              ) : (
+                <span className="proPrice">
+                  ₹ {dish.price}
+                </span>
+              )}
             </span>
           </div>
           <span className="ppText">Per Pack</span>
