@@ -89,7 +89,6 @@ export const Header: React.FC<Props> = ({
 
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
 
-
   useEffect(() => {
     if (cartCount === 0) {
       localStorage.removeItem('couponCode');
@@ -194,14 +193,16 @@ export const Header: React.FC<Props> = ({
 
   // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
+    const shouldGoToHome = true;
     return (
-      <div className="middleBox" style={{ background: 'red' }}>
+      <div className="middleBox">
         <img
+         onClick={() => navigate(shouldGoToHome ? Routes.TabNavigator : Routes.TabNavigator)}
           className="logo-header"
           src={pic1}
           alt=""
           width={150}
-          onClick={() => navigate('/tab-navigator')}
+         
         />
       </div>
     );
@@ -360,7 +361,7 @@ export const Header: React.FC<Props> = ({
         {renderUser()}
         {renderGoBack()}
         {renderTitle()}
-        {renderBasket()}
+        {renderBasket()} 
       </header>
       {renderModal()}
     </>

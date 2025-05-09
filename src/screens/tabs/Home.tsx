@@ -19,9 +19,6 @@ export const Home: React.FC = () => {
   const { carouselLoading, carousel } = hooks.useGetCarousel();
   const { menuLoadingBanner, banner } = hooks.useGetMenu();
 
-  console.log("aqaqaqaqaqaqaqaqaqaqaq", banner);
-
-  // {console.log('dishesdishes',dishes)}
 
   const loading: boolean =
     menuLoading || dishesLoading || reviewsLoading || carouselLoading;

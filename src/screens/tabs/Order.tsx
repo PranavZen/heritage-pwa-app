@@ -57,7 +57,7 @@ export const Order: React.FC = () => {
   const [Subtotal, setSubtotal] = useState<any>({});
 
 
-  console.log("Subtotal", Subtotal);
+  // console.log("Subtotal", Subtotal);
 
   const [addressId, SetAddressId] = useState('');
   const [superPoint, setSuperPoint] = useState<any>(null);
@@ -92,8 +92,22 @@ export const Order: React.FC = () => {
   const [redeemedAmount, setRedeemedAmount] = useState(0);
   const [passPoints, setPassPoints] = useState(0);
 
-  const PassPointsInCheckout =redeemedAmount * 10
-  console.log("sssssss", PassPointsInCheckout);
+  const [superPointCoins, SetSuperPoint] = useState<number>(0);
+
+  // console.log("superPointCoins", superPointCoins);
+
+const maxRedeemableAmount = Math.floor(superPointCoins / 10);
+
+const adjustedRedeemedAmount = Math.min(redeemedAmount, maxRedeemableAmount);
+const PassPointsInCheckout = adjustedRedeemedAmount * 10;
+
+// console.log("Adjusted Redeemed Amount:", adjustedRedeemedAmount);
+
+// console.log("PassPointsInCheckout:", PassPointsInCheckout);
+
+
+
+  // console.log("sssssss", PassPointsInCheckout);
 
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -105,10 +119,6 @@ export const Order: React.FC = () => {
 
   // console.log("extraDiscountShow", extraDiscountShow);
 
-  const [superPointCoins, SetSuperPoint] = useState<number>(0);
-
-
-  console.log("superPointCoins", superPointCoins);
 
   const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
@@ -193,7 +203,7 @@ export const Order: React.FC = () => {
           )
         )
         setSubtotal(response.data)
-        
+
       } catch (error) {
         console.error(error);
       }
@@ -207,6 +217,7 @@ export const Order: React.FC = () => {
     getAddToCartData();
 
   }, [cityId, c_id, shouldRefresh]);
+
 
   useEffect(() => {
     const getAddress = async () => {
@@ -409,7 +420,7 @@ export const Order: React.FC = () => {
       }
     };
     fetchCoupons();
-  }, []);
+  }, [shouldRefresh]);
 
   // *******************Super Coupons *******************************
   const { menuLoading, menu } = hooks.useGetMenu();
@@ -424,7 +435,6 @@ export const Order: React.FC = () => {
 
   useEffect(() => {
     const storedCode = localStorage.getItem('couponCode');
-
     // console.log("storedCodemmmm", storedCode);
     setCodeCoupon(storedCode);
   });
@@ -722,9 +732,7 @@ export const Order: React.FC = () => {
               borderBottom: '1px solid #DBE9F5',
             }}
           >
-
             {localStorage.getItem('couponCode') ? <> </> : <> </>}
-
             <span className='t14'>
               Coupon {localStorage.getItem('couponCode') || '₹ 0'} applied
               {localStorage.getItem('couponCode') && ` of ₹${cartDetails?.after_discount_total || 0}`}
@@ -817,12 +825,12 @@ export const Order: React.FC = () => {
                     // console.log("aaaaa", cartTotal);
 
                     let discount = 0;
-              
+
                     if (localStorage.getItem('couponCode')) {
                       discount = Number(cartDetails?.after_discount_total || 0);
                     }
 
-                    console.log("bbb", discount)
+                    // console.log("bbb", discount)
 
                     const gst = Number(cartDetails?.gst_tax_total || 0);
 
@@ -872,7 +880,6 @@ export const Order: React.FC = () => {
   };
   return (
     <div id="screen" style={{ opacity }}>
-
       {renderContent()}
       {renderLoading()}
       {showModal && (

@@ -38,7 +38,7 @@ export const MenuList: React.FC = () => {
 
   const [filterData, setFilterData] = useState<DishType[] | null>(null);
 
-  console.log("filterDatafilterData", filterData);
+  // console.log("filterDatafilterData", filterData);
 
   const [filterDataLoading, setFilterDataDishesLoading] =
     useState<boolean>(false);
@@ -65,7 +65,7 @@ export const MenuList: React.FC = () => {
         `https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,
         formData
       );
-      console.log("responseewewewe",response);
+      // console.log("responseewewewe",response);
 
       setFilterData(response.data?.optionListing || null);
 

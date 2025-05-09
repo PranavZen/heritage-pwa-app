@@ -84,7 +84,7 @@ export const Dish: React.FC = () => {
 
   const showSubscribe = location.state.showSubscribe
 
-  console.log("vvvvvvvvv", showSubscribe);
+  // console.log("vvvvvvvvv", showSubscribe);
 
   // Ensure dish and the properties exist
   if (dish && dish.product_option_id && dish.product_option_value_id) {

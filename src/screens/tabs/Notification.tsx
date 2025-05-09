@@ -9,8 +9,6 @@ export const Notification: React.FC = () => {
   const [rewardPoints, setRewardPoints] = useState<number>(0);
 
 
-  console.log("rewardPointsrewardPoints", rewardPoints)
-
 
   const [redeemPoints, setRedeemPoints] = useState<number>(0);
 
@@ -35,10 +33,10 @@ export const Notification: React.FC = () => {
       if (data.status === "success") {
         setWalletData(data);
       } else {
-        console.error("Failed to fetch wallet data:", data.message);
+        // console.error("Failed to fetch wallet data:", data.message);
       }
     } catch (error) {
-      console.error("Error fetching wallet data:", error);
+      // console.error("Error fetching wallet data:", error);
     }
   };
 

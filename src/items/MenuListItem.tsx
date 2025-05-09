@@ -127,7 +127,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
   };
   useEffect(() => {
     fetchCartData();
-  }, [cityId, c_id, dish]);
+  }, [cityId, c_id, dish, ]);
 
   const HandleAddToCart = async () => {
     if (!c_id) {
@@ -241,7 +241,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
     }
   };
 
-
   const navigate = hooks.useNavigate();
   // const { ifInWishlist, addToWishlist, removeFromWishlist } =
   hooks.useWishlistHandler();
@@ -253,7 +252,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
   // }
 
   const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
-
 
   const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -400,8 +398,8 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
                     ? handleRemoveFromCart(event)
                     : handleUpdateCart(quantity - 1)
                 }
-              >
-                <svg.MinusSvg />
+              > 
+                <svg.MinusSvg/>
               </button>
               <span className="countNum">{quantity}</span>
               <button

@@ -8,7 +8,7 @@ import { actions } from '../store/actions';
 import { components } from '../components';
 import axios from 'axios';
 import { notification, Modal } from 'antd';
-import { setCartCount } from '../store/slices/cartSlice';
+import { setCartCount, setShouldRefresh } from '../store/slices/cartSlice';
 import { toggleWishlistItem } from '../store/slices/wishlistSlice';
 import { fetchWishlist } from '../store/slices/wishlistSlice';
 
@@ -117,6 +117,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
         setQuantity(1);
+          dispatch(setShouldRefresh(false));
 
         const newCartId =
           response.data.cart_id ||

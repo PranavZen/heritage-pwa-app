@@ -17,14 +17,14 @@ type Props = {
 };
 
 export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
-
-  // console.log("dishzzzzzzzzzz", dish.product_option_value_id);
   const dispatch = useDispatch();
   const navigate = hooks.useNavigate();
   const [deliveryPreferenceInModal, setDeliveryPreferenceInModal] = useState<any[]>([]);
   const [deliveriesInModal, setDeliveriesInModal] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
+
+  const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
   useEffect(() => {
     const getData = async () => {
@@ -41,10 +41,16 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       }
     };
     getData();
-  }, []);
+  }, [shouldRefresh]);
   // console.log("dishdishdish", dish);
-  
-  const [quantity, setQuantity] = useState<number>(Number(dish.quantity));
+
+  const [quantity, setQuantity] = useState<number>(Number(dish.quantity
+  ));
+
+
+  useEffect(() => {
+    // console.log('Quantity changed:', quantity);
+  }, [quantity, shouldRefresh]);
 
   // console.log("ccccc", quantity);
 
@@ -59,7 +65,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const c_id = localStorage.getItem('c_id');
   const cityId = localStorage.getItem('cityId');
 
-  const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
   // console.log("dis", dish);
 
@@ -92,7 +97,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         formData
       );
 
-      console.log("mmm", response.data);
+      // console.log("mmm", response.data);
 
       if (response.data.status === 'success') {
         setQuantity(newQuantity);
@@ -177,6 +182,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             notification.error({ message: 'Failed to remove item from cart.' });
           } finally {
             setIsLoading(false);
+            dispatch(setShouldRefresh(true));
           }
         },
         cancelText: 'Cancel',
@@ -184,6 +190,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       });
     }
   };
+
 
   useEffect(() => {
     const getAddToCartData = async () => {
@@ -318,7 +325,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 className="t14"
                 style={{ color: "var(--main-color)", fontWeight: 500 }}
               >
-                <span className="cartLable">Qty :</span> {quantity}
+                <span className="cartLable">Qty :</span>  {dish.quantity}
               </span>
 
               {noOfDeliveries > 0 && (
@@ -392,7 +399,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               </button>
 
               <span className="countNum">
-                {quantity}
+
+               {dish.quantity}
 
               </span>
 
