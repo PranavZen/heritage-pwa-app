@@ -828,6 +828,9 @@ details summary {
           position: absolute;
           top: 0;
           left: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         @media screen and (max-width: 767px) {
@@ -1092,14 +1095,25 @@ select {
 
 // Pranav added new css start
 .topHeader {
-  height: 100px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 0.2px solid #1a712e;
   position: relative;
-
+  background-color: #104d1e;
+  .middleBox {
+    height: 70px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .logo-header {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
   &::before {
     content: "";
     // background-image: url("../assets/icons/pwa-logo.jpg");
@@ -1125,13 +1139,17 @@ select {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      border: 2px solid #1a712e;
+      border: 2px solid #fff;
     }
 
     .userName {
       font-size: 14px;
       font-family: "SF Pro Display Semibold";
-      color: #1a712e;
+      color: #fff;
+      white-space: nowrap;
+      width: 75px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -1141,8 +1159,8 @@ select {
     .basketCount {
       width: 20px;
       height: 20px;
-      background-color: #1a712e;
-      color: #fff;
+      background-color: #fff;
+      color: #1a712e;
       border-radius: 50%;
       position: absolute;
       top: -10px;
@@ -1346,37 +1364,37 @@ select {
     width: 100%;
     /* background-color: #1a712e; */
     color: var(--main-color);
-    font-size: 16px;
+    font-size: 14px;
     font-family: "SF Pro Display Medium";
     margin-top: 5px;
     /* font-family: sans-serif; */
     // transform: translateX(-50%);
   }
 }
-.wave{
+.wave {
   background-color: #fff;
-	height: 100%;
-	left: 0;
-	position: absolute;
-	top: calc(100% + 22px);
-	transition: top 1s ease;
-	width: 100%;
-  &::before{
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: calc(100% + 22px);
+  transition: top 1s ease;
+  width: 100%;
+  &::before {
     animation: wave 0.5s linear infinite;
-	background-image: url(../assets/bg/btn-wave.png);
-	background-size: contain;
-	content: '';
-	height: 22px;
-	left: 0;
-	position: absolute;
-	top: -20px;
-	width: 100%;
+    background-image: url(../assets/bg/btn-wave.png);
+    background-size: contain;
+    content: "";
+    height: 22px;
+    left: 0;
+    position: absolute;
+    top: -20px;
+    width: 100%;
   }
 }
 @keyframes wave {
-	to {
-		background-position-x: 118px;
-	}
+  to {
+    background-position-x: 118px;
+  }
 }
 .proCardWrap {
   border-radius: 10px;
@@ -1412,7 +1430,6 @@ select {
     width: 65%;
     margin: 15px auto 0 auto;
 
-
     .cartButton {
       padding: 8px;
       font-size: 16px;
@@ -1425,12 +1442,11 @@ select {
       align-items: center;
       border-radius: 50px;
       height: 100%;
-      .btnText{
+      .btnText {
         z-index: 1;
-
       }
-      &:hover{
-        .btnText{
+      &:hover {
+        .btnText {
           color: #0c1d2e;
         }
       }
@@ -1438,7 +1454,6 @@ select {
       &:focus .wave,
       &:active .wave {
         top: 0;
-
       }
       svg {
         path {
@@ -1466,6 +1481,9 @@ select {
         position: absolute;
         top: 0;
         left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
@@ -1481,9 +1499,16 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 20px;
+  section{
+    background: #26982152;
+  border-radius: 8px;
+  box-shadow: 0px 0px 8px -2px #000;
+  }
 
   @media screen and (max-width: 767px) {
     width: 100%;
+    padding: 0 20px;
   }
 }
 
@@ -2076,16 +2101,6 @@ select {
   margin-top: 20px;
 }
 
-.logo-header {
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 90%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-}
 .NoDataAvailable {
   width: 100%;
   height: 47px;
@@ -2179,7 +2194,8 @@ select {
 
 // Animation for basketCount bounce effect
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -2366,7 +2382,7 @@ select {
   right: 19px;
   cursor: pointer;
 }
-.fotterSection{
+.fotterSection {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -2380,10 +2396,10 @@ select {
     max-width: 100%;
   }
 }
-.favoriteItemsWrap{
+.favoriteItemsWrap {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px,
+  gap: 15px;
 }
 
 .scroll-up {
@@ -2420,4 +2436,21 @@ select {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+.rowLine {
+  padding-bottom: 13px;
+  margin-bottom: 20px;
+  border: none;
+  border-bottom: 0;
+  background-image: repeating-linear-gradient(
+    to right,
+    rgb(0 0 0) 0px,
+    rgb(219, 233, 245) 2px,
+    transparent 2px,
+    transparent 5px
+  );
+  background-position: bottom;
+  background-repeat: repeat-x;
+  background-size: auto 2px;
 }

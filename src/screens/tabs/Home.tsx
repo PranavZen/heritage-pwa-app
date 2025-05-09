@@ -108,7 +108,7 @@ export const Home: React.FC = () => {
         style={{
           marginBottom: 30,
           backgroundColor: "#d2e7c4",
-          padding: "20px 0",
+          padding: "20px 0 0",
         }}
       >
         <components.BlockHeading
@@ -119,9 +119,9 @@ export const Home: React.FC = () => {
           containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}
         />
 
-        <div style={{ width: "100%" }} >
+        <div style={{ width: "100%", paddingLeft: 20 }} >
           <Swiper
-            spaceBetween={10}
+            spaceBetween={20}
             slidesPerView={"auto"}
             pagination={{ clickable: true }}
             navigation={true}
@@ -130,7 +130,7 @@ export const Home: React.FC = () => {
             {menu.map((menu: MenuType, index: number, array: MenuType[]) => {
               const isLast = index === array.length - 1;
               return (
-                <SwiperSlide key={menu.id} style={{ width: "auto" }}>
+                <SwiperSlide key={menu.id} style={{ width: "auto", height: 160 }}>
                   
                     <div className="itemWrap" data-aos="zoom-out">
                       <button
@@ -219,7 +219,7 @@ export const Home: React.FC = () => {
 
   const renderReviews = (): JSX.Element => {
     return (
-      <section style={{ backgroundColor: "#d2e7c4", padding: "20px 0" }} >
+      <section style={{ backgroundColor: "#d2e7c4", padding: "20px 0 40px 0px" }} >
         <components.BlockHeading
           title="Our Happy clients say"
           viewAllOnClick={() => navigate(Routes.Reviews)}

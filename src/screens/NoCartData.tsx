@@ -17,7 +17,7 @@ const NoCartData: React.FC = () => {
     <div style={{display:"flex", justifyContent:"center"}}>
       <Lottie animationData={Animation} style={{ width: 350, height: 350 }} />
     </div>
-    <div style={{fontSize:"30px", fontWeight:"900", textAlign:"center", paddingTop:"100px"}}>
+    <div style={{fontSize:"22px", fontWeight:"600", textAlign:"center"}}>
         Empty Cart
     </div>
   </>

@@ -696,12 +696,7 @@ export const Order: React.FC = () => {
           </div>
 
           <div
-            className="row-center-space-between"
-            style={{
-              paddingBottom: 13,
-              marginBottom: 20,
-              borderBottom: "1px solid #DBE9F5",
-            }}
+            className="row-center-space-between rowLine"
           >
             <span className="t14">
               Extra Discount of {extraDiscountShow ? extraDiscountShow : "0"}{" "}
@@ -712,12 +707,7 @@ export const Order: React.FC = () => {
           </div>
           {/******************************************************** */}
           <div
-            className="row-center-space-between"
-            style={{
-              paddingBottom: 13,
-              marginBottom: 20,
-              borderBottom: "1px solid #DBE9F5",
-            }}
+            className="row-center-space-between rowLine"
           >
             <span className="t14"> Discount on Free Deliveries</span>
             <span className="t14">
@@ -742,12 +732,7 @@ export const Order: React.FC = () => {
             <>
               {" "}
               <div
-                className="row-center-space-between"
-                style={{
-                  paddingBottom: 13,
-                  marginBottom: 20,
-                  borderBottom: "1px solid #DBE9F5",
-                }}
+                className="row-center-space-between rowLine"
               >
                 {localStorage.getItem("coupon") ? <> </> : <></>}
 
@@ -772,12 +757,7 @@ export const Order: React.FC = () => {
             <></>
           )}
           <div
-            className="row-center-space-between"
-            style={{
-              paddingBottom: 13,
-              marginBottom: 20,
-              borderBottom: "1px solid #DBE9F5",
-            }}
+            className="row-center-space-between rowLine"
           >
             <span className="t14">GST</span>
             {localStorage.getItem("couponCode") ? (
@@ -791,12 +771,7 @@ export const Order: React.FC = () => {
 
           {/* ***************************yyyy*******************Orderrrrrrrrrrr */}
           <div
-            className="row-center-space-between"
-            style={{
-              paddingBottom: 13,
-              marginBottom: 20,
-              borderBottom: "1px solid #DBE9F5",
-            }}
+            className="row-center-space-between rowLine"
           >
             <div>
               <input

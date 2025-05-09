@@ -195,6 +195,7 @@ export const Header: React.FC<Props> = ({
             alignItems: 'center',
             padding: '0 20px',
             gap: 10,
+            color: '#fff',
           }}
           className="clickable"
         >
@@ -208,7 +209,7 @@ export const Header: React.FC<Props> = ({
   // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
     return (
-      <div className="middleBox" style={{ background: 'red' }}>
+      <div className="middleBox">
         <img
           className="logo-header"
           src={pic1}

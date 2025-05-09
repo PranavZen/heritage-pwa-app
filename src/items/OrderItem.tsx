@@ -275,6 +275,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                   color: "var(--main-color)",
                   fontWeight: 600,
                   fontSize: 16,
+                  whiteSpace: "nowrap",
+                  width: 105,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
 
