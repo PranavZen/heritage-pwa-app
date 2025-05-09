@@ -52,9 +52,9 @@ export const Order: React.FC = () => {
   const [opacity, setOpacity] = useState<number>(0);
   const [totalPrice, SetTotalPrice] = useState<any[]>([]);
   const [freeNoOfdeliveries, SetfreeNoOfdeliveries] = useState<any[]>([]);
+  const [Subtotal, setSubtotal] = useState<any>({});
 
-
-  console.log("Subtotal", Subtotal);
+  // console.log("freeNoOfdeliveries", freeNoOfdeliveries);
 
   const [addressId, SetAddressId] = useState("");
   const [superPoint, setSuperPoint] = useState<any>(null);
@@ -103,7 +103,7 @@ export const Order: React.FC = () => {
 
   const [superPointCoins, SetSuperPoint] = useState<number>(0);
 
-  console.log("superPointCoins", superPointCoins);
+  // console.log("superPointCoins", superPointCoins);
 
   const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
@@ -194,7 +194,7 @@ export const Order: React.FC = () => {
           response.data.optionListing.map(
             (elem: any) => elem.no_of_deliveries * elem.discount * elem.quantity
           )
-        )
+        );
       } catch (error) {
         console.error(error);
       }
@@ -251,9 +251,12 @@ export const Order: React.FC = () => {
   const handleCheckout = async () => {
     setLoading(true);
     const formData = new FormData();
-    formData.append('c_id', c_id || '');
-    formData.append('addresses_id', String(addressId) || selectedAddressId || '');
-    formData.append('redeem_reward_points', String(superPointCoins));
+    formData.append("c_id", c_id || "");
+    formData.append(
+      "addresses_id",
+      String(addressId) || selectedAddressId || ""
+    );
+    formData.append("redeem_reward_points", String(superPointCoins));
 
     try {
       const response = await axios.post(
@@ -678,11 +681,20 @@ export const Order: React.FC = () => {
             >
               Subtotal
             </span>
-            <span className='t14' style={{ color: 'var(--main-color)' }}>
-              ₹{' '}
-              {totalPrice.reduce((total, elem) => {
-                return total + elem.quantity * elem.price * (elem.no_of_deliveries === '0' ? '1' : elem.no_of_deliveries);
-              }, 0).toFixed(2)}
+            <span className="t14" style={{ color: "var(--main-color)" }}>
+              ₹{" "}
+              {totalPrice
+                .reduce((total, elem) => {
+                  return (
+                    total +
+                    elem.quantity *
+                      elem.price *
+                      (elem.no_of_deliveries === "0"
+                        ? "1"
+                        : elem.no_of_deliveries)
+                  );
+                }, 0)
+                .toFixed(2)}
             </span>
           </div>
 
@@ -719,16 +731,13 @@ export const Order: React.FC = () => {
           </div>
           {/* *************************************************** */}
 
-          {localStorage.getItem('coupon') ? <> <div
-            className='row-center-space-between'
-            style={{
-              paddingBottom: 13,
-              marginBottom: 20,
-              borderBottom: '1px solid #DBE9F5',
-            }}
-          >
-
-            {localStorage.getItem('coupon') ? <> </> : <></>}
+          {localStorage.getItem("coupon") ? (
+            <>
+              {" "}
+              <div
+                className="row-center-space-between rowLine"
+              >
+                {localStorage.getItem("coupon") ? <> </> : <></>}
 
                 <span className="t14">
                   Coupon {localStorage.getItem("couponCode") || "₹ 0"} applied
@@ -843,13 +852,13 @@ export const Order: React.FC = () => {
 
                   // console.log("aaaaa", cartTotal);
 
-                    let discount = 0;
+                  let discount = 0;
 
-                    if (localStorage.getItem('couponCode')) {
-                      discount = Number(cartDetails?.after_discount_total || 0);
-                    }
+                  if (localStorage.getItem("couponCode")) {
+                    discount = Number(cartDetails?.after_discount_total || 0);
+                  }
 
-                    // console.log("bbb", discount)
+                  // console.log("bbb", discount)
 
                   const gst = Number(cartDetails?.gst_tax_total || 0);
 
