@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { DishType } from '../../types';
+import { notification } from 'antd';
 
 export type WishlistStateType = { list: DishType[] };
 
@@ -47,11 +48,11 @@ export const toggleWishlistItem = createAsyncThunk(
       product_option_id: number;
       product_option_value_id: number;
       c_id: number;
-      type: number; 
+      type: number;
     },
     { rejectWithValue }
   ) => {
-    
+
     // console.log('Dispatching toggleWishlistItem with:', params);
 
     const formData = new FormData();
@@ -69,7 +70,7 @@ export const toggleWishlistItem = createAsyncThunk(
 
       const resData = response.data;
 
-  
+
       if (resData.status === 'fail' && resData.message === 'Wishlist already added!' && params.type === 1) {
         console.warn('Item is already in wishlist. Skipping update.');
         return rejectWithValue('Already in wishlist');
@@ -98,7 +99,7 @@ export const wishlistSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-     
+
       .addCase(fetchWishlist.fulfilled, (state, action) => {
         state.list = action.payload;
       })
@@ -112,13 +113,23 @@ export const wishlistSlice = createSlice({
             (item) => item.product_option_value_id === product_option_value_id
           );
           if (!inWishlist) {
-            // state.list.push({ product_option_value_id });
+            // state.list.push({ product_option_value_id }); 
+            notification.success({
+              message: 'Item Added',
+              description: 'The item has been added to your wishlist.',
+              duration: 2,
+            });
           }
         } else if (type === 2) {
           // Remove Item from Wishlist
           state.list = state.list.filter(
             (item) => item.product_option_value_id !== product_option_value_id
           );
+          notification.success({
+            message: 'Item Removed',
+            description: 'The item has been removed from your wishlist.',
+            duration: 2, 
+          });
         }
       });
   },

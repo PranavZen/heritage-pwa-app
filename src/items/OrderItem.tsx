@@ -44,8 +44,12 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     };
     getData();
   }, []);
+  // console.log("dishdishdish", dish);
+  
+  const [quantity, setQuantity] = useState<number>(Number(dish.quantity));
 
-  const [quantity, setQuantity] = useState<number>(Number(dish.quantity) || 1);
+  // console.log("ccccc", quantity);
+
   const [deliveryPreference, setDeliveryPreference] = useState<string>(String(dish.delivery_preference) || '');
   const [noOfDeliveries, setNoOfDeliveries] = useState<number>(Number(dish.no_of_deliveries));
   // console.log('[noOfDeliveries[noOfDeliveries[noOfDeliveries', noOfDeliveries);
@@ -57,7 +61,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const c_id = localStorage.getItem('c_id');
   const cityId = localStorage.getItem('cityId');
 
-
+  const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
   // console.log("dis", dish);
 
@@ -90,7 +94,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         formData
       );
 
-      // console.log("mmm", response);
+      console.log("mmm", response.data);
 
       if (response.data.status === 'success') {
         setPrevQuantity(quantity);
@@ -98,7 +102,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         setIsAnimating(true);
         setTimeout(() => setIsAnimating(false), 500);
         notification.success({ message: response.data.message });
-        dispatch(addToCart(dish));
+        // dispatch(addToCart(dish));
         dispatch(setShouldRefresh(true));
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message });
@@ -141,6 +145,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           dispatch(actions.removeItemCompletely({ ...dish }));
           dispatch(setShouldRefresh(true));
           notification.success({ message: response.data.message });
+
         } else {
           notification.error({ message: response.data.message });
         }
@@ -160,12 +165,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             const formData = new FormData();
             formData.append('id', String(dish.cart_id));
             formData.append('c_id', localStorage.getItem('c_id') || '');
-
             const response = await axios.post(
               'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
               formData
             );
-
             if (response.data.status === 'success') {
               notification.success({ message: response.data.message });
               dispatch(removeFromCart({ ...dish }));
@@ -176,6 +179,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               dispatch(setShouldRefresh(true));
             } else {
               notification.error({ message: response.data.message });
+              dispatch(setShouldRefresh(true));
             }
           } catch (error) {
             notification.error({ message: 'Failed to remove item from cart.' });
@@ -188,7 +192,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       });
     }
   };
-
 
   useEffect(() => {
     const getAddToCartData = async () => {
@@ -204,15 +207,16 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           formData
         );
 
-        // console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
+        // console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response);
 
         SetSetCartData(response.data.optionListing.map((elem: any) => elem.no_of_deliveries));
+
       } catch (error) {
         console.error(error);
       }
     };
     getAddToCartData();
-  }, [cityId, c_id]);
+  }, [shouldRefresh]);
 
 
 
@@ -289,7 +293,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               </span>
 
 
-
               {dish.discount ? (
                 <>
                   <del
@@ -345,7 +348,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 className="t14"
                 style={{ color: "var(--main-color)", fontWeight: 500 }}
               >
-                <span className="cartLable">Free Deliveries :</span> {dish.no_of_free_deliveries}
+                {dish.order_type.toString() === '1' ? <>  <span className="cartLable">Free Deliveries :</span> {dish.no_of_free_deliveries} </>
+                  : <>   </>
+                }
+
               </span>
               {dish.preferenceName && (
                 <span
@@ -399,6 +405,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 <svg.MinusSvg />
               </button>
 
+<<<<<<< HEAD
               <div className="countNum">
                 {isAnimating && (
                   <span
@@ -411,6 +418,12 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 )}
                 {!isAnimating && <span>{quantity}</span>}
               </div>
+=======
+              <span className="countNum">
+                {quantity}
+
+              </span>
+>>>>>>> roshan
 
               <button
                 className="cartButton"

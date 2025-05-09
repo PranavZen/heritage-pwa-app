@@ -24,6 +24,8 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
   const navigate = hooks.useNavigate();
 
   const [quantity, setQuantity] = useState<number>(0);
+
+
   const [cartItemId, setCartItemId] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [prevQuantity, setPrevQuantity] = useState<number>(0);
@@ -429,7 +431,6 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
               ₹ {dish.price}
             </span>
           )}
-
           <div className="cartButtonWrap">
             {quantity < 1 ? (
               <button className="cartButton" onClick={HandleAddToCart}>
