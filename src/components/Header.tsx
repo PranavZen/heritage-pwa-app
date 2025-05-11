@@ -30,6 +30,7 @@ interface ProfileData {
   photo_url: string | null;
 }
 
+
 const modalMenu = [
   {
     id: 1,
@@ -63,6 +64,7 @@ const modalMenu = [
   },
 ];
 
+
 export const Header: React.FC<Props> = ({
   title,
   userName,
@@ -91,9 +93,9 @@ export const Header: React.FC<Props> = ({
 
   useEffect(() => {
     if (cartCount === 0) {
-      localStorage.removeItem('couponCode');
+      // localStorage.removeItem('couponCode');
     }
-  }, [cartCount]);
+  }, [shouldRefresh]);
 
   // const removeCart = useSelector((state: RootState) => state.cartSlice.cartCount);
 

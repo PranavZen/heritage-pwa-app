@@ -117,7 +117,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
         setQuantity(1);
-          dispatch(setShouldRefresh(false));
+        dispatch(setShouldRefresh(true));
 
         const newCartId =
           response.data.cart_id ||
@@ -251,7 +251,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     );
 
     const type = isInWishlist ? 2 : 1;
-  //  console.log("product_option_value_id", dish.product_option_value_id)
+    //  console.log("product_option_value_id", dish.product_option_value_id)
     try {
       const resultAction = await dispatch(toggleWishlistItem({
         product_id: dish.product_id,
@@ -280,8 +280,14 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           src={dish.option_value_image}
           alt={dish.name}
           onClick={() =>
-            navigate(`/dish/${dish.option_value_name}`, { state: { dish } })
+            navigate(`/dish/${dish.option_value_name}`, {
+              state: {
+                dish,
+                showSubscribe: dish.subscription_product
+              }
+            })
           }
+
         />
       </div>
 
@@ -322,10 +328,10 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           style={{
             position: 'absolute',
             right: 0,
-            bottom:46,
+            bottom: 46,
             padding: 15,
             borderRadius: 10,
-            backgroundColor: 'transparent', 
+            backgroundColor: 'transparent',
             border: 'none',
           }}
         >

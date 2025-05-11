@@ -57,8 +57,6 @@ export const Order: React.FC = () => {
   const [Subtotal, setSubtotal] = useState<any>({});
 
 
-  // console.log("Subtotal", Subtotal);
-
   const [addressId, SetAddressId] = useState('');
   const [superPoint, setSuperPoint] = useState<any>(null);
 
@@ -96,14 +94,14 @@ export const Order: React.FC = () => {
 
   // console.log("superPointCoins", superPointCoins);
 
-const maxRedeemableAmount = Math.floor(superPointCoins / 10);
+  const maxRedeemableAmount = Math.floor(superPointCoins / 10);
 
-const adjustedRedeemedAmount = Math.min(redeemedAmount, maxRedeemableAmount);
-const PassPointsInCheckout = adjustedRedeemedAmount * 10;
+  const adjustedRedeemedAmount = Math.min(redeemedAmount, maxRedeemableAmount);
+  const PassPointsInCheckout = adjustedRedeemedAmount * 10;
 
-// console.log("Adjusted Redeemed Amount:", adjustedRedeemedAmount);
+  // console.log("Adjusted Redeemed Amount:", adjustedRedeemedAmount);
 
-// console.log("PassPointsInCheckout:", PassPointsInCheckout);
+  // console.log("PassPointsInCheckout:", PassPointsInCheckout);
 
 
 
@@ -198,10 +196,14 @@ const PassPointsInCheckout = adjustedRedeemedAmount * 10;
           )
         );
         setExtraDiscountShow(
-          response.data.optionListing.map((elem: any) =>
-            (elem.no_of_deliveries) * elem.discount * elem.quantity
-          )
-        )
+          response.data.optionListing.map((elem: any) => {
+            const deliveries = Number(elem.no_of_deliveries) === 0 ? 1 : Number(elem.no_of_deliveries);
+            const discount = Number(elem.discount);
+            const quantity = Number(elem.quantity);
+            return (deliveries * discount * quantity).toString();
+          })
+        );
+
         setSubtotal(response.data)
 
       } catch (error) {
@@ -274,7 +276,7 @@ const PassPointsInCheckout = adjustedRedeemedAmount * 10;
         notification.success({ message: response.data.message });
         // setOrderPlaced(true); 
         navigate('/thank-you');
-        localStorage.removeItem('couponCode')
+        localStorage.removeItem('couponCode');
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message || 'Order placement failed' });
       }
@@ -682,11 +684,11 @@ const PassPointsInCheckout = adjustedRedeemedAmount * 10;
             </span>
             <span className='t14' style={{ color: 'var(--main-color)' }}>
               ₹{' '}
-              {/* {totalPrice.reduce((total, elem) => {
+              {totalPrice.reduce((total, elem) => {
                 return total + elem.quantity * elem.price * (elem.no_of_deliveries === '0' ? '1' : elem.no_of_deliveries);
-              }, 0).toFixed(2)} */}
+              }, 0).toFixed(2)}
 
-              {Subtotal.cart_grand_total}
+              {/* {Subtotal.cart_grand_total} */}
             </span>
           </div>
 
@@ -713,13 +715,22 @@ const PassPointsInCheckout = adjustedRedeemedAmount * 10;
           >
             <span className='t14'> Discount on Free Deliveries</span>
             <span className='t14'>
-              ₹ {
+              {/* ₹ {
                 superPoint && superPoint.optionListing && superPoint.optionListing.length > 0
                   ? superPoint.optionListing.map((elem: any) => {
                     return (elem.price - elem.discount) * elem.no_of_free_deliveries;
                   }).reduce((acc: number, current: number) => acc + current, 0)
                   : 0
+              } */}
+
+              ₹ {
+                superPoint && superPoint.optionListing && superPoint.optionListing.length > 0
+                  ? superPoint.optionListing
+                    .map((elem: any) => (elem.price - elem.discount) * elem.no_of_free_deliveries * elem.quantity)
+                    .reduce((acc: number, current: number) => acc + current, 0)
+                  : 0
               }
+
             </span>
           </div>
           {/* *************************************************** */}
@@ -786,6 +797,7 @@ const PassPointsInCheckout = adjustedRedeemedAmount * 10;
               (
                 <h4>
                   ₹{' '}
+
                   {
                     (
                       totalPrice.reduce((total, elem) => {
@@ -797,17 +809,20 @@ const PassPointsInCheckout = adjustedRedeemedAmount * 10;
                         ) {
                           return total;
                         }
-
                         const deliveryCount = elem.no_of_deliveries === '0'
                           ? 1
                           : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
-
                         const lineTotal = Number(elem.quantity) * Number(elem.price) * deliveryCount;
-
-                        return total + lineTotal - (Number(extraDiscount) || 0);
-                      }, 0) - (redeemedAmount > 0 ? redeemedAmount : 0)
+                        return total + lineTotal;
+                      }, 0)
+                      - extraDiscountShow.reduce((sum, val) => sum + Number(val), 0)
+                      - (Number(extraDiscount) || 0)
+                      - (redeemedAmount > 0 ? redeemedAmount : 0)
                     ).toFixed(2)
                   }
+
+
+
                 </h4>
               ) : localStorage.getItem('couponCode') || redeemedAmount > 1 ? (
                 <h4>
@@ -851,12 +866,45 @@ const PassPointsInCheckout = adjustedRedeemedAmount * 10;
               ) : (
                 <h4>
                   ₹{' '}
-                  {totalPrice
+                  {/* {totalPrice
                     .reduce((total, elem) => {
                       const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
                       return total + elem.quantity * elem.price * deliveryCount;
                     }, 0)
-                    .toFixed(2)}
+                    .toFixed(2)} */}
+                  {
+                    (
+                      totalPrice.reduce((total, elem) => {
+                        if (
+                          !elem ||
+                          isNaN(Number(elem.quantity)) ||
+                          isNaN(Number(elem.price)) ||
+                          isNaN(Number(elem.discount)) ||
+                          typeof elem.no_of_deliveries === 'undefined'
+                        ) {
+                          return total;
+                        }
+                        const deliveryCount = elem.no_of_deliveries === '0'
+                          ? 1
+                          : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
+                        const lineTotal = Number(elem.quantity) * Number(elem.price) * deliveryCount;
+                        return total + lineTotal;
+                      }, 0)
+                      - totalPrice.reduce((discountTotal, elem) => {
+                        if (
+                          !elem ||
+                          isNaN(Number(elem.discount)) ||
+                          isNaN(Number(elem.quantity))
+                        ) {
+                          return discountTotal;
+                        }
+                        return discountTotal + (Number(elem.discount) * Number(elem.quantity));
+                      }, 0)
+                      - (Number(extraDiscount) || 0)
+                      - (redeemedAmount > 0 ? redeemedAmount : 0)
+                    ).toFixed(2)
+                  }
+
                 </h4>
               )}
           </div>

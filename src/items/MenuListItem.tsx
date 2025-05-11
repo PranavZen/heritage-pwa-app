@@ -18,8 +18,8 @@ type Props = {
 };
 
 export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }) => {
-  const showSubscribe = selectedCategory === '28' || selectedCategory === '29';
-  // console.log("dishdishdishdishdish", dish);
+  const showSubscribe = dish.subscription_product
+  // console.log("dishdishdishdishdish", showSubscribe);
   const dispatch = hooks.useDispatch();
   const [cartId, setCartId] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(0);
@@ -127,7 +127,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
   };
   useEffect(() => {
     fetchCartData();
-  }, [cityId, c_id, dish, ]);
+  }, [cityId, c_id, dish,]);
 
   const HandleAddToCart = async () => {
     if (!c_id) {
@@ -307,7 +307,12 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
             alt={dish.name}
             className="proItemImg"
             onClick={() =>
-              navigate(`/dish/${dish.option_name}`, { state: { dish , showSubscribe} })
+              navigate(`/dish/${dish.option_name}`, {
+                state: {
+                  dish,
+                  showSubscribe: dish.subscription_product,
+                }
+              })
             }
           />
         </div>
@@ -398,8 +403,8 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
                     ? handleRemoveFromCart(event)
                     : handleUpdateCart(quantity - 1)
                 }
-              > 
-                <svg.MinusSvg/>
+              >
+                <svg.MinusSvg />
               </button>
               <span className="countNum">{quantity}</span>
               <button
@@ -419,10 +424,10 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
               }>
                 Subscribe
             </button> */}
-            {showSubscribe && (
+            {String(showSubscribe) === '1' && (
               <button className="subscriptionButton"
                 onClick={() =>
-                  navigate(`/dish/${dish.option_name}`, { state: { dish } })
+                  navigate(`/dish/${dish.option_name}`, { state: { dish, showSubscribe } })
                 }>
                 Subscribe
               </button>

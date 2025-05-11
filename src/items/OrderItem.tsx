@@ -224,10 +224,23 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     navigate(`/dish/${dish.option_name}`, { state: { dish } });
   }
 
-  const handleOpenModalMenuList = (option_name: any) => {
+  // const handleOpenModalMenuList = (option_name: any) => {
 
-    navigate(`/dish/${dish.option_name}`, { state: { dish } });
-  }
+  //   navigate(`/dish/${dish.option_name}`, { state: { dish } ,
+
+  //   });
+  // }
+
+  const handleOpenModalMenuList = (option_name: any) => {
+    localStorage.setItem('product_option_value_id', dish.cart_product_option_value_id.toString());
+
+    navigate(`/dish/${option_name}`, {
+      state: {
+        dish,
+        showSubscribe: dish.subscription_product,
+      },
+    });
+  };
 
   const handleOk = async () => {
     await handleUpdateCart(quantity);
@@ -400,7 +413,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
 
               <span className="countNum">
 
-               {dish.quantity}
+                {dish.quantity}
 
               </span>
 
