@@ -82,7 +82,6 @@ export const Header: React.FC<Props> = ({
   const cart = useSelector((state: RootState) => state.cartSlice);
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
 
-  // Fetching the cartCount from Redux state (updated to cartCount instead of list.length)
 
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
@@ -92,9 +91,12 @@ export const Header: React.FC<Props> = ({
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
 
   useEffect(() => {
-    if (cartCount === 0) {
-      // localStorage.removeItem('couponCode');
-    }
+    setTimeout(() => {
+      if (cartCount === 0) {
+        localStorage.removeItem('couponCode');
+      }
+    }, 1000)
+
   }, [shouldRefresh]);
 
   // const removeCart = useSelector((state: RootState) => state.cartSlice.cartCount);
@@ -199,12 +201,12 @@ export const Header: React.FC<Props> = ({
     return (
       <div className="middleBox">
         <img
-         onClick={() => navigate(shouldGoToHome ? Routes.TabNavigator : Routes.TabNavigator)}
+          onClick={() => navigate(shouldGoToHome ? Routes.TabNavigator : Routes.TabNavigator)}
           className="logo-header"
           src={pic1}
           alt=""
           width={150}
-         
+
         />
       </div>
     );
@@ -248,7 +250,7 @@ export const Header: React.FC<Props> = ({
           )}
         </div>
         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-           <NoCartData/>
+          <NoCartData />
         </Modal>
       </>
     );
@@ -363,7 +365,7 @@ export const Header: React.FC<Props> = ({
         {renderUser()}
         {renderGoBack()}
         {renderTitle()}
-        {renderBasket()} 
+        {renderBasket()}
       </header>
       {renderModal()}
     </>

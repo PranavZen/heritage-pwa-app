@@ -84,7 +84,7 @@ export const SubscriptionOrder: React.FC = () => {
     order_id: string;
     order_status_id: string;
     payment_method: string;
-    order_option_id:string;
+    order_option_id: string;
   }
   const [orderToDelete, setOrderToDelete] = useState<orderToDelete | null>(null);
 
@@ -421,15 +421,18 @@ export const SubscriptionOrder: React.FC = () => {
 
     axios
       .post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/oneTimeOrderList",
+        "https://heritage.bizdel.in/app/consumer/services_v11/getMyOneTimeOrder",
         formData
       )
       .then((response) => {
-        setOneTimeOrderData(response.data.ordersListing);
+        const data = response.data.orders
+          .map((order: any) => order.oneTimeOrderListing)
+          .flat();
+        setOneTimeOrderData(data);
         setIsLoading(false);
-
-        // console.log("kkkkkkkkkkkkkkkkkkk", response);
+         
       })
+      
       .catch((error) => {
         console.error("Error fetching one-time order data", error);
         setIsLoading(false);
@@ -440,6 +443,9 @@ export const SubscriptionOrder: React.FC = () => {
     fetchSubscriptionData();
     fetchOneTimeOrderData();
   }, []);
+
+
+
 
   useEffect(() => {
     if (Array.isArray(subscriptionID) && subscriptionID.length !== 0) {
@@ -531,8 +537,8 @@ export const SubscriptionOrder: React.FC = () => {
                           <p className="orderPrice">
                             <small>MRP</small> ₹{subscription.price}{" "}
                             <span>per pack</span>
-                          </p>  
-                          <p className="orderBalAmt"> 
+                          </p>
+                          <p className="orderBalAmt">
                             Total Amount : ₹ {subscription.subscription_block_amount}
                           </p>
                         </div>
@@ -699,45 +705,35 @@ export const SubscriptionOrder: React.FC = () => {
             <h2>One Time Orders</h2>
             <div className="scrollable-container">
               <div className="card-list">
-                {Array.isArray(oneTimeOrderData) &&
-                  oneTimeOrderData.length > 0 ? (
-                  oneTimeOrderData.map((order) => (
-                    <div key={order.subscription_id} className="card">
-
+                {Array.isArray(oneTimeOrderData) && oneTimeOrderData.length > 0 ? (
+                  oneTimeOrderData.map((orderData) => (
+                    <div key={orderData.orders_id} className="card">
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
-                            src={order.image}
-                            alt={order.product_name}
+                            src={orderData.image}
+                            alt={orderData.option_value_name}
                             className="card-img"
                           />
                         </div>
                         <div className="card-info">
-                          <h3 className="orderItmName">
-                            {order.product_name}
-                          </h3>
+                          <h3 className="orderItmName">{orderData.option_value_name}</h3>
                           <p className="orderItmWieght">
-                            {order.weight} {order.weight_unit}
+                            {orderData.weight} {orderData.weight_unit}
                           </p>
                           <p className="orderQuantity">
-                            Pack: {order.quantity} Per day 
-                            {order.package_name}
+                            Pack: {orderData.order_option_quantity} Per day {orderData.sku}
                           </p>
-                          {/* <p className="orderLD">
-                            Last Delivered:{" "}
-                            {order.lastDeliveryDate || "-"}
-                          </p> */}
                           <p className="orderPrice">
-                            <small>MRP</small> ₹{order.price}{" "}
-                            <span>per pack</span>
+                            <small>MRP</small> ₹{orderData.price} <span>per pack</span>
                           </p>
                           <p className="orderBalAmt">
-                            Total Amount : ₹ {order.price * order.quantity}
+                            Total Amount: ₹ {parseFloat(orderData.price) * parseInt(orderData.order_option_quantity)}
                           </p>
                         </div>
                       </div>
                       <div className="dataWraps">
-
+                        {/* Additional data wrap sections can go here */}
                       </div>
                       <div className="orderDateWrap">
                         <div className="orderDateLeftBox box50">
@@ -752,56 +748,38 @@ export const SubscriptionOrder: React.FC = () => {
                             </svg>
                           </div>
                           <div className="innerBox">
-                            {" "}
                             <p>Order Date</p>
-                            <span>{order.
-                              delivery_date
-                              || "-"}</span>
+                            <span>{orderData.order_date || "-"}</span>
                           </div>
                         </div>
-
-
-
-
                         <div className="orderDateRightBox box50">
-                          <div className="svgWrap">
-                            {/* <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                              width={24}
-                              height={24}
-                            >
-                              <path d="M19,2h-1V1c0-.552-.447-1-1-1s-1,.448-1,1v1H8V1c0-.552-.447-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5ZM5,4h14c1.654,0,3,1.346,3,3v1H2v-1c0-1.654,1.346-3,3-3Zm14,18H5c-1.654,0-3-1.346-3-3V10H22v9c0,1.654-1.346,3-3,3Zm0-8c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h12c.553,0,1,.448,1,1Zm-7,4c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h5c.553,0,1,.448,1,1Z" />
-                            </svg> */}
-                          </div>
                           <div className="innerBox">
-                            {/* <p>Delivery : </p> */}
-                            <span>{order.status_name || "-"}</span>
+                            <span>{orderData.order_status_name || "-"}</span>
                           </div>
                         </div>
                       </div>
-                      <span className="subExpiredText">
-                        {order.status}
-                      </span>
+                      <span className="subExpiredText">{orderData.order_status_name}</span>
                       <div className="subscription_idWrap">
-                        <p>Order Id: #{order.order_id}</p>
+                        <p>Order Id: #{orderData.orders_id}</p>
                       </div>
 
-
-                      <div className="delete-icon"
-                        onClick={() => handleDeleteClick(order)}
+                      {/* Delete Icon */}
+                      <div
+                        className="delete-icon"
+                        onClick={() => handleDeleteClick(orderData)}
                       >
+                        {/* You can add delete functionality here */}
                       </div>
-
                     </div>
                   ))
                 ) : (
-                  <p>No order  found.</p>
+                  <p>No order found.</p>
                 )}
               </div>
             </div>
           </div>
         )}
+
 
         {/* Delete Confirmation Modal */}
         <Modal
@@ -830,22 +808,22 @@ export const SubscriptionOrder: React.FC = () => {
 
   // ****************header and Footer**************************
 
-    // const renderHeader = (): JSX.Element => {
-    //   return (
-    //     <components.Header showGoBack={true} showBasket={true} />
-    //   );
-    // };
+  // const renderHeader = (): JSX.Element => {
+  //   return (
+  //     <components.Header showGoBack={true} showBasket={true} />
+  //   );
+  // };
 
-    // const renderFooter = (): JSX.Element => {
-    //   return <components.Footer />;
-    // };
+  // const renderFooter = (): JSX.Element => {
+  //   return <components.Footer />;
+  // };
 
   return (
     <div id="screen" style={{ opacity }}>
       {/* {renderHeader()} */}
       {renderContent()}
 
-      
+
       {/* {renderFooter()} */}
     </div>
   );

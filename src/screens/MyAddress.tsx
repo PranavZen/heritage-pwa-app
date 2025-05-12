@@ -4,6 +4,9 @@ import { Routes } from "../routes";
 import { components } from "../components";
 import axios from "axios";
 import { notification, Modal } from "antd";
+import { setShouldRefresh } from "../store/slices/cartSlice";
+import { useSelector } from "react-redux";
+import { RootState } from '../store';
 
 export const MyAddress: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -11,7 +14,7 @@ export const MyAddress: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
-  //console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq',addresses);
+  console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq',addresses);
   const [newAddress, setNewAddress] = useState<any | null>(null);
   const [opacity, setOpacity] = useState<number>(0);
   const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
@@ -21,26 +24,30 @@ export const MyAddress: React.FC = () => {
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
+  const [shouldRefresh, setShouldRefresh] = useState(false);
+
   const c_id = localStorage.getItem("c_id");
 
   useEffect(() => {
-    const fetchAddresses = async () => {
-      const formData = new FormData();
-      formData.append('c_id', c_id || '0');
-      try {
-        setLoading(true);
-        const response = await axios.post('https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById', formData);
-        // console.log('xxxxxxxxxxxxxxx', response.data.addresses);
-        setAddresses(response.data.addresses);
+        const fetchAddresses = async () => {
+            const formData = new FormData();
+            formData.append("c_id", c_id || "0");
+            try {
+                setLoading(true);
+                const response = await axios.post(
+                    "https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById",
+                    formData
+                );
+                setAddresses(response.data.addresses);
+                setLoading(false);
+            } catch (error) {
+                setLoading(false);
+                console.error("Error fetching addresses:", error);
+            }
+        };
+        fetchAddresses();
+    }, [c_id, shouldRefresh]);
 
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.error("Error fetching addresses:", error);
-      }
-    };
-    fetchAddresses();
-  }, [c_id]);
 
   // *******************************Delete*************************************
   useEffect(() => {
@@ -141,6 +148,51 @@ export const MyAddress: React.FC = () => {
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader />;
 
+
+    const SetDefaultAddress = async (elem: any) => {
+      const formData = new FormData();
+      formData.append("address_id", elem.id || "");
+      formData.append("c_id", elem.c_id);
+      formData.append("country_id", elem.country_id);
+      formData.append("state_id", elem.state_id);
+      formData.append("city_id", elem.city_id);
+      formData.append("area_id", localStorage.getItem('area_id') || '');
+      formData.append("address1", elem.address1);
+      formData.append("address2", elem.address2);
+      formData.append("pincode", elem.pincode);
+      formData.append("is_default", "1");
+      formData.append("firstname", elem.firstname);
+      formData.append("lastname", elem.lastname);
+      formData.append("building_name", elem.building_name);
+
+      if (elem.building_id) {
+        formData.append("building_id", elem.building_id);
+      }
+
+      try {
+        setLoading(true);
+        const response = await axios.post(
+          "https://heritage.bizdel.in/app/consumer/services_v11/updateAddress",
+          formData
+        );
+
+        if (response.data.status === "success") {
+          navigate(Routes.MyAddress);
+          notification.success({ message: "Address set as default" });
+          setShouldRefresh(true); 
+        } else {
+          notification.error({ message: response.data.message });
+        }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error("Error updating address:", error);
+      }
+    };
+
+
+
+
     return (
       <section className="scrollable">
         <div className="newAddressBtnWrap">
@@ -169,7 +221,7 @@ export const MyAddress: React.FC = () => {
                       <p className="defaultAddressLabel">Default Address</p>
                     ) : (
                       <span className="setDefaultBtn btns">
-                        <i className="fa fa-check-circle"></i> Delete
+                        <p onClick={() => SetDefaultAddress(elem)} style={{ cursor: "pointer" }}> Set as default</p>
                       </span>
                     )}
                   </div>
@@ -178,7 +230,7 @@ export const MyAddress: React.FC = () => {
             </div>
           ) : (
             <div style={{ borderRadius: 10, marginBottom: 10, backgroundColor: "var(--white-color)", padding: 20 }}>
-            <p style={{textAlign:"center"}}>  No addresses found. </p>    
+              <p style={{ textAlign: "center" }}>  No addresses found. </p>
             </div>
           )}
 

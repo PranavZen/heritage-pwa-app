@@ -44,6 +44,8 @@ export const Order: React.FC = () => {
   const location = useLocation();
   const couponCode = location.state?.couponCode;
 
+  // console.log("wwwwwwwww",  couponCode);
+
   // const selectedAddressId = location.state?.addressId;
   const selectedAddressId = localStorage.getItem('selectedAddressId');
 
@@ -56,6 +58,7 @@ export const Order: React.FC = () => {
   const [freeNoOfdeliveries, SetfreeNoOfdeliveries] = useState<any[]>([]);
   const [Subtotal, setSubtotal] = useState<any>({});
 
+  // console.log('totalPrice', Subtotal);
 
   const [addressId, SetAddressId] = useState('');
   const [superPoint, setSuperPoint] = useState<any>(null);
@@ -112,10 +115,11 @@ export const Order: React.FC = () => {
   const [isApplying, setIsApplying] = useState<boolean>(false);
 
   const [extraDiscount, setExtraDiscount] = useState<any[]>([]);
+
   const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
 
 
-  // console.log("extraDiscountShow", extraDiscountShow);
+  // console.log("extraDiscount", extraDiscount);
 
 
   const handleCheckboxChange = (e: any) => {
@@ -264,7 +268,12 @@ export const Order: React.FC = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append('c_id', c_id || '');
-    formData.append('addresses_id', String(addressId) || selectedAddressId || '');
+    // formData.append('addresses_id', String(addressId) || selectedAddressId || '');
+    formData.append(
+      'addresses_id',
+      selectedAddressId ? String(selectedAddressId) : String(addressId || '')
+    );
+
     formData.append('redeem_reward_points', String(PassPointsInCheckout));
 
     try {
@@ -279,7 +288,7 @@ export const Order: React.FC = () => {
         localStorage.removeItem('couponCode');
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message || 'Order placement failed' });
-          dispatch(setShouldRefresh(true));
+        dispatch(setShouldRefresh(true));
       }
     } catch (error) {
       setLoading(false);
@@ -305,7 +314,6 @@ export const Order: React.FC = () => {
           formData
         );
         const data = response.data;
-
 
         // console.log("iiiiiiiiiiiiiii", response);
 
@@ -830,16 +838,25 @@ export const Order: React.FC = () => {
                 </h4>
               ) : localStorage.getItem('couponCode') || redeemedAmount > 1 ? (
                 <h4>
+
+
+
+
+
+                  {/* {cartDetails?.after_discount_total} */}
+
                   ₹{' '}
                   {(() => {
-                    const cartTotal = totalPrice
-                      .reduce((total, elem) => {
-                        const deliveryCount = elem.no_of_deliveries === '0'
-                          ? 1
-                          : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
-                        return total + elem.quantity * elem.price * deliveryCount;
-                      }, 0)
-                      .toFixed(2);
+                    const cartTotal = Subtotal.cart_grand_total
+                    //  totalPrice
+                    //   .reduce((total, elem) => {
+                    //     // console.log("aaaa", total);
+                    //     const deliveryCount = elem.no_of_deliveries === '0'
+                    //       ? 1
+                    //       : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
+                    //     return total + elem.quantity * elem.price * deliveryCount;
+                    //   }, 0)
+                    //   .toFixed(2);
 
                     // console.log("aaaaa", cartTotal);
 
@@ -857,15 +874,30 @@ export const Order: React.FC = () => {
 
                     const deliveryMultiplier = deliveries.reduce((total, currentValue) => total + Number(currentValue), 0);
 
-                    // console.log("ddddd", deliveryMultiplier)
+                    // console.log("dddddz", cartTotal)
 
                     // const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
-                    const total = (Number(cartTotal) - discount - (Number(extraDiscount) || 0)) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
+                    const total = (Number(cartTotal) - (Number(extraDiscount) || 0)) + gst - (redeemedAmount > 0 ? redeemedAmount : 0) - discount;
 
                     // console.log("bbbb", total);
                     return total.toLocaleString('en-IN');
 
                   })()}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </h4>
               ) : (
                 <h4>
