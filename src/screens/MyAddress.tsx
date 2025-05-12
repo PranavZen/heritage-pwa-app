@@ -157,7 +157,7 @@ export const MyAddress: React.FC = () => {
               {addresses.map((elem) => (
                 <div className="myaddress-getting-separate" key={elem.id}>
                   <h4>{elem.firstname} {elem.lastname}</h4>
-                  <p>{elem.flat_plot_no} {elem.wing} {elem.building_name}, {elem.address1} {elem.address2}, {elem.area_name}, {elem.city_name}, {elem.state_name} {elem.pincode}</p>
+                  <p>{elem.flat_plot_no} {elem.wing} {elem.building_name} {elem.address1} {elem.address2}, {elem.area_name}, {elem.city_name}, {elem.state_name} {elem.pincode}</p>
                   <div className="myAddressActionBtnWrap">
                     <span onClick={() => navigate(Routes.AddressAdd, { state: { cityID: elem } })} className="editBtn btns">
                       <i className="fa fa-edit"></i>
@@ -169,7 +169,7 @@ export const MyAddress: React.FC = () => {
                       <p className="defaultAddressLabel">Default Address</p>
                     ) : (
                       <span className="setDefaultBtn btns">
-                        <i className="fa fa-check-circle"></i> Set as Default
+                        <i className="fa fa-check-circle"></i> Delete
                       </span>
                     )}
                   </div>

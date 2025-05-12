@@ -279,6 +279,7 @@ export const Order: React.FC = () => {
         localStorage.removeItem('couponCode');
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message || 'Order placement failed' });
+          dispatch(setShouldRefresh(true));
       }
     } catch (error) {
       setLoading(false);
@@ -700,9 +701,12 @@ export const Order: React.FC = () => {
               borderBottom: '1px solid #DBE9F5',
             }}
           >
-            <span className='t14'>Extra Discount of {extraDiscountShow ? extraDiscountShow : '0'} applied </span>
-
-            <span className='t14'> ₹{extraDiscountShow} </span>
+            <span className='t14'>
+              Extra Discount of {extraDiscountShow[0] ? extraDiscountShow[0] : '0'} applied
+            </span>
+            <span className='t14'>
+              ₹{extraDiscountShow.reduce((acc, val) => acc + parseInt(val, 10), 0)}
+            </span>
           </div>
           {/******************************************************** */}
           <div
