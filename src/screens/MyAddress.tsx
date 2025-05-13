@@ -14,7 +14,7 @@ export const MyAddress: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
-  console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq',addresses);
+  console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq', addresses);
   const [newAddress, setNewAddress] = useState<any | null>(null);
   const [opacity, setOpacity] = useState<number>(0);
   const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
@@ -26,27 +26,36 @@ export const MyAddress: React.FC = () => {
 
   const [shouldRefresh, setShouldRefresh] = useState(false);
 
+  // console.log("shouldRefresh", shouldRefresh)
+
   const c_id = localStorage.getItem("c_id");
 
   useEffect(() => {
-        const fetchAddresses = async () => {
-            const formData = new FormData();
-            formData.append("c_id", c_id || "0");
-            try {
-                setLoading(true);
-                const response = await axios.post(
-                    "https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById",
-                    formData
-                );
-                setAddresses(response.data.addresses);
-                setLoading(false);
-            } catch (error) {
-                setLoading(false);
-                console.error("Error fetching addresses:", error);
-            }
-        };
-        fetchAddresses();
-    }, [c_id, shouldRefresh]);
+    const fetchAddresses = async () => {
+      const formData = new FormData();
+      formData.append("c_id", c_id || "0");
+
+      try {
+        setLoading(true);
+        const response = await axios.post(
+          "https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById",
+          formData
+        );
+        setAddresses(response.data.addresses);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error("Error fetching addresses:", error);
+      }
+    };
+
+    if (shouldRefresh) {
+      fetchAddresses();
+      setShouldRefresh(false);
+    } else {
+      fetchAddresses();
+    }
+  }, [c_id, shouldRefresh]);
 
 
   // *******************************Delete*************************************
@@ -179,8 +188,9 @@ export const MyAddress: React.FC = () => {
         if (response.data.status === "success") {
           navigate(Routes.MyAddress);
           notification.success({ message: "Address set as default" });
-          setShouldRefresh(true); 
+          setShouldRefresh(true);
         } else {
+
           notification.error({ message: response.data.message });
         }
         setLoading(false);
