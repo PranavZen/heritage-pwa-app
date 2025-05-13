@@ -58,6 +58,9 @@ export const WalletHistory: React.FC = () => {
         'https://heritage.bizdel.in/app/consumer/services_v11/getWalletHistoryByCustomerId',
         formData
       );
+
+      // console.log("responseresponse", response);
+
       setWalletData(response.data.walletHistoryDetails);
     } catch (error) {
       console.error('Error fetching wallet history', error);
@@ -79,7 +82,6 @@ export const WalletHistory: React.FC = () => {
           <h1 style={{ textAlign: "center", padding: "10px" }}>Wallet History</h1>
 
           <div className="walletHistoryFilter-main">
-
 
             <div className="walletHistoryFilter">
               <div className="datePicker">

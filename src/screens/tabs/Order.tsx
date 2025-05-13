@@ -63,8 +63,7 @@ export const Order: React.FC = () => {
   const [addressId, SetAddressId] = useState('');
   const [superPoint, setSuperPoint] = useState<any>(null);
 
-  // console.log("superPoint", superPoint.optionListing
-  // );
+  // console.log("superPoint", superPoint);
 
 
 
@@ -78,6 +77,9 @@ export const Order: React.FC = () => {
   const [addresses, setAddresses] = useState<any[]>([]);
 
   const [getrewardbalance, setGetrewardBalance] = useState<any[]>([]);
+
+
+  // console.log("getrewardbalancegetrewardbalance", getrewardbalance)
 
 
 
@@ -422,7 +424,7 @@ export const Order: React.FC = () => {
         //     redeemed_amount: data.redeemed_amount,
         //   });
         // }
-        setSuperPoint(data)
+        setSuperPoint(data);
 
         // setLoading(false);
       } catch (error) {
@@ -883,19 +885,6 @@ export const Order: React.FC = () => {
                     return total.toLocaleString('en-IN');
 
                   })()}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 </h4>

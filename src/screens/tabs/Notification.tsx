@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { components } from "../../components";
 import { svg } from "../../assets/svg";
+import axios from "axios";
 
 export const Notification: React.FC = () => {
   const [walletData, setWalletData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [rewardPoints, setRewardPoints] = useState<number>(0);
+  const [getrewardbalance, setGetrewardBalance] = useState<any[]>([]);
 
 
 
@@ -86,6 +88,44 @@ export const Notification: React.FC = () => {
     fetchRewardTransactions();
   }, []);
 
+
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("c_id", localStorage.getItem('c_id') || '');
+        // formData.append("c_id",  '123207');
+        formData.append("city_id", localStorage.getItem('cityId') || '')
+        formData.append("area_id", localStorage.getItem('area_id') || '');
+        formData.append('next_id', '0');
+
+        const response = await axios.post(
+          'https://heritage.bizdel.in/app/consumer/services_v11/getrewardbalance',
+          formData
+        );
+        //  console.log("rrtttttttttt", response)
+
+
+        if (response.data.status === "success") {
+          setGetrewardBalance(response.data.points);
+          localStorage.setItem("reward_balance", response.data.points);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching coupons:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchCoupons();
+  }, []);
+
+
+
+
+
+
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader />;
 
@@ -117,7 +157,8 @@ export const Notification: React.FC = () => {
               </span>
               <div className="rightPart">
                 <span>Rewards</span>
-                <span>{rewardPoints}</span>
+                {/* <span>{rewardPoints}</span> */}
+                <span>{getrewardbalance}</span>
               </div>
             </div>
 

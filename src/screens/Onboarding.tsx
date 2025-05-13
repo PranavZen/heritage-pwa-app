@@ -32,6 +32,8 @@ export const Onboarding: React.FC = () => {
 
       const data = await response.json();
 
+      console.log("wwwwwww", data)
+
       if (
         data.status === "success" &&
         data.search_data?.[0]?.is_servicesable === "1"
