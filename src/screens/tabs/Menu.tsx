@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {hooks} from '../../hooks';
 import {Routes} from '../../routes';
 import {MenuType} from '../../types';
-import {components} from '../../components';
+import '../../scss/menu.scss';
 
 export const Menu: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -22,33 +22,31 @@ export const Menu: React.FC = () => {
   const renderMenu = (): JSX.Element => {
     return (
       <section style={{paddingTop: 10}}>
-        <ul
-          className='menuItemsWrap'
-        >
-          {menu.map((menu: MenuType, index: number, array: MenuType[]) => {
-            return (
-              <li
-                key={menu.id}
-                className="itemWrap innerMenu"
-                onClick={() =>
-                  navigate(Routes.MenuList, {state: {menuName: menu.product_cat_id}})
-                }
-              >   
-                <img
-                  src={menu.image}
-                  alt={menu.name}
-                  className="itemImg"
-                  style={{cursor:"pointer"}}
-                />
-               <span
-                    className="home_product_category"
-                  >
-                    {menu.name}
-                  </span>
-              </li>
-            );
-          })}
-        </ul>
+        <div className='menuItemsWrap'>
+          {menu.map((menuItem: MenuType) => (
+            <div
+              key={menuItem.id}
+              className="innerMenu"
+              onClick={() =>
+                navigate(Routes.MenuList, {state: {menuName: menuItem.product_cat_id}})
+              }
+              role="button"
+              aria-label={`View ${menuItem.name} menu`}
+            >
+              <img
+                src={menuItem.image}
+                alt={menuItem.name}
+                className="itemImg"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200x150?text=No+Image';
+                }}
+              />
+              <div className="home_product_category">
+                {menuItem.name}
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
     );
   };
@@ -59,8 +57,17 @@ export const Menu: React.FC = () => {
   };
 
   const renderLoader = (): JSX.Element | null => {
-    if (menuLoading) return <components.Loader />;
-    return null;
+    if (!menuLoading) return null;
+
+    return (
+      <div className="menu-loading">
+        <div className="loading-grid">
+          {[...Array(8)].map((_, index) => (
+            <div key={index} className="loading-item" />
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (

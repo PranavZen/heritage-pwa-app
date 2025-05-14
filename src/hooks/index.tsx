@@ -13,6 +13,7 @@ import {useGetReviews} from './useGetReviews';
 import {useGetCarousel} from './useGetCarousel';
 import {useGetPromocodes} from './useGetPromocodes';
 import {useGetNotifications} from './useGetNotifications';
+import {useLoader} from './useLoader';
 
 import {useOpacity} from './useOpacity';
 import {useThemeColor} from './useThemeColor';
@@ -42,4 +43,5 @@ export const hooks = {
   useGetPromocodes,
   useWishlistHandler,
   useGetNotifications,
+  useLoader,
 };

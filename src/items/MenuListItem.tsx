@@ -301,74 +301,11 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
   );
 
   return (
-    <li className="proListItemWrap">
-      <div className="proLeftBox">
-        <div className="proItemImgWrap">
-          <img
-            src={dish.option_value_image}
-            alt={dish.name}
-            className="proItemImg"
-            onClick={() =>
-              navigate(`/dish/${dish.option_name}`, { state: { dish , showSubscribe} })
-            }
-          />
-        </div>
-        <div className="proItemDetailsWrap">
-          {/* <span
-          className="t14"
-          style={{
-            marginBottom: 4,
-            color: "var(--main-color)",
-            textTransform: "capitalize",
-          }}
-        >
-          {dish.name}
-        </span>
-        <p
-          className="t10"
-          style={{
-            fontSize: 10,
-            color: "var(--text-color)",
-            lineHeight: 1.5,
-            marginBottom: 4,
-          }}
-        >
-          {dish.description}
-        </p> */}
-          <span className="proName">{dish.option_value_name}</span>
-          <span className="proWeigh">
-            {/* {dish.kcal} kcal - {dish.weight}g */}
-            {dish.weight} {dish.weight_unit}
-          </span>
-
-
-          {Number(dish.discount ?? 0) > 0 ? (
-            <>
-              <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
-                ₹ {dish.price}
-              </span>
-              <span className="proPrice" style={{ marginLeft: '8px' }}>
-                ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
-              </span>
-            </>
-          ) : (
-            <span className="proPrice">
-              ₹ {dish.price}
-            </span>
-          )}
-        </div>
-      </div>
+    <div className="product-item">
       <button
+        className="wishlist-button"
         onClick={wishlistHandler}
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: -10,
-          padding: 15,
-          borderRadius: 10,
-          backgroundColor: 'transparent',
-          border: 'none',
-        }}
+        aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -376,65 +313,103 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
           width="24"
           height="24"
           style={{
-            fill: isInWishlist ? 'red' : 'gray',
+            fill: isInWishlist ? '#dc3545' : '#aaaaaa',
             transition: 'fill 0.3s ease',
           }}
         >
-          <path
-            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-          />
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
         </svg>
       </button>
-      <div className="lastBox">
-        <div className="cartButtonWrap">
+
+      <div className="product-content">
+        <div
+          className="product-image-container"
+          onClick={() => navigate(`/dish/${dish.option_name}`, { state: { dish, showSubscribe } })}
+        >
+          {Number(dish.discount ?? 0) > 0 && (
+            <div className="discount-badge">
+              {Math.round((Number(dish.discount) / Number(dish.price)) * 100)}% OFF
+            </div>
+          )}
+          <img
+            src={dish.option_value_image}
+            alt={dish.name}
+            loading="lazy"
+          />
+        </div>
+        <div className="product-details">
+          <div>
+            <h3
+              className="product-name"
+              onClick={() => navigate(`/dish/${dish.option_name}`, { state: { dish, showSubscribe } })}
+            >
+              {dish.option_value_name}
+            </h3>
+            <span className="product-weight">
+              {dish.weight} {dish.weight_unit}
+            </span>
+            <div className="product-price">
+            {Number(dish.discount ?? 0) > 0 ? (
+              <>
+                <span className="original-price">₹{dish.price}</span>
+                <span>₹{Number(dish.price ?? 0) - Number(dish.discount ?? 0)}</span>
+              </>
+            ) : (
+              <span>₹{dish.price}</span>
+            )}
+          </div>
+          </div>
+
+          
+        </div>
+      </div>
+
+      <div className="product-actions">
+
+        <div className="cart-controls">
           {quantity < 1 ? (
-            <button className="cartButton" onClick={HandleAddToCart}>
-              + Add
+            <button className="cart-button" onClick={HandleAddToCart}>
+              <span>+ Add</span>
             </button>
           ) : (
             <>
               <button
-                className="cartButton"
+                className="cart-button quantity-button"
                 onClick={(event) =>
                   quantity === 1
                     ? handleRemoveFromCart(event)
                     : handleUpdateCart(quantity - 1)
                 }
               >
-                <svg.MinusSvg />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12H19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
-              <span className="countNum">{quantity}</span>
+              <span className="quantity">{quantity}</span>
               <button
-                className="cartButton"
+                className="cart-button quantity-button"
                 onClick={() => handleUpdateCart(quantity + 1)}
               >
-                <svg.AddSvg />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 5V19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M5 12H19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
             </>
           )}
+
+          {showSubscribe && quantity === 0 && (
+            <button
+              className="cart-button"
+              style={{ marginLeft: '10px', backgroundColor: '#ffc107', color: '#333' }}
+              onClick={() => navigate(`/dish/${dish.option_name}`, { state: { dish } })}
+            >
+              Subscribe
+            </button>
+          )}
         </div>
-        {
-          quantity === 0 ? (<>
-            {/* <button className="subscriptionButton"
-              onClick={() =>
-                navigate(`/dish/${dish.option_name}`, { state: { dish } })
-              }>
-                Subscribe
-            </button> */}
-            {showSubscribe && (
-              <button className="subscriptionButton"
-                onClick={() =>
-                  navigate(`/dish/${dish.option_name}`, { state: { dish } })
-                }>
-                Subscribe
-              </button>
-            )}
-          </>) : (<>
-            <span className="smallText">Deliver once</span>
-          </>)
-        }
       </div>
-    </li>
+    </div>
   );
 };
 

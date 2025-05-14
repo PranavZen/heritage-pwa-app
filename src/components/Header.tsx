@@ -226,9 +226,6 @@ export const Header: React.FC<Props> = ({
     const ShowNoData = () => {
       setIsModalOpen(true);
     };
-    const handleOk = () => {
-      setIsModalOpen(false);
-    };
     const handleCancel = () => {
       setIsModalOpen(false);
     };
@@ -264,7 +261,14 @@ export const Header: React.FC<Props> = ({
             </button>
           )}
         </div>
-        <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Modal
+          open={isModalOpen}
+          onCancel={handleCancel}
+          footer={null} // Remove footer buttons
+          centered // Center the modal
+          width={500} // Set appropriate width
+          closable={true} // Allow closing with X button
+        >
            <NoCartData/>
         </Modal>
       </>

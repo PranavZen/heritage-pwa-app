@@ -39,7 +39,7 @@
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  padding-bottom: 55px;
+  // padding-bottom: 55px;
 }
 
 .scrollable {
@@ -1333,26 +1333,14 @@ select {
   }
 }
 .itemWrap {
-  visibility: visible;
-  opacity: 1;
-  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-  transition: opacity 0.5s cubic-bezier(0.5, 0, 0, 1) 0.4s,
-    transform 0.5s cubic-bezier(0.5, 0, 0, 1) 0.4s;
-  height: 120px;
-  width: 120px;
-  padding: 5px 0;
+     height: 150px;
+    width: 135px;
   .bg-cover {
-    // margin:20vh auto;
     height: 100%;
     width: 100%;
-    //  background-image: url("https://vallybb.github.io/images/unavitadavanti.jpg");
-    -webkit-animation: liquid 4s ease-in-out infinite;
-    animation: liquid 4s ease-in-out infinite;
-    border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    box-shadow: 1px 0px 6px -2px #000;
   }
 
   .home_product_category {
