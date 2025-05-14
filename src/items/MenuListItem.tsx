@@ -18,8 +18,8 @@ type Props = {
 };
 
 export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }) => {
-  const showSubscribe = selectedCategory === '28' || selectedCategory === '29';
-  // console.log("dishdishdishdishdish", dish);
+  const showSubscribe = dish.subscription_product
+  // console.log("dishdishdishdishdish", showSubscribe);
   const dispatch = hooks.useDispatch();
   const [cartId, setCartId] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(0);
@@ -127,7 +127,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
   };
   useEffect(() => {
     fetchCartData();
-  }, [cityId, c_id, dish]);
+  }, [cityId, c_id, dish,]);
 
   const HandleAddToCart = async () => {
     if (!c_id) {
@@ -241,7 +241,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
     }
   };
 
-
   const navigate = hooks.useNavigate();
   // const { ifInWishlist, addToWishlist, removeFromWishlist } =
   hooks.useWishlistHandler();
@@ -253,7 +252,6 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
   // }
 
   const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
-
 
   const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();

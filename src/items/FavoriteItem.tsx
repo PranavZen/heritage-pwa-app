@@ -14,17 +14,17 @@ import { fetchWishlist, toggleWishlistItem } from '../store/slices/wishlistSlice
 
 type Props = {
   dish: DishType;
+  selectedCategory: string;
 };
 
-export const FavoriteItem: React.FC<Props> = ({ dish }) => {
+export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
 
-  // console.log("wwwwwwwwww", dish);
-
+  const showSubscribe = selectedCategory === '28' || selectedCategory === '29';
+  
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
 
   const [quantity, setQuantity] = useState<number>(0);
-
 
   const [cartItemId, setCartItemId] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
@@ -314,7 +314,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
     try {
       const resultAction = await dispatch(toggleWishlistItem({
         product_id: dish.product_id,
-        product_option_id:  Number(dish.product_id),
+        product_option_id: Number(dish.product_id),
         product_option_value_id: dish.product_option_value_id,
         c_id: c_id_num,
         type
@@ -347,9 +347,15 @@ export const FavoriteItem: React.FC<Props> = ({ dish }) => {
           <img
             src={dish.option_value_image}
             alt={dish.name}
-            onClick={() =>
-              navigate(`/dish/${dish.option_name}`, { state: { dish } })
-            }
+            onClick={() => {
+              localStorage.setItem('product_option_value_id', dish.product_option_value_id.toString());
+              navigate(`/dish/${dish.option_name}`, {
+                state: {
+                  dish,
+                  showSubscribe: dish.subscription_product,
+                },
+              });
+            }}
           />
         </div>
 

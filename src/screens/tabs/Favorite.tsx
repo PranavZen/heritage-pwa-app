@@ -25,10 +25,11 @@ export const Favorite: React.FC = () => {
           className='favoriteItemsWrap'
         >
           {wishlist.map((dish) => {
-            return (
+            return(
               <items.FavoriteItem
                 dish={dish}
                 key={dish.id}
+                selectedCategory={'28'}
               />
             );
           })}

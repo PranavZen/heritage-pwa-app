@@ -294,8 +294,14 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           src={dish.option_value_image}
           alt={dish.name}
           onClick={() =>
-            navigate(`/dish/${dish.option_value_name}`, { state: { dish } })
+            navigate(`/dish/${dish.option_value_name}`, {
+              state: {
+                dish,
+                showSubscribe: dish.subscription_product
+              }
+            })
           }
+
         />
       </div>
 

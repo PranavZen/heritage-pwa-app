@@ -41,7 +41,7 @@ export const MenuList: React.FC = () => {
 
   const [filterData, setFilterData] = useState<DishType[] | null>(null);
 
-  console.log("filterDatafilterData", filterData);
+  // console.log("filterDatafilterData", filterData);
 
   const [filterDataLoading, setFilterDataDishesLoading] =
     useState<boolean>(false);

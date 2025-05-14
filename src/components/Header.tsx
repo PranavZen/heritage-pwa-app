@@ -30,6 +30,7 @@ interface ProfileData {
   photo_url: string | null;
 }
 
+
 const modalMenu = [
   {
     id: 1,
@@ -63,6 +64,7 @@ const modalMenu = [
   },
 ];
 
+
 export const Header: React.FC<Props> = ({
   title,
   userName,
@@ -81,7 +83,6 @@ export const Header: React.FC<Props> = ({
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Fetching the cartCount from Redux state (updated to cartCount instead of list.length)
 
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
@@ -103,10 +104,13 @@ export const Header: React.FC<Props> = ({
   }, [cartCount]);
 
   useEffect(() => {
-    if (cartCount === 0) {
-      localStorage.removeItem('couponCode');
-    }
-  }, [cartCount]);
+    setTimeout(() => {
+      if (cartCount === 0) {
+        localStorage.removeItem('couponCode');
+      }
+    }, 1000)
+
+  }, [shouldRefresh]);
 
   // const removeCart = useSelector((state: RootState) => state.cartSlice.cartCount);
 
@@ -208,14 +212,16 @@ export const Header: React.FC<Props> = ({
 
   // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
+    const shouldGoToHome = true;
     return (
       <div className="middleBox">
         <img
+          onClick={() => navigate(shouldGoToHome ? Routes.TabNavigator : Routes.TabNavigator)}
           className="logo-header"
           src={pic1}
           alt=""
           width={150}
-          onClick={() => navigate('/tab-navigator')}
+
         />
       </div>
     );

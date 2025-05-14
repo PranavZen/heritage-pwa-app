@@ -266,7 +266,7 @@ export const NewUsereAddAddress: React.FC = () => {
         // console.log("kkkkkkk", response);
         setAreaIdByPincode(response.data.areaDetails)
       } catch (eror) {
-        console.log(eror)
+        // console.log(eror)
       }
     }
     GetAreaId();
@@ -274,7 +274,7 @@ export const NewUsereAddAddress: React.FC = () => {
 
   const handleAreaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAreaId(event.target.value);
-    console.log('Selected Area ID:', event.target.value);
+    // console.log('Selected Area ID:', event.target.value);
   };
 
 

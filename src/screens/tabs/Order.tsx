@@ -43,6 +43,8 @@ export const Order: React.FC = () => {
   const location = useLocation();
   const couponCode = location.state?.couponCode;
 
+  // console.log("wwwwwwwww",  couponCode);
+
   // const selectedAddressId = location.state?.addressId;
   const selectedAddressId = localStorage.getItem("selectedAddressId");
 
@@ -59,8 +61,7 @@ export const Order: React.FC = () => {
   const [addressId, SetAddressId] = useState("");
   const [superPoint, setSuperPoint] = useState<any>(null);
 
-  // console.log("superPoint", superPoint.optionListing
-  // );
+  // console.log("superPoint", superPoint);
 
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -87,8 +88,22 @@ export const Order: React.FC = () => {
   const [redeemedAmount, setRedeemedAmount] = useState(0);
   const [passPoints, setPassPoints] = useState(0);
 
-  const PassPointsInCheckout =redeemedAmount * 10
-  console.log("sssssss", PassPointsInCheckout);
+  const [superPointCoins, SetSuperPoint] = useState<number>(0);
+
+  // console.log("superPointCoins", superPointCoins);
+
+  const maxRedeemableAmount = Math.floor(superPointCoins / 10);
+
+  const adjustedRedeemedAmount = Math.min(redeemedAmount, maxRedeemableAmount);
+  const PassPointsInCheckout = adjustedRedeemedAmount * 10;
+
+  // console.log("Adjusted Redeemed Amount:", adjustedRedeemedAmount);
+
+  // console.log("PassPointsInCheckout:", PassPointsInCheckout);
+
+
+
+  // console.log("sssssss", PassPointsInCheckout);
 
   const shouldRefresh = useSelector(
     (state: RootState) => state.cartSlice.shouldRefresh
@@ -97,11 +112,10 @@ export const Order: React.FC = () => {
   const [isApplying, setIsApplying] = useState<boolean>(false);
 
   const [extraDiscount, setExtraDiscount] = useState<any[]>([]);
+
   const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
 
   // console.log("extraDiscountShow", extraDiscountShow);
-
-  const [superPointCoins, SetSuperPoint] = useState<number>(0);
 
   // console.log("superPointCoins", superPointCoins);
 
@@ -207,6 +221,7 @@ export const Order: React.FC = () => {
     }
     getAddToCartData();
   }, [cityId, c_id, shouldRefresh]);
+
 
   useEffect(() => {
     const getAddress = async () => {
@@ -416,7 +431,7 @@ export const Order: React.FC = () => {
       }
     };
     fetchCoupons();
-  }, []);
+  }, [shouldRefresh]);
 
   // *******************Super Coupons *******************************
   const { menuLoading, menu } = hooks.useGetMenu();
