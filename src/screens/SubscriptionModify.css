@@ -39,8 +39,6 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    max-height: 500px; /* Add a max height to limit the container's size */
-    overflow-y: auto; /* Enable vertical scrolling when the content overflows */
   }
   
   .order-group {

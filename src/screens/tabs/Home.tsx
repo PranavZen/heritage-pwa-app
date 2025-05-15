@@ -123,7 +123,7 @@ export const Home: React.FC = () => {
             autoplay={true}
             breakpoints={{
               320: {
-                slidesPerView: 2.2,
+                slidesPerView: 2.8,
                 spaceBetween: 10,
               },
               480: {
@@ -202,11 +202,11 @@ export const Home: React.FC = () => {
             }}
             breakpoints={{
               320: {
-                slidesPerView: 1.2,
+                slidesPerView: 1.8,
                 spaceBetween: 10,
               },
               480: {
-                slidesPerView: 1.6,
+                slidesPerView: 1.8,
                 spaceBetween: 12,
               },
               768: {

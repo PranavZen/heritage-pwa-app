@@ -18,6 +18,7 @@ import Lottie from "lottie-react";
 import { actions } from "../../store/actions";
 import FaBackward from "../../assets/icons/left.png";
 import NoCartData from "../NoCartData";
+import "../../scss/order.scss";
 
 interface Address {
   id: string;
@@ -87,6 +88,8 @@ export const Order: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [redeemedAmount, setRedeemedAmount] = useState(0);
   const [passPoints, setPassPoints] = useState(0);
+  const [coinAnimating, setCoinAnimating] = useState(false);
+  const [amountAnimating, setAmountAnimating] = useState(false);
 
   const [superPointCoins, SetSuperPoint] = useState<number>(0);
 
@@ -101,8 +104,6 @@ export const Order: React.FC = () => {
 
   // console.log("PassPointsInCheckout:", PassPointsInCheckout);
 
-
-
   // console.log("sssssss", PassPointsInCheckout);
 
   const shouldRefresh = useSelector(
@@ -114,6 +115,7 @@ export const Order: React.FC = () => {
   const [extraDiscount, setExtraDiscount] = useState<any[]>([]);
 
   const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
+  const [isCouponAnimating, setIsCouponAnimating] = useState(false);
 
   // console.log("extraDiscountShow", extraDiscountShow);
 
@@ -122,11 +124,31 @@ export const Order: React.FC = () => {
   const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
     setIsChecked(checked);
-    // setIsApplying(true);
-    // setShowModal(true);
-    if (checked && superPoint) {
-      setRedeemedAmount(superPoint.available_amount);
-      SetSuperPoint(superPoint.available_points);
+
+    // Trigger animations
+    setCoinAnimating(true);
+    setAmountAnimating(true);
+
+    // Reset animations after they complete
+    setTimeout(() => {
+      setCoinAnimating(false);
+    }, 600);
+
+    setTimeout(() => {
+      setAmountAnimating(false);
+    }, 500);
+
+    if (checked) {
+      // Show the modal with animation when checked
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+      }, 2000);
+
+      if (superPoint) {
+        setRedeemedAmount(superPoint.available_amount);
+        SetSuperPoint(superPoint.available_points);
+      }
     } else {
       setRedeemedAmount(0);
       SetSuperPoint(0);
@@ -185,7 +207,6 @@ export const Order: React.FC = () => {
           `https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv`,
           formData
         );
-        // console.log("nmnmnmnmnmnmnmnmmnxxx", response);
 
         SetTotalPrice(response.data.optionListing);
         SetDeliveries(
@@ -220,8 +241,7 @@ export const Order: React.FC = () => {
       });
     }
     getAddToCartData();
-  }, [cityId, c_id, shouldRefresh]);
-
+  }, [cityId, c_id, shouldRefresh, dispatch]);
 
   useEffect(() => {
     const getAddress = async () => {
@@ -382,12 +402,11 @@ export const Order: React.FC = () => {
     fetchCoupons();
   }, [shouldRefresh]);
 
-  const [cId, setCId] = useState<string | null>(null);
-
   useEffect(() => {
+    // Check if c_id exists in localStorage
     const storedCId = localStorage.getItem("c_id");
-    if (storedCId) {
-      setCId(storedCId);
+    if (!storedCId) {
+      console.warn("No customer ID found in localStorage");
     }
   }, []);
 
@@ -434,20 +453,14 @@ export const Order: React.FC = () => {
   }, [shouldRefresh]);
 
   // *******************Super Coupons *******************************
-  const { menuLoading, menu } = hooks.useGetMenu();
-
-  const { list, subtotal, delivery, total } = useSelector(
-    (state: RootState) => state.cartSlice
-  );
+  const { menuLoading } = hooks.useGetMenu();
 
   const [codeCoupon, setCodeCoupon] = useState<string | null>(null);
 
   useEffect(() => {
     const storedCode = localStorage.getItem("couponCode");
-
-    // console.log("storedCodemmmm", storedCode);
     setCodeCoupon(storedCode);
-  });
+  }, []);
 
   const handleRemoveCoupon = () => {
     localStorage.removeItem("couponCode");
@@ -479,39 +492,184 @@ export const Order: React.FC = () => {
   const couponApplied = (): JSX.Element => {
     const cleanedDiscount = stripHtmlTags(discountSuccessfull);
 
-    // console.log("cleanedDiscountcleanedDiscount", cleanedDiscount)
+    const handleCouponClick = (e: React.MouseEvent<HTMLDivElement>) => {
+      // Prevent triggering if we're clicking on a child interactive element
+      if (
+        (e.target as HTMLElement).closest('.view-cart') ||
+        (e.target as HTMLElement).closest('.removeCoupon')
+      ) {
+        return;
+      }
+
+      // Add clicked class for animation
+      e.currentTarget.classList.add("clicked");
+      setIsCouponAnimating(true);
+
+      // Create ripple effect
+      const ripple = document.createElement("span");
+      ripple.classList.add("ripple-effect");
+
+      // Position the ripple at click coordinates
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+
+      // Add ripple to element
+      e.currentTarget.appendChild(ripple);
+
+      // Remove the ripple and clicked class after animation completes
+      setTimeout(() => {
+        e.currentTarget.classList.remove("clicked");
+        ripple.remove();
+        setIsCouponAnimating(false);
+      }, 600);
+
+      // Navigate to coupon list on mobile
+      if (window.innerWidth <= 480) {
+        handleCoupon();
+      }
+    };
+
+    // Determine if we should show "Apply Coupon" or "View All Coupons"
+    const couponButtonText = window.innerWidth <= 480 ? "Apply Coupon" : "View All Coupons";
+
+    // Format discount amount for better display
+    const formatDiscount = (discount: string) => {
+      if (discount === "0") return "No discount applied";
+
+      // Check if the discount already has a currency symbol
+      if (discount.includes("₹")) return `Discount: ${discount}`;
+      return `Discount: ₹${discount}`;
+    };
+
     return (
-      <div className="couponApplied-main">
+      <div
+        className={`couponApplied-main ${isCouponAnimating ? 'animating' : ''}`}
+        onMouseEnter={(e) => e.currentTarget.classList.add("hovered")}
+        onMouseLeave={(e) => e.currentTarget.classList.remove("hovered")}
+        onClick={handleCouponClick}
+        role="button"
+        aria-label="Coupon section"
+      >
+        <div className="coupon-icon" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M22 8.5V14a2 2 0 0 1-2 2h-7.5"></path>
+            <path d="M2 8.5V14a2 2 0 0 0 2 2h3.5"></path>
+            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+            <path d="M18 6V4"></path>
+            <path d="M6 6V4"></path>
+            <path d="M10 15h4"></path>
+          </svg>
+        </div>
         <div className="coupon-details">
+          <div className="coupon-header">
+            <h3>{codeCoupon ? "Applied Coupon" : "Discount Coupon"}</h3>
+            {codeCoupon && <span className="coupon-code">{codeCoupon}</span>}
+          </div>
           {cleanedDiscount && (
             <>
               <p className="discount-text">
-                {cleanedDiscount === "0" ? <> </> : <> {cleanedDiscount}</>}
+                <span>{formatDiscount(cleanedDiscount)}</span>
               </p>
               <hr className="divider" />
             </>
           )}
-          <div className="view-cart" onClick={handleCoupon}>
-            View All Coupons
+          <div
+            className="view-cart"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCoupon();
+            }}
+            role="button"
+            aria-label="View all available coupons"
+          >
+            <span>{couponButtonText}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
           </div>
         </div>
         {codeCoupon && (
-          <div onClick={handleRemoveCoupon} className="removeCoupon">
-            Remove
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveCoupon();
+            }}
+            className="removeCoupon"
+            role="button"
+            aria-label="Remove coupon"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Remove</span>
           </div>
         )}
+        <div className="coupon-shine" aria-hidden="true"></div>
       </div>
     );
   };
 
   const renderButton = (): JSX.Element => {
-    return <components.Button text="Checkout" onClick={handleCheckout} />;
+    return (
+      <button className="checkout-button" onClick={handleCheckout}>
+        Proceed to Checkout
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ marginLeft: "10px" }}
+        >
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    );
   };
 
   // ********************************Address*******************************
-  const selectedAddressIdd = useSelector((state: any) => state);
-
-  // console.log("selectedAddressIdd", selectedAddressIdd);
 
   const selectedAddress = selectedAddressId
     ? addresses?.find((a) => a.id === selectedAddressId)
@@ -519,9 +677,26 @@ export const Order: React.FC = () => {
   const AddressWithButton = (): JSX.Element => {
     return (
       <>
-        <div>
+        <div className="address-section">
+          <div className="section-header addHeader">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <h2>Delivery Address</h2>
+          </div>
           {addresses?.length > 0 ? (
-            <div className="">
+            <div>
               <div className="myAddressBoxWrap">
                 {/* Show selected address if available */}
                 {selectedAddress ? (
@@ -617,15 +792,25 @@ export const Order: React.FC = () => {
 
   const renderContent = (): JSX.Element | null => {
     return (
-      <main className="container scrollable">
+      <main className="container scrollable order-container">
         {cartCount > 0 ? (
           <>
-            {renderBackButton()}
-            {renderDishes()}
-            {couponApplied()}
-            {renderSummary()}
-            {AddressWithButton()}
-            {renderButton()}
+            <div className="order-header">
+              <div className="header-left">{renderBackButton()}</div>
+            </div>
+            <div className="order-content">
+              <div className="order-main-section">
+                {renderDishes()}
+                {couponApplied()}
+              </div>
+              <div className="order-bottom-section">
+                <div className="order-left-column">{AddressWithButton()}</div>
+                <div className="order-right-column">
+                  {renderSummary()}
+                  {renderButton()}
+                </div>
+              </div>
+            </div>
           </>
         ) : (
           <>
@@ -638,13 +823,33 @@ export const Order: React.FC = () => {
 
   const renderDishes = (): JSX.Element => {
     return (
-      <section style={{ marginBottom: 20 }}>
-        <ul style={{ paddingTop: 10 }}>
+      <section className="order-items">
+        <div className="section-header">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <h2>Your Items</h2>
+        </div>
+        <ul className="items-list">
           {totalPrice.map(
             (dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;
               return (
-                <items.OrderItem key={dish.id} dish={dish} isLast={isLast} />
+                <li key={dish.id} style={{ animationDelay: `${index * 0.1}s` }}>
+                  <items.OrderItem dish={dish} isLast={isLast} />
+                </li>
               );
             }
           )}
@@ -653,10 +858,10 @@ export const Order: React.FC = () => {
     );
   };
 
-  const [showButton, setShowButton] = useState(false);
-
+  // Animation effect for the page
   useEffect(() => {
-    setShowButton(true);
+    // Set opacity to 1 after component mounts for fade-in effect
+    setTimeout(() => setOpacity(1), 100);
   }, []);
 
   const handleHomeMenu = (screen: TabScreens) => {
@@ -669,8 +874,24 @@ export const Order: React.FC = () => {
 
   const renderBackButton = (): JSX.Element => {
     return (
-      <button onClick={() => handleHomeMenu(TabScreens.Home)}>
-        <img src={FaBackward} alt="" width={30} />
+      <button
+        className="back-button"
+        onClick={() => handleHomeMenu(TabScreens.Home)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
       </button>
     );
   };
@@ -678,14 +899,28 @@ export const Order: React.FC = () => {
   const renderSummary = (): JSX.Element => {
     return (
       <>
-        <section
-          style={{
-            padding: 20,
-            borderRadius: 10,
-            marginBottom: 20,
-            border: "1px solid var(--main-turquoise)",
-          }}
-        >
+        <section className="summary-section">
+          <div className="section-header">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            <h2>Order Summary</h2>
+          </div>
           <div
             className="row-center-space-between"
             style={{ marginBottom: 13 }}
@@ -713,9 +948,7 @@ export const Order: React.FC = () => {
             </span>
           </div>
 
-          <div
-            className="row-center-space-between rowLine"
-          >
+          <div className="row-center-space-between rowLine">
             <span className="t14">
               Extra Discount of {extraDiscountShow ? extraDiscountShow : "0"}{" "}
               applied{" "}
@@ -724,9 +957,7 @@ export const Order: React.FC = () => {
             <span className="t14"> ₹{extraDiscountShow} </span>
           </div>
           {/******************************************************** */}
-          <div
-            className="row-center-space-between rowLine"
-          >
+          <div className="row-center-space-between rowLine">
             <span className="t14"> Discount on Free Deliveries</span>
             <span className="t14">
               ₹{" "}
@@ -749,9 +980,7 @@ export const Order: React.FC = () => {
           {localStorage.getItem("coupon") ? (
             <>
               {" "}
-              <div
-                className="row-center-space-between rowLine"
-              >
+              <div className="row-center-space-between rowLine">
                 {localStorage.getItem("coupon") ? <> </> : <></>}
 
                 <span className="t14">
@@ -774,9 +1003,7 @@ export const Order: React.FC = () => {
           ) : (
             <></>
           )}
-          <div
-            className="row-center-space-between rowLine"
-          >
+          <div className="row-center-space-between rowLine">
             <span className="t14">GST</span>
             {localStorage.getItem("couponCode") ? (
               <>
@@ -788,31 +1015,53 @@ export const Order: React.FC = () => {
           </div>
 
           {/* ***************************yyyy*******************Orderrrrrrrrrrr */}
-          <div
-            className="row-center-space-between rowLine"
-          >
-            <div>
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={handleCheckboxChange}
-              />
-              <span className="t14" style={{ paddingLeft: "4px" }}>
-                Super Coins
-              </span>
-              <span className="t14" style={{ paddingLeft: "4px" }}>
-                (
-                {superPoint?.available_points ? (
-                  <> {superPoint?.available_points} </>
-                ) : (
-                  <> 0</>
-                )}
-                )
-              </span>
+          <div className="row-center-space-between rowLine super-coins-row">
+            <div className="super-coins-wrapper">
+              <label className="custom-coin-checkbox">
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                />
+                <div className="checkbox-design">
+                  <div className="coin-face">
+                    <div className="coin-inner">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="coin-icon-svg">
+                        <circle cx="12" cy="12" r="10" className="coin-circle"></circle>
+                        <path d="M12 6v12M8 12h8" className="coin-symbol"></path>
+                      </svg>
+                    </div>
+                    <div className="coin-shine"></div>
+                  </div>
+                  <div className="checkbox-ripple"></div>
+                  <div className="checkbox-rays">
+                    {[...Array(8)].map((_, i) => (
+                      <div key={i} className="ray" style={{ transform: `rotate(${i * 45}deg)` }}></div>
+                    ))}
+                  </div>
+                </div>
+              </label>
+              <div className="super-coins-text">
+                <span className="t14 super-coins-label">
+                  Super Coins
+                </span>
+                <div className={`coins-value ${amountAnimating ? 'animate' : ''}`}>
+                  <span className="t14 coins-amount">
+                    {superPoint?.available_points ? (
+                      <>{superPoint?.available_points}</>
+                    ) : (
+                      <>0</>
+                    )}
+                  </span>
+                </div>
+              </div>
             </div>
-            <span className="t14">
-              ₹{redeemedAmount ? <> {redeemedAmount}</> : <> 0 </>}
-            </span>
+            <div className="coins-redemption">
+              <span className={`t14 redemption-amount ${amountAnimating ? 'animate' : ''}`}>
+                ₹{redeemedAmount ? <>{redeemedAmount}</> : <>0</>}
+              </span>
+              <span className="redemption-label">savings</span>
+            </div>
           </div>
 
           {/* ***********************Ordereeeeeeeeeeeeeee***************** */}
@@ -879,7 +1128,8 @@ export const Order: React.FC = () => {
 
                   // console.log("cccc", gst);
 
-                  const deliveryMultiplier = deliveries.reduce(
+                  // Calculate total deliveries (not used directly)
+                  deliveries.reduce(
                     (total, currentValue) => total + Number(currentValue),
                     0
                   );
@@ -931,12 +1181,23 @@ export const Order: React.FC = () => {
       {renderContent()}
       {renderLoading()}
       {showModal && (
-        <div className="popup-modal">
+        <div className="popup-modal super-coins-modal">
           <div className="popup-content">
-            <Lottie
-              animationData={SuperCoins}
-              style={{ width: 150, height: 150 }}
-            />
+            <div className="coins-animation">
+              <Lottie
+                animationData={SuperCoins}
+                style={{ width: 150, height: 150 }}
+              />
+            </div>
+            <div className="coins-message">
+              <p>Applying Super Coins!</p>
+              <div className="coins-value-display">
+                <span className="coins-label">Redeeming</span>
+                <span className="coins-amount">{superPoint?.available_points || 0}</span>
+                <span className="coins-label">coins for</span>
+                <span className="discount-amount">₹{redeemedAmount || 0}</span>
+              </div>
+            </div>
           </div>
         </div>
       )}

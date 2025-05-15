@@ -288,13 +288,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                   color: "var(--main-color)",
                   fontWeight: 600,
                   fontSize: 16,
-                  whiteSpace: "nowrap",
-                  width: 105,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
                 }}
               >
-
                 {dish.option_value_name}{" "}
                 <span className="t10" style={{ fontSize: 14 }}>
                   ({dish.weight}ml)
