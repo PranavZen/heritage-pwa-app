@@ -94,6 +94,7 @@ export const Header: React.FC<Props> = ({
     setTimeout(() => {
       if (cartCount === 0) {
         localStorage.removeItem('couponCode');
+        localStorage.removeItem('isChecked');
       }
     }, 1000)
 

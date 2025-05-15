@@ -82,7 +82,6 @@ export const Order: React.FC = () => {
   // console.log("getrewardbalancegetrewardbalance", getrewardbalance)
 
 
-
   const [showAll, setShowAll] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -91,7 +90,7 @@ export const Order: React.FC = () => {
   const otherAddresses = Array.isArray(addresses) ? addresses.filter((addr) => addr.is_default !== "1") : [];
 
 
-  const [isChecked, setIsChecked] = useState(false);
+
   const [redeemedAmount, setRedeemedAmount] = useState(0);
   const [passPoints, setPassPoints] = useState(0);
 
@@ -122,24 +121,24 @@ export const Order: React.FC = () => {
 
 
   // console.log("extraDiscount", extraDiscount);
+   const [isChecked, setIsChecked] = useState<boolean>(() => {
+    const stored = localStorage.getItem('isChecked');
+    return stored === 'true';
+  });
 
-
-  const handleCheckboxChange = (e: any) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setIsChecked(checked);
-    // setIsApplying(true);
-    // setShowModal(true);
+    localStorage.setItem('isChecked', checked.toString());
+
     if (checked && superPoint) {
       setRedeemedAmount(superPoint.available_amount);
-      SetSuperPoint(superPoint.available_points)
-
+      SetSuperPoint(superPoint.available_points);
     } else {
       setRedeemedAmount(0);
       SetSuperPoint(0);
     }
   };
-
-
 
   setTimeout(() => {
     setShowModal(false);
@@ -288,6 +287,7 @@ export const Order: React.FC = () => {
         // setOrderPlaced(true); 
         navigate('/thank-you');
         localStorage.removeItem('couponCode');
+         localStorage.removeItem('isChecked');
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message || 'Order placement failed' });
         dispatch(setShouldRefresh(true));

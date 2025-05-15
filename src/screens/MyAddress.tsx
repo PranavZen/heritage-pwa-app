@@ -14,7 +14,7 @@ export const MyAddress: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
-  console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq', addresses);
+  // console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq', addresses);
   const [newAddress, setNewAddress] = useState<any | null>(null);
   const [opacity, setOpacity] = useState<number>(0);
   const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
