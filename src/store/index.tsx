@@ -24,6 +24,7 @@ import type {SortStateType} from './slices/sortSlice';
 import type {FilterStateType} from './slices/filterSlice';
 import type {WishlistStateType} from './slices/wishlistSlice';
 import type {VerificationStateType} from './slices/verificationSlice';
+import type {LoaderStateType} from './slices/loaderSlice';
 
 import {bgSlice} from './slices/bgSlice';
 import {tabSlice} from './slices/tabSlice';
@@ -35,6 +36,7 @@ import {paymentSlice} from './slices/paymentSlice';
 import {wishlistSlice} from './slices/wishlistSlice';
 import {promocodeSlice} from './slices/promocodeSlice';
 import {firstLaunchSlice} from './slices/firstLaunchSlice';
+import {loaderSlice} from './slices/loaderSlice';
 
 const rootReducer = combineReducers({
   bgSlice: bgSlice.reducer,
@@ -47,6 +49,7 @@ const rootReducer = combineReducers({
   wishlistSlice: wishlistSlice.reducer,
   promocodeSlice: promocodeSlice.reducer,
   firstLaunchSlice: firstLaunchSlice.reducer,
+  loaderSlice: loaderSlice.reducer,
 });
 
 const persistConfig = {
@@ -75,6 +78,7 @@ export interface RootState {
   filterSlice: FilterStateType;
   wishlistSlice: WishlistStateType;
   verificationSlice: VerificationStateType;
+  loaderSlice: LoaderStateType;
 }
 
 // export const persistor = persistStore(store);

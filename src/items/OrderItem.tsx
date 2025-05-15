@@ -23,6 +23,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [deliveriesInModal, setDeliveriesInModal] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
+ const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [prevQuantity, setPrevQuantity] = useState<number>(0);
 
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
@@ -41,19 +43,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       }
     };
     getData();
-  }, [shouldRefresh]);
-  // console.log("dishdishdish", dish);
+  }, []);
 
-  const [quantity, setQuantity] = useState<number>(Number(dish.quantity
-  ));
-
-
-  useEffect(() => {
-    // console.log('Quantity changed:', quantity);
-  }, [quantity, shouldRefresh]);
-
-  // console.log("ccccc", quantity);
-
+  const [quantity, setQuantity] = useState<number>(Number(dish.quantity) || 1);
   const [deliveryPreference, setDeliveryPreference] = useState<string>(String(dish.delivery_preference) || '');
   const [noOfDeliveries, setNoOfDeliveries] = useState<number>(Number(dish.no_of_deliveries));
   // console.log('[noOfDeliveries[noOfDeliveries[noOfDeliveries', noOfDeliveries);
@@ -97,12 +89,14 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         formData
       );
 
-      // console.log("mmm", response.data);
+      // console.log("mmm", response);
 
       if (response.data.status === 'success') {
+        setPrevQuantity(quantity);
         setQuantity(newQuantity);
+        setIsAnimating(true);
+        setTimeout(() => setIsAnimating(false), 500);
         notification.success({ message: response.data.message });
-        // dispatch(addToCart(dish));
         dispatch(setShouldRefresh(true));
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message });
@@ -138,14 +132,13 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         );
 
         if (response.data.status === 'success') {
+          setPrevQuantity(quantity);
           setQuantity(newQuantity);
-          const updatedDish = { ...dish };
+          setIsAnimating(true);
+          setTimeout(() => setIsAnimating(false), 500);
           dispatch(actions.removeItemCompletely({ ...dish }));
-          setQuantity(0);
-          // setCartItemId(null);
           dispatch(setShouldRefresh(true));
           notification.success({ message: response.data.message });
-
         } else {
           notification.error({ message: response.data.message });
         }
@@ -165,18 +158,22 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             const formData = new FormData();
             formData.append('id', String(dish.cart_id));
             formData.append('c_id', localStorage.getItem('c_id') || '');
+
             const response = await axios.post(
               'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
               formData
             );
+
             if (response.data.status === 'success') {
               notification.success({ message: response.data.message });
               dispatch(removeFromCart({ ...dish }));
+              setPrevQuantity(quantity);
               setQuantity(1);
+              setIsAnimating(true);
+              setTimeout(() => setIsAnimating(false), 500);
               dispatch(setShouldRefresh(true));
             } else {
               notification.error({ message: response.data.message });
-              dispatch(setShouldRefresh(true));
             }
           } catch (error) {
             notification.error({ message: 'Failed to remove item from cart.' });
@@ -206,16 +203,17 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           formData
         );
 
-        // console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response);
+        // console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
 
         SetSetCartData(response.data.optionListing.map((elem: any) => elem.no_of_deliveries));
-
       } catch (error) {
         console.error(error);
       }
     };
     getAddToCartData();
-  }, [shouldRefresh]);
+  }, [cityId, c_id]);
+
+
 
   // *************************************************************************************
   const handleOpenModal = (option_name: any) => {
@@ -291,12 +289,12 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                   fontSize: 16,
                 }}
               >
-
                 {dish.option_value_name}{" "}
                 <span className="t10" style={{ fontSize: 14 }}>
                   ({dish.weight}ml)
                 </span>
               </span>
+
 
 
               {dish.discount ? (
@@ -354,10 +352,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 className="t14"
                 style={{ color: "var(--main-color)", fontWeight: 500 }}
               >
-                {dish.order_type.toString() === '1' ? <>  <span className="cartLable">Free Deliveries :</span> {dish.no_of_free_deliveries} </>
-                  : <>   </>
-                }
-
+                <span className="cartLable">Free Deliveries :</span> {dish.no_of_free_deliveries}
               </span>
               {dish.preferenceName && (
                 <span
@@ -407,15 +402,22 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                     ? handleRemoveFromCart(event)
                     : handleUpdateCart(quantity - 1)
                 }
-              >
+               >
                 <svg.MinusSvg />
               </button>
 
-              <span className="countNum">
-
-                {dish.quantity}
-
-              </span>
+              <div className="countNum">
+                {isAnimating && (
+                  <span
+                    className={
+                      quantity > prevQuantity ? "scroll-up" : "scroll-down"
+                    }
+                  >
+                    {quantity}
+                  </span>
+                )}
+                {!isAnimating && <span>{quantity}</span>}
+              </div>
 
               <button
                 className="cartButton"

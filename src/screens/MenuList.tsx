@@ -1,14 +1,17 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { svg } from "../assets/svg";
+import { components } from "../components";
 import { hooks } from "../hooks";
 import { items } from "../items";
-import { MenuType } from "../types";
 import { Routes } from "../routes";
-import { components } from "../components";
-import { DishType } from "../types";
-import { svg } from "../assets/svg";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { DishType, MenuType } from "../types";
+import "../scss/menu-list.scss";
 
 export const MenuList: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -21,7 +24,7 @@ export const MenuList: React.FC = () => {
   // console.log("menueeeeeeeeeeeeeeeeeeeeeeeeeeeeee", menu);
 
   const location = hooks.useLocation();
-  
+
   const product_cat_id: string = location.state.menuName;
   // console.log("zzzz", product_cat_id);
 
@@ -50,6 +53,9 @@ export const MenuList: React.FC = () => {
 
 
 
+  // Use our custom loader hook
+  const { withLoader } = hooks.useLoader();
+
   const getDishes = async () => {
     const cityId = localStorage.getItem("cityId");
     setFilterDataDishesLoading(true);
@@ -61,14 +67,18 @@ export const MenuList: React.FC = () => {
     formData.append('product_id', searchId || '');
     formData.append('next_id', '0');
     try {
-      const response = await axios.post(
-        `https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,
-        formData
-      );
-      // console.log("responseewewewe",response);
+      // Example of using the global loader for API calls
+      const response = await withLoader(
+        async () => {
+          return await axios.post(
+            `https://heritage.bizdel.in/app/consumer/services_v11/productOptionByCategory`,
+            formData
+          );
+        },
+        'Loading menu items...'
+      )();
 
       setFilterData(response.data?.optionListing || null);
-
 
       localStorage.setItem("product_option_value_id", response.data?.optionListing.product_option_value_id);
     } catch (error) {
@@ -77,12 +87,6 @@ export const MenuList: React.FC = () => {
       setFilterDataDishesLoading(false);
     }
   };
-
-
-
-
-
-
 
   useEffect(() => {
     setFilterData(null);
@@ -107,23 +111,22 @@ export const MenuList: React.FC = () => {
       return null;
     }
     return (
-      <section className="row-center container" style={{ gap: 5, marginTop: 10 }}>
-        <button
-          style={{
-            height: 50,
-            display: "flex",
-            alignItems: "center",
-            paddingLeft: 5,
-            gap: 14,
-            flex: 1,
-            backgroundColor: "var(--white-color)",
-            borderRadius: 10,
-          }}
-          onClick={() => navigate(Routes.Search)}
-        >
-          <svg.SearchSvg />
-          <span className="t16">Search ...</span>
-        </button>
+      <section className="search-bar-container fade-in">
+        <div className="search-bar" onClick={() => navigate(Routes.Search)}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            placeholder="Search for products..."
+            readOnly
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(Routes.Search);
+            }}
+          />
+        </div>
       </section>
     );
   };
@@ -134,59 +137,48 @@ export const MenuList: React.FC = () => {
     }
 
     return (
-      <section style={{ width: "100%", marginTop: 14, paddingBottom: 20 }}>
+      <section className="category-tabs-container">
         {!searchId && (
-          <Swiper
-            spaceBetween={8}
-            slidesPerView={"auto"}
-            pagination={{ clickable: true }}
-            navigation={true}
-            mousewheel={true}
-          >
-            {menu.map((category: MenuType, index, array) => {
-              const isLast = index === array.length - 1;
-              return (
-                <SwiperSlide
-                  key={category.product_cat_id}
-                  style={{
-                    width: "auto",
-                    marginLeft: index === 0 ? 20 : 0,
-                    marginRight: isLast ? 20 : 0,
-                  }}
-                  onClick={() => {
-                    setSelectedCategory(category.product_cat_id);
-                    setProductId(category.product_id);
-                  }}
-                >
-                  <div
+          <div className="swiper-container">
+            <Swiper
+              modules={[Navigation, Pagination]}
+              spaceBetween={12}
+              slidesPerView={"auto"}
+              pagination={false}
+              navigation={false}
+              mousewheel={true}
+              breakpoints={{
+                320: { spaceBetween: 8 },
+                768: { spaceBetween: 12 }
+              }}
+            >
+              {menu.map((category: MenuType, index, array) => {
+                const isLast = index === array.length - 1;
+                const isActive = selectedCategory === category.product_cat_id;
+
+                return (
+                  <SwiperSlide
+                    key={category.product_cat_id}
                     style={{
-                      padding: "10px 20px",
-                      borderRadius: 10,
-                      border: "1px solid red",
-                      borderColor:
-                        selectedCategory === category.product_cat_id
-                          ? "var(--main-turquoise)"
-                          : "var(--white-color)",
-                      backgroundColor: "var(--white-color)",
+                      width: "auto",
+                      marginLeft: index === 0 ? 20 : 0,
+                      marginRight: isLast ? 20 : 0,
+                    }}
+                    onClick={() => {
+                      setSelectedCategory(category.product_cat_id);
+                      setProductId(category.product_id);
                     }}
                   >
-                    <h5
-                      style={{
-                        textTransform: "capitalize",
-                        cursor: "pointer",
-                        color:
-                          selectedCategory === category.product_cat_id
-                            ? "var(--main-turquoise)"
-                            : "var(--main-color)",
-                      }}
-                    >
-                      {category.name} ({category.totalProducts})
-                    </h5>
-                  </div>
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+                    <div className={`category-tab ${isActive ? 'active' : ''} item-${index + 1} fade-in`}>
+                      <h5>
+                        {category.name} ({category.totalProducts})
+                      </h5>
+                    </div>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </div>
         )}
       </section>
     );
@@ -199,39 +191,49 @@ export const MenuList: React.FC = () => {
       return null;
     }
     return (
-      <main className="scrollable container">
-        {filterDataLoading ?  false : (Array.isArray(filterData) && filterData!.length === 0 ? (
-          <div className="NoData-Found">
-            <div>Product Not Available</div>
+      <main className="scrollable container menu-list-container">
+        {filterDataLoading ? (
+          <div className="empty-state fade-in">
+            <components.Loader local={true} message="Loading products..." />
           </div>
         ) : (
-          <ul style={{ paddingBottom: 20 }}>
-            {filterData!.map((dish: DishType, index: number, array: DishType[]) =>{
-              const isLast = index === array.length - 1;
-              return(
-                <items.MenuListItem
-                  dish={dish}
-                  key={dish.cart_id}
-                  isLast={isLast}
-                  selectedCategory={selectedCategory}
-                />
-              );
-            })}
-          </ul>
-        ) )}
+          Array.isArray(filterData) && filterData!.length === 0 ? (
+            <div className="empty-state fade-in">
+              <h3>No Products Available</h3>
+              <p>We couldn't find any products in this category. Please try another category or check back later.</p>
+            </div>
+          ) : (
+            <ul className="product-list">
+              {filterData!.map((dish: DishType, index: number, array: DishType[]) => {
+                const isLast = index === array.length - 1;
+                const animationClass = index % 3 === 0 ? 'slide-up' : (index % 3 === 1 ? 'scale-in' : 'fade-in-right');
+
+                return (
+                  <li key={dish.cart_id} className={`item-${index + 1} ${animationClass}`}>
+                    <items.MenuListItem
+                      dish={dish}
+                      isLast={isLast}
+                      selectedCategory={selectedCategory}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          )
+        )}
       </main>
     );
   };
-   
+
 
   const renderLoader = (): JSX.Element | null => {
     if (categoryLoading) {
-      return <components.Loader />;
+      return <components.Loader local={true} message="Loading categories..." />;
     }
     return null;
   };
   return (
-    <div id="screen" style={{ opacity }}>
+    <div id="screen" style={{ opacity }} className="menu-list-page">
       {renderHeader()}
       {renderSearch()}
       {renderCategories()}

@@ -1,15 +1,26 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .container {
     max-width: 1200px;
     margin: 20 auto;
     padding: 20px;
   }
-  
+
   .tabs {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
   }
-  
+
   .tab-button {
     padding: 10px 20px;
     margin: 0 10px;
@@ -21,40 +32,39 @@
     border-radius: 4px;
     transition: background-color 0.3s, color 0.3s;
   }
-  
+
   .tab-button:hover {
     background-color: #007bff;
     color: #fff;
   }
-  
+
   .tab-button.active {
     background-color: #007bff;
     color: #fff;
   }
-  
+
   .loading {
     text-align: center;
     font-size: 18px;
     color: #007bff;
   }
-  
+
   .card-container {
     margin-top: 20px;
   }
-  
+
   .card-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
     justify-content: space-around;
   }
-  
+
   .scrollable-container {
-    max-height: 600px; 
-    overflow-y: auto; 
-    padding-right: 10px; 
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 10px;
   }
-  
+
   .card {
     width: 250px;
     background-color: #f9f9f9;
@@ -64,36 +74,61 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 16px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
   }
   .cardOrderId{
     font-weight: 900;
   }
-  
+
   .card:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
   }
-  
+
+  /* Base state for cards - initially hidden */
+  .card {
+    // opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  /* Animation classes applied when cards come into view */
+  .card.animate-card:nth-child(4n+1) {
+    animation: fadeLeft 0.8s ease forwards;
+  }
+
+  .card.animate-card:nth-child(4n+2) {
+    animation: fadeRight 0.8s ease forwards;
+  }
+
+  .card.animate-card:nth-child(4n+3) {
+    animation: zoomIn 0.8s ease forwards;
+  }
+
+  .card.animate-card:nth-child(4n+4) {
+    animation: zoomOut 0.8s ease forwards;
+  }
+
   .card-img {
     width: 100%;
     height: auto;
     border-radius: 8px;
   }
-  
+
   .card-info {
     margin-top: 12px;
   }
-  
+
   .card-info h3 {
     font-size: 18px;
     margin-bottom: 10px;
   }
-  
+
   .card-info p {
     font-size: 14px;
     color: #555;
   }
-  
+
   .card-info .btn {
     background-color: #007bff;
     color: white;
@@ -105,7 +140,7 @@
     margin-top: 12px;
     transition: background-color 0.3s ease;
   }
-  
+
   .card-info .btn:hover {
     background-color: #0056b3;
   }
@@ -130,22 +165,22 @@
 // *************************************Delete icon********************************
 .delete-modal {
   .ant-modal {
-    background: #f9f9f9;  
-    border-radius: 8px; 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 20px;
   }
 
   .ant-modal-title {
-    font-size: 20px;  
-    font-weight: 600;  
-    color: #333; 
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
   }
 
   .delete-modal-content {
-    font-size: 14px;  
+    font-size: 14px;
     margin-bottom: 10px;
-    color: #555; 
+    color: #555;
   }
 
   .ant-radio-group {
@@ -156,13 +191,13 @@
     font-size: 14px;
     color: #555;
     margin-bottom: 10px;
-    
+
     .ant-radio-inner {
-      border-color: #dcdcdc;  
+      border-color: #dcdcdc;
     }
 
     .ant-radio-checked .ant-radio-inner {
-      border-color: #ff4d4f;  
+      border-color: #ff4d4f;
       background-color: #ff4d4f;
     }
   }
@@ -173,32 +208,31 @@
     padding-top: 10px;
 
     .ant-btn {
-      border-radius: 4px; 
+      border-radius: 4px;
       font-weight: 500;
       padding: 8px 20px;
       font-size: 14px;
     }
 
     .delete-confirm-btn {
-      background-color: #ff4d4f;  
+      background-color: #ff4d4f;
       color: white;
       border: none;
-      
+
       &:hover {
-        background-color: #d9363e;  
+        background-color: #d9363e;
     }
 
     .delete-cancel-btn {
-      background-color: #f0f0f0;  
+      background-color: #f0f0f0;
       color: #333;
       border: 1px solid #dcdcdc;
-      
+
       &:hover {
-        background-color: #e6e6e6;  
+        background-color: #e6e6e6;
       }
     }
   }
   }
 }
 
- 

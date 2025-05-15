@@ -5,10 +5,11 @@ import { TabScreens } from '../routes';
 import { components } from '../components';
 import { Home } from '../screens/tabs/Home';
 import { Menu } from '../screens/tabs/Menu';
-import { Order } from '../screens/tabs/Order';
+// import { Order } from '../screens/tabs/Order';
 import { Favorite } from '../screens/tabs/Favorite';
 import { Notification } from '../screens/tabs/Notification';
 import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
+import Order from '../screens/tabs/Order';
 
 export const TabNavigator: React.FC = () => {
   const currentTabScreen = useSelector(

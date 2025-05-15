@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { hooks } from '../hooks';
-import { svg } from '../assets/svg';
-import { Modal, notification } from 'antd';
-import axios from 'axios';
-import { DishType } from '../types';
-import { actions } from '../store/actions';
-import { setCartCount, setShouldRefresh } from '../store/slices/cartSlice';
-import { fetchWishlist, toggleWishlistItem } from '../store/slices/wishlistSlice';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-
+import React, { useEffect, useState } from "react";
+import { hooks } from "../hooks";
+import { svg } from "../assets/svg";
+import { Modal, notification } from "antd";
+import axios from "axios";
+import { DishType } from "../types";
+import { actions } from "../store/actions";
+import { setCartCount, setShouldRefresh } from "../store/slices/cartSlice";
+import {
+  fetchWishlist,
+  toggleWishlistItem,
+} from "../store/slices/wishlistSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 type Props = {
   dish: DishType;
@@ -17,14 +19,17 @@ type Props = {
   selectedCategory: string;
 };
 
-export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }) => {
-  const showSubscribe = dish.subscription_product
+export const MenuListItem: React.FC<Props> = ({
+  dish,
+  isLast,
+  selectedCategory,
+}) => {
+  const showSubscribe = dish.subscription_product;
   // console.log("dishdishdishdishdish", showSubscribe);
   const dispatch = hooks.useDispatch();
   const [cartId, setCartId] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-
 
   // console.log("quantity", quantity);
 
@@ -32,10 +37,9 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
 
   // console.log("qqqqqqqqqqqqqqqqqqqqqqqqmmmm", quantity);
 
-  const c_id = localStorage.getItem('c_id') || '';
+  const c_id = localStorage.getItem("c_id") || "";
 
-  const cityId = localStorage.getItem('cityId') || '';
-
+  const cityId = localStorage.getItem("cityId") || "";
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -47,17 +51,17 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
     } else {
       try {
         const formData = new FormData();
-        formData.append('id', cartItemId);
-        formData.append('c_id', c_id);
+        formData.append("id", cartItemId);
+        formData.append("c_id", c_id);
 
         const response = await axios.post(
-          'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
+          "https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem",
           formData
         );
 
-        if (response.data.status === 'success') {
+        if (response.data.status === "success") {
           notification.success({
-            message: 'Success',
+            message: "Success",
             description: response.data.message,
           });
 
@@ -67,38 +71,37 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
           dispatch(setCartCount(Number(response.data.cart_count)));
         } else {
           notification.error({
-            message: 'Error',
-            description: response.data.message || 'Failed to remove item.',
+            message: "Error",
+            description: response.data.message || "Failed to remove item.",
           });
         }
       } catch (error) {
         // console.error('Error removing item from cart:', error);
         notification.error({
-          message: 'Error',
-          description: 'Failed to remove item from cart.',
+          message: "Error",
+          description: "Failed to remove item from cart.",
         });
       }
     }
   };
 
-
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split('T')[0];
+    return tomorrow.toISOString().split("T")[0];
   };
 
   const fetchCartData = async () => {
     try {
       const formData = new FormData();
-      formData.append('city_id', cityId);
-      formData.append('c_id', c_id);
-      formData.append('next_id', '0');
-      formData.append('area_id', localStorage.getItem('area_id') || '');
-      formData.append('cart_type', '2');
+      formData.append("city_id", cityId);
+      formData.append("c_id", c_id);
+      formData.append("next_id", "0");
+      formData.append("area_id", localStorage.getItem("area_id") || "");
+      formData.append("cart_type", "2");
 
       const response = await axios.post(
-        'https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv',
+        "https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv",
         formData
       );
 
@@ -112,9 +115,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
         setLoading(true);
 
         if (matchedItem) {
-          setQuantity(Number(matchedItem.quantity
-
-          ) || 1);
+          setQuantity(Number(matchedItem.quantity) || 1);
           setCartItemId(String(matchedItem.cart_id));
         } else {
           setQuantity(0);
@@ -127,7 +128,7 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
   };
   useEffect(() => {
     fetchCartData();
-  }, [cityId, c_id, dish,]);
+  }, [cityId, c_id, dish]);
 
   const HandleAddToCart = async () => {
     if (!c_id) {
@@ -170,9 +171,11 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
           message: 'Success',
           description: response.data.message,
         });
+          dispatch(setShouldRefresh(false));
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
         setQuantity(1);
+      
 
         const newCartId =
           response.data.cart_id ||
@@ -200,43 +203,42 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
       });
     }
   };
-
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 0 || !cartItemId) return;
 
     try {
       const formData = new FormData();
-      formData.append('id', cartItemId);
-      formData.append('c_id', c_id);
-      formData.append('package_id', '13');
-      formData.append('quantity', String(newQuantity));
-      formData.append('delivery_preference', '0');
-      formData.append('no_of_deliveries', '0');
-      formData.append('order_date', getTomorrowDate());
-      formData.append('order_type', '2');
+      formData.append("id", cartItemId);
+      formData.append("c_id", c_id);
+      formData.append("package_id", "13");
+      formData.append("quantity", String(newQuantity));
+      formData.append("delivery_preference", "0");
+      formData.append("no_of_deliveries", "0");
+      formData.append("order_date", getTomorrowDate());
+      formData.append("order_type", "2");
 
       const response = await axios.post(
-        'https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem',
+        "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
         formData
       );
 
-      if (response.data.status === 'success') {
+      if (response.data.status === "success") {
         setQuantity(newQuantity);
         notification.success({
-          message: 'Success',
+          message: "Success",
           description: response.data.message,
         });
       } else {
         notification.error({
-          message: 'Error',
-          description: response.data.message || 'Failed to update quantity.',
+          message: "Error",
+          description: response.data.message || "Failed to update quantity.",
         });
       }
     } catch (error) {
       // console.error('Error updating cart:', error);
       notification.error({
-        message: 'Error',
-        description: 'Failed to update item quantity.',
+        message: "Error",
+        description: "Failed to update item quantity.",
       });
     }
   };
@@ -245,27 +247,27 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
   // const { ifInWishlist, addToWishlist, removeFromWishlist } =
   hooks.useWishlistHandler();
 
-
-
   // if (loading) {
   //   return <components.Loader />;
   // }
 
   const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
 
-  const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const wishlistHandler = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.stopPropagation();
 
-    const c_id_num = parseInt(localStorage.getItem('c_id') || '0');
+    const c_id_num = parseInt(localStorage.getItem("c_id") || "0");
     if (!c_id_num) {
       Modal.confirm({
-        title: 'Please Sign In',
-        content: 'You need to sign in to manage your wishlist.',
+        title: "Please Sign In",
+        content: "You need to sign in to manage your wishlist.",
         onOk() {
-          navigate('/');
+          navigate("/");
         },
-        cancelText: 'Cancel',
-        okText: 'Sign In',
+        cancelText: "Cancel",
+        okText: "Sign In",
       });
       return;
     }
@@ -277,101 +279,34 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
     const type = isInWishlist ? 2 : 1;
 
     try {
-      const resultAction = await dispatch(toggleWishlistItem({
-        product_id: dish.product_id,
-        product_option_id: dish.product_option_id,
-        product_option_value_id: dish.product_option_value_id,
-        c_id: c_id_num,
-        type
-      }));
+      const resultAction = await dispatch(
+        toggleWishlistItem({
+          product_id: dish.product_id,
+          product_option_id: dish.product_option_id,
+          product_option_value_id: dish.product_option_value_id,
+          c_id: c_id_num,
+          type,
+        })
+      );
 
       if (toggleWishlistItem.fulfilled.match(resultAction)) {
         dispatch(fetchWishlist());
       }
     } catch (error) {
-      console.error('Wishlist action failed:', error);
+      console.error("Wishlist action failed:", error);
     }
   };
-
 
   const isInWishlist = wishlist.some(
     (item) => item.option_value_id === dish.option_value_id
   );
 
   return (
-    <li className="proListItemWrap">
-      <div className="proLeftBox">
-        <div className="proItemImgWrap">
-          <img
-            src={dish.option_value_image}
-            alt={dish.name}
-            className="proItemImg"
-            onClick={() =>
-              navigate(`/dish/${dish.option_name}`, {
-                state: {
-                  dish,
-                  showSubscribe: dish.subscription_product,
-                }
-              })
-            }
-          />
-        </div>
-        <div className="proItemDetailsWrap">
-          {/* <span
-          className="t14"
-          style={{
-            marginBottom: 4,
-            color: "var(--main-color)",
-            textTransform: "capitalize",
-          }}
-        >
-          {dish.name}
-        </span>
-        <p
-          className="t10"
-          style={{
-            fontSize: 10,
-            color: "var(--text-color)",
-            lineHeight: 1.5,
-            marginBottom: 4,
-          }}
-        >
-          {dish.description}
-        </p> */}
-          <span className="proName">{dish.option_value_name}</span>
-          <span className="proWeigh">
-            {/* {dish.kcal} kcal - {dish.weight}g */}
-            {dish.weight} {dish.weight_unit}
-          </span>
-
-
-          {Number(dish.discount ?? 0) > 0 ? (
-            <>
-              <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
-                ₹ {dish.price}
-              </span>
-              <span className="proPrice" style={{ marginLeft: '8px' }}>
-                ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
-              </span>
-            </>
-          ) : (
-            <span className="proPrice">
-              ₹ {dish.price}
-            </span>
-          )}
-        </div>
-      </div>
+    <div className="product-item">
       <button
+        className="wishlist-button"
         onClick={wishlistHandler}
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: -10,
-          padding: 15,
-          borderRadius: 10,
-          backgroundColor: 'transparent',
-          border: 'none',
-        }}
+        aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -379,66 +314,147 @@ export const MenuListItem: React.FC<Props> = ({ dish, isLast, selectedCategory }
           width="24"
           height="24"
           style={{
-            fill: isInWishlist ? 'red' : 'gray',
-            transition: 'fill 0.3s ease',
+            fill: isInWishlist ? "#dc3545" : "#aaaaaa",
+            transition: "fill 0.3s ease",
           }}
         >
-          <path
-            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-          />
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
         </svg>
       </button>
-      <div className="lastBox">
-        <div className="cartButtonWrap">
+
+      <div className="product-content">
+        <div
+          className="product-image-container"
+          onClick={() =>
+            navigate(`/dish/${dish.option_name}`, {
+              state: { dish, showSubscribe },
+            })
+          }
+        >
+          {Number(dish.discount ?? 0) > 0 && (
+            <div className="discount-badge">
+              {Math.round((Number(dish.discount) / Number(dish.price)) * 100)}%
+              OFF
+            </div>
+          )}
+          <img src={dish.option_value_image} alt={dish.name} loading="lazy" />
+        </div>
+        <div className="product-details">
+          <div>
+            <h3
+              className="product-name"
+              onClick={() =>
+                navigate(`/dish/${dish.option_name}`, {
+                  state: { dish, showSubscribe },
+                })
+              }
+            >
+              {dish.option_value_name}
+            </h3>
+            <span className="product-weight">
+              {dish.weight} {dish.weight_unit}
+            </span>
+            <div className="product-price">
+              {Number(dish.discount ?? 0) > 0 ? (
+                <>
+                  <span className="original-price">₹{dish.price}</span>
+                  <span>
+                    ₹{Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+                  </span>
+                </>
+              ) : (
+                <span>₹{dish.price}</span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="product-actions">
+        <div className="cart-controls">
           {quantity < 1 ? (
-            <button className="cartButton" onClick={HandleAddToCart}>
-              + Add
+            <button className="cart-button" onClick={HandleAddToCart}>
+              <span>+ Add</span>
             </button>
           ) : (
             <>
               <button
-                className="cartButton"
+                className="cart-button quantity-button"
                 onClick={(event) =>
                   quantity === 1
                     ? handleRemoveFromCart(event)
                     : handleUpdateCart(quantity - 1)
                 }
               >
-                <svg.MinusSvg />
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 12H19"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
-              <span className="countNum">{quantity}</span>
+              <span className="quantity">{quantity}</span>
               <button
-                className="cartButton"
+                className="cart-button quantity-button"
                 onClick={() => handleUpdateCart(quantity + 1)}
               >
-                <svg.AddSvg />
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 5V19"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M5 12H19"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
             </>
           )}
-        </div>
-        {
-          quantity === 0 ? (<>
-            {/* <button className="subscriptionButton"
+
+          {String(showSubscribe) === "1" && (
+            <button
+              className="cart-button"
+              style={{
+                marginLeft: "10px",
+                backgroundColor: "#ffc107",
+                color: "#333",
+              }}
               onClick={() =>
-                navigate(`/dish/${dish.option_name}`, { state: { dish } })
-              }>
-                Subscribe
-            </button> */}
-            {String(showSubscribe) === '1' && (
-              <button className="subscriptionButton"
-                onClick={() =>
-                  navigate(`/dish/${dish.option_name}`, { state: { dish, showSubscribe } })
-                }>
-                Subscribe
-              </button>
-            )}
-          </>) : (<>
-            <span className="smallText">Deliver once</span>
-          </>)
-        }
+                navigate(`/dish/${dish.option_name}`, {
+                  state: {
+                    dish,
+                    showSubscribe: dish.subscription_product,
+                  },
+                })
+              }
+            >
+              Subscribe
+            </button>
+          )}
+        </div>
       </div>
-    </li>
+    </div>
   );
 };
-
-

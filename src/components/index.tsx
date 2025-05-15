@@ -11,6 +11,8 @@ import {RatingStars} from './RatingStars';
 import {BlockHeading} from './BlockHeading';
 import {Modal}   from './Modal'
 
+import {AnimatedOrderList} from './AnimatedOrderList';
+
 export const components = {
   Name,
   Header,
@@ -22,6 +24,7 @@ export const components = {
   Rating,
   Switch,
   RatingStars,
-  BlockHeading, 
+  BlockHeading,
   Modal,
+  AnimatedOrderList,
 };

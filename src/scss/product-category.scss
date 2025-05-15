@@ -1,0 +1,244 @@
+// Enhanced Product Category Styles
+.product-category-section {
+  margin-bottom: 25px;
+  background-color: #f0f7ed;
+  padding: 20px 0 30px;
+  position: relative;
+  overflow: hidden;
+
+  .swiper-container {
+    position: relative;
+    z-index: 1;
+    padding: 10px 0;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #1a712e;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+
+    &:after {
+      font-size: 16px !important;
+    }
+
+    &:hover {
+      background-color: white;
+    }
+  }
+}
+
+// Simplified Item Wrap - Card Format
+.itemWrap {
+  position: relative;
+  width: 160px;
+  height: 200px;
+  padding: 0;
+  margin: 10px 5px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+  // Simple hover effect
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(26, 113, 46, 0.15);
+
+    .bg-cover {
+      transform: scale(1.05);
+    }
+
+    .home_product_category {
+      color: #1a712e;
+    }
+
+    .item-count {
+      background-color: #1a712e;
+      color: white;
+    }
+  }
+
+  // Active state for touch devices
+  &:active {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(26, 113, 46, 0.1);
+  }
+
+  // Image container - simplified
+  .bg-cover {
+    height: 120px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+
+  // Content container - simplified
+  .card-content {
+    padding: 12px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  // Category name - simplified
+  .home_product_category {
+    text-align: center;
+    width: 100%;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    transition: color 0.3s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Item count badge - simplified
+  .item-count {
+    background-color: #f0f7ed;
+    color: #1a712e;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive styles
+@media screen and (max-width: 767px) {
+  .product-category-section {
+    padding: 15px 0 25px;
+  }
+
+  .itemWrap {
+    height: 180px;
+    width: 140px;
+
+    .bg-cover {
+      height: 100px;
+    }
+
+    .home_product_category {
+      font-size: 13px;
+    }
+  }
+}
+
+// Simple entrance animations
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+// Add staggered animation delay for items
+@for $i from 1 through 10 {
+  .item-#{$i} {
+    animation-delay: #{$i * 0.1}s;
+  }
+}
+
+// Carousel styles
+.carousel-slide {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+    img {
+      transform: scale(1.03);
+    }
+  }
+
+  img {
+    transition: transform 0.5s ease;
+  }
+
+  h3 {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover h3 {
+    transform: translateY(-3px);
+  }
+}
+
+// Enhance Swiper navigation
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  color: #1a712e !important;
+  transition: all 0.3s ease;
+
+  &:after {
+    font-size: 18px !important;
+    font-weight: bold;
+  }
+
+  &:hover {
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Enhance Swiper pagination
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(26, 113, 46, 0.5);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+
+  &-active {
+    background-color: #1a712e;
+    opacity: 1;
+    width: 12px;
+    height: 12px;
+  }
+}

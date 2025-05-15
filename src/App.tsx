@@ -4,6 +4,9 @@ import { useAppDispatch } from './store/actions/useAppDispatch';
 import { fetchWishlist } from './store/slices/wishlistSlice';
 import { StackNavigator } from './navigation/StackNavigator';
 import { RootState } from './store';
+import { Loader } from './components/Loader';
+
+import AOS from 'aos';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -11,14 +14,17 @@ function App() {
   const wishlist = useSelector((state: RootState) => state.wishlistSlice);
 
   useEffect(() => {
-
     dispatch(fetchWishlist());
-
   }, [dispatch]);
+
+   useEffect(() => {
+    AOS.init();
+  }, []);
 
   return (
     <div id="app">
       <StackNavigator />
+        <Loader />
     </div>
   );
 }

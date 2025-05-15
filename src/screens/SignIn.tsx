@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { hooks } from "../hooks";
 import { Routes } from "../routes";
@@ -8,12 +8,21 @@ import { components } from "../components";
 import { notification } from "antd";
 import { useDispatch } from "react-redux";
 import { fetchWishlist } from "../store/slices/wishlistSlice";
+import Lottie from "lottie-react";
+import "./SignIn.scss";
+
+// Import animations
+import OtpVerificationAnimation from "../components/Animation/OtpVerification.json";
+import WelcomeAnimation from "../components/Animation/WelcomeAnimation.json";
+import FormBackground from "../components/Animation/FormBackground.json";
+import logo from "../assets/icons/logo.png";
 
 export const SignIn: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
+  const formRef = useRef<HTMLDivElement>(null);
 
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  // State variables
   const [opacity, setOpacity] = useState<number>(0);
   const [mobile, setMobile] = useState<string>("");
   const [otp, setOtp] = useState<string>("");
@@ -22,11 +31,24 @@ export const SignIn: React.FC = () => {
   const [timer, setTimer] = useState<number>(60);
   const [isResendAvailable, setIsResendAvailable] = useState<boolean>(false);
   const [otpSentTime, setOtpSentTime] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [animateForm, setAnimateForm] = useState<boolean>(false);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
+  // Animation effect when component mounts
+  useEffect(() => {
+    // Trigger form animation after a short delay
+    const timer = setTimeout(() => {
+      setAnimateForm(true);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // OTP timer effect
   useEffect(() => {
     if (isOtpSent && otpSentTime) {
       const interval = setInterval(() => {
@@ -53,6 +75,9 @@ export const SignIn: React.FC = () => {
     }
     if (mobile.length === 10) {
       try {
+        // Show loading state
+        setIsLoading(true);
+
         const formData = new FormData();
         formData.append("mobile", mobile);
 
@@ -60,13 +85,11 @@ export const SignIn: React.FC = () => {
           "https://heritage.bizdel.in/app/consumer/services_v11/login",
           formData
         );
-        // console.log("area_id", response);
+
         if (
           response.data.status === "success" &&
           response.data.action === "existing user"
-        ) 
-        
-        {
+        ) {
           setIsOtpSent(true);
           dispatch(fetchWishlist());
           setOtpSentTime(Math.floor(Date.now() / 1000));
@@ -76,8 +99,6 @@ export const SignIn: React.FC = () => {
           });
           localStorage.setItem("c_id", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
-         
-        
         } else {
           notification.error({
             message: response.data.message || "Failed to send OTP",
@@ -88,7 +109,11 @@ export const SignIn: React.FC = () => {
         console.error("Error during login:", error);
         notification.error({
           message: "Something went wrong. Please try again.",
+          placement: "bottomRight",
         });
+      } finally {
+        // Hide loading state
+        setIsLoading(false);
       }
     } else {
       notification.error({
@@ -100,6 +125,9 @@ export const SignIn: React.FC = () => {
 
   const handleVerifyOtp = async () => {
     try {
+      // Show loading state
+      setIsLoading(true);
+
       const formData = new FormData();
       formData.append("mobile", mobile);
       formData.append("otp", otp);
@@ -108,8 +136,6 @@ export const SignIn: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP",
         formData
       );
-
-      // console.log("otppppppppppppppp", response);
 
       if (response.data.status === "success"){
         const addressDetails = response.data.CustomerDetail[0].address_details;
@@ -127,7 +153,7 @@ export const SignIn: React.FC = () => {
             message: "OTP Verified. Please add your address.",
             placement: "bottomRight",
           });
-         
+
         } else {
           notification.success({
             message: "OTP Verified.",
@@ -144,12 +170,17 @@ export const SignIn: React.FC = () => {
       }
     } catch (error) {
       console.error("Error during OTP verification:", error);
+      notification.error({
+        message: "Error verifying OTP. Please try again.",
+        placement: "bottomRight",
+      });
+    } finally {
+      // Hide loading state
+      setIsLoading(false);
     }
   };
 
-  const renderHeader = (): JSX.Element => {
-    return <components.Header showGoBack={false} />;
-  };
+  // Header removed as requested
 
   const redirectToCity = () => {
     navigate("/pincode");
@@ -158,107 +189,169 @@ export const SignIn: React.FC = () => {
   const renderContent = (): JSX.Element => {
     return (
       <main className="scrollable signInWrap">
-        <section
-          style={{
-            padding: 20,
-            width: "100%",
-          }}
-        >
-          <h1 style={{ marginBottom: 30, textAlign: "center" }}>Welcome Back!</h1>
-
-          <Input
-            type="number"
-            placeholder="Enter your mobile number"
-            containerStyle={{ marginBottom: 14 }}
-            leftIcon={<svg.PhoneSvg />}
-            value={mobile}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (/^\d{0,10}$/.test(value)) {
-                setMobile(value);
-              }
-            }}
+        {/* Background animation */}
+        <div className="background-animation">
+          <Lottie
+            animationData={FormBackground}
+            style={{ width: '100%', height: '100%' }}
           />
-          {mobile.length > 0 && mobile.length !== 10 && (
-            <span className="t144">Mobile number must be exactly 10 digits.</span>
-          )}
+        </div>
 
-          <div style={{ margin: 10, marginBottom: 20 }}>
-            <span style={{ fontSize: 16 }}>
+        <section
+          ref={formRef}
+          className={`login-form-container ${animateForm ? 'fade-in' : ''}`}
+        >
+          <div className="login-header">
+            <div className="logo-container">
+              <img src={logo} alt="Heritage Logo" className="logo-image" />
+            </div>
+            <h1 className="login-title">Welcome Back</h1>
+            <p className="login-subtitle">Sign in to continue</p>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              Mobile Number
+            </label>
+            <Input
+              type="number"
+              placeholder="Enter your mobile number"
+              containerStyle={{
+                marginBottom: 8,
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                transform: mobile.length === 10 ? "translateY(-2px)" : "none",
+                boxShadow: mobile.length === 10 ? "0 4px 8px rgba(26, 113, 46, 0.2)" : "none"
+              }}
+              leftIcon={<svg.PhoneSvg />}
+              value={mobile}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d{0,10}$/.test(value)) {
+                  setMobile(value);
+                }
+              }}
+            />
+            {mobile.length > 0 && mobile.length !== 10 && (
+              <span className="error-message">
+                Mobile number must be exactly 10 digits.
+              </span>
+            )}
+          </div>
+
+          <div className="terms-container">
+            <label className="terms-label">
               <input
                 type="checkbox"
                 checked={isTermsAccepted}
                 onChange={() => setIsTermsAccepted(!isTermsAccepted)}
-                className="checkboxWrap"
+                className="terms-checkbox"
               />
-              {" "}I agree to the <a href="#">Terms & Conditions</a>
-            </span>
-          </div>
-
-          <span className="t16" style={{ marginBottom: 0, display: "block", textAlign: "right", fontSize: 14 }}>
-            {isOtpSent ? (
-              timer === 0 ? (
-                "Did not get OTP ?"
-              ) : (
-                `Did not get OTP ? (${timer}s)`
-              )
-            ) : (
-              ""
-            )}
-          </span>
-
-          <div className="mb5">
-            {!isOtpSent ? (
-              <components.Button text="Generate OTP" onClick={handleLogin} />
-            ) : (
-              <>
-                {timer === 0 && isResendAvailable && (
-                  <button
-                    onClick={() => {
-                      setIsOtpSent(false);
-                      setIsResendAvailable(false);
-                      setTimer(60);
-                      setOtpSentTime(Math.floor(Date.now() / 1000));
-                      handleLogin();
-                    }}
-                    className="explore-btn"
-                    style={{ marginTop: 0 }}
-                  >
-                    Resend OTP
-                  </button>
-                )}
-              </>
-            )}
+              I agree to the <a
+                href="/terms"
+                className="terms-link"
+              >
+                Terms & Conditions
+              </a>
+            </label>
           </div>
 
           {isOtpSent && (
-            <>
+            <div className="otp-container">
+              <label className="form-label">
+                OTP Verification
+              </label>
               <Input
                 placeholder="Enter OTP"
-                containerStyle={{ marginBottom: 14 }}
+                containerStyle={{
+                  marginBottom: 8,
+                  transition: "all 0.3s ease"
+                }}
                 leftIcon={<svg.KeySvg />}
                 value={otp}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setOtp(e.target.value)
                 }
               />
-              <components.Button text="Verify OTP" onClick={handleVerifyOtp} />
-            </>
+
+              <div className="otp-timer">
+                {timer > 0 ? (
+                  <span>
+                    Resend OTP in <span className="otp-timer-value">{timer}s</span>
+                  </span>
+                ) : (
+                  isResendAvailable && (
+                    <button
+                      onClick={() => {
+                        setIsOtpSent(false);
+                        setIsResendAvailable(false);
+                        setTimer(60);
+                        setOtpSentTime(Math.floor(Date.now() / 1000));
+                        handleLogin();
+                      }}
+                      className="resend-button"
+                    >
+                      Resend OTP
+                    </button>
+                  )
+                )}
+              </div>
+
+              <components.Button
+                text={isLoading ? "Verifying..." : "Verify OTP"}
+                onClick={handleVerifyOtp}
+                disabled={isLoading || otp.length === 0}
+              />
+            </div>
           )}
 
-          <button onClick={redirectToCity} className="explore-btn">
+          {!isOtpSent && (
+            <components.Button
+              text={isLoading ? "Sending OTP..." : "Generate OTP"}
+              onClick={handleLogin}
+              disabled={isLoading || mobile.length !== 10 || !isTermsAccepted}
+              containerStyle={{
+                marginBottom: 20,
+                transition: "all 0.3s ease",
+                transform: mobile.length === 10 && isTermsAccepted ? "translateY(-2px)" : "none",
+                boxShadow: mobile.length === 10 && isTermsAccepted ? "0 4px 12px rgba(26, 113, 46, 0.3)" : "none"
+              }}
+            />
+          )}
+
+          <button
+            onClick={redirectToCity}
+            className="explore-btn"
+          >
             Enter Your PinCode
           </button>
-
         </section>
       </main>
     );
   };
 
+  // Add loading modal for OTP verification
+  const renderLoadingModal = (): JSX.Element | null => {
+    if (!isLoading) return null;
+
+    return (
+      <div className="popup-modal">
+        <div className="popup-content">
+          <Lottie
+            animationData={OtpVerificationAnimation}
+            style={{ width: 120, height: 120 }}
+          />
+          <p className="loading-message">
+            {isOtpSent ? "Verifying OTP..." : "Sending OTP..."}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div id="screen" style={{ opacity }}>
-      {renderHeader()}
       {renderContent()}
+      {renderLoadingModal()}
     </div>
   );
 };

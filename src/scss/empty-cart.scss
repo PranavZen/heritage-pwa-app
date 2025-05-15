@@ -1,0 +1,243 @@
+// Variables
+$primary-color: #1a712e;
+$primary-dark: #145a25;
+$accent-color: #ffc107;
+$text-dark: #333333;
+$text-light: #666666;
+$white: #ffffff;
+$light-bg: #f8f9fa;
+$border-color: #e9ecef;
+$error-color: #dc3545;
+$success-color: #28a745;
+
+.empty-cart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 70vh;
+  text-align: center;
+
+  .animation-container {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 10px;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 10px;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%);
+      border-radius: 50%;
+      z-index: -1;
+    }
+  }
+
+  .empty-cart-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: $primary-color;
+    margin-bottom: 12px;
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .empty-cart-message {
+    font-size: 16px;
+    color: $text-light;
+    margin-bottom: 30px;
+    max-width: 300px;
+    line-height: 1.5;
+    animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 300px;
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+
+    .browse-button {
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+      }
+
+      &:hover {
+        background-color: darken($primary-color, 5%);
+        transform: translateY(-2px);
+
+        &::before {
+          left: 100%;
+        }
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .wishlist-button {
+      background-color: transparent;
+      color: $text-dark;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      &:hover {
+        background-color: $light-bg;
+        border-color: $primary-color;
+        color: $primary-color;
+        transform: translateY(-2px);
+
+        svg {
+          fill: $primary-color;
+        }
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: $text-light;
+        transition: fill 0.3s ease;
+      }
+    }
+  }
+
+  .product-suggestions {
+    margin-top: 40px;
+    width: 100%;
+    animation: fadeInUp 1.2s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-dark;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .suggestion-items {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      padding: 10px 0;
+      scroll-snap-type: x mandatory;
+
+      &::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba($primary-color, 0.3);
+        border-radius: 4px;
+      }
+
+      .suggestion-item {
+        min-width: 140px;
+        scroll-snap-align: start;
+        background: white;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        img {
+          width: 100%;
+          height: 100px;
+          object-fit: cover;
+          border-radius: 6px;
+          margin-bottom: 8px;
+        }
+
+        h4 {
+          font-size: 14px;
+          font-weight: 500;
+          color: $text-dark;
+          margin-bottom: 4px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        p {
+          font-size: 12px;
+          color: $primary-color;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
