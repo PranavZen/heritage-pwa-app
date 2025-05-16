@@ -375,10 +375,10 @@ export const MenuListItem: React.FC<Props> = ({
         <div className="cart-controls">
           {quantity < 1 ? (
             <button className="cart-button" onClick={HandleAddToCart}>
-              <span>+ Add</span>
+              <span>Add</span>
             </button>
           ) : (
-            <>
+            <div className="cart-buttons-group">
               <button
                 className="cart-button quantity-button"
                 onClick={(event) =>
@@ -386,6 +386,7 @@ export const MenuListItem: React.FC<Props> = ({
                     ? handleRemoveFromCart(event)
                     : handleUpdateCart(quantity - 1)
                 }
+                aria-label="Decrease quantity"
               >
                 <svg
                   width="16"
@@ -403,10 +404,11 @@ export const MenuListItem: React.FC<Props> = ({
                   />
                 </svg>
               </button>
-              <span className="quantity">{quantity}</span>
+              <span className="quantity" aria-label={`Quantity: ${quantity}`}>{quantity}</span>
               <button
                 className="cart-button quantity-button"
                 onClick={() => handleUpdateCart(quantity + 1)}
+                aria-label="Increase quantity"
               >
                 <svg
                   width="16"
@@ -431,14 +433,13 @@ export const MenuListItem: React.FC<Props> = ({
                   />
                 </svg>
               </button>
-            </>
+            </div>
           )}
 
           {String(showSubscribe) === "1" && (
             <button
               className="cart-button"
               style={{
-                marginLeft: "10px",
                 backgroundColor: "#ffc107",
                 color: "#333",
               }}
@@ -450,6 +451,7 @@ export const MenuListItem: React.FC<Props> = ({
                   },
                 })
               }
+              aria-label="Subscribe to this product"
             >
               Subscribe
             </button>

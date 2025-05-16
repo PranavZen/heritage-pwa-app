@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
-import { StackNavigator } from './navigation/StackNavigator';
 import { useEffect } from 'react';
 import Aos from 'aos';
 import "aos/dist/aos.css";
 import { Loader } from './components/Loader';
+import { AppRouter } from './navigation/AppRouter';
 
 function App() {
   const color = useSelector((state: RootState) => state.bgSlice.color);
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div id="app">
-      <StackNavigator />
+      <AppRouter />
       {/* Global loader that will be shown/hidden based on Redux state */}
       <Loader />
     </div>
