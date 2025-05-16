@@ -78,11 +78,11 @@ export const Search: React.FC = () => {
     }
 
     // Log form data for debugging
-    console.log("Form data:", {
-      search_key: query,
-      city_id: localStorage.getItem('cityId') || '',
-      c_id: c_id || ''
-    });
+    // console.log("Form data:", {
+    //   search_key: query,
+    //   city_id: localStorage.getItem('cityId') || '',
+    //   c_id: c_id || ''
+    // });
 
     setDishesLoading(true);
 

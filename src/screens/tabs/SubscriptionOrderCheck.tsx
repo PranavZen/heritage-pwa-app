@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+
+import { Modal, notification, Radio } from "antd";
 import axios from "axios";
-import "./SubscriptionOrder.scss";
+import moment from 'moment';
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { components } from "../../components";
 import { hooks } from "../../hooks";
-import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { TabScreens } from "../../routes";
-import { notification, Switch } from "antd";
-import { Modal, Radio, Button, DatePicker } from 'antd';
-import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
-
+import "./SubscriptionOrder.scss";
 
 export const SubscriptionOrderCheck: React.FC = () => {
   const navigate = useNavigate();
@@ -34,7 +32,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
 
   const [oneTimeOrderData, setOneTimeOrderData] = useState<any[]>([]);
 
-//   console.log("oneTimeOrderDataoneTimeOrderData", oneTimeOrderData);
+  // console.log("oneTimeOrderDataoneTimeOrderData", oneTimeOrderData);
 
   const [activeTab, setActiveTab] = useState('subscriptions');
   const [isLoading, setIsLoading] = useState(false);
@@ -84,12 +82,9 @@ export const SubscriptionOrderCheck: React.FC = () => {
     order_id: string;
     order_status_id: string;
     payment_method: string;
-    order_option_id: string;
+    order_option_id:string;
   }
   const [orderToDelete, setOrderToDelete] = useState<orderToDelete | null>(null);
-
-  // console.log("xxxxxxxxxxxxxxxxxxxxxx", orderToDelete)
-
   interface CancelReason {
     id: number;
     reason: string;
@@ -421,18 +416,15 @@ export const SubscriptionOrderCheck: React.FC = () => {
 
     axios
       .post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/getMyOneTimeOrder",
+        "https://heritage.bizdel.in/app/consumer/services_v11/oneTimeOrderList",
         formData
       )
       .then((response) => {
-        const data = response.data.orders
-          .map((order: any) => order.oneTimeOrderListing)
-          .flat();
-        setOneTimeOrderData(data);
+        setOneTimeOrderData(response.data.ordersListing);
         setIsLoading(false);
-         
+
+        // console.log("kkkkkkkkkkkkkkkkkkk", response);
       })
-      
       .catch((error) => {
         console.error("Error fetching one-time order data", error);
         setIsLoading(false);
@@ -444,8 +436,62 @@ export const SubscriptionOrderCheck: React.FC = () => {
     fetchOneTimeOrderData();
   }, []);
 
+  // Set up Intersection Observer for card animations
+  useEffect(() => {
+    const cards = document.querySelectorAll('.card');
 
+    if (cards.length === 0) return;
 
+    // Convert NodeList to Array for easier manipulation
+    const cardsArray = Array.from(cards);
+
+    // Sort cards by their position from bottom to top
+    // This ensures cards at the bottom of the page animate first when scrolling up
+    cardsArray.sort((a, b) => {
+      const aRect = a.getBoundingClientRect();
+      const bRect = b.getBoundingClientRect();
+      return bRect.top - aRect.top; // Sort from bottom to top
+    });
+
+    // Create a map to store the index of each card
+    const cardIndexMap = new Map();
+    cardsArray.forEach((card, index) => {
+      cardIndexMap.set(card, index);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const card = entry.target;
+          const index = cardIndexMap.get(card);
+
+          // Set a custom property for staggered animation delay
+          // The delay increases as the user scrolls up
+          (card as HTMLElement).style.setProperty('--card-index', String(index));
+
+          // Add a class to trigger the animation
+          setTimeout(() => {
+            (card as HTMLElement).classList.add('animate-card');
+          }, 50 * index); // Staggered delay
+
+          observer.unobserve(card);
+        }
+      });
+    }, {
+      threshold: 0.15, // Increased threshold for better timing
+      rootMargin: '0px 0px -50px 0px' // Adjusted to trigger a bit earlier
+    });
+
+    cardsArray.forEach(card => {
+      observer.observe(card);
+    });
+
+    return () => {
+      cardsArray.forEach(card => {
+        observer.unobserve(card);
+      });
+    };
+  }, [subscriptionData, oneTimeOrderData, activeTab]);
 
   useEffect(() => {
     if (Array.isArray(subscriptionID) && subscriptionID.length !== 0) {
@@ -505,12 +551,13 @@ export const SubscriptionOrderCheck: React.FC = () => {
         {activeTab === "subscriptions" && (
           <div className="ordersContainer">
             <h2>Subscription Orders</h2>
-            <div className="scrollable-container">
+            <div className="scrollable-containers" style={{maxHeight: "100%"}}>
               <div className="card-list">
                 {Array.isArray(subscriptionData) &&
                   subscriptionData.length > 0 ? (
                   subscriptionData.map((subscription) => (
-                    <div key={subscription.subscription_id} className="card">
+
+                    <div  className="card" key={subscription.subscription_id}>
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
@@ -619,7 +666,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                         </button> */}
                         {/* {
                           subscription.status === 'expire' ? <>  <button
-                        
+
                             onClick={() =>
                               handleSubscriptionID(subscription.subscription_id)
                             }
@@ -627,7 +674,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                           >
                             Renew
                           </button> </> : <>
-                              
+
                           </>
                         } */}
                       </div>
@@ -644,6 +691,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                         <span>{subscription.status}</span>
                       </div>
                     </div>
+
                   ))
                 ) : (
                   <p>No subscriptions found.</p>
@@ -677,10 +725,10 @@ export const SubscriptionOrderCheck: React.FC = () => {
           <div style={{ marginTop: '10px' }}>
             <label>Resume Date:</label>
             <DatePicker
-              value={resumeDate ? moment(resumeDate) : null} 
+              value={resumeDate ? moment(resumeDate) : null}
               onChange={(date) => setResumeDate(date ? date.format('YYYY-MM-DD') : '')}
               format="YYYY-MM-DD"
-              disabledDate={(current) => current && current < moment().add(1, 'days').startOf('day')} 
+              disabledDate={(current) => current && current < moment().add(1, 'days').startOf('day')}
             />
           </div>
         </Modal> */}
@@ -703,37 +751,48 @@ export const SubscriptionOrderCheck: React.FC = () => {
         {activeTab === "one-time-orders" && (
           <div className="ordersContainer">
             <h2>One Time Orders</h2>
-            <div className="scrollable-container">
+            <div className="scrollable-containers" style={{maxHeight: "100%"}}>
               <div className="card-list">
-                {Array.isArray(oneTimeOrderData) && oneTimeOrderData.length > 0 ? (
-                  oneTimeOrderData.map((orderData) => (
-                    <div key={orderData.orders_id} className="card">
+                {Array.isArray(oneTimeOrderData) &&
+                  oneTimeOrderData.length > 0 ? (
+                  oneTimeOrderData.map((order) => (
+
+                    <div key={order.subscription_id} className="card" >
+
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
-                            src={orderData.image}
-                            alt={orderData.option_value_name}
+                            src={order.image}
+                            alt={order.product_name}
                             className="card-img"
                           />
                         </div>
                         <div className="card-info">
-                          <h3 className="orderItmName">{orderData.option_value_name}</h3>
+                          <h3 className="orderItmName">
+                            {order.product_name}
+                          </h3>
                           <p className="orderItmWieght">
-                            {orderData.weight} {orderData.weight_unit}
+                            {order.weight} {order.weight_unit}
                           </p>
                           <p className="orderQuantity">
-                            Pack: {orderData.order_option_quantity} Per day {orderData.sku}
+                            Pack: {order.quantity} Per day
+                            {order.package_name}
                           </p>
+                          {/* <p className="orderLD">
+                            Last Delivered:{" "}
+                            {order.lastDeliveryDate || "-"}
+                          </p> */}
                           <p className="orderPrice">
-                            <small>MRP</small> ₹{orderData.price} <span>per pack</span>
+                            <small>MRP</small> ₹{order.price}{" "}
+                            <span>per pack</span>
                           </p>
                           <p className="orderBalAmt">
-                            Total Amount: ₹ {parseFloat(orderData.price) * parseInt(orderData.order_option_quantity)}
+                            Total Amount : ₹ {order.price * order.quantity}
                           </p>
                         </div>
                       </div>
                       <div className="dataWraps">
-                        {/* Additional data wrap sections can go here */}
+
                       </div>
                       <div className="orderDateWrap">
                         <div className="orderDateLeftBox box50">
@@ -748,44 +807,61 @@ export const SubscriptionOrderCheck: React.FC = () => {
                             </svg>
                           </div>
                           <div className="innerBox">
+                            {" "}
                             <p>Order Date</p>
-                            <span>{orderData.order_date || "-"}</span>
+                            <span>{order.delivery_date || "-"}</span>
                           </div>
                         </div>
+
+
+
+
                         <div className="orderDateRightBox box50">
+                          <div className="svgWrap">
+                            {/* <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width={24}
+                              height={24}
+                            >
+                              <path d="M19,2h-1V1c0-.552-.447-1-1-1s-1,.448-1,1v1H8V1c0-.552-.447-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5ZM5,4h14c1.654,0,3,1.346,3,3v1H2v-1c0-1.654,1.346-3,3-3Zm14,18H5c-1.654,0-3-1.346-3-3V10H22v9c0,1.654-1.346,3-3,3Zm0-8c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h12c.553,0,1,.448,1,1Zm-7,4c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h5c.553,0,1,.448,1,1Z" />
+                            </svg> */}
+                          </div>
                           <div className="innerBox">
-                            <span>{orderData.order_status_name || "-"}</span>
+                            {/* <p>Delivery : </p> */}
+                            <span>{order.status_name || "-"}</span>
                           </div>
                         </div>
                       </div>
-                      <span className="subExpiredText">{orderData.order_status_name}</span>
+                      <span className="subExpiredText">
+                        {order.status}
+                      </span>
                       <div className="subscription_idWrap">
-                        <p>Order Id: #{orderData.orders_id}</p>
+                        <p>Order Id: #{order.order_id}</p>
                       </div>
 
-                      {/* Delete Icon */}
-                      <div
-                        className="delete-icon"
-                        onClick={() => handleDeleteClick(orderData)}
+
+                      <div className="delete-icon"
+                        onClick={() => handleDeleteClick(order)}
                       >
-                        {/* You can add delete functionality here */}
                       </div>
+
                     </div>
+
                   ))
                 ) : (
-                  <p>No order found.</p>
+                  <p>No order  found.</p>
                 )}
               </div>
             </div>
           </div>
         )}
 
-
         {/* Delete Confirmation Modal */}
         <Modal
           className="delete-modal"
           title="Cancel Order"
-          visible={isModalVisible}
+          open={isModalVisible}
           onOk={handleConfirmDelete}
           onCancel={handleCancelModal}
           okText="Confirm"
@@ -808,22 +884,20 @@ export const SubscriptionOrderCheck: React.FC = () => {
 
   // ****************header and Footer**************************
 
-  const renderHeader = (): JSX.Element => {
-    return (
-      <components.Header showGoBack={true} showBasket={true} />
-    );
-  };
+    const renderHeader = (): JSX.Element => {
+      return (
+        <components.Header showGoBack={true} showBasket={true} />
+      );
+    };
 
-  // const renderFooter = (): JSX.Element => {
-  //   return <components.Footer />;
-  // };
+    // const renderFooter = (): JSX.Element => {
+    //   return <components.Footer />;
+    // };
 
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
       {renderContent()}
-
-
       {/* {renderFooter()} */}
     </div>
   );

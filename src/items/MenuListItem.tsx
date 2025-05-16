@@ -133,14 +133,14 @@ export const MenuListItem: React.FC<Props> = ({
   const HandleAddToCart = async () => {
     if (!c_id) {
       Modal.confirm({
-        title: "Please Sign In",
-        content: "You need to sign in to add items to your cart.",
+        title: 'Please Sign In',
+        content: 'You need to sign in to add items to your cart.',
         onOk() {
-          navigate("/");
+          navigate('/');
         },
-        onCancel() {},
-        cancelText: "Cancel",
-        okText: "Sign In",
+        onCancel() { },
+        cancelText: 'Cancel',
+        okText: 'Sign In',
       });
       return;
     }
@@ -148,35 +148,34 @@ export const MenuListItem: React.FC<Props> = ({
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append("c_id", c_id);
-      formData.append("product_id", String(dish.product_id));
-      formData.append("package_id", "13");
-      formData.append("product_option_id", String(dish.product_option_id));
-      formData.append(
-        "product_option_value_id",
-        String(dish.product_option_value_id)
-      );
-      formData.append("quantity", "1");
-      formData.append("weight", String(dish.weight));
-      formData.append("weight_unit", String(dish.weight_unit));
-      formData.append("delivery_preference", "0");
-      formData.append("no_of_deliveries", "0");
-      formData.append("order_date", getTomorrowDate());
-      formData.append("order_type", "2");
+      formData.append('c_id', c_id);
+      formData.append('product_id', String(dish.product_id));
+      formData.append('package_id', '13');
+      formData.append('product_option_id', String(dish.product_option_id));
+      formData.append('product_option_value_id', String(dish.product_option_value_id));
+      formData.append('quantity', '1');
+      formData.append('weight', String(dish.weight));
+      formData.append('weight_unit', String(dish.weight_unit));
+      formData.append('delivery_preference', '0');
+      formData.append('no_of_deliveries', '0');
+      formData.append('order_date', getTomorrowDate());
+      formData.append('order_type', '2');
 
       const response = await axios.post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
+        'https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart',
         formData
       );
 
-      if (response.data.status === "success") {
+      if (response.data.status === 'success') {
         notification.success({
-          message: "Success",
+          message: 'Success',
           description: response.data.message,
         });
+          dispatch(setShouldRefresh(false));
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
         setQuantity(1);
+      
 
         const newCartId =
           response.data.cart_id ||
@@ -191,19 +190,19 @@ export const MenuListItem: React.FC<Props> = ({
         }
       } else {
         notification.error({
-          message: "Error",
-          description: response.data.message || "Something went wrong.",
+          message: 'Error',
+          description: response.data.message || 'Something went wrong.',
         });
+
       }
     } catch (error) {
       // console.error('Error adding to cart:', error);
       notification.error({
-        message: "Error",
-        description: "Failed to add item to cart.",
+        message: 'Error',
+        description: 'Failed to add item to cart.',
       });
     }
   };
-
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 0 || !cartItemId) return;
 

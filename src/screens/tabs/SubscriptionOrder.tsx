@@ -82,10 +82,9 @@ export const SubscriptionOrder: React.FC = () => {
     order_id: string;
     order_status_id: string;
     payment_method: string;
+    order_option_id:string;
   }
   const [orderToDelete, setOrderToDelete] = useState<orderToDelete | null>(null);
-
-  // console.log("xxxxxxxxxxxxxxxxxxxxxx", orderToDelete)
 
   interface CancelReason {
     id: number;
@@ -121,9 +120,8 @@ export const SubscriptionOrder: React.FC = () => {
     if (selectedReason && orderToDelete) {
       const formData = new FormData();
       formData.append("c_id", localStorage.getItem('c_id') || '');
-      formData.append("order_option_id", orderToDelete.order_id);
-      formData.append("order_status_id", orderToDelete.order_status_id
-      );
+      formData.append("order_option_id", orderToDelete.order_option_id);
+      formData.append("order_status_id", '5');
       formData.append("cancel_reason_id", String(selectedReason));
       // formData.append("comment", "ffffffffffff");
       formData.append("payment_method", orderToDelete.payment_method

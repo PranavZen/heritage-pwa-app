@@ -97,7 +97,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         setIsAnimating(true);
         setTimeout(() => setIsAnimating(false), 500);
         notification.success({ message: response.data.message });
-        dispatch(addToCart(dish));
         dispatch(setShouldRefresh(true));
       } else if (response.data.status === 'fail') {
         notification.error({ message: response.data.message });

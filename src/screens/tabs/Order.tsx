@@ -40,7 +40,8 @@ interface Props {
   addresses: Address[];
 }
 
-export const Order: React.FC = () => {
+// export const Order: React.FC = () => {
+const Order = () => {
   const location = useLocation();
   const couponCode = location.state?.couponCode;
 
@@ -85,7 +86,7 @@ export const Order: React.FC = () => {
     ? addresses.filter((addr) => addr.is_default !== "1")
     : [];
 
-  const [isChecked, setIsChecked] = useState(false);
+
   const [redeemedAmount, setRedeemedAmount] = useState(0);
   const [passPoints, setPassPoints] = useState(0);
   const [coinAnimating, setCoinAnimating] = useState(false);
@@ -93,7 +94,7 @@ export const Order: React.FC = () => {
 
   const [superPointCoins, SetSuperPoint] = useState<number>(0);
 
-  // console.log("superPointCoins", superPointCoins);
+  // console.log("setRedeemedAmount", redeemedAmount);
 
   const maxRedeemableAmount = Math.floor(superPointCoins / 10);
 
@@ -117,33 +118,48 @@ export const Order: React.FC = () => {
   const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
   const [isCouponAnimating, setIsCouponAnimating] = useState(false);
 
-  // console.log("extraDiscountShow", extraDiscountShow);
+  // console.log("extraDiscount", extraDiscount);
 
-  // console.log("superPointCoins", superPointCoins);
+  // console.log("extraDiscount", extraDiscount);
+  const [isChecked, setIsChecked] = useState<boolean>(() => {
+    const stored = localStorage.getItem('isChecked');
+    return stored === 'true';
+  });
+
+  //  console.log("aaaaaaaazzzzzzzz", superPoint.available_amount)
+
+
+  const shouldMount = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
+
+
+  useEffect(() => {
+    const isChecked = localStorage.getItem("isChecked") === "true";
+
+    if (isChecked) {
+      setIsChecked(true);
+
+      if (superPoint) {
+        setRedeemedAmount(superPoint.available_amount);
+        SetSuperPoint(superPoint.available_points);
+      }
+    }
+  }, [superPoint]);
 
   const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
     setIsChecked(checked);
 
-    // Trigger animations
+    localStorage.setItem("isChecked", JSON.stringify(checked));
+
     setCoinAnimating(true);
     setAmountAnimating(true);
 
-    // Reset animations after they complete
-    setTimeout(() => {
-      setCoinAnimating(false);
-    }, 600);
-
-    setTimeout(() => {
-      setAmountAnimating(false);
-    }, 500);
+    setTimeout(() => setCoinAnimating(false), 600);
+    setTimeout(() => setAmountAnimating(false), 500);
 
     if (checked) {
-      // Show the modal with animation when checked
       setShowModal(true);
-      setTimeout(() => {
-        setShowModal(false);
-      }, 2000);
+      setTimeout(() => setShowModal(false), 2000);
 
       if (superPoint) {
         setRedeemedAmount(superPoint.available_amount);
@@ -152,8 +168,12 @@ export const Order: React.FC = () => {
     } else {
       setRedeemedAmount(0);
       SetSuperPoint(0);
+      localStorage.removeItem("superPointChecked");
     }
   };
+
+
+
 
   setTimeout(() => {
     setShowModal(false);
@@ -226,10 +246,14 @@ export const Order: React.FC = () => {
           )
         );
         setExtraDiscountShow(
-          response.data.optionListing.map(
-            (elem: any) => elem.no_of_deliveries * elem.discount * elem.quantity
-          )
+          response.data.optionListing.map((elem: any) => {
+            const deliveries = Number(elem.no_of_deliveries) === 0 ? 1 : Number(elem.no_of_deliveries);
+            const discount = Number(elem.discount);
+            const quantity = Number(elem.quantity);
+            return (deliveries * discount * quantity).toString();
+          })
         );
+           setSubtotal(response.data)
       } catch (error) {
         console.error(error);
       }
@@ -288,8 +312,8 @@ export const Order: React.FC = () => {
     const formData = new FormData();
     formData.append("c_id", c_id || "");
     formData.append(
-      "addresses_id",
-      String(addressId) || selectedAddressId || ""
+      'addresses_id',
+      selectedAddressId ? String(selectedAddressId) : String(addressId || '')
     );
     formData.append("redeem_reward_points", String(superPointCoins));
 
@@ -450,7 +474,7 @@ export const Order: React.FC = () => {
       }
     };
     fetchCoupons();
-  }, [shouldRefresh]);
+  }, [shouldRefresh, shouldMount]);
 
   // *******************Super Coupons *******************************
   const { menuLoading } = hooks.useGetMenu();
@@ -521,11 +545,15 @@ export const Order: React.FC = () => {
       e.currentTarget.appendChild(ripple);
 
       // Remove the ripple and clicked class after animation completes
+      const target = e.currentTarget;
+      const rippleEl = ripple;
+
       setTimeout(() => {
-        e.currentTarget.classList.remove("clicked");
-        ripple.remove();
+        if (target) target.classList.remove("clicked");
+        if (rippleEl && rippleEl.remove) rippleEl.remove();
         setIsCouponAnimating(false);
       }, 600);
+
 
       // Navigate to coupon list on mobile
       if (window.innerWidth <= 480) {
@@ -938,10 +966,10 @@ export const Order: React.FC = () => {
                   return (
                     total +
                     elem.quantity *
-                      elem.price *
-                      (elem.no_of_deliveries === "0"
-                        ? "1"
-                        : elem.no_of_deliveries)
+                    elem.price *
+                    (elem.no_of_deliveries === "0"
+                      ? "1"
+                      : elem.no_of_deliveries)
                   );
                 }, 0)
                 .toFixed(2)}
@@ -949,12 +977,12 @@ export const Order: React.FC = () => {
           </div>
 
           <div className="row-center-space-between rowLine">
-            <span className="t14">
-              Extra Discount of {extraDiscountShow ? extraDiscountShow : "0"}{" "}
-              applied{" "}
+            <span className='t14'>
+              Extra Discount of  ₹{extraDiscountShow.reduce((acc, val) => acc + parseInt(val, 10), 0)} applied
             </span>
-
-            <span className="t14"> ₹{extraDiscountShow} </span>
+            <span className='t14'>
+              ₹{extraDiscountShow.reduce((acc, val) => acc + parseInt(val, 10), 0)}
+            </span>
           </div>
           {/******************************************************** */}
           <div className="row-center-space-between rowLine">
@@ -962,16 +990,16 @@ export const Order: React.FC = () => {
             <span className="t14">
               ₹{" "}
               {superPoint &&
-              superPoint.optionListing &&
-              superPoint.optionListing.length > 0
+                superPoint.optionListing &&
+                superPoint.optionListing.length > 0
                 ? superPoint.optionListing
-                    .map((elem: any) => {
-                      return (
-                        (elem.price - elem.discount) *
-                        elem.no_of_free_deliveries
-                      );
-                    })
-                    .reduce((acc: number, current: number) => acc + current, 0)
+                  .map((elem: any) => {
+                    return (
+                      (elem.price - elem.discount) *
+                      elem.no_of_free_deliveries
+                    );
+                  })
+                  .reduce((acc: number, current: number) => acc + current, 0)
                 : 0}
             </span>
           </div>
@@ -1066,103 +1094,109 @@ export const Order: React.FC = () => {
 
           {/* ***********************Ordereeeeeeeeeeeeeee***************** */}
 
-          <div className="row-center-space-between">
+          <div className='row-center-space-between'>
             <h4>Total</h4>
 
             {/* Case when no cart total is available */}
-            {!cartDetails?.cart_final_grand_total ? (
-              <h4>
-                ₹{" "}
-                {(
-                  totalPrice.reduce((total, elem) => {
-                    if (
-                      !elem ||
-                      isNaN(Number(elem.quantity)) ||
-                      isNaN(Number(elem.price)) ||
-                      typeof elem.no_of_deliveries === "undefined"
-                    ) {
-                      return total;
-                    }
+            {!cartDetails?.cart_final_grand_total ?
+              (
+                <h4>
+                  ₹{' '}
 
-                    const deliveryCount =
-                      elem.no_of_deliveries === "0"
-                        ? 1
-                        : Number(elem.no_of_deliveries) -
-                          (Number(elem.no_of_free_deliveries) || 0);
-
-                    const lineTotal =
-                      Number(elem.quantity) *
-                      Number(elem.price) *
-                      deliveryCount;
-
-                    return total + lineTotal - (Number(extraDiscount) || 0);
-                  }, 0) - (redeemedAmount > 0 ? redeemedAmount : 0)
-                ).toFixed(2)}
-              </h4>
-            ) : localStorage.getItem("couponCode") || redeemedAmount > 1 ? (
-              <h4>
-                ₹{" "}
-                {(() => {
-                  const cartTotal = totalPrice
-                    .reduce((total, elem) => {
-                      const deliveryCount =
-                        elem.no_of_deliveries === "0"
+                  {
+                    (
+                      totalPrice.reduce((total, elem) => {
+                        if (
+                          !elem ||
+                          isNaN(Number(elem.quantity)) ||
+                          isNaN(Number(elem.price)) ||
+                          typeof elem.no_of_deliveries === 'undefined'
+                        ) {
+                          return total;
+                        }
+                        const deliveryCount = elem.no_of_deliveries === '0'
                           ? 1
-                          : Number(elem.no_of_deliveries) -
-                            (Number(elem.no_of_free_deliveries) || 0);
-                      return total + elem.quantity * elem.price * deliveryCount;
-                    }, 0)
-                    .toFixed(2);
-
-                  // console.log("aaaaa", cartTotal);
-
-                  let discount = 0;
-
-                  if (localStorage.getItem("couponCode")) {
-                    discount = Number(cartDetails?.after_discount_total || 0);
+                          : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
+                        const lineTotal = Number(elem.quantity) * Number(elem.price) * deliveryCount;
+                        return total + lineTotal;
+                      }, 0)
+                      - extraDiscountShow.reduce((sum, val) => sum + Number(val), 0)
+                      - (Number(extraDiscount) || 0)
+                      - (redeemedAmount > 0 ? redeemedAmount : 0)
+                    ).toFixed(2)
                   }
 
-                  // console.log("bbb", discount)
+                </h4>
+              ) : localStorage.getItem('couponCode') || redeemedAmount > 1 ? (
+                <h4>
+                  {/* {cartDetails?.after_discount_total} */}
+                  ₹{' '}
+                  {(() => {
+                    const cartTotal = Subtotal.cart_grand_total
+                    //  totalPrice
+                    //   .reduce((total, elem) => {
+                    //     // console.log("aaaa", total);
+                    //     const deliveryCount = elem.no_of_deliveries === '0'
+                    //       ? 1
+                    //       : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
+                    //     return total + elem.quantity * elem.price * deliveryCount;
+                    //   }, 0)
+                    //   .toFixed(2);
+                    let discount = 0;
+                    if (localStorage.getItem('couponCode')) {
+                      discount = Number(cartDetails?.after_discount_total || 0);
+                    }
+                    const gst = Number(cartDetails?.gst_tax_total || 0);
+                    const total = (Number(cartTotal) - (Number(extraDiscount) || 0)) + gst - (redeemedAmount > 0 ? redeemedAmount : 0) - discount;
+                    return total.toLocaleString('en-IN');
+                  })()}
+                </h4>
+              ) : (
+                <h4>
+                  ₹{' '}
+                  {/* {totalPrice
+                    .reduce((total, elem) => {
+                      const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
+                      return total + elem.quantity * elem.price * deliveryCount;
+                    }, 0)
+                    .toFixed(2)} */}
+                  {
+                    (
+                      totalPrice.reduce((total, elem) => {
+                        if (
+                          !elem ||
+                          isNaN(Number(elem.quantity)) ||
+                          isNaN(Number(elem.price)) ||
+                          isNaN(Number(elem.discount)) ||
+                          typeof elem.no_of_deliveries === 'undefined'
+                        ) {
+                          return total;
+                        }
+                        const deliveryCount = elem.no_of_deliveries === '0'
+                          ? 1
+                          : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
+                        const lineTotal = Number(elem.quantity) * Number(elem.price) * deliveryCount;
+                        return total + lineTotal;
+                      }, 0)
+                      - totalPrice.reduce((discountTotal, elem) => {
+                        if (
+                          !elem ||
+                          isNaN(Number(elem.discount)) ||
+                          isNaN(Number(elem.quantity))
+                        ) {
+                          return discountTotal;
+                        }
+                        return discountTotal + (Number(elem.discount) * Number(elem.quantity));
+                      }, 0)
+                      - (Number(extraDiscount) || 0)
+                      - (redeemedAmount > 0 ? redeemedAmount : 0)
+                    ).toFixed(2)
+                  }
 
-                  const gst = Number(cartDetails?.gst_tax_total || 0);
-
-                  // console.log("cccc", gst);
-
-                  // Calculate total deliveries (not used directly)
-                  deliveries.reduce(
-                    (total, currentValue) => total + Number(currentValue),
-                    0
-                  );
-
-                  // console.log("ddddd", deliveryMultiplier)
-
-                  // const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
-                  const total =
-                    Number(cartTotal) -
-                    discount -
-                    (Number(extraDiscount) || 0) +
-                    gst -
-                    (redeemedAmount > 0 ? redeemedAmount : 0);
-
-                  // console.log("bbbb", total);
-                  return total.toLocaleString("en-IN");
-                })()}
-              </h4>
-            ) : (
-              <h4>
-                ₹{" "}
-                {totalPrice
-                  .reduce((total, elem) => {
-                    const deliveryCount =
-                      elem.no_of_deliveries === "0"
-                        ? 1
-                        : Number(elem.no_of_deliveries);
-                    return total + elem.quantity * elem.price * deliveryCount;
-                  }, 0)
-                  .toFixed(2)}
-              </h4>
-            )}
+                </h4>
+              )}
           </div>
+
         </section>
       </>
     );
@@ -1203,4 +1237,5 @@ export const Order: React.FC = () => {
       )}
     </div>
   );
-};
+}
+export default Order;
