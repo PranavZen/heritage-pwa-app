@@ -101,6 +101,29 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 }
 
+@keyframes coinRotate {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+@keyframes coinShine {
+  0% {
+    opacity: 0.2;
+    left: -100%;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.2;
+    left: 100%;
+  }
+}
+
 // Order Page Container
 .order-container {
   padding: 20px 15px;
@@ -161,22 +184,6 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       .label {
         font-size: 12px;
       }
-    }
-  }
-}
-
-// Order Content Layout
-.order-content {
-  .order-main-section {
-    margin-bottom: 20px;
-  }
-
-  .order-bottom-section {
-    @media (min-width: 992px) {
-      display: grid;
-      grid-template-columns: 1fr 350px;
-      grid-gap: 20px;
-      align-items: start;
     }
   }
 }
@@ -282,7 +289,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 15px;
   transition: all 0.3s ease;
   animation: slideUp 0.6s ease, couponPulse 2s infinite;
@@ -293,11 +300,26 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
     margin-bottom: 20px;
   }
 
-  @media (max-width: 480px) {
-    padding: 15px 12px;
-    border-width: 2px;
-    flex-direction: column;
+  @media (max-width: 767px) {
+    padding: 15px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "icon header remove"
+      "icon discount remove";
     align-items: center;
+    gap: 10px;
+    border-width: 2px;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "icon header remove"
+      "discount discount discount";
   }
 
   // Shine effect
@@ -332,8 +354,17 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
     }
 
     .coupon-icon {
-      transform: rotate(10deg);
       color: $primary-color;
+
+      .coupon-svg {
+        transform: scale(1.2) rotate(10deg);
+        stroke-width: 2.5;
+      }
+
+      .coupon-icon-bg {
+        transform: translate(-50%, -50%) scale(1.3);
+        background-color: rgba($primary-color, 0.2);
+      }
     }
 
     @media (max-width: 480px) {
@@ -373,36 +404,92 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
     flex-shrink: 0;
     position: relative;
     z-index: 2;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    svg {
-      width: 32px;
-      height: 32px;
+    .coupon-svg {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+      animation: iconPulse 2s infinite;
 
       @media (min-width: 768px) {
-        width: 40px;
-        height: 40px;
+        width: 22px;
+        height: 22px;
       }
 
       @media (max-width: 480px) {
-        width: 36px;
-        height: 36px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .coupon-icon-bg {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      background-color: rgba($accent-color, 0.15);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 0 rgba($accent-color, 0.4);
+      animation: bgPulse 2s infinite;
+
+      @media (min-width: 768px) {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &:hover {
+      .coupon-svg {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      .coupon-icon-bg {
+        transform: translate(-50%, -50%) scale(1.2);
+        background-color: rgba($accent-color, 0.25);
+      }
+    }
+
+    @media (max-width: 767px) {
+      grid-area: icon;
+      margin: 0;
+      width: 32px;
+      height: 32px;
+
+      .coupon-svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .coupon-icon-bg {
+        width: 32px;
+        height: 32px;
       }
     }
 
     @media (max-width: 480px) {
-      margin-bottom: 10px;
+      width: 28px;
+      height: 28px;
 
-      &::after {
-        content: '';
-        position: absolute;
-        width: 50px;
-        height: 50px;
-        background-color: rgba($accent-color, 0.1);
-        border-radius: 50%;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: -1;
+      .coupon-svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .coupon-icon-bg {
+        width: 28px;
+        height: 28px;
       }
     }
   }
@@ -412,27 +499,41 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
     position: relative;
     z-index: 2;
 
+    @media (max-width: 767px) {
+      display: contents;
+    }
+
     .coupon-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
       flex-wrap: wrap;
-      gap: 8px;
+      margin-bottom: 15px;
+
+      @media (max-width: 767px) {
+        grid-area: header;
+        margin-bottom: 0;
+      }
 
       h3 {
         margin: 0;
         font-size: 16px;
         color: $text-dark;
+        font-weight: 600;
 
         @media (min-width: 768px) {
           font-size: 18px;
         }
 
+        @media (max-width: 767px) {
+          font-size: 15px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
         @media (max-width: 480px) {
-          font-size: 16px;
-          width: 100%;
-          text-align: center;
+          font-size: 14px;
         }
       }
 
@@ -460,13 +561,23 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 
     .discount-text {
       font-weight: 600;
-      color: $primary-color;
-      margin-bottom: 8px;
-      font-size: 16px;
+      color: #1a712e;
+      margin-bottom: 0;
+      font-size: 12px;
+
+      @media (max-width: 767px) {
+        grid-area: discount;
+        font-size: 13px;
+        margin-top: 5px;
+        padding: 5px 8px;
+        background-color: rgba($primary-color, 0.05);
+        border-radius: 20px;
+        text-align: center;
+      }
 
       @media (max-width: 480px) {
-        text-align: center;
-        font-size: 15px;
+        font-size: 12px;
+        padding: 4px 6px;
       }
 
       span {
@@ -517,15 +628,31 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       gap: 8px;
       transition: all 0.3s ease;
 
-      @media (max-width: 480px) {
-        justify-content: center;
-        margin-top: 5px;
-        padding: 8px 0;
-        border-radius: 20px;
-        background-color: rgba($primary-color, 0.05);
+      @media (max-width: 767px) {
+        font-size: 13px;
 
-        &:active {
+        span {
+          display: none;
+        }
+
+        svg {
+          width: 18px;
+          height: 18px;
           background-color: rgba($primary-color, 0.1);
+          padding: 3px;
+          border-radius: 50%;
+          stroke-width: 2.5;
+        }
+
+        &:active svg {
+          background-color: rgba($primary-color, 0.2);
+        }
+      }
+
+      @media (max-width: 480px) {
+        svg {
+          width: 16px;
+          height: 16px;
         }
       }
 
@@ -548,22 +675,22 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 
   .removeCoupon {
-    background-color: $light-bg;
-    color: $error-color;
-    border: 1px solid $error-color;
-    border-radius: 20px;
-    padding: 6px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
-    gap: 5px;
-    position: relative;
-    z-index: 2;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
     svg {
       transition: transform 0.3s ease;
+      width: 14px;
+      height: 14px;
     }
 
     &:hover {
@@ -579,84 +706,147 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       transform: scale(0.95);
     }
 
-    @media (max-width: 480px) {
-      align-self: center;
-      margin-top: 15px;
-      padding: 8px 15px;
-      border-radius: 25px;
-      box-shadow: $shadow-sm;
+    @media (max-width: 767px) {
+      grid-area: remove;
+      width: 22px;
+      height: 22px;
 
-      span {
-        font-weight: 500;
+      svg {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      width: 20px;
+      height: 20px;
+
+      svg {
+        width: 10px;
+        height: 10px;
       }
     }
   }
 
-  // Responsive layout adjustments
-  @media (max-width: 480px) {
-    // Already set flex-direction: column in the base styles
+  // Touch feedback for mobile
+  @media (max-width: 767px) {
+    &:active {
+      background-color: rgba($primary-light, 0.5);
+    }
 
+    // Add subtle pattern for visual interest
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at center, rgba($primary-light, 0.3) 0%, transparent 70%);
-      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231a712e' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3Ccircle cx='13' cy='13' r='1'/%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+      z-index: 0;
       pointer-events: none;
-    }
-  }
-
-  // Tablet specific adjustments
-  @media (min-width: 481px) and (max-width: 768px) {
-    align-items: center;
-
-    .coupon-details {
-      .coupon-header {
-        h3 {
-          font-size: 16px;
-        }
-      }
-
-      .discount-text {
-        font-size: 15px;
-      }
+      border-radius: 10px;
     }
 
-    .removeCoupon {
-      padding: 5px 10px;
-      font-size: 13px;
+    // Add subtle highlight effect
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+      pointer-events: none;
+      z-index: 0;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
     }
   }
 }
 
 // Coupon animations
 @keyframes couponPulse {
-  0%, 100% { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
-  50% { box-shadow: 0 4px 12px rgba($accent-color, 0.2); }
+  0%,
+  100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba($accent-color, 0.2);
+  }
 }
 
 @keyframes couponClick {
-  0% { transform: scale(1); }
-  50% { transform: scale(0.98); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes ripple {
-  0% { transform: scale(0); opacity: 1; }
-  100% { transform: scale(3); opacity: 0; }
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
 }
 
 @keyframes couponActivate {
-  0% { transform: scale(1); }
-  10% { transform: scale(1.02); }
-  20% { transform: scale(0.98); }
-  30% { transform: scale(1.01); }
-  40% { transform: scale(0.99); }
-  50% { transform: scale(1); box-shadow: 0 0 15px rgba($accent-color, 0.5); }
-  100% { transform: scale(1); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.02);
+  }
+  20% {
+    transform: scale(0.98);
+  }
+  30% {
+    transform: scale(1.01);
+  }
+  40% {
+    transform: scale(0.99);
+  }
+  50% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba($accent-color, 0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes bgPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($accent-color, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba($accent-color, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($accent-color, 0);
+  }
 }
 
 // Summary Section
@@ -703,10 +893,6 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       padding-bottom: 0;
       border-bottom: none;
     }
-
-    &.rowLine {
-      border-bottom: 1px dashed $border-color;
-    }
   }
 
   .t14 {
@@ -728,286 +914,323 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       font-size: 20px;
     }
   }
+}
 
-  // Super Coins Row
-  .super-coins-row {
-    margin: 15px 0;
-    padding: 12px 15px;
-    background-color: rgba($primary-light, 0.5);
-    border-radius: 12px;
-    border: 1px dashed $accent-color;
+// Super Coins Row
+.super-coins-row {
+  margin: 15px 0;
+  padding: 12px 15px;
+  background-color: #ffc1074a;
+  border-radius: 12px;
+  // border: 1px dashed $accent-color;
+  position: relative;
+  overflow: hidden;
+}
+
+// Super Coins Checkbox
+.super-coins-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  // Custom Coin Checkbox
+  .custom-coin-checkbox {
     position: relative;
-    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 5px;
 
-    &::before {
-      content: '';
+    input[type="checkbox"] {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, transparent, rgba($accent-color, 0.1), transparent);
-      background-size: 200% 100%;
-      animation: shimmer 3s infinite;
-      opacity: 0.5;
-      pointer-events: none;
-    }
-  }
-
-  // Super Coins Checkbox
-  .super-coins-wrapper {
-    display: flex;
-    align-items: center;
-    position: relative;
-
-    // Custom Coin Checkbox
-    .custom-coin-checkbox {
-      position: relative;
-      display: inline-block;
+      opacity: 0;
       cursor: pointer;
-      margin-right: 12px;
+      height: 0;
+      width: 0;
 
-      input[type="checkbox"] {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-
-        &:checked ~ .checkbox-design {
-          .coin-face {
-            transform: rotateY(180deg);
-            box-shadow: 0 0 15px rgba($accent-color, 0.7);
-          }
-
-          .checkbox-ripple {
-            transform: scale(1.5);
-            opacity: 0;
-          }
-
-          .checkbox-rays {
-            opacity: 1;
-
-            .ray {
-              transform-origin: center;
-              animation: rayAnimation 1s ease-out;
-            }
-
-            @for $i from 1 through 8 {
-              .ray:nth-child(#{$i}) {
-                animation-delay: $i * 0.05s;
-              }
-            }
-          }
-        }
-      }
-
-      .checkbox-design {
-        position: relative;
-        width: 28px;
-        height: 28px;
-
+      &:checked ~ .checkbox-design {
         .coin-face {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: linear-gradient(145deg, $accent-color, darken($accent-color, 15%));
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          transform-style: preserve-3d;
-          backface-visibility: hidden;
-          z-index: 2;
-
-          .coin-inner {
-            width: 85%;
-            height: 85%;
-            border-radius: 50%;
-            background: $accent-color;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .coin-icon-svg {
-              width: 80%;
-              height: 80%;
-
-              .coin-circle {
-                fill: $accent-color;
-                stroke: $white;
-                stroke-width: 1;
-              }
-
-              .coin-symbol {
-                fill: none;
-                stroke: $white;
-                stroke-width: 2;
-                stroke-linecap: round;
-                stroke-linejoin: round;
-              }
-            }
-          }
-
-          .coin-shine {
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 200%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transform: rotate(25deg);
-            animation: coinShine 2s infinite;
-            pointer-events: none;
-          }
+          transform: rotateY(180deg);
+          box-shadow: 0 0 15px rgba($accent-color, 0.7);
         }
 
         .checkbox-ripple {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%) scale(0);
-          width: 100%;
-          height: 100%;
-          background-color: rgba($accent-color, 0.3);
-          border-radius: 50%;
-          z-index: 1;
-          opacity: 1;
-          transition: all 0.5s ease-out;
+          transform: scale(1.5);
+          opacity: 0;
         }
 
         .checkbox-rays {
+          opacity: 1;
+
+          .ray {
+            transform-origin: center;
+            animation: rayAnimation 1s ease-out;
+          }
+
+          @for $i from 1 through 8 {
+            .ray:nth-child(#{$i}) {
+              animation-delay: $i * 0.05s;
+            }
+          }
+        }
+      }
+    }
+
+    .checkbox-design {
+      position: relative;
+      width: 28px;
+      height: 28px;
+
+      .coin-face {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: linear-gradient(
+          145deg,
+          $accent-color,
+          darken($accent-color, 15%)
+        );
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        z-index: 2;
+
+        .coin-inner {
+          width: 85%;
+          height: 85%;
+          border-radius: 50%;
+          background: $accent-color;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .coin-icon-svg {
+            width: 80%;
+            height: 80%;
+
+            .coin-circle {
+              fill: $accent-color;
+              stroke: $white;
+              stroke-width: 1;
+            }
+
+            .coin-symbol {
+              fill: none;
+              stroke: $white;
+              stroke-width: 2;
+              stroke-linecap: round;
+              stroke-linejoin: round;
+            }
+          }
+        }
+
+        .coin-shine {
+          position: absolute;
+          top: 0;
+          left: -50%;
+          width: 200%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+          );
+          transform: rotate(25deg);
+          animation: coinShine 2s infinite;
+          pointer-events: none;
+        }
+      }
+
+      .checkbox-ripple {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 100%;
+        height: 100%;
+        background-color: rgba($accent-color, 0.3);
+        border-radius: 50%;
+        z-index: 1;
+        opacity: 1;
+        transition: all 0.5s ease-out;
+      }
+
+      .checkbox-rays {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+
+        .ray {
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, -50%);
-          width: 100%;
-          height: 100%;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-
-          .ray {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 2px;
-            height: 0;
-            background-color: rgba($accent-color, 0.7);
-            transform-origin: bottom center;
-          }
-        }
-      }
-    }
-
-    .super-coins-text {
-      display: flex;
-      flex-direction: column;
-
-      .super-coins-label {
-        font-weight: 600;
-        color: $primary-color;
-        margin-bottom: 2px;
-      }
-
-      .coins-value {
-        display: flex;
-        align-items: center;
-
-        .coins-amount {
-          font-weight: 700;
-          color: $accent-color;
-          font-size: 16px;
-
-          &::before {
-            content: '(';
-            margin-right: 2px;
-            color: $white;
-          }
-
-          &::after {
-            content: ' coins)';
-            margin-left: 2px;
-            color: $white;
-            font-weight: normal;
-            font-size: 14px;
-          }
+          width: 2px;
+          height: 0;
+          background-color: rgba($accent-color, 0.7);
+          transform-origin: bottom center;
         }
       }
     }
   }
 
-  // Coins Redemption
-  .coins-redemption {
+  .super-coins-text {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
 
-    .redemption-amount {
-      font-weight: 700;
+    .super-coins-label {
+      font-weight: 600;
       color: $primary-color;
-      font-size: 18px;
+      margin-bottom: 2px;
     }
 
-    .redemption-label {
-      font-size: 12px;
-      color: $white;
-    }
-  }
+    .coins-value {
+      display: flex;
+      align-items: center;
 
-  @keyframes coinShine {
-    0% { transform: translateX(-100%) rotate(25deg); }
-    50% { transform: translateX(100%) rotate(25deg); }
-    100% { transform: translateX(-100%) rotate(25deg); }
-  }
-
-  @keyframes rayAnimation {
-    0% { height: 0; opacity: 1; }
-    50% { height: 20px; opacity: 0.8; }
-    100% { height: 0; opacity: 0; }
-  }
-
-  @keyframes coinSpin {
-    0% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.5) rotate(180deg); }
-    100% { transform: scale(1) rotate(360deg); }
-  }
-
-  @keyframes coinPulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  .coins-value {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-
-    &.animate {
       .coins-amount {
-        animation: numberChange 0.5s ease;
+        font-weight: 700;
+        color: $accent-color;
+        font-size: 16px;
+
+        &::before {
+          content: "(";
+          margin-right: 2px;
+          color: $white;
+        }
+
+        &::after {
+          content: " coins)";
+          margin-left: 2px;
+          color: $white;
+          font-weight: normal;
+          font-size: 14px;
+        }
       }
     }
   }
+}
 
-  @keyframes numberChange {
-    0% { transform: translateY(0); opacity: 1; }
-    50% { transform: translateY(-10px); opacity: 0; }
-    51% { transform: translateY(10px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
+// Coins Redemption
+.coins-redemption {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .redemption-amount {
+    font-weight: 700;
+    color: $primary-color;
+    font-size: 18px;
   }
 
-  // Regular checkbox
-  input[type="checkbox"] {
-    accent-color: $primary-color;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
+  .redemption-label {
+    font-size: 12px;
+    color: #1a712e;
   }
+}
+
+@keyframes coinShine {
+  0% {
+    transform: translateX(-100%) rotate(25deg);
+  }
+  50% {
+    transform: translateX(100%) rotate(25deg);
+  }
+  100% {
+    transform: translateX(-100%) rotate(25deg);
+  }
+}
+
+@keyframes rayAnimation {
+  0% {
+    height: 0;
+    opacity: 1;
+  }
+  50% {
+    height: 20px;
+    opacity: 0.8;
+  }
+  100% {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes coinSpin {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.5) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+@keyframes coinPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.coins-value {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  &.animate {
+    .coins-amount {
+      animation: numberChange 0.5s ease;
+    }
+  }
+}
+
+@keyframes numberChange {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  51% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Regular checkbox
+input[type="checkbox"] {
+  accent-color: $primary-color;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
 }
 
 // Address Section
@@ -1308,11 +1531,131 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes floatAnimation {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes pulseText {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+// Silver Coin Styles
+.silver-coin {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  perspective: 1000px;
+  display: inline-block;
+  vertical-align: middle;
+
+  .coin-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: coinRotate 3s infinite linear;
+  }
+
+  .coin-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #e6e6e6, #c0c0c0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: skewX(-20deg);
+      animation: coinShine 2s infinite;
+    }
+
+    svg {
+      width: 60%;
+      height: 60%;
+      z-index: 2;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+  }
+
+  .coin-edge {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translateZ(-2px);
+    border-radius: 50%;
+    background: #a0a0a0;
+    transition: background 0.3s ease;
+  }
+}
+
+// Super Coins Checkbox with Silver Coin
+.custom-coin-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+
+  input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+
+    &:checked + .silver-coin {
+      .coin-face {
+        background: linear-gradient(145deg, #d4e6d7, #a3c9a9);
+        box-shadow: 0 2px 8px rgba(26, 113, 46, 0.3);
+
+        &::after {
+          background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.9) 50%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          animation: coinShine 1.5s infinite;
+        }
+
+        svg {
+          color: #1a712e;
+          transform: scale(1.1);
+        }
+      }
+
+      .coin-inner {
+        animation: coinRotate 2s infinite linear;
+      }
+
+      .coin-edge {
+        background: #8ab891;
+      }
+    }
+  }
 }

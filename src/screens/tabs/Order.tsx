@@ -40,7 +40,8 @@ interface Props {
   addresses: Address[];
 }
 
-export const Order: React.FC = () => {
+// export const Order: React.FC = () => {
+const Order = () => {
   const location = useLocation();
   const couponCode = location.state?.couponCode;
 
@@ -85,7 +86,6 @@ export const Order: React.FC = () => {
     ? addresses.filter((addr) => addr.is_default !== "1")
     : [];
 
-  const [isChecked, setIsChecked] = useState(false);
   const [redeemedAmount, setRedeemedAmount] = useState(0);
   const [passPoints, setPassPoints] = useState(0);
   const [coinAnimating, setCoinAnimating] = useState(false);
@@ -93,7 +93,7 @@ export const Order: React.FC = () => {
 
   const [superPointCoins, SetSuperPoint] = useState<number>(0);
 
-  // console.log("superPointCoins", superPointCoins);
+  // console.log("setRedeemedAmount", redeemedAmount);
 
   const maxRedeemableAmount = Math.floor(superPointCoins / 10);
 
@@ -117,33 +117,48 @@ export const Order: React.FC = () => {
   const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
   const [isCouponAnimating, setIsCouponAnimating] = useState(false);
 
-  // console.log("extraDiscountShow", extraDiscountShow);
+  // console.log("extraDiscount", extraDiscount);
 
-  // console.log("superPointCoins", superPointCoins);
+  // console.log("extraDiscount", extraDiscount);
+  const [isChecked, setIsChecked] = useState<boolean>(() => {
+    const stored = localStorage.getItem("isChecked");
+    return stored === "true";
+  });
+
+  //  console.log("aaaaaaaazzzzzzzz", superPoint.available_amount)
+
+  const shouldMount = useSelector(
+    (state: RootState) => state.cartSlice.shouldRefresh
+  );
+
+  useEffect(() => {
+    const isChecked = localStorage.getItem("isChecked") === "true";
+
+    if (isChecked) {
+      setIsChecked(true);
+
+      if (superPoint) {
+        setRedeemedAmount(superPoint.available_amount);
+        SetSuperPoint(superPoint.available_points);
+      }
+    }
+  }, [superPoint]);
 
   const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
     setIsChecked(checked);
 
-    // Trigger animations
+    localStorage.setItem("isChecked", JSON.stringify(checked));
+
     setCoinAnimating(true);
     setAmountAnimating(true);
 
-    // Reset animations after they complete
-    setTimeout(() => {
-      setCoinAnimating(false);
-    }, 600);
-
-    setTimeout(() => {
-      setAmountAnimating(false);
-    }, 500);
+    setTimeout(() => setCoinAnimating(false), 600);
+    setTimeout(() => setAmountAnimating(false), 500);
 
     if (checked) {
-      // Show the modal with animation when checked
       setShowModal(true);
-      setTimeout(() => {
-        setShowModal(false);
-      }, 2000);
+      setTimeout(() => setShowModal(false), 2000);
 
       if (superPoint) {
         setRedeemedAmount(superPoint.available_amount);
@@ -152,6 +167,7 @@ export const Order: React.FC = () => {
     } else {
       setRedeemedAmount(0);
       SetSuperPoint(0);
+      localStorage.removeItem("superPointChecked");
     }
   };
 
@@ -226,10 +242,17 @@ export const Order: React.FC = () => {
           )
         );
         setExtraDiscountShow(
-          response.data.optionListing.map(
-            (elem: any) => elem.no_of_deliveries * elem.discount * elem.quantity
-          )
+          response.data.optionListing.map((elem: any) => {
+            const deliveries =
+              Number(elem.no_of_deliveries) === 0
+                ? 1
+                : Number(elem.no_of_deliveries);
+            const discount = Number(elem.discount);
+            const quantity = Number(elem.quantity);
+            return (deliveries * discount * quantity).toString();
+          })
         );
+        setSubtotal(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -289,7 +312,7 @@ export const Order: React.FC = () => {
     formData.append("c_id", c_id || "");
     formData.append(
       "addresses_id",
-      String(addressId) || selectedAddressId || ""
+      selectedAddressId ? String(selectedAddressId) : String(addressId || "")
     );
     formData.append("redeem_reward_points", String(superPointCoins));
 
@@ -450,7 +473,7 @@ export const Order: React.FC = () => {
       }
     };
     fetchCoupons();
-  }, [shouldRefresh]);
+  }, [shouldRefresh, shouldMount]);
 
   // *******************Super Coupons *******************************
   const { menuLoading } = hooks.useGetMenu();
@@ -495,8 +518,8 @@ export const Order: React.FC = () => {
     const handleCouponClick = (e: React.MouseEvent<HTMLDivElement>) => {
       // Prevent triggering if we're clicking on a child interactive element
       if (
-        (e.target as HTMLElement).closest('.view-cart') ||
-        (e.target as HTMLElement).closest('.removeCoupon')
+        (e.target as HTMLElement).closest(".view-cart") ||
+        (e.target as HTMLElement).closest(".removeCoupon")
       ) {
         return;
       }
@@ -521,20 +544,24 @@ export const Order: React.FC = () => {
       e.currentTarget.appendChild(ripple);
 
       // Remove the ripple and clicked class after animation completes
+      const target = e.currentTarget;
+      const rippleEl = ripple;
+
       setTimeout(() => {
-        e.currentTarget.classList.remove("clicked");
-        ripple.remove();
+        if (target) target.classList.remove("clicked");
+        if (rippleEl && rippleEl.remove) rippleEl.remove();
         setIsCouponAnimating(false);
       }, 600);
 
       // Navigate to coupon list on mobile
-      if (window.innerWidth <= 480) {
+      if (window.innerWidth <= 767) {
         handleCoupon();
       }
     };
 
     // Determine if we should show "Apply Coupon" or "View All Coupons"
-    const couponButtonText = window.innerWidth <= 480 ? "Apply Coupon" : "View All Coupons";
+    const couponButtonText =
+      window.innerWidth <= 767 ? "Apply" : "View All Coupons";
 
     // Format discount amount for better display
     const formatDiscount = (discount: string) => {
@@ -547,7 +574,7 @@ export const Order: React.FC = () => {
 
     return (
       <div
-        className={`couponApplied-main ${isCouponAnimating ? 'animating' : ''}`}
+        className={`couponApplied-main ${isCouponAnimating ? "animating" : ""}`}
         onMouseEnter={(e) => e.currentTarget.classList.add("hovered")}
         onMouseLeave={(e) => e.currentTarget.classList.remove("hovered")}
         onClick={handleCouponClick}
@@ -557,37 +584,26 @@ export const Order: React.FC = () => {
         <div className="coupon-icon" aria-hidden="true">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="coupon-svg"
           >
-            <path d="M22 8.5V14a2 2 0 0 1-2 2h-7.5"></path>
-            <path d="M2 8.5V14a2 2 0 0 0 2 2h3.5"></path>
-            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-            <path d="M18 6V4"></path>
-            <path d="M6 6V4"></path>
-            <path d="M10 15h4"></path>
+            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+            <path d="m9 12 2 2 4-4" />
           </svg>
+          <div className="coupon-icon-bg"></div>
         </div>
         <div className="coupon-details">
           <div className="coupon-header">
             <h3>{codeCoupon ? "Applied Coupon" : "Discount Coupon"}</h3>
-            {codeCoupon && <span className="coupon-code">{codeCoupon}</span>}
-          </div>
-          {cleanedDiscount && (
-            <>
-              <p className="discount-text">
-                <span>{formatDiscount(cleanedDiscount)}</span>
-              </p>
-              <hr className="divider" />
-            </>
-          )}
-          <div
+            {/* {codeCoupon && <span className="coupon-code">{codeCoupon}</span>} */}
+             <div
             className="view-cart"
             onClick={(e) => {
               e.stopPropagation();
@@ -612,6 +628,16 @@ export const Order: React.FC = () => {
               <path d="M9 18l6-6-6-6"></path>
             </svg>
           </div>
+          </div>
+          {cleanedDiscount && (
+            <>
+              <p className="discount-text">
+                <span>{formatDiscount(cleanedDiscount)}</span>
+              </p>
+              {/* <hr className="divider" /> */}
+            </>
+          )}
+
         </div>
         {codeCoupon && (
           <div
@@ -638,7 +664,6 @@ export const Order: React.FC = () => {
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
-            <span>Remove</span>
           </div>
         )}
         <div className="coupon-shine" aria-hidden="true"></div>
@@ -800,15 +825,11 @@ export const Order: React.FC = () => {
             </div>
             <div className="order-content">
               <div className="order-main-section">
+                {AddressWithButton()}
                 {renderDishes()}
                 {couponApplied()}
-              </div>
-              <div className="order-bottom-section">
-                <div className="order-left-column">{AddressWithButton()}</div>
-                <div className="order-right-column">
-                  {renderSummary()}
-                  {renderButton()}
-                </div>
+                {renderSummary()}
+                {renderButton()}
               </div>
             </div>
           </>
@@ -950,11 +971,20 @@ export const Order: React.FC = () => {
 
           <div className="row-center-space-between rowLine">
             <span className="t14">
-              Extra Discount of {extraDiscountShow ? extraDiscountShow : "0"}{" "}
-              applied{" "}
+              Extra Discount of ₹
+              {extraDiscountShow.reduce(
+                (acc, val) => acc + parseInt(val, 10),
+                0
+              )}{" "}
+              applied
             </span>
-
-            <span className="t14"> ₹{extraDiscountShow} </span>
+            <span className="t14">
+              ₹
+              {extraDiscountShow.reduce(
+                (acc, val) => acc + parseInt(val, 10),
+                0
+              )}
+            </span>
           </div>
           {/******************************************************** */}
           <div className="row-center-space-between rowLine">
@@ -1023,41 +1053,64 @@ export const Order: React.FC = () => {
                   checked={isChecked}
                   onChange={handleCheckboxChange}
                 />
-                <div className="checkbox-design">
-                  <div className="coin-face">
-                    <div className="coin-inner">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="coin-icon-svg">
-                        <circle cx="12" cy="12" r="10" className="coin-circle"></circle>
-                        <path d="M12 6v12M8 12h8" className="coin-symbol"></path>
-                      </svg>
+                <div className="silver-coin">
+                  <div className="coin-inner">
+                    <div className="coin-face">
+                      {isChecked ? (
+                        // Applied coin SVG - checkmark icon
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" />
+                          <path
+                            d="M7 13l3 3 7-7"
+                            strokeWidth="2"
+                            stroke="#1a712e"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      ) : (
+                        // Default coin SVG - plus icon
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" />
+                          <path d="M12 6v12M8 12h8" />
+                        </svg>
+                      )}
                     </div>
-                    <div className="coin-shine"></div>
-                  </div>
-                  <div className="checkbox-ripple"></div>
-                  <div className="checkbox-rays">
-                    {[...Array(8)].map((_, i) => (
-                      <div key={i} className="ray" style={{ transform: `rotate(${i * 45}deg)` }}></div>
-                    ))}
+                    <div className="coin-edge"></div>
                   </div>
                 </div>
-              </label>
-              <div className="super-coins-text">
-                <span className="t14 super-coins-label">
+                <span
+                  className="t14 super-coins-label"
+                  style={{ color: "#1a712e" }}
+                >
                   Super Coins
                 </span>
-                <div className={`coins-value ${amountAnimating ? 'animate' : ''}`}>
-                  <span className="t14 coins-amount">
-                    {superPoint?.available_points ? (
-                      <>{superPoint?.available_points}</>
-                    ) : (
-                      <>0</>
-                    )}
-                  </span>
-                </div>
+              </label>
+              <div
+                className={`coins-value ${amountAnimating ? "animate" : ""}`}
+              >
+                <span className="t14 coins-amount" style={{ color: "#1a712e" }}>
+                  {superPoint?.available_points ? (
+                    <>({superPoint?.available_points})</>
+                  ) : (
+                    <>(0)</>
+                  )}
+                </span>
               </div>
             </div>
             <div className="coins-redemption">
-              <span className={`t14 redemption-amount ${amountAnimating ? 'animate' : ''}`}>
+              <span
+                className={`t14 redemption-amount ${
+                  amountAnimating ? "animate" : ""
+                }`}
+              >
                 ₹{redeemedAmount ? <>{redeemedAmount}</> : <>0</>}
               </span>
               <span className="redemption-label">savings</span>
@@ -1083,83 +1136,97 @@ export const Order: React.FC = () => {
                     ) {
                       return total;
                     }
-
                     const deliveryCount =
                       elem.no_of_deliveries === "0"
                         ? 1
                         : Number(elem.no_of_deliveries) -
                           (Number(elem.no_of_free_deliveries) || 0);
-
                     const lineTotal =
                       Number(elem.quantity) *
                       Number(elem.price) *
                       deliveryCount;
-
-                    return total + lineTotal - (Number(extraDiscount) || 0);
-                  }, 0) - (redeemedAmount > 0 ? redeemedAmount : 0)
+                    return total + lineTotal;
+                  }, 0) -
+                  extraDiscountShow.reduce((sum, val) => sum + Number(val), 0) -
+                  (Number(extraDiscount) || 0) -
+                  (redeemedAmount > 0 ? redeemedAmount : 0)
                 ).toFixed(2)}
               </h4>
             ) : localStorage.getItem("couponCode") || redeemedAmount > 1 ? (
               <h4>
-                ₹{" "}
+                {/* {cartDetails?.after_discount_total} */}₹{" "}
                 {(() => {
-                  const cartTotal = totalPrice
-                    .reduce((total, elem) => {
-                      const deliveryCount =
-                        elem.no_of_deliveries === "0"
-                          ? 1
-                          : Number(elem.no_of_deliveries) -
-                            (Number(elem.no_of_free_deliveries) || 0);
-                      return total + elem.quantity * elem.price * deliveryCount;
-                    }, 0)
-                    .toFixed(2);
-
-                  // console.log("aaaaa", cartTotal);
-
+                  const cartTotal = Subtotal.cart_grand_total;
+                  //  totalPrice
+                  //   .reduce((total, elem) => {
+                  //     // console.log("aaaa", total);
+                  //     const deliveryCount = elem.no_of_deliveries === '0'
+                  //       ? 1
+                  //       : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
+                  //     return total + elem.quantity * elem.price * deliveryCount;
+                  //   }, 0)
+                  //   .toFixed(2);
                   let discount = 0;
-
                   if (localStorage.getItem("couponCode")) {
                     discount = Number(cartDetails?.after_discount_total || 0);
                   }
-
-                  // console.log("bbb", discount)
-
                   const gst = Number(cartDetails?.gst_tax_total || 0);
-
-                  // console.log("cccc", gst);
-
-                  // Calculate total deliveries (not used directly)
-                  deliveries.reduce(
-                    (total, currentValue) => total + Number(currentValue),
-                    0
-                  );
-
-                  // console.log("ddddd", deliveryMultiplier)
-
-                  // const total = (Number(cartTotal) - discount) + gst - (redeemedAmount > 0 ? redeemedAmount : 0);
                   const total =
                     Number(cartTotal) -
-                    discount -
                     (Number(extraDiscount) || 0) +
                     gst -
-                    (redeemedAmount > 0 ? redeemedAmount : 0);
-
-                  // console.log("bbbb", total);
+                    (redeemedAmount > 0 ? redeemedAmount : 0) -
+                    discount;
                   return total.toLocaleString("en-IN");
                 })()}
               </h4>
             ) : (
               <h4>
                 ₹{" "}
-                {totalPrice
-                  .reduce((total, elem) => {
+                {/* {totalPrice
+                    .reduce((total, elem) => {
+                      const deliveryCount = elem.no_of_deliveries === '0' ? 1 : Number(elem.no_of_deliveries);
+                      return total + elem.quantity * elem.price * deliveryCount;
+                    }, 0)
+                    .toFixed(2)} */}
+                {(
+                  totalPrice.reduce((total, elem) => {
+                    if (
+                      !elem ||
+                      isNaN(Number(elem.quantity)) ||
+                      isNaN(Number(elem.price)) ||
+                      isNaN(Number(elem.discount)) ||
+                      typeof elem.no_of_deliveries === "undefined"
+                    ) {
+                      return total;
+                    }
                     const deliveryCount =
                       elem.no_of_deliveries === "0"
                         ? 1
-                        : Number(elem.no_of_deliveries);
-                    return total + elem.quantity * elem.price * deliveryCount;
-                  }, 0)
-                  .toFixed(2)}
+                        : Number(elem.no_of_deliveries) -
+                          (Number(elem.no_of_free_deliveries) || 0);
+                    const lineTotal =
+                      Number(elem.quantity) *
+                      Number(elem.price) *
+                      deliveryCount;
+                    return total + lineTotal;
+                  }, 0) -
+                  totalPrice.reduce((discountTotal, elem) => {
+                    if (
+                      !elem ||
+                      isNaN(Number(elem.discount)) ||
+                      isNaN(Number(elem.quantity))
+                    ) {
+                      return discountTotal;
+                    }
+                    return (
+                      discountTotal +
+                      Number(elem.discount) * Number(elem.quantity)
+                    );
+                  }, 0) -
+                  (Number(extraDiscount) || 0) -
+                  (redeemedAmount > 0 ? redeemedAmount : 0)
+                ).toFixed(2)}
               </h4>
             )}
           </div>
@@ -1193,7 +1260,9 @@ export const Order: React.FC = () => {
               <p>Applying Super Coins!</p>
               <div className="coins-value-display">
                 <span className="coins-label">Redeeming</span>
-                <span className="coins-amount">{superPoint?.available_points || 0}</span>
+                <span className="coins-amount">
+                  {superPoint?.available_points || 0}
+                </span>
                 <span className="coins-label">coins for</span>
                 <span className="discount-amount">₹{redeemedAmount || 0}</span>
               </div>
@@ -1204,3 +1273,4 @@ export const Order: React.FC = () => {
     </div>
   );
 };
+export default Order;

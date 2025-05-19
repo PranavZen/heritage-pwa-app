@@ -7,7 +7,7 @@
     padding: 0 16px 16px;
   }
 
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 767px) {
     padding: 0 12px 12px;
   }
 
@@ -62,13 +62,13 @@
         }
       }
 
-      @media screen and (max-width: 480px) {
+      @media screen and (max-width: 767px) {
         width: 100%;
         justify-content: center;
       }
     }
 
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 767px) {
       justify-content: center;
     }
   }

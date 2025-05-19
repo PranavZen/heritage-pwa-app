@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { hooks } from "../hooks";
 import { components } from "../components";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,10 @@ export const CouponList: React.FC = () => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isApplying, setIsApplying] = useState<boolean>(false);
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [appliedCouponCode, setAppliedCouponCode] = useState<string | null>(null);
+  const couponRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const navigate = useNavigate();
 
@@ -24,6 +28,12 @@ export const CouponList: React.FC = () => {
   hooks.useGetNotifications();
 
   useEffect(() => {
+    // Check if there's already an applied coupon
+    const currentCouponCode = localStorage.getItem('couponCode');
+    if (currentCouponCode) {
+      setAppliedCouponCode(currentCouponCode);
+    }
+
     const fetchCoupons = async () => {
       try {
         const formData = new FormData();
@@ -84,15 +94,68 @@ export const CouponList: React.FC = () => {
       );
     }
 
+    const handleCouponHover = (couponId: string, isHovering: boolean) => {
+      setHoveredCard(isHovering ? couponId : null);
+    };
+
+    const handleCouponClick = (couponId: string) => {
+      setActiveCard(couponId);
+
+      // Add ripple effect
+      const card = couponRefs.current[couponId];
+      if (card) {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple-effect');
+        card.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      }
+    };
+
+    const applyCoupon = (coupon: any) => {
+      if (isApplying) return;
+
+      handleCouponClick(coupon.coupon_id);
+      setIsApplying(true);
+      localStorage.setItem('couponCode', coupon.code);
+      setAppliedCouponCode(coupon.code);
+
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        setIsApplying(false);
+        navigate('/tab-navigator', {
+          state: { couponCode: coupon.code }
+        });
+      }, 3000);
+    };
+
     return (
       <div className="coupon-list-container">
         <h1>Your Discount Coupons</h1>
         {coupons.length > 0 ? (
           coupons.map((coupon) => (
-            <div className="card" key={coupon.coupon_id}>
+            <div
+              className={`card ${activeCard === coupon.coupon_id ? 'active' : ''} ${appliedCouponCode === coupon.code ? 'applied' : ''}`}
+              key={coupon.coupon_id}
+              ref={el => couponRefs.current[coupon.coupon_id] = el}
+              onMouseEnter={() => handleCouponHover(coupon.coupon_id, true)}
+              onMouseLeave={() => handleCouponHover(coupon.coupon_id, false)}
+              onClick={() => !appliedCouponCode || appliedCouponCode !== coupon.code ? handleCouponClick(coupon.coupon_id) : null}
+            >
               <div className="circle-cutout-left" aria-hidden="true"></div>
               <div className="circle-cutout-right" aria-hidden="true"></div>
               <div className="card-header">
+                {appliedCouponCode === coupon.code && (
+                  <div className="applied-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Applied
+                  </div>
+                )}
                 <h3>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20.91 8.84 8.56 2.23a1.93 1.93 0 0 0-1.81 0L3.1 4.13a2.12 2.12 0 0 0-.05 3.69l12.22 6.93a2 2 0 0 0 1.94 0L21 12.51a2.12 2.12 0 0 0-.09-3.67Z"></path>
@@ -135,30 +198,33 @@ export const CouponList: React.FC = () => {
                     Uses Left: {coupon.uses_total_coupon}
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    if (isApplying) return;
-                    setIsApplying(true);
-                    localStorage.setItem('couponCode', coupon.code);
-
-                    setShowModal(true);
-                    setTimeout(() => {
-                      setShowModal(false);
-                      setIsApplying(false);
-                      navigate('/tab-navigator', {
-                        state: { couponCode: coupon.code }
-                      });
-                    }, 3000);
-                  }}
-                  aria-label={`Apply coupon ${coupon.name}`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7"></path>
-                    <path d="m16 5 5 5"></path>
-                    <path d="M21 5h-5v5"></path>
-                  </svg>
-                  Apply Coupon
-                </button>
+                {appliedCouponCode === coupon.code ? (
+                  <button
+                    className="applied-button"
+                    disabled
+                    aria-label={`Coupon ${coupon.name} already applied`}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Applied
+                  </button>
+                ) : (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      applyCoupon(coupon);
+                    }}
+                    aria-label={`Apply coupon ${coupon.name}`}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7"></path>
+                      <path d="m16 5 5 5"></path>
+                      <path d="M21 5h-5v5"></path>
+                    </svg>
+                    Apply Coupon
+                  </button>
+                )}
               </div>
             </div>
           ))

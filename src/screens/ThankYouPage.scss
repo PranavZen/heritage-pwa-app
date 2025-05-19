@@ -1,86 +1,373 @@
+// Variables
+$primary-color: #1a712e;
+$primary-light: #e8f5e9;
+$primary-dark: #156023;
+$accent-color: #ff6f61;
+$accent-light: #ffebe9;
+$text-dark: #333;
+$text-medium: #555;
+$text-light: #777;
+$white: #fff;
+$background-color: #f8f9fa;
+$border-radius: 16px;
+$box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+$transition-speed: 0.4s;
+
+// Container
+.thank-you-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $background-color 0%, $white 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: calc(var(--footer-height) + 0px);
+}
+
+// Main content
 .thank-you-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
-  background-color: #f7f7f7;
-  font-family: 'Roboto', sans-serif;
+  padding: 0 2rem 3rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 
-  .thank-you-message {
-    text-align: center;
-    margin-bottom: 2rem;
-    
-    h1 {
-      font-size: 2.5rem;
-      color: #333;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 1.5rem 2rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 1rem 1.5rem;
+  }
+}
+
+// Success animation
+.success-animation {
+  width: 100%;
+  max-width: 300px;
+  margin: -30px auto 0;
+  animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
+
+  @media (max-width: 768px) {
+    max-width: 250px;
+    margin-top: -20px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 200px;
+    margin-top: -10px;
+  }
+}
+
+// Content wrapper
+.thank-you-content {
+  width: 100%;
+  max-width: 800px;
+  animation: fadeIn 0.8s ease 0.6s both;
+}
+
+// Thank you message
+.thank-you-message {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.8s ease 0.8s both;
+
+  h1 {
+    font-size: 3rem;
+    color: $primary-color;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, $primary-color, $primary-light);
+      border-radius: 2px;
+      animation: expandWidth 1s ease 1.2s both;
     }
 
-    p {
-      font-size: 1.2rem;
-      color: #666;
-      max-width: 600px;
-      margin: 0 auto;
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 2rem;
     }
   }
 
-  .order-summary {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
+  p {
+    font-size: 1.3rem;
+    color: $text-medium;
     max-width: 600px;
-    margin-bottom: 2rem;
-    
-    p {
-      font-size: 1.1rem;
-      color: #444;
-      margin-bottom: 1rem;
+    margin: 1.5rem auto 0;
+    line-height: 1.6;
 
-      strong {
-        font-weight: bold;
-        color: #333;
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Order details
+.order-details {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.8s ease 1s both;
+
+  .order-number,
+  .order-date {
+    background-color: $white;
+    border-radius: $border-radius;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    min-width: 200px;
+    text-align: center;
+    transition: transform $transition-speed ease, box-shadow $transition-speed ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .label {
+      font-size: 0.9rem;
+      color: $text-light;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .value {
+      font-size: 1.3rem;
+      color: $text-dark;
+      font-weight: 600;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+
+    .order-number,
+    .order-date {
+      width: 100%;
+      max-width: 300px;
+      padding: 1.2rem;
+    }
+  }
+}
+
+// Order summary
+.order-summary {
+  background-color: $white;
+  border-radius: $border-radius;
+  padding: 2rem;
+  box-shadow: $box-shadow;
+  width: 100%;
+  margin-bottom: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease 1.2s both;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, $primary-color, $primary-light);
+  }
+
+  .summary-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    svg {
+      color: $primary-color;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: $text-dark;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: $text-medium;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+
+    .summary-header {
+      margin-bottom: 1.2rem;
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
       }
     }
-  }
 
-  .back-home-button {
-    background-color: #007bff;
-    color: #fff;
+    p {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Action buttons
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  animation: fadeInUp 0.8s ease 1.4s both;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
     padding: 1rem 2rem;
     font-size: 1.1rem;
+    font-weight: 600;
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all $transition-speed ease;
 
-    &:hover {
-      background-color: #0056b3;
+    svg {
+      transition: transform 0.3s ease;
     }
 
     &:focus {
       outline: none;
     }
   }
+
+  .view-order-button {
+    background-color: $primary-color;
+    color: $white;
+    box-shadow: 0 5px 15px rgba($primary-color, 0.3);
+
+    &:hover {
+      background-color: $primary-dark;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba($primary-color, 0.4);
+
+      svg {
+        transform: translateX(3px);
+      }
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
+  }
+
+  .continue-shopping-button {
+    background-color: $white;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      background-color: $primary-light;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+      svg {
+        transform: translateX(-3px);
+      }
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+
+    button {
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
+    }
+  }
 }
 
-@media (max-width: 768px) {
-  .thank-you-page {
-    padding: 1rem;
-  }
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-  .thank-you-message h1 {
-    font-size: 2rem;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  .order-summary {
-    padding: 1rem;
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
   }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
-  .back-home-button {
-    width: 100%;
-  }
+@keyframes expandWidth {
+  from { width: 0; }
+  to { width: 80px; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }

@@ -430,9 +430,9 @@ export const SubscriptionOrderCheck: React.FC = () => {
           .flat();
         setOneTimeOrderData(data);
         setIsLoading(false);
-         
+
       })
-      
+
       .catch((error) => {
         console.error("Error fetching one-time order data", error);
         setIsLoading(false);
@@ -510,7 +510,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                 {Array.isArray(subscriptionData) &&
                   subscriptionData.length > 0 ? (
                   subscriptionData.map((subscription) => (
-                    <div key={subscription.subscription_id} className="card">
+                    <div key={subscription.subscription_id} className="card" style={{ marginBottom: '0px' }}>
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
@@ -619,7 +619,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                         </button> */}
                         {/* {
                           subscription.status === 'expire' ? <>  <button
-                        
+
                             onClick={() =>
                               handleSubscriptionID(subscription.subscription_id)
                             }
@@ -627,7 +627,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                           >
                             Renew
                           </button> </> : <>
-                              
+
                           </>
                         } */}
                       </div>
@@ -677,10 +677,10 @@ export const SubscriptionOrderCheck: React.FC = () => {
           <div style={{ marginTop: '10px' }}>
             <label>Resume Date:</label>
             <DatePicker
-              value={resumeDate ? moment(resumeDate) : null} 
+              value={resumeDate ? moment(resumeDate) : null}
               onChange={(date) => setResumeDate(date ? date.format('YYYY-MM-DD') : '')}
               format="YYYY-MM-DD"
-              disabledDate={(current) => current && current < moment().add(1, 'days').startOf('day')} 
+              disabledDate={(current) => current && current < moment().add(1, 'days').startOf('day')}
             />
           </div>
         </Modal> */}
@@ -707,7 +707,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
               <div className="card-list">
                 {Array.isArray(oneTimeOrderData) && oneTimeOrderData.length > 0 ? (
                   oneTimeOrderData.map((orderData) => (
-                    <div key={orderData.orders_id} className="card">
+                    <div key={orderData.orders_id} className="card" style={{ marginBottom: '2px' }} >
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
@@ -754,21 +754,35 @@ export const SubscriptionOrderCheck: React.FC = () => {
                         </div>
                         <div className="orderDateRightBox box50">
                           <div className="innerBox">
-                            <span>{orderData.order_status_name || "-"}</span>
+                            {/* <span>{orderData.order_status_name || "-"}</span> */}
+                            <span className="subExpiredText">{orderData.order_status_name}</span>
                           </div>
                         </div>
                       </div>
-                      <span className="subExpiredText">{orderData.order_status_name}</span>
+
                       <div className="subscription_idWrap">
                         <p>Order Id: #{orderData.orders_id}</p>
                       </div>
 
                       {/* Delete Icon */}
                       <div
-                        className="delete-icon"
+                        className="delete-icon ddd"
                         onClick={() => handleDeleteClick(orderData)}
+                        role="button"
+                        aria-label="Delete order"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            handleDeleteClick(orderData);
+                          }
+                        }}
                       >
-                        {/* You can add delete functionality here */}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          <line x1="10" y1="11" x2="10" y2="17"></line>
+                          <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
                       </div>
                     </div>
                   ))

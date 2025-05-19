@@ -45,30 +45,67 @@ h1 {
   }
 }
 
-// Enhanced Coupon card (Google Pay/Paytm style)
+// Modern E-commerce Coupon Cards
 .coupon-list-container {
   padding: 15px;
-
-  @media (max-width: 480px) {
-    padding: 10px;
-  }
 }
 
 .card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  background: white;
   border-radius: 16px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   overflow: visible;
-  width: 92%;
-  margin: 30px auto;
   padding: 0;
   display: flex;
   flex-direction: column;
   position: relative;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   animation: slideUp 0.5s ease forwards;
   transform-origin: center;
+  height: 100%;
+  cursor: pointer;
+
+  // Ripple effect
+  .ripple-effect {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: rgba($primary-color, 0.2);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  // Active state
+  &.active {
+    transform: scale(0.98);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  // Applied state
+  &.applied {
+    border: 2px solid $primary-color;
+    box-shadow: 0 5px 20px rgba($primary-color, 0.15);
+    position: relative;
+    cursor: default;
+
+    &::before {
+      opacity: 0.1;
+    }
+
+    &::after {
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='8' viewBox='0 0 40 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h5l5 8 5-8h5l5 8 5-8h5l5 8 5-8' fill='none' stroke='%231a712e' stroke-width='1.5'/%3E%3C/svg%3E");
+    }
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba($primary-color, 0.2);
+    }
+  }
 
   // Coupon pattern background
   &::before {
@@ -78,47 +115,23 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image:
-      radial-gradient(circle at 20px 20px, rgba(26, 113, 46, 0.05) 2px, transparent 2px),
-      radial-gradient(circle at 40px 40px, rgba(26, 113, 46, 0.05) 2px, transparent 2px);
-    background-size: 60px 60px;
-    background-position: 0 0, 30px 30px;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231a712e' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M0 20L20 0h10L0 30v-10zm10 0L30 0h10L10 30v-10z'/%3E%3C/g%3E%3C/svg%3E");
     opacity: 0.5;
     z-index: 0;
     border-radius: 16px;
     pointer-events: none;
   }
 
-  // Coupon tear effect (middle)
+  // Coupon tear effect (zigzag)
   &::after {
     content: '';
     position: absolute;
     left: 0;
     width: 100%;
-    height: 2px;
-    background-image:
-      linear-gradient(90deg,
-        transparent 0%, transparent 5%,
-        #ddd 5%, #ddd 10%,
-        transparent 10%, transparent 15%,
-        #ddd 15%, #ddd 20%,
-        transparent 20%, transparent 25%,
-        #ddd 25%, #ddd 30%,
-        transparent 30%, transparent 35%,
-        #ddd 35%, #ddd 40%,
-        transparent 40%, transparent 45%,
-        #ddd 45%, #ddd 50%,
-        transparent 50%, transparent 55%,
-        #ddd 55%, #ddd 60%,
-        transparent 60%, transparent 65%,
-        #ddd 65%, #ddd 70%,
-        transparent 70%, transparent 75%,
-        #ddd 75%, #ddd 80%,
-        transparent 80%, transparent 85%,
-        #ddd 85%, #ddd 90%,
-        transparent 90%, transparent 95%,
-        #ddd 95%, #ddd 100%
-      );
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='8' viewBox='0 0 40 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h5l5 8 5-8h5l5 8 5-8h5l5 8 5-8' fill='none' stroke='%23ddd' stroke-width='1'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 40px 8px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
@@ -127,12 +140,12 @@ h1 {
   // Left circle cutout
   .circle-cutout-left {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     background-color: #f6f9f9;
     border-radius: 50%;
     top: 50%;
-    left: -15px;
+    left: -12px;
     transform: translateY(-50%);
     z-index: 3;
     box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.05);
@@ -141,23 +154,23 @@ h1 {
   // Right circle cutout
   .circle-cutout-right {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     background-color: #f6f9f9;
     border-radius: 50%;
     top: 50%;
-    right: -15px;
+    right: -12px;
     transform: translateY(-50%);
     z-index: 3;
     box-shadow: inset 2px 0 5px rgba(0, 0, 0, 0.05);
   }
 
   &:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 
     .discount {
-      transform: rotate(3deg) scale(1.1);
+      transform: rotate(-3deg) scale(1.05);
     }
 
     .card-header h3 {
@@ -165,8 +178,14 @@ h1 {
     }
 
     button {
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(26, 113, 46, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(26, 113, 46, 0.3);
+    }
+
+    .card-header {
+      &::after {
+        height: 100%;
+      }
     }
   }
 
@@ -174,16 +193,59 @@ h1 {
   .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding: 20px 25px 15px;
     background: linear-gradient(135deg, $primary-light 0%, lighten($primary-light, 5%) 100%);
     position: relative;
     z-index: 1;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
+    overflow: hidden;
+
+    // Applied badge
+    .applied-badge {
+      display: none !important;
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: $primary-color;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px 4px 15px;
+      border-radius: 0 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease;
+      z-index: 10;
+
+      svg {
+        width: 14px;
+        height: 14px;
+        stroke-width: 3;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 11px;
+        padding: 3px 8px 3px 12px;
+      }
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 0;
+      background: $primary-color;
+      transition: height 0.4s ease;
+    }
 
     h3 {
-      font-size: 22px;
+      font-size: 20px;
       color: $primary-color;
       margin: 0;
       font-weight: 700;
@@ -191,6 +253,19 @@ h1 {
       align-items: center;
       gap: 10px;
       transition: all 0.3s ease;
+      position: relative;
+      padding-bottom: 5px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: $primary-color;
+        transition: width 0.3s ease;
+      }
 
       svg {
         color: $primary-color;
@@ -198,19 +273,26 @@ h1 {
       }
     }
 
+    &:hover h3::after {
+      width: 100%;
+    }
+
     .discount {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       color: white;
       background: linear-gradient(135deg, $accent-color 0%, darken($accent-color, 10%) 100%);
       padding: 8px 16px;
       border-radius: 30px;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       transform-origin: center;
       box-shadow: 0 4px 10px rgba($accent-color, 0.3);
       position: relative;
       overflow: hidden;
+      min-width: 80px;
 
       &::before {
         content: '';
@@ -224,8 +306,20 @@ h1 {
         animation: shimmerDiscount 2s infinite;
       }
 
+      &::after {
+        content: '';
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        width: 30px;
+        height: 30px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        z-index: 1;
+      }
+
       @media (max-width: 480px) {
-        font-size: 18px;
+        font-size: 12px;
         padding: 6px 14px;
       }
     }
@@ -250,6 +344,7 @@ h1 {
     position: relative;
     z-index: 1;
     background-color: white;
+    flex-grow: 1;
 
     p {
       font-size: 15px;
@@ -264,6 +359,13 @@ h1 {
       margin-bottom: 15px;
       position: relative;
       padding-left: 20px;
+
+      // Truncate long descriptions
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &::before {
         content: '';
@@ -293,6 +395,7 @@ h1 {
     z-index: 1;
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
 
     .coupon-info {
       display: flex;
@@ -318,6 +421,7 @@ h1 {
 
       &:hover {
         background-color: rgba(0, 0, 0, 0.06);
+        transform: translateX(3px);
       }
     }
 
@@ -338,6 +442,30 @@ h1 {
       position: relative;
       overflow: hidden;
 
+      &.applied-button {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        cursor: default;
+        box-shadow: none;
+        opacity: 0.9;
+
+        svg {
+          stroke-width: 3;
+        }
+
+        &:hover {
+          transform: none;
+          box-shadow: none;
+
+          &::before {
+            left: -100%;
+          }
+
+          svg {
+            transform: none;
+          }
+        }
+      }
+
       svg {
         transition: transform 0.3s ease;
       }
@@ -354,7 +482,7 @@ h1 {
       }
 
       &:hover {
-        transform: scale(1.05);
+        transform: translateY(-3px);
         box-shadow: 0 8px 15px rgba(26, 113, 46, 0.35);
 
         &::before {
@@ -362,12 +490,12 @@ h1 {
         }
 
         svg {
-          transform: translateX(3px);
+          transform: translateX(3px) rotate(15deg);
         }
       }
 
       &:active {
-        transform: scale(0.98);
+        transform: translateY(0) scale(0.98);
       }
     }
 
@@ -394,17 +522,6 @@ h1 {
         padding: 12px 20px;
       }
     }
-  }
-
-  // Responsive adjustments
-  @media (max-width: 768px) {
-    width: 95%;
-    margin: 25px auto;
-  }
-
-  @media (max-width: 480px) {
-    width: 100%;
-    margin: 20px auto;
   }
 
   // Animation delay for staggered appearance
@@ -648,4 +765,24 @@ h1 {
 @keyframes shimmer {
   0% { background-position: -1000px 0; }
   100% { background-position: 1000px 0; }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

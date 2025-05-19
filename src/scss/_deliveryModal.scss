@@ -1,4 +1,4 @@
-/* Enhanced styling for Delivery Preferences Modal */
+/* Modern, interactive styling for Delivery Preferences Modal */
 .delivery-preferences-modal {
   /* Modal overlay */
   .modal-overlay {
@@ -7,26 +7,37 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(3px);
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    animation: fadeIn 0.3s ease;
+    animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Modal container */
   .modal-container {
     background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     width: 90%;
-    max-width: 450px;
+    max-width: 480px;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    animation: slideUp 0.4s ease;
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #1a712e, #2a9d4a);
+      border-radius: 20px 20px 0 0;
+    }
   }
 
   /* Modal header */
@@ -34,222 +45,339 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(26, 113, 46, 0.1);
     position: sticky;
     top: 0;
     background-color: white;
     z-index: 10;
-    border-radius: 12px 12px 0 0;
+    border-radius: 20px 20px 0 0;
 
     h3 {
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 20px;
+      font-weight: 700;
       color: #1a712e;
       margin: 0;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background-color: #1a712e;
+        border-radius: 3px;
+      }
     }
 
     .close-button {
-      background: transparent;
+      background: rgba(26, 113, 46, 0.1);
       border: none;
       cursor: pointer;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      transition: background-color 0.2s ease;
+      transition: all 0.3s ease;
 
       &:hover {
-        background-color: #f5f5f5;
+        background-color: rgba(26, 113, 46, 0.2);
+        transform: rotate(90deg);
       }
 
       svg {
         width: 20px;
         height: 20px;
-        color: #666;
+        color: #1a712e;
       }
     }
   }
 
   /* Modal content */
   .modal-content {
-    padding: 20px;
+    padding: 24px;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(26, 113, 46, 0.05) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      pointer-events: none;
+    }
   }
 }
 
 /* Enhanced styling for delivery preferences form */
 .main-card-daily-delivery {
   padding: 0;
-  
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
   /* Section styling */
   .delivery-section {
-    margin-bottom: 24px;
-    
-    &:last-child {
-      margin-bottom: 0;
+    background-color: rgba(26, 113, 46, 0.03);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(26, 113, 46, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 5px 15px rgba(26, 113, 46, 0.08);
+      transform: translateY(-2px);
     }
-    
+
     .section-title {
       font-size: 16px;
       font-weight: 600;
-      color: #333;
-      margin-bottom: 12px;
+      color: #1a712e;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
-      
+
       svg {
         margin-right: 8px;
         color: #1a712e;
       }
     }
   }
-  
+
   /* Date picker styling */
-  .date-picker-section {
-    .main-card-daily-delivery-box {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 0;
-      
-      label {
-        font-size: 14px;
-        font-weight: 500;
-        color: #333;
-        display: flex;
-        align-items: center;
-        
-        svg {
-          margin-right: 6px;
-          color: #1a712e;
-        }
-      }
-      
-      .react-datepicker-wrapper {
-        width: 100%;
-        
-        input {
-          width: 100%;
-          padding: 12px 16px;
-          border: 1px solid #e0e0e0;
-          border-radius: 8px;
-          font-size: 14px;
-          transition: all 0.2s ease;
-          background-color: #f9f9f9;
-          
-          &:focus {
-            border-color: #1a712e;
-            box-shadow: 0 0 0 2px rgba(26, 113, 46, 0.1);
-            outline: none;
-            background-color: white;
-          }
-          
-          &::placeholder {
-            color: #999;
-          }
-        }
-      }
+  .main-card-daily-delivery-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 0;
+    background-color: rgba(26, 113, 46, 0.03);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(26, 113, 46, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 5px 15px rgba(26, 113, 46, 0.08);
+      transform: translateY(-2px);
     }
-  }
-  
-  /* Select styling */
-  .select-wrapper {
-    position: relative;
-    margin-bottom: 16px;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 16px;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 5px solid #666;
-      pointer-events: none;
-    }
-    
-    select {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 14px;
-      appearance: none;
-      background-color: #f9f9f9;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      
-      &:focus {
-        border-color: #1a712e;
-        box-shadow: 0 0 0 2px rgba(26, 113, 46, 0.1);
-        outline: none;
-        background-color: white;
-      }
-      
-      option {
-        padding: 8px;
-      }
-    }
-  }
-  
-  /* Delivery dropdown */
-  .delivery-dropdown {
+
     label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a712e;
       display: flex;
       align-items: center;
-      
-      svg {
-        margin-right: 6px;
-        color: #1a712e;
+
+      &::before {
+        content: '📅';
+        margin-right: 8px;
+        font-size: 16px;
+      }
+    }
+
+    .react-datepicker-wrapper {
+      width: 100%;
+
+      input {
+        width: 100%;
+        padding: 14px 18px;
+        border: 1px solid rgba(26, 113, 46, 0.2);
+        border-radius: 12px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background-color: white;
+
+        &:focus {
+          border-color: #1a712e;
+          box-shadow: 0 0 0 3px rgba(26, 113, 46, 0.15);
+          outline: none;
+          transform: translateY(-2px);
+        }
+
+        &::placeholder {
+          color: #999;
+        }
       }
     }
   }
-  
+
+  /* Select styling */
+  select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid rgba(26, 113, 46, 0.2);
+    border-radius: 12px;
+    font-size: 15px;
+    appearance: none;
+    background-color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a712e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    margin-bottom: 0;
+
+    &:focus {
+      border-color: #1a712e;
+      box-shadow: 0 0 0 3px rgba(26, 113, 46, 0.15);
+      outline: none;
+      transform: translateY(-2px);
+    }
+
+    option {
+      padding: 10px;
+    }
+  }
+
+  /* Delivery dropdown */
+  .delivery-dropdown {
+    background-color: rgba(26, 113, 46, 0.03);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(26, 113, 46, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 5px 15px rgba(26, 113, 46, 0.08);
+      transform: translateY(-2px);
+    }
+
+    label {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a712e;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: '📆';
+        margin-right: 8px;
+        font-size: 16px;
+      }
+    }
+  }
+
   /* Action buttons */
   .action-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 24px;
-    gap: 12px;
-    
+    margin-top: 10px;
+    gap: 16px;
+
     button {
       flex: 1;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 500;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
-      
+      transition: all 0.3s ease;
+
       &.cancel-button {
         background-color: #f5f5f5;
         color: #666;
         border: 1px solid #e0e0e0;
-        
+
         &:hover {
           background-color: #e8e8e8;
+          transform: translateY(-2px);
+        }
+
+        &:active {
+          transform: translateY(0);
         }
       }
-      
+
       &.confirm-button {
         background-color: #1a712e;
         color: white;
         border: none;
-        
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: all 0.5s ease;
+        }
+
         &:hover {
           background-color: #156023;
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(26, 113, 46, 0.2);
+
+          &::before {
+            left: 100%;
+          }
+        }
+
+        &:active {
+          transform: translateY(0);
+          box-shadow: 0 2px 5px rgba(26, 113, 46, 0.1);
         }
       }
+    }
+  }
+
+  /* Button styling for components.Button */
+  .components-Button {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #1a712e;
+    color: white;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+    text-align: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.5s ease;
+    }
+
+    &:hover {
+      background-color: #156023;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(26, 113, 46, 0.2);
+
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(26, 113, 46, 0.1);
     }
   }
 }
@@ -266,7 +394,7 @@
 
 @keyframes slideUp {
   from {
-    transform: translateY(20px);
+    transform: translateY(30px);
     opacity: 0;
   }
   to {
@@ -275,26 +403,114 @@
   }
 }
 
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
 /* Responsive adjustments */
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
+  .delivery-preferences-modal {
+    .modal-container {
+      width: 92%;
+      max-width: 450px;
+    }
+
+    .modal-header {
+      padding: 18px 20px;
+
+      h3 {
+        font-size: 18px;
+      }
+    }
+
+    .modal-content {
+      padding: 20px;
+    }
+  }
+
+  .main-card-daily-delivery {
+    gap: 16px;
+
+    .main-card-daily-delivery-box,
+    .delivery-dropdown,
+    .delivery-section {
+      padding: 14px;
+    }
+
+    select,
+    .react-datepicker-wrapper input {
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+
+    .components-Button {
+      padding: 14px;
+      font-size: 15px;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
   .delivery-preferences-modal {
     .modal-container {
       width: 95%;
       max-height: 85vh;
+      border-radius: 16px;
     }
-    
-    .modal-header h3 {
-      font-size: 16px;
+
+    .modal-header {
+      padding: 16px;
+
+      h3 {
+        font-size: 16px;
+      }
+
+      .close-button {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .modal-content {
+      padding: 16px;
     }
   }
-  
+
   .main-card-daily-delivery {
+    gap: 14px;
+
+    .main-card-daily-delivery-box,
+    .delivery-dropdown,
+    .delivery-section {
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    label {
+      font-size: 14px;
+    }
+
+    select,
+    .react-datepicker-wrapper input {
+      padding: 10px 14px;
+      font-size: 14px;
+      border-radius: 10px;
+    }
+
     .action-buttons {
       flex-direction: column;
-      
+
       button {
         width: 100%;
       }
+    }
+
+    .components-Button {
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 10px;
     }
   }
 }

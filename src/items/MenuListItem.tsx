@@ -373,89 +373,91 @@ export const MenuListItem: React.FC<Props> = ({
 
       <div className="product-actions">
         <div className="cart-controls">
-          {quantity < 1 ? (
-            <button className="cart-button" onClick={HandleAddToCart}>
-              <span>Add</span>
-            </button>
-          ) : (
-            <div className="cart-buttons-group">
-              <button
-                className="cart-button quantity-button"
-                onClick={(event) =>
-                  quantity === 1
-                    ? handleRemoveFromCart(event)
-                    : handleUpdateCart(quantity - 1)
-                }
-                aria-label="Decrease quantity"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5 12H19"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+          <div className="buttons-container">
+            {quantity < 1 ? (
+              <button className="cart-button" onClick={HandleAddToCart}>
+                <span>Add</span>
               </button>
-              <span className="quantity" aria-label={`Quantity: ${quantity}`}>{quantity}</span>
-              <button
-                className="cart-button quantity-button"
-                onClick={() => handleUpdateCart(quantity + 1)}
-                aria-label="Increase quantity"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+            ) : (
+              <div className="cart-buttons-group">
+                <button
+                  className="cart-button quantity-button"
+                  onClick={(event) =>
+                    quantity === 1
+                      ? handleRemoveFromCart(event)
+                      : handleUpdateCart(quantity - 1)
+                  }
+                  aria-label="Decrease quantity"
                 >
-                  <path
-                    d="M12 5V19"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M5 12H19"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-          )}
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5 12H19"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <span className="quantity" aria-label={`Quantity: ${quantity}`}>{quantity}</span>
+                <button
+                  className="cart-button quantity-button"
+                  onClick={() => handleUpdateCart(quantity + 1)}
+                  aria-label="Increase quantity"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 5V19"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M5 12H19"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
 
-          {String(showSubscribe) === "1" && (
-            <button
-              className="cart-button"
-              style={{
-                backgroundColor: "#ffc107",
-                color: "#333",
-              }}
-              onClick={() =>
-                navigate(`/dish/${dish.option_name}`, {
-                  state: {
-                    dish,
-                    showSubscribe: dish.subscription_product,
-                  },
-                })
-              }
-              aria-label="Subscribe to this product"
-            >
-              Subscribe
-            </button>
-          )}
+            {String(showSubscribe) === "1" && (
+              <button
+                className="cart-button"
+                style={{
+                  backgroundColor: "#ffc107",
+                  color: "#333",
+                }}
+                onClick={() =>
+                  navigate(`/dish/${dish.option_name}`, {
+                    state: {
+                      dish,
+                      showSubscribe: dish.subscription_product,
+                    },
+                  })
+                }
+                aria-label="Subscribe to this product"
+              >
+                Subscribe
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
