@@ -191,7 +191,7 @@ export const MenuList: React.FC = () => {
       return null;
     }
     return (
-      <main className="scrollable container menu-list-container">
+      <main className="scrollable menu-list-container">
         {filterDataLoading ? (
           <div className="empty-state fade-in">
             <components.Loader local={true} message="Loading products..." />

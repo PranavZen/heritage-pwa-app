@@ -308,7 +308,7 @@ export const Dish: React.FC = () => {
         if (newCartId) {
           setCartItemId(String(newCartId));
         } else {
-          // await fetchCartData(); 
+          // await fetchCartData();
         }
       } else {
         notification.error({
@@ -803,18 +803,18 @@ export const Dish: React.FC = () => {
   // const handleAddToCartWithCustomPreferences = async () => {
   //   const dishWithCustomPreferences = {
   //     c_id: c_id || "null",
-  //     // package_id: 13, 
+  //     // package_id: 13,
   //     package_days: 0,
-  //     product_id: dish.product_id, 
-  //     product_option_id: 6, 
-  //     product_option_value_id: 11, 
+  //     product_id: dish.product_id,
+  //     product_option_id: 6,
+  //     product_option_value_id: 11,
   //     quantity: 1,
-  //     weight: dish.weight, 
-  //     weight_unit: "g", 
+  //     weight: dish.weight,
+  //     weight_unit: "g",
   //     delivery_preference: deliveryPreference,
   //     no_of_deliveries: deliveries,
-  //     order_date: startDate, 
-  //     order_type: 2, 
+  //     order_date: startDate,
+  //     order_type: 2,
   //   };
 
   //   const cartCount = await addToCartApi(dishWithCustomPreferences);
@@ -916,88 +916,140 @@ export const Dish: React.FC = () => {
 
 
   const renderDetails = (): JSX.Element => {
+    const discountPercentage = Math.round((Number(dish.discount ?? 0) / Number(dish.price ?? 1)) * 100);
+
     return (
       <div className="productInfoBox">
-        <div className="infoWrap">
-          <h3
-            className="number-of-lines-1"
-            style={{ textTransform: "capitalize" }}
-          >
-            {dish.option_value_name}
-          </h3>
-          <span className="t16">{dish.weight} ml</span>
-          <div className="ppdBox">
-            <span>Packs</span>
-            <div className="cartButtonWrap">
-              <button
-                onClick={(event) => {
-                  if (isInCart) {
-                    quantity === 1
-                      ? handleRemoveFromCart(event)
-                      : handleUpdateCart(quantity - 1);
-                  } else {
-                    if (localQuantity > 1) {
-                      setLocalQuantity(localQuantity - 1);
-                    }
-                  }
-                }}
-                className="cartButton"
-              >
-                <svg.MinusSvg />
-              </button>
+        {/* Product category */}
+        <div className="product-category" aria-label="Product category">Premium Dairy</div>
 
-              <span className="countNum">
-                {isInCart ? quantity : localQuantity}
+        {/* Product info container */}
+        <div className="product-info-container">
+          <div className="infoWrap">
+            {/* Product title */}
+            <h3 className="number-of-lines-1" style={{ textTransform: "capitalize" }}>
+              {dish.option_value_name}
+            </h3>
 
-
-              </span>
-
-              <button
-                onClick={() => {
-                  if (isInCart) {
-                    handleUpdateCart(quantity + 1);
-                  } else {
-                    setLocalQuantity(localQuantity + 1);
-                  }
-                }}
-                className="cartButton"
-              >
-                <svg.AddSvg />
-              </button>
+            {/* Product meta info */}
+            <div className="product-meta">
+              <div className="meta-item" aria-label="Product rating: 4.8 out of 5 stars, 124 reviews">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" />
+                </svg>
+                4.8 (124 reviews)
+              </div>
+              <div className="meta-item" aria-label="Delivery information: Same day delivery available">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" fill="currentColor" />
+                </svg>
+                Same day delivery
+              </div>
             </div>
-            <span>Per Day</span>
-          </div>
 
-          {/* Add to Cart button only if not in cart */}
-          {!isInCart && (
-            <button
-              onClick={() => handleUpdateCart(localQuantity)}
-              className="addToCartButton"
-            >
-              {/* Add to Cart */}
-            </button>
-          )}
+            {/* Product description */}
+            <span className="t16">{dish.weight} ml</span>
 
-          <div className="priceWrap">
-            <span>
+            {/* Product features */}
+            <div className="product-features">
+              <div className="feature-title" id="features-heading">Features</div>
+              <div className="features-list" aria-labelledby="features-heading">
+                <div className="feature-item" tabIndex={0}>Farm Fresh</div>
+                <div className="feature-item" tabIndex={0}>No Preservatives</div>
+                <div className="feature-item" tabIndex={0}>100% Natural</div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="divider" aria-hidden="true"></div>
+
+            {/* Price section */}
+            <div className="priceWrap">
               {Number(dish.discount ?? 0) > 0 ? (
-                <>
-                  <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
-                    ₹ {dish.price}
-                  </span>
-                  <span className="proPrice" style={{ marginLeft: '8px' }}>
-                    ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
-                  </span>
-                </>
+                <div className="price-container">
+                  <div className="original-price" aria-label={`Original price: ${dish.price} rupees`}>
+                    <span className="currency">₹</span>
+                    <span className="amount">{dish.price}</span>
+                  </div>
+                  <div className="discount-price">
+                    <span className="currency">₹</span>
+                    <span className="amount" aria-label={`Current price: ${Number(dish.price ?? 0) - Number(dish.discount ?? 0)} rupees`}>
+                      {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+                    </span>
+                    <div className="discount-badge" aria-label={`${discountPercentage}% discount`}>
+                      <span>{discountPercentage}% OFF</span>
+                    </div>
+                  </div>
+                </div>
               ) : (
-                <span className="proPrice">
-                  ₹ {dish.price}
-                </span>
+                <div className="price-container">
+                  <div className="current-price" aria-label={`Price: ${dish.price} rupees`}>
+                    <span className="currency">₹</span>
+                    <span className="amount">{dish.price}</span>
+                  </div>
+                </div>
               )}
-            </span>
+            </div>
+
+            {/* Quantity selector */}
+            <div className="ppdBox" role="group" aria-label="Quantity selector">
+              <div className="quantity-label" id="quantity-label">Quantity</div>
+              <div className="cartButtonWrap">
+                <button
+                  onClick={(event) => {
+                    if (isInCart) {
+                      quantity === 1
+                        ? handleRemoveFromCart(event)
+                        : handleUpdateCart(quantity - 1);
+                    } else {
+                      if (localQuantity > 1) {
+                        setLocalQuantity(localQuantity - 1);
+                      }
+                    }
+                  }}
+                  className="cartButton"
+                  aria-label="Decrease quantity"
+                  aria-controls="quantity-value"
+                  disabled={isInCart ? quantity <= 1 : localQuantity <= 1}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M19 13H5V11H19V13Z" fill="currentColor" />
+                  </svg>
+                </button>
+                <span className="countNum" id="quantity-value" aria-live="polite" aria-atomic="true" aria-labelledby="quantity-label">
+                  {isInCart ? quantity : localQuantity}
+                </span>
+                <button
+                  onClick={() => {
+                    if (isInCart) {
+                      handleUpdateCart(quantity + 1);
+                    } else {
+                      setLocalQuantity(localQuantity + 1);
+                    }
+                  }}
+                  className="cartButton"
+                  aria-label="Increase quantity"
+                  aria-controls="quantity-value"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor" />
+                  </svg>
+                </button>
+              </div>
+              <div className="per-day-label">Per Day</div>
+            </div>
+
+            {/* Add to Cart button */}
+            {!isInCart && (
+              <button
+                onClick={() => handleUpdateCart(localQuantity)}
+                className="addToCartButton"
+                aria-label={`Add ${localQuantity} items to cart`}
+              >
+                Add to Cart
+              </button>
+            )}
           </div>
-          {/* <span className="ppText">Per Pack</span>
-          <p className="fatText">Fat 3.0%, SNF 8.5%</p> */}
         </div>
       </div>
     );
@@ -1070,107 +1122,172 @@ export const Dish: React.FC = () => {
   const renderModal = (): JSX.Element => {
     if (!isModalOpen) return <> </>;
     return (
-      <components.Modal title="Delivery Preferences"
-        onClose={setIsModalOpenDaily}
-      >
-        <div className="main-card-daily-delivery">
-          <div className="main-card-daily-delivery-box">
-            <label>Start Date:- </label>
-            <DatePicker
-              selected={startDate ? new Date(startDate) : null}
-              onChange={(date: Date | null) => {
-                if (date) {
-                  setStartDate(date.toISOString().split('T')[0]);
-                } else {
-                  setStartDate('');
-                }
-              }}
-              minDate={new Date(minDate)}
-              dateFormat="yyyy-MM-dd"
-              placeholderText="Select a date"
+      <div className="delivery-preferences-modal">
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className="modal-header">
+              <h3>Delivery Preferences</h3>
+              <button
+                className="close-button"
+                onClick={setIsModalOpenDaily}
+                aria-label="Close modal"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
 
-              required
-            />
-          </div>
-          <select
-            value={deliveryPreference}
-            onChange={(e) => setDeliveryPreference(e.target.value)}
-          >
-            {deliveryOptionsPreference &&
-              deliveryOptionsPreference.length > 0 ? (
-              deliveryOptionsPreference.map((elem) => (
-                <>
-                  {elem.deliveryPreference &&
-                    elem.deliveryPreference.length > 0 ? (
-                    elem.deliveryPreference.map((option: any) => (
-                      <option key={option.id} value={option.id}>
-                        {option.name}
-                      </option>
-                    ))
+            <div className="modal-content">
+              <div className="main-card-daily-delivery">
+                {/* Date picker section */}
+                <div className="delivery-section date-picker-section">
+                  <div className="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Choose Start Date
+                  </div>
+                  <div className="main-card-daily-delivery-box">
+                    <label>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      When would you like to start?
+                    </label>
+                    <DatePicker
+                      selected={startDate ? new Date(startDate) : null}
+                      onChange={(date: Date | null) => {
+                        if (date) {
+                          setStartDate(date.toISOString().split('T')[0]);
+                        } else {
+                          setStartDate('');
+                        }
+                      }}
+                      minDate={new Date(minDate)}
+                      dateFormat="yyyy-MM-dd"
+                      placeholderText="Select a start date"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Delivery preference section */}
+                <div className="delivery-section">
+                  <div className="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Delivery Preference
+                  </div>
+                  <div className="select-wrapper">
+                    <select
+                      value={deliveryPreference}
+                      onChange={(e) => setDeliveryPreference(e.target.value)}
+                      aria-label="Select delivery preference"
+                    >
+                      {deliveryOptionsPreference &&
+                        deliveryOptionsPreference.length > 0 ? (
+                        deliveryOptionsPreference.map((elem, elemIndex) => (
+                          <React.Fragment key={`elem-${elemIndex}`}>
+                            {elem.deliveryPreference &&
+                              elem.deliveryPreference.length > 0 ? (
+                              elem.deliveryPreference.map((option: any) => (
+                                <option key={option.id} value={option.id}>
+                                  {option.name}
+                                </option>
+                              ))
+                            ) : (
+                              <option key="no-preference" value="">
+                                No delivery options available
+                              </option>
+                            )}
+                          </React.Fragment>
+                        ))
+                      ) : (
+                        <option value="">No delivery options available</option>
+                      )}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Select days section */}
+                <div className="delivery-section">
+                  <div className="delivery-dropdown">
+                    <label>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                      </svg>
+                      Select Number of Days:
+                    </label>
+                    <div className="select-wrapper">
+                      <select
+                        value={deliveries}
+                        onChange={(e) => {
+                          const selectedValue = Number(e.target.value);
+                          setDeliveries(selectedValue);
+                        }}
+                        aria-label="Select number of days"
+                      >
+                        {deliveryOptionsPreference &&
+                          deliveryOptionsPreference.length > 0 &&
+                          deliveryOptionsPreference.map((elem, elemIndex) => {
+                            return elem.packages && elem.packages.length > 0
+                              ? elem.packages.map((option: any, optionIndex: number) => {
+                                if (option.package_name === "Daily") {
+                                  return option.no_of_deliveries
+                                    .split(",")
+                                    .map((delivery: string, index: number) => (
+                                      <option key={`${elemIndex}-${optionIndex}-${index}`} value={delivery}>
+                                        {`${delivery} days`}
+                                      </option>
+                                    ));
+                                }
+                                return null;
+                              })
+                              : null;
+                          })}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="action-buttons">
+                  <button
+                    className="cancel-button"
+                    onClick={setIsModalOpenDaily}
+                  >
+                    Cancel
+                  </button>
+
+                  {!cartItemId ? (
+                    <button
+                      className="confirm-button"
+                      onClick={handleAddToCartWithPreferences}
+                    >
+                      Confirm and Add to Cart
+                    </button>
                   ) : (
-                    <option key="no-preference" value="">
-                      No delivery options available
-                    </option>
+                    <button
+                      className="confirm-button"
+                      onClick={handleupdatetheAddToCartt}
+                    >
+                      Update and Add to Cart
+                    </button>
                   )}
-                </>
-              ))
-            ) : (
-              <option value="">No delivery options available</option>
-            )}
-          </select>
-          <div className="delivery-dropdown">
-            <label>Select Days:</label>
-            <select
-              value={deliveries}
-              onChange={(e) => {
-                const selectedValue = Number(e.target.value);
-                // console.log("Selected Delivery :", selectedValue);
-                setDeliveries(selectedValue);
-              }}
-            >
-              {deliveryOptionsPreference &&
-                deliveryOptionsPreference.length > 0 &&
-                deliveryOptionsPreference.map((elem) => {
-                  return elem.packages && elem.packages.length > 0
-                    ? elem.packages.map((option: any) => {
-                      if (option.package_name === "Daily") {
-                        return option.no_of_deliveries
-                          .split(",")
-                          .map((delivery: string, index: number) => (
-                            <option key={index} value={delivery}>
-                              {`${delivery}`}
-                            </option>
-                          ));
-                      }
-                    })
-                    : null;
-                })}
-            </select>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-
-          {
-            !cartItemId
-              ? <>
-                <components.Button
-                  text="Confirm and Add to Cart"
-                  onClick={handleAddToCartWithPreferences}
-                />
-              </> :
-              <>
-                <components.Button
-                  text="update and Add to Cart"
-                  onClick={handleupdatetheAddToCartt}
-                />
-              </>
-          }
-
-
-        </div>
-      </components.Modal>
-
-
+      </div>
     );
   };
 
@@ -1179,97 +1296,172 @@ export const Dish: React.FC = () => {
     if (!isAlternateModalOpen) return <></>;
 
     return (
-      <components.Modal
-        title="Delivery Preferences"
-        onClose={handleCloseModalAlternateDays}
-      >
-        <div className="main-card-daily-delivery">
-          <div className="main-card-daily-delivery-box">
-            <label>Start Date:- </label>
-            <DatePicker
-              selected={startDate ? new Date(startDate) : null}
-              onChange={(date: Date | null) => {
-                if (date) {
-                  setStartDate(date.toISOString().split('T')[0]);
-                } else {
-                  setStartDate('');
-                }
-              }}
-              minDate={new Date(minDate)}
-              dateFormat="yyyy-MM-dd"
-              placeholderText="Select a date"
+      <div className="delivery-preferences-modal">
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className="modal-header">
+              <h3>Alternate Days Delivery</h3>
+              <button
+                className="close-button"
+                onClick={handleCloseModalAlternateDays}
+                aria-label="Close modal"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
 
-              required
-            />
-          </div>
-          <select
-            value={deliveryPreference}
-            onChange={(e) => setDeliveryPreference(e.target.value)}
-          >
-            {deliveryOptionsPreference &&
-              deliveryOptionsPreference.length > 0 ? (
-              deliveryOptionsPreference.map((elem) => (
-                <>
-                  {elem.deliveryPreference &&
-                    elem.deliveryPreference.length > 0 ? (
-                    elem.deliveryPreference.map((option: any) => (
-                      <option key={option.id} value={option.id}>
-                        {option.name}
-                      </option>
-                    ))
+            <div className="modal-content">
+              <div className="main-card-daily-delivery">
+                {/* Date picker section */}
+                <div className="delivery-section date-picker-section">
+                  <div className="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Choose Start Date
+                  </div>
+                  <div className="main-card-daily-delivery-box">
+                    <label>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      When would you like to start?
+                    </label>
+                    <DatePicker
+                      selected={startDate ? new Date(startDate) : null}
+                      onChange={(date: Date | null) => {
+                        if (date) {
+                          setStartDate(date.toISOString().split('T')[0]);
+                        } else {
+                          setStartDate('');
+                        }
+                      }}
+                      minDate={new Date(minDate)}
+                      dateFormat="yyyy-MM-dd"
+                      placeholderText="Select a start date"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Delivery preference section */}
+                <div className="delivery-section">
+                  <div className="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Delivery Preference
+                  </div>
+                  <div className="select-wrapper">
+                    <select
+                      value={deliveryPreference}
+                      onChange={(e) => setDeliveryPreference(e.target.value)}
+                      aria-label="Select delivery preference"
+                    >
+                      {deliveryOptionsPreference &&
+                        deliveryOptionsPreference.length > 0 ? (
+                        deliveryOptionsPreference.map((elem, elemIndex) => (
+                          <React.Fragment key={`alt-elem-${elemIndex}`}>
+                            {elem.deliveryPreference &&
+                              elem.deliveryPreference.length > 0 ? (
+                              elem.deliveryPreference.map((option: any) => (
+                                <option key={option.id} value={option.id}>
+                                  {option.name}
+                                </option>
+                              ))
+                            ) : (
+                              <option key="alt-no-preference" value="">
+                                No delivery options available
+                              </option>
+                            )}
+                          </React.Fragment>
+                        ))
+                      ) : (
+                        <option value="">No delivery options available</option>
+                      )}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Select days section */}
+                <div className="delivery-section">
+                  <div className="delivery-dropdown">
+                    <label>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                      </svg>
+                      Select Number of Days:
+                    </label>
+                    <div className="select-wrapper">
+                      <select
+                        value={deliveries}
+                        onChange={(e) => {
+                          const selectedValue = Number(e.target.value);
+                          setDeliveries(selectedValue);
+                        }}
+                        aria-label="Select number of days"
+                      >
+                        {deliveryOptionsPreference &&
+                          deliveryOptionsPreference.length > 0 &&
+                          deliveryOptionsPreference.map((elem, elemIndex) => {
+                            return elem.packages && elem.packages.length > 0
+                              ? elem.packages.map((option: any, optionIndex: number) => {
+                                if (option.package_name === "Alternate Days") {
+                                  return option.no_of_deliveries
+                                    .split(",")
+                                    .map((delivery: string, index: number) => (
+                                      <option key={`alt-${elemIndex}-${optionIndex}-${index}`} value={delivery}>
+                                        {`${delivery} days`}
+                                      </option>
+                                    ));
+                                }
+                                return null;
+                              })
+                              : null;
+                          })}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="action-buttons">
+                  <button
+                    className="cancel-button"
+                    onClick={handleCloseModalAlternateDays}
+                  >
+                    Cancel
+                  </button>
+
+                  {!cartItemId ? (
+                    <button
+                      className="confirm-button"
+                      onClick={handleAddToCartWithAlternate}
+                    >
+                      Confirm and Add to Cart
+                    </button>
                   ) : (
-                    <option key="no-preference" value="">
-                      No delivery options available
-                    </option>
+                    <button
+                      className="confirm-button"
+                      onClick={handleupdatetheAddToCart}
+                    >
+                      Update and Add to Cart
+                    </button>
                   )}
-                </>
-              ))
-            ) : (
-              <option value="">No delivery options available</option>
-            )}
-          </select>
-          <div className="delivery-dropdown">
-            <label>Select Days:</label>
-            <select
-              value={deliveries}
-              onChange={(e) => {
-                const selectedValue = Number(e.target.value);
-                // console.log("Selected Delivery :", selectedValue);
-                setDeliveries(selectedValue);
-              }}
-            >
-              {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 &&
-                deliveryOptionsPreference.map((elem) => {
-                  return elem.packages && elem.packages.length > 0
-                    ? elem.packages.map((option: any) => {
-                      if (option.package_name === "Alternate Days") {
-                        return option.no_of_deliveries
-                          .split(",")
-                          .map((delivery: string, index: number) => (
-                            <option key={index} value={delivery}>
-                              {`${delivery}`}
-                            </option>
-                          ));
-                      }
-                    })
-                    : null;
-                })}
-            </select>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div>
-          {
-            !cartItemId ? <> <components.Button
-              text="Confirm and Add to Cart"
-              onClick={handleAddToCartWithAlternate}
-            /> </> : <> <components.Button
-              text="update and Add to Cart"
-              onClick={handleupdatetheAddToCart}
-            /></>
-          }
-        </div>
-      </components.Modal>
+      </div>
     );
   };
 
