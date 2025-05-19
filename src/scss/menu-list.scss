@@ -17,15 +17,12 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 // Menu List Container
 .menu-list-container {
   padding: 0 0 20px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
 
   .scrollable {
     padding-bottom: 80px;
-    max-width: 100%;
+    max-width: 1400px;
     margin: 0 auto;
+
     width: 100%;
     box-sizing: border-box;
   }
@@ -36,6 +33,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 
   @media (max-width: 320px) {
     padding: 0 0 10px;
+
   }
 }
 
@@ -43,19 +41,6 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 .search-bar-container {
   margin: 15px 20px;
   position: relative;
-  width: calc(100% - 40px);
-  box-sizing: border-box;
-  max-width: 100%;
-
-  @media (max-width: 400px) {
-    margin: 12px 15px;
-    width: calc(100% - 30px);
-  }
-
-  @media (max-width: 320px) {
-    margin: 10px 12px;
-    width: calc(100% - 24px);
-  }
 
   .search-bar {
     display: flex;
@@ -67,10 +52,8 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
     border: 1px solid $border-color;
     transition: all 0.2s ease;
     width: 100%;
-    box-sizing: border-box;
 
-    &:hover,
-    &:focus-within {
+    &:hover, &:focus-within {
       border-color: rgba($primary-color, 0.5);
     }
 
@@ -101,19 +84,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 // Category Tabs
 .category-tabs-container {
   margin: 10px 0 15px;
-  // position: relative;
-  // width: 100%;
-  // box-sizing: border-box;
-  // max-width: 100%;
-  // overflow: hidden;
-  // padding-bottom: 10px;
-  @media (max-width: 400px) {
-    margin: 8px 0 12px;
-  }
-
-  @media (max-width: 320px) {
-    margin: 6px 0 10px;
-  }
+  position: relative;
 
   &::after {
     content: "";
@@ -129,8 +100,6 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
   .swiper-container {
     padding: 0 0 8px;
     overflow: visible;
-    width: 100%;
-    box-sizing: border-box;
   }
 
   .category-tab {
@@ -140,17 +109,6 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
     border: 1px solid $border-color;
     transition: all 0.2s ease;
     cursor: pointer;
-    white-space: nowrap;
-    box-sizing: border-box;
-
-    @media (max-width: 400px) {
-      padding: 7px 14px;
-    }
-
-    @media (max-width: 320px) {
-      padding: 6px 12px;
-      border-radius: 3px;
-    }
 
     &:hover {
       border-color: rgba($primary-color, 0.3);
@@ -173,14 +131,6 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       transition: color 0.2s ease;
       text-transform: capitalize;
       white-space: nowrap;
-
-      @media (max-width: 400px) {
-        font-size: 13px;
-      }
-
-      @media (max-width: 320px) {
-        font-size: 12px;
-      }
     }
   }
 }
@@ -188,6 +138,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 // Product List
 .product-list {
   padding: 0;
+
   margin: 0 auto;
   list-style: none;
   display: grid;
@@ -254,20 +205,24 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       opacity: 1;
       transform: translateY(0);
     }
+
   }
 
   .product-item {
     margin-bottom: 0;
+
     border-radius: 10px;
     background-color: $white;
     box-shadow: $shadow-sm;
     overflow: hidden; /* Changed from visible to hidden to prevent content overflow */
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0,0,0,0.05);
     height: 100%;
+
     width: 100%;
     box-sizing: border-box;
     max-width: 100%;
@@ -319,83 +274,37 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       z-index: 1;
     }
 
+
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: $shadow-md;
-      border-color: rgba($primary-color, 0.3);
-
-      &::after {
-        opacity: 1;
-      }
-    }
-
-    // Add a subtle bottom highlight on hover
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(
-        to right,
-        $primary-light,
-        $primary-color,
-        $primary-light
-      );
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
-    }
-
-    // Active state
-    &:active {
-      transform: translateY(-2px) scale(0.98);
-      transition: all 0.1s ease;
+      transform: translateY(-3px);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
 
     .wishlist-button {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: rgba(255, 255, 255, 0.9);
+      top: 8px;
+      right: 8px;
+      background-color: rgba(255, 255, 255, 0.8);
       border: none;
-      cursor: pointer;
-      z-index: 10;
       padding: 0;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
       border-radius: 50%;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      width: 36px;
-      height: 36px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
       &:hover {
-        transform: scale(1.15) rotate(5deg);
-        background-color: rgba(255, 255, 255, 1);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
       }
 
       &:active {
-        transform: scale(0.9);
-      }
-
-      svg {
-        transition: all 0.3s ease;
-
-        &:hover {
-          filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
-        }
-      }
-
-      @media (max-width: 576px) {
-        width: 32px;
-        height: 32px;
-        top: 8px;
-        right: 8px;
+        transform: scale(0.95);
       }
 
       svg {
@@ -411,6 +320,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       padding: 12px;
       position: relative;
       flex: 1; /* Allow content to expand and fill the card */
+
       z-index: 2; /* Above the ::before highlight */
       width: 100%;
       box-sizing: border-box;
@@ -470,6 +380,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
           margin-bottom: 8px;
         }
 
+
         @media (max-width: 576px) {
           height: 110px;
           border-radius: 6px;
@@ -497,66 +408,26 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
         img {
           width: 100%;
           height: 100%;
-          object-fit: contain; /* Changed from cover to contain */
-          object-position: center;
-          transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-
-          /* Fallback for older browsers */
-          max-width: 100%;
-          max-height: 100%;
-
-          @media (max-width: 576px) {
-            padding: 5px; /* Add some padding on small screens */
-          }
-
-          /* Fix for very small screens */
-          @media (max-width: 400px) {
-            padding: 8px;
-          }
-
-          /* Handle different image aspect ratios */
-          &[src*="placeholder"],
-          &:not([src]),
-          &[src=""] {
-            padding: 15px;
-            object-fit: scale-down;
-          }
+          object-fit: cover;
+          transition: transform 0.3s ease;
         }
 
         .discount-badge {
           position: absolute;
-          top: 10px;
-          left: 10px;
+          top: 8px;
+          left: 8px;
           background-color: $accent-color;
           color: $text-dark;
-          font-weight: 700;
-          font-size: 12px;
-          padding: 4px 8px;
-          border-radius: 20px;
+          font-weight: 600;
+          font-size: 11px;
+          padding: 3px 6px;
+          border-radius: 3px;
           z-index: 2;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-          transition: all 0.3s ease;
-
-          @media (max-width: 576px) {
-            font-size: 11px;
-            padding: 3px 7px;
-            top: 8px;
-            left: 8px;
-          }
         }
 
         &:hover {
           img {
-            transform: scale(1.08);
-          }
-
-          &::after {
-            opacity: 1;
-          }
-
-          .discount-badge {
-            background-color: darken($accent-color, 5%);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            transform: scale(1.05);
           }
         }
       }
@@ -566,7 +437,9 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
         min-height: 80px;
+
         padding: 0 2px;
 
         @media (max-width: 768px) {
@@ -603,6 +476,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
           color: $text-dark;
           margin-bottom: 6px;
           display: -webkit-box;
+
           -webkit-line-clamp: 1; /* Show only 1 line by default */
           line-clamp: 1;
           -webkit-box-orient: vertical;
@@ -649,12 +523,14 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
           @media (max-width: 400px) {
             font-size: 11px;
             margin-bottom: 2px;
+
           }
         }
 
         .product-weight {
           font-size: 13px;
           color: $text-light;
+
           margin-bottom: 8px;
           display: inline-block;
           line-height: 1.2;
@@ -694,16 +570,20 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
             margin-bottom: 3px;
             padding: 1px 3px;
             border-radius: 4px;
+
           }
         }
 
         .product-price {
           font-size: 16px;
+
           font-weight: 700;
+
           color: $primary-color;
           display: flex;
           align-items: center;
           margin-top: auto;
+
           padding-top: 6px;
           border-top: 1px solid rgba(0, 0, 0, 0.05);
           transition: all 0.3s ease;
@@ -712,6 +592,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
             font-size: 15px;
             padding-top: 5px;
           }
+
 
           @media (max-width: 576px) {
             font-size: 14px;
@@ -734,6 +615,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
             margin-right: 8px;
             font-weight: 400;
             font-size: 13px;
+
             position: relative;
 
             // Add a strike-through animation on hover
@@ -786,6 +668,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
               border-radius: 2px;
               z-index: -1;
             }
+
           }
         }
       }
@@ -795,6 +678,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       display: flex;
       justify-content: center; /* Center by default */
       align-items: center;
+
       padding: 0 10px 10px; /* Reduced padding */
       margin-top: auto; /* Push to bottom of card */
       position: relative;
@@ -832,12 +716,14 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
         padding: 0 3px 3px;
       }
 
+
       .cart-controls {
         display: flex;
         align-items: center;
         margin-left: auto;
         width: 100%;
         justify-content: flex-end;
+
 
         .buttons-container {
           display: flex;
@@ -921,19 +807,23 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
           }
         }
 
+
         .cart-button {
           background-color: $primary-color;
           color: $white;
           border: none;
+
           border-radius: 50px;
           padding: 6px 12px;
           font-size: 13px;
           font-weight: 600;
+
           cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transition: all 0.2s ease;
           display: flex;
           align-items: center;
           justify-content: center;
+
           box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
           position: relative;
           overflow: hidden;
@@ -993,17 +883,13 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
             transition: all 0.5s ease;
           }
 
+
           &:hover {
             background-color: $primary-dark;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-
-            &::before {
-              left: 100%;
-            }
           }
 
           &:active {
+
             transform: translateY(0) scale(0.95);
           }
 
@@ -1044,10 +930,12 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
             width: 36px;
             height: 36px; /* Match the height of Add button */
             min-width: unset; /* Override min-width for quantity buttons */
+
             padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
+
             border-radius: 50px; /* Match the border-radius of other buttons */
             flex-shrink: 0; /* Prevent shrinking */
             background-color: rgba(255, 255, 255, 0.1); /* Slightly visible background */
@@ -1241,7 +1129,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
             background-color: darken($accent-color, 5%) !important;
           }
 
-          /* Removed conflicting media queries */
+
         }
       }
     }
@@ -1270,12 +1158,8 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 
 // Animations
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {

@@ -18,6 +18,12 @@ type Props = {
   isLast: boolean;
 };
 
+interface SubscriptionData {
+  delivery_preference: string;
+  no_of_deliveries?: string;
+  cart_order_date?: string;
+}
+
 export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
@@ -26,6 +32,12 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const [cartItemId, setCartItemId] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [prevQuantity, setPrevQuantity] = useState<number>(0);
+  const [orderType, setOrderType] = useState<number>(0);
+
+
+ const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
+
+  console.log("subscriptionData", subscriptionData)
 
   const c_id = localStorage.getItem("c_id") || "";
   const cityId = localStorage.getItem("cityId") || "";
@@ -62,6 +74,8 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
         if (matchedItem) {
           setQuantity(Number(matchedItem.quantity) || 1);
           setCartItemId(String(matchedItem.cart_id));
+          setOrderType(matchedItem.order_type);
+          setSubscriptionData(matchedItem);
         } else {
           setQuantity(0);
           setCartItemId(null);
@@ -151,18 +165,28 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     }
   };
 
+
+
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 0 || !cartItemId) return;
+
+    const preferenceName = subscriptionData?.delivery_preference || "0";  
+
+    // console.log("preferenceName", preferenceName);
+    const noOfDeliveries = subscriptionData?.no_of_deliveries || "0";  
+    const orderDate = subscriptionData?.cart_order_date || getTomorrowDate() || "0";
+    const orderType = (subscriptionData?.delivery_preference && subscriptionData?.no_of_deliveries && subscriptionData?.cart_order_date) ? "1" : "2";
+
     try {
       const formData = new FormData();
       formData.append("id", cartItemId);
       formData.append("c_id", c_id);
       formData.append("package_id", "13");
       formData.append("quantity", String(newQuantity));
-      formData.append("delivery_preference", "0");
-      formData.append("no_of_deliveries", "0");
-      formData.append("order_date", getTomorrowDate());
-      formData.append("order_type", "2");
+      formData.append("delivery_preference", preferenceName);
+      formData.append("no_of_deliveries", noOfDeliveries);
+      formData.append("order_date", orderDate);
+      formData.append("order_type", orderType);
 
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
@@ -192,6 +216,9 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       });
     }
   };
+
+
+
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -411,46 +438,53 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           <span className="proPrice">₹ {dish.price}</span>
         )}
 
+
         <div className="cartButtonWrap">
           {quantity < 1 ? (
             <button className="cartButton" onClick={HandleAddToCart}>
               + Add
             </button>
           ) : (
-            <>
-              <button
-                className="cartButton"
-                onClick={(event) =>
-                  quantity === 1
-                    ? handleRemoveFromCart(event)
-                    : handleUpdateCart(quantity - 1)
-                }
-              >
-                <svg.MinusSvg />
-              </button>
+            (
+              <>
+                <button
+                  className="cartButton"
+                  onClick={(event) =>
+                    quantity === 1
+                      ? handleRemoveFromCart(event)
+                      : handleUpdateCart(quantity - 1)
+                  }
+                >
+                  <svg.MinusSvg />
+                </button>
 
-              <div className="countNum">
-                {isAnimating && (
-                  <span
-                    className={
-                      quantity > prevQuantity ? "scroll-up" : "scroll-down"
-                    }
-                  >
-                    {quantity}
-                  </span>
-                )}
-                {!isAnimating && <span>{quantity}</span>}
-              </div>
+                <div className="countNum">
+                  {isAnimating ? (
+                    <span
+                      className={
+                        quantity > prevQuantity ? "scroll-up" : "scroll-down"
+                      }
+                    >
+                      {quantity}
+                    </span>
+                  ) : (
+                    <span>{quantity}</span>
+                  )}
+                </div>
 
-              <button
-                className="cartButton"
-                onClick={() => handleUpdateCart(quantity + 1)}
-              >
-                <svg.AddSvg />
-              </button>
-            </>
+                <button
+                  className="cartButton"
+                  onClick={() => handleUpdateCart(quantity + 1)}
+                >
+                  <svg.AddSvg />
+                </button>
+              </>
+            )
           )}
         </div>
+
+
+
       </div>
     </div>
   );

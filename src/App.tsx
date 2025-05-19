@@ -1,12 +1,9 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
 import { useAppDispatch } from './store/actions/useAppDispatch';
 import { fetchWishlist } from './store/slices/wishlistSlice';
 import { RootState } from './store';
-
 import { Loader } from './components/Loader';
-import { AppRouter } from './navigation/AppRouter';
 
 import AOS from 'aos';
 
@@ -25,8 +22,10 @@ function App() {
 
   return (
     <div id="app">
+
       <AppRouter />
       <Loader />
+
     </div>
   );
 }

@@ -61,7 +61,10 @@ export const Dish: React.FC = () => {
   // console.log("isModalOpen", isModalOpen);
 
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const [deliveryPreference, setDeliveryPreference] = useState<string>("1");
+
+  
+  const [deliveryPreference, setDeliveryPreference] = useState<string>('1');
+
 
   const [deliveries, setDeliveries] = useState<number>(30);
 
@@ -335,7 +338,7 @@ export const Dish: React.FC = () => {
         if (newCartId) {
           setCartItemId(String(newCartId));
         } else {
-          // await fetchCartData();
+          // await fetchCartData(); 
         }
       } else {
         notification.error({
@@ -830,18 +833,18 @@ export const Dish: React.FC = () => {
   // const handleAddToCartWithCustomPreferences = async () => {
   //   const dishWithCustomPreferences = {
   //     c_id: c_id || "null",
-  //     // package_id: 13,
+  //     // package_id: 13, 
   //     package_days: 0,
-  //     product_id: dish.product_id,
-  //     product_option_id: 6,
-  //     product_option_value_id: 11,
+  //     product_id: dish.product_id, 
+  //     product_option_id: 6, 
+  //     product_option_value_id: 11, 
   //     quantity: 1,
-  //     weight: dish.weight,
-  //     weight_unit: "g",
+  //     weight: dish.weight, 
+  //     weight_unit: "g", 
   //     delivery_preference: deliveryPreference,
   //     no_of_deliveries: deliveries,
-  //     order_date: startDate,
-  //     order_type: 2,
+  //     order_date: startDate, 
+  //     order_type: 2, 
   //   };
 
   //   const cartCount = await addToCartApi(dishWithCustomPreferences);
@@ -939,125 +942,92 @@ export const Dish: React.FC = () => {
   const renderDetails = (): JSX.Element => {
     return (
       <div className="productInfoBox">
-        {/* <span className="product-category">{dish.category_name || "Dairy Product"}</span> */}
-        <div className="product-info-container">
-          <div className="infoWrap">
-            <h3
-              className="number-of-lines-1"
-              style={{ textTransform: "capitalize" }}
-            >
-              {dish.option_value_name}
-            </h3>
 
-            {/* Product features */}
-            <div className="product-features">
-              <span className="feature-title">Product Details</span>
-              <div className="features-list">
-                <span className="feature-item">
-                  {dish.weight} {dish.weight_unit}
-                </span>
-                {/* {dish.fat && <span className="feature-item">Fat {dish.fat}%</span>}
-                {dish.snf && <span className="feature-item">SNF {dish.snf}%</span>}
-                {dish.isOrganic && <span className="feature-item">Organic</span>}
-                {dish.isFresh && <span className="feature-item">Fresh</span>} */}
-              </div>
-            </div>
-
-            {/* Price section */}
-            <div className="priceWrap">
-              <div className="price-container">
-                {Number(dish.discount ?? 0) > 0 ? (
-                  <>
-                    <div className="original-price">
-                      <span className="currency">₹</span>
-                      <span>{dish.price}</span>
-                    </div>
-                    <div className="discount-price">
-                      <span className="currency">₹</span>
-                      <span className="amount">
-                        {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
-                      </span>
-                      <span
-                        className="discount-badge"
-                        aria-label={`${Math.round(
-                          (Number(dish.discount) / Number(dish.price)) * 100
-                        )}% off`}
-                      >
-                        {Math.round(
-                          (Number(dish.discount) / Number(dish.price)) * 100
-                        )}
-                        % OFF
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <div className="current-price">
-                    <span className="currency">₹</span>
-                    <span className="amount">{dish.price}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Quantity selector */}
-            <div className="ppdBox">
-              <span className="quantity-label">Quantity</span>
-              <div className="cartButtonWrap">
-                <button
-                  onClick={(event) => {
-                    if (isInCart) {
-                      quantity === 1
-                        ? handleRemoveFromCart(event)
-                        : handleUpdateCart(quantity - 1);
-                    } else {
-                      if (localQuantity > 1) {
-                        setLocalQuantity(localQuantity - 1);
-                      }
-                    }
-                  }}
-                  className="cartButton"
-                  aria-label="Decrease quantity"
-                >
-                  <svg.MinusSvg />
-                </button>
-
-                <span
-                  className="countNum"
-                  aria-label={`Quantity: ${
-                    isInCart ? quantity : localQuantity
-                  }`}
-                >
-                  {isInCart ? quantity : localQuantity}
-                </span>
-
-                <button
-                  onClick={() => {
-                    if (isInCart) {
-                      handleUpdateCart(quantity + 1);
-                    } else {
-                      setLocalQuantity(localQuantity + 1);
-                    }
-                  }}
-                  className="cartButton"
-                  aria-label="Increase quantity"
-                >
-                  <svg.AddSvg />
-                </button>
-              </div>
-              <span className="per-day-label">Per Day</span>
-            </div>
-
-            {/* Add to Cart button only if not in cart */}
-            {/* {!isInCart && (
+        <div className="infoWrap">
+          <h3
+            className="number-of-lines-1"
+            style={{ textTransform: "capitalize" }}
+          >
+            {dish.option_value_name}
+          </h3>
+          <span className="t16">{dish.weight} ml</span>
+          <div className="ppdBox">
+            <span>Packs</span>
+            <div className="cartButtonWrap">
               <button
-                onClick={() => handleUpdateCart(localQuantity)}
-                className="addToCartButton"
-                aria-label="Add to cart"
+                onClick={(event) => {
+                  if (isInCart) {
+                    quantity === 1
+                      ? handleRemoveFromCart(event)
+                      : handleUpdateCart(quantity - 1);
+                  } else {
+                    if (localQuantity > 1) {
+                      setLocalQuantity(localQuantity - 1);
+                    }
+                  }
+                }}
+                className="cartButton"
               >
-                Add to Cart
+                <svg.MinusSvg />
               </button>
-            )} */}
+
+              <span className="countNum">
+                {isInCart ? quantity : localQuantity}
+
+
+              </span>
+
+              <button
+                onClick={() => {
+                  if (isInCart) {
+                    handleUpdateCart(quantity + 1);
+                  } else {
+                    setLocalQuantity(localQuantity + 1);
+                  }
+                }}
+                className="cartButton"
+
+              >
+                <svg.AddSvg />
+              </button>
+
+            </div>
+            <span>Per Day</span>
           </div>
+
+          {/* Add to Cart button only if not in cart */}
+          {!isInCart && (
+            <button
+              onClick={() => handleUpdateCart(localQuantity)}
+              className="addToCartButton"
+            >
+              {/* Add to Cart */}
+            </button>
+          )}
+
+          <div className="priceWrap">
+            <span>
+              {Number(dish.discount ?? 0) > 0 ? (
+                <>
+                  <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
+                    ₹ {dish.price}
+                  </span>
+                  <span className="proPrice" style={{ marginLeft: '8px' }}>
+                    ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+                  </span>
+                </>
+              ) : (
+                <span className="proPrice">
+                  ₹ {dish.price}
+                </span>
+              )}
+            </span>
+
+            )} */}
+
+          </div>
+          {/* <span className="ppText">Per Pack</span>
+          <p className="fatText">Fat 3.0%, SNF 8.5%</p> */}
         </div>
       </div>
     );
@@ -1130,57 +1100,63 @@ export const Dish: React.FC = () => {
   const renderModal = (): JSX.Element => {
     if (!isModalOpen) return <> </>;
     return (
-      <components.Modal
-        title="Delivery Preferences"
+
+      <components.Modal title="Delivery Preferences"
+
+
         onClose={setIsModalOpenDaily}
       >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
-            <label>Start Date:</label>
+
+            <label>Start Date:- </label>
+
             <DatePicker
               selected={startDate ? new Date(startDate) : null}
               onChange={(date: Date | null) => {
                 if (date) {
-                  setStartDate(date.toISOString().split("T")[0]);
+
+                  setStartDate(date.toISOString().split('T')[0]);
                 } else {
-                  setStartDate("");
+                  setStartDate('');
+
                 }
               }}
               minDate={new Date(minDate)}
               dateFormat="yyyy-MM-dd"
               placeholderText="Select a date"
+
+
               required
             />
           </div>
-          <div className="main-card-daily-delivery-box">
-            <label>Order Instruction:</label>
-            <select
-              value={deliveryPreference}
-              onChange={(e) => setDeliveryPreference(e.target.value)}
-            >
-              {deliveryOptionsPreference &&
+          <select
+            value={deliveryPreference}
+            onChange={(e) => setDeliveryPreference(e.target.value)}
+          >
+            {deliveryOptionsPreference &&
               deliveryOptionsPreference.length > 0 ? (
-                deliveryOptionsPreference.map((elem) => (
-                  <>
-                    {elem.deliveryPreference &&
+              deliveryOptionsPreference.map((elem) => (
+                <>
+                  {elem.deliveryPreference &&
                     elem.deliveryPreference.length > 0 ? (
-                      elem.deliveryPreference.map((option: any) => (
-                        <option key={option.id} value={option.id}>
-                          {option.name}
-                        </option>
-                      ))
-                    ) : (
-                      <option key="no-preference" value="">
-                        No delivery options available
+                    elem.deliveryPreference.map((option: any) => (
+                      <option key={option.id} value={option.id}>
+                        {option.name}
                       </option>
-                    )}
-                  </>
-                ))
-              ) : (
-                <option value="">No delivery options available</option>
-              )}
-            </select>
-          </div>
+                    ))
+                  ) : (
+                    <option key="no-preference" value="">
+                      No delivery options available
+                    </option>
+                  )}
+                </>
+              ))
+            ) : (
+              <option value="">No delivery options available</option>
+            )}
+          </select>
+
           <div className="delivery-dropdown">
             <label>Select Days:</label>
             <select
@@ -1193,43 +1169,50 @@ export const Dish: React.FC = () => {
             >
               {deliveryOptionsPreference &&
                 deliveryOptionsPreference.length > 0 &&
-                deliveryOptionsPreference.flatMap((elem) => {
-                  if (!elem.packages || elem.packages.length === 0) return [];
 
-                  return elem.packages.flatMap((option: any) => {
-                    if (option.package_name === "Daily") {
-                      return option.no_of_deliveries
-                        .split(",")
-                        .map((delivery: string, index: number) => (
-                          <option key={index} value={delivery}>
-                            {`${delivery}`}
-                          </option>
-                        ));
-                    }
-                    return [];
-                  });
+                deliveryOptionsPreference.map((elem) => {
+                  return elem.packages && elem.packages.length > 0
+                    ? elem.packages.map((option: any) => {
+                      if (option.package_name === "Daily") {
+                        return option.no_of_deliveries
+                          .split(",")
+                          .map((delivery: string, index: number) => (
+                            <option key={index} value={delivery}>
+                              {`${delivery}`}
+                            </option>
+                          ));
+                      }
+                    })
+                    : null;
+
                 })}
             </select>
           </div>
         </div>
         <div>
-          {!cartItemId ? (
-            <>
-              <components.Button
-                text="Confirm and Add to Cart"
-                onClick={handleAddToCartWithPreferences}
-              />
-            </>
-          ) : (
-            <>
-              <components.Button
-                text="update and Add to Cart"
-                onClick={handleupdatetheAddToCartt}
-              />
-            </>
-          )}
+
+
+          {
+            !cartItemId
+              ? <>
+                <components.Button
+                  text="Confirm and Add to Cart"
+                  onClick={handleAddToCartWithPreferences}
+                />
+              </> :
+              <>
+                <components.Button
+                  text="update and Add to Cart"
+                  onClick={handleupdatetheAddToCartt}
+                />
+              </>
+          }
+
+
         </div>
       </components.Modal>
+
+
     );
   };
 
@@ -1244,51 +1227,55 @@ export const Dish: React.FC = () => {
       >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
-            <label>Start Date: </label>
+
+            <label>Start Date:- </label>
+
             <DatePicker
               selected={startDate ? new Date(startDate) : null}
               onChange={(date: Date | null) => {
                 if (date) {
-                  setStartDate(date.toISOString().split("T")[0]);
+
+                  setStartDate(date.toISOString().split('T')[0]);
                 } else {
-                  setStartDate("");
+                  setStartDate('');
+
                 }
               }}
               minDate={new Date(minDate)}
               dateFormat="yyyy-MM-dd"
               placeholderText="Select a date"
+
+
               required
             />
           </div>
-          <div className="main-card-daily-delivery-box">
-            <label>Order Instruction:</label>
-            <select
-              value={deliveryPreference}
-              onChange={(e) => setDeliveryPreference(e.target.value)}
-            >
-              {deliveryOptionsPreference &&
+          <select
+            value={deliveryPreference}
+            onChange={(e) => setDeliveryPreference(e.target.value)}
+          >
+            {deliveryOptionsPreference &&
               deliveryOptionsPreference.length > 0 ? (
-                deliveryOptionsPreference.map((elem) => (
-                  <>
-                    {elem.deliveryPreference &&
+              deliveryOptionsPreference.map((elem) => (
+                <>
+                  {elem.deliveryPreference &&
                     elem.deliveryPreference.length > 0 ? (
-                      elem.deliveryPreference.map((option: any) => (
-                        <option key={option.id} value={option.id}>
-                          {option.name}
-                        </option>
-                      ))
-                    ) : (
-                      <option key="no-preference" value="">
-                        No delivery options available
+                    elem.deliveryPreference.map((option: any) => (
+                      <option key={option.id} value={option.id}>
+                        {option.name}
                       </option>
-                    )}
-                  </>
-                ))
-              ) : (
-                <option value="">No delivery options available</option>
-              )}
-            </select>
-          </div>
+                    ))
+                  ) : (
+                    <option key="no-preference" value="">
+                      No delivery options available
+                    </option>
+                  )}
+                </>
+              ))
+            ) : (
+              <option value="">No delivery options available</option>
+            )}
+          </select>
+
           <div className="delivery-dropdown">
             <label>Select Days:</label>
             <select
@@ -1299,46 +1286,40 @@ export const Dish: React.FC = () => {
                 setDeliveries(selectedValue);
               }}
             >
-              {deliveryOptionsPreference &&
-                deliveryOptionsPreference.length > 0 &&
-                deliveryOptionsPreference.flatMap((elem) => {
-                  if (!elem.packages || elem.packages.length === 0) return [];
 
-                  return elem.packages.flatMap((option: any) => {
-                    if (option.package_name === "Alternate Days") {
-                      return option.no_of_deliveries
-                        .split(",")
-                        .map((delivery: string, index: number) => (
-                          <option key={index} value={delivery}>
-                            {`${delivery}`}
-                          </option>
-                        ));
-                    }
-                    return [];
-                  });
+              {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 &&
+                deliveryOptionsPreference.map((elem) => {
+                  return elem.packages && elem.packages.length > 0
+                    ? elem.packages.map((option: any) => {
+                      if (option.package_name === "Alternate Days") {
+                        return option.no_of_deliveries
+                          .split(",")
+                          .map((delivery: string, index: number) => (
+                            <option key={index} value={delivery}>
+                              {`${delivery}`}
+                            </option>
+                          ));
+                      }
+                    })
+                    : null;
+
                 })}
             </select>
           </div>
         </div>
 
         <div>
-          {!cartItemId ? (
-            <>
-              {" "}
-              <components.Button
-                text="Confirm and Add to Cart"
-                onClick={handleAddToCartWithAlternate}
-              />{" "}
-            </>
-          ) : (
-            <>
-              {" "}
-              <components.Button
-                text="update and Add to Cart"
-                onClick={handleupdatetheAddToCart}
-              />
-            </>
-          )}
+
+          {
+            !cartItemId ? <> <components.Button
+              text="Confirm and Add to Cart"
+              onClick={handleAddToCartWithAlternate}
+            /> </> : <> <components.Button
+              text="update and Add to Cart"
+              onClick={handleupdatetheAddToCart}
+            /></>
+          }
+
         </div>
       </components.Modal>
     );

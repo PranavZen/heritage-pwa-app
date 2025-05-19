@@ -81,7 +81,7 @@ export const AddressAdd: React.FC = () => {
 
   useEffect(() => {
     if (areaIdByPincode && Array.isArray(areaIdByPincode) && areaIdByPincode.length > 0) {
-      setSelectedAreaId(areaIdByPincode[0].id);
+      setSelectedAreaId(areaIdByPincode[0].id);  
     }
   }, [areaIdByPincode]);
 
@@ -95,8 +95,8 @@ export const AddressAdd: React.FC = () => {
       localStorage.setItem('cityId', newAddress.city_id);
     }
   }, [newAddress.city_id]);
-
-
+  
+  
 
   const verifyPincode = async (pincode: string) => {
     try {
@@ -283,223 +283,115 @@ export const AddressAdd: React.FC = () => {
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader />;
     return (
-      <section className="scrollable address-add-page">
+      <section className="scrollable">
         <form onSubmit={handleSubmit} className="form-container">
-          {/* Personal Information Section */}
-          <div className="form-section">
-            <h3>Personal Information</h3>
-            <div className="inputWrap">
-              <div className="col-6">
-                <label htmlFor="firstname" className="form-label required">First Name<span>*</span></label>
-                <input
-                  type="text"
-                  id="firstname"
-                  name="firstname"
-                  value={newAddress.firstname}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                  placeholder="Enter your first name"
-                  aria-required="true"
-                />
-              </div>
-              <div className="col-6">
-                <label htmlFor="lastname" className="form-label required">Last Name<span>*</span></label>
-                <input
-                  type="text"
-                  id="lastname"
-                  name="lastname"
-                  value={newAddress.lastname}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                  placeholder="Enter your last name"
-                  aria-required="true"
-                />
-              </div>
+          <div className="inputWrap">
+            <div className="col-6">
+              <label className="form-label">First Name</label>
+              <input
+                type="text"
+                name="firstname"
+                value={newAddress.firstname}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="col-6">
+              <label className="form-label">Last Name</label>
+              <input
+                type="text"
+                name="lastname"
+                value={newAddress.lastname}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
             </div>
           </div>
 
-          {/* Location Information Section */}
-          <div className="form-section">
-            <h3>Location Information</h3>
-            <div className="inputWrap">
-              <div className="col-6">
-                <label htmlFor="pincode" className="form-label required">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                    </svg>
-                    Pincode<span>*</span>
-                  </div>
-                </label>
-                <input
-                  type="text"
-                  id="pincode"
-                  name="pincode"
-                  value={newAddress.pincode}
-                  onChange={handlePincodeChange}
-                  className={`form-input ${isPincodeVerified ? 'verified' : ''}`}
-                  maxLength={6}
-                  required
-                  placeholder="Enter 6-digit pincode"
-                  aria-required="true"
-                />
-              </div>
 
-              <div className="col-6">
-                <label htmlFor="area" className="form-label required">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    Area<span>*</span>
-                  </div>
-                </label>
-                <select
-                  id="area"
-                  value={selectedAreaId}
-                  onChange={handleAreaChange}
-                  required
-                  aria-required="true"
-                >
-                  {(areaIdByPincode && Array.isArray(areaIdByPincode) && areaIdByPincode.length > 0) ? (
-                    areaIdByPincode.map((elem: any) => (
-                      <option key={elem.id} value={elem.id}>
-                        {elem.name}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="">No areas available</option>
-                  )}
-                </select>
-              </div>
+          <div className="inputWrap">
+
+            <div className="col-6">
+              <label className="form-label">Pincode</label>
+              <input
+                type="text"
+                name="pincode"
+                value={newAddress.pincode}
+                onChange={handlePincodeChange}
+                className="form-input"
+                maxLength={6}
+              />
             </div>
 
-            <div className="inputWrap">
-              <div className="col-6">
-                <label htmlFor="state" className="form-label">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    State<span>*</span>
-                  </div>
-                </label>
-                <input
-                  type="text"
-                  id="state"
-                  name="state_name"
-                  value={newAddress.state_name}
-                  className="form-input"
-                  readOnly
-                  aria-label="State (auto-filled from pincode)"
-                />
-              </div>
 
-              <div className="col-6">
-                <label htmlFor="city" className="form-label">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    City<span>*</span>
-                  </div>
-                </label>
-                <input
-                  type="text"
-                  id="city"
-                  name="city_name"
-                  value={newAddress.city_name}
-                  className="form-input"
-                  readOnly
-                  aria-label="City (auto-filled from pincode)"
-                />
-              </div>
+
+            <div className="inputWrap">
+              <label className="form-label">Select Area ID</label>
+
+              <select value={selectedAreaId} onChange={handleAreaChange}>
+                {(areaIdByPincode && Array.isArray(areaIdByPincode) && areaIdByPincode.length > 0) ? (
+                  areaIdByPincode.map((elem: any) => (
+                    <option key={elem.id} value={elem.id}>
+                      {elem.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">No areas available</option>
+                )}
+              </select>
+            </div>
+
+
+
+          </div>
+          <div className="inputWrap">
+            <div className="col-6">
+              <label className="form-label">State</label>
+              <input
+                type="text"
+                name="city_name"
+                value={newAddress.state_name}
+                className="form-input"
+              />
+            </div>
+
+
+            <div className="col-6">
+              <label className="form-label">City</label>
+              <input
+                type="text"
+                name="city_name"
+                value={newAddress.city_name}
+                className="form-input"
+              />
             </div>
           </div>
-
-          {/* Address Details Section */}
-          <div className="form-section">
-            <h3>Address Details</h3>
-            <div className="inputWrap">
-              <div className="col-12">
-                <label htmlFor="building_name" className="form-label">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
-                      <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                    </svg>
-                    Building/Apartment Name<span>*</span>
-                  </div>
-                </label>
-                <input
-                  type="text"
-                  id="building_name"
-                  name="building_name"
-                  value={newAddress.building_name}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="Enter building or apartment name"
-                />
-              </div>
-            </div>
-
-            <div className="inputWrap">
-              <div className="col-12">
-                <label htmlFor="address1" className="form-label required">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                    Address Line 1<span>*</span>
-                  </div>
-                </label>
-                <input
-                  type="text"
-                  id="address1"
-                  name="address1"
-                  value={newAddress.address1}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                  placeholder="Enter your street address"
-                  aria-required="true"
-                />
-              </div>
-            </div>
-
-            <div className="inputWrap">
-              <div className="col-12">
-                <label htmlFor="address2" className="form-label">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                    Address Line 2<span>*</span>
-                  </div>
-                </label>
-                <input
-                  type="text"
-                  id="address2"
-                  name="address2"
-                  value={newAddress.address2}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  placeholder="Apartment, suite, unit, etc. (optional)"
-                />
-              </div>
-            </div>
-
+          <div>
+            <label className="form-label">Address Line 1</label>
+            <input
+              type="text"
+              name="address1"
+              value={newAddress.address1}
+              onChange={handleInputChange}
+              className="form-input"
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Address Line 2</label>
+            <input
+              type="text"
+              name="address2"
+              value={newAddress.address2}
+              onChange={handleInputChange}
+              className="form-input"
+            />
             <div className="checkBoxWrap">
+              <label className="form-label">Default Address</label>
               <input
                 type="checkbox"
-                id="is_default"
                 name="is_default"
                 checked={newAddress.is_default === "1"}
                 onChange={(e) =>
@@ -509,26 +401,12 @@ export const AddressAdd: React.FC = () => {
                   }))
                 }
               />
-              <label htmlFor="is_default" className="form-label">Set as default address</label>
             </div>
           </div>
 
+
           <div className="submitBtnWrap">
             <button type="submit" className="submit-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                {newAddress.id ? (
-                  <>
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                  </>
-                ) : (
-                  <>
-                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                    <polyline points="7 3 7 8 15 8"></polyline>
-                  </>
-                )}
-              </svg>
               {newAddress.id ? "Update Address" : "Add Address"}
             </button>
           </div>
