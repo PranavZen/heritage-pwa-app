@@ -8,8 +8,8 @@ import { Menu } from '../screens/tabs/Menu';
 import { Favorite } from '../screens/tabs/Favorite';
 import { Notification } from '../screens/tabs/Notification';
 import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
-import Order from '../screens/tabs/Order';
 import { actions } from '../store/actions';
+import {Order} from '../screens/tabs/Order';
 
 export const TabNavigator: React.FC = () => {
   const dispatch = useDispatch();

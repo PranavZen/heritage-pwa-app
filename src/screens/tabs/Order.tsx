@@ -41,9 +41,10 @@ interface Props {
 }
 
 // export const Order: React.FC = () => {
-const Order = () => {
-// export const Order: React.FC = () => {
-const Order = () => {
+// const Order = () => {
+
+ export const Order: React.FC = () => {
+
   const location = useLocation();
   const couponCode = location.state?.couponCode;
 
@@ -486,7 +487,6 @@ const Order = () => {
     };
     fetchCoupons();
   }, [shouldRefresh, shouldMount]);
-  }, [shouldRefresh, shouldMount]);
 
   // *******************Super Coupons *******************************
   const { menuLoading } = hooks.useGetMenu();
@@ -557,8 +557,8 @@ const Order = () => {
       e.currentTarget.appendChild(ripple);
 
       // Remove the ripple and clicked class after animation completes
-      const target = e.currentTarget;
-      const rippleEl = ripple;
+      // const target = e.currentTarget;
+      // const rippleEl = ripple;
 
       const target = e.currentTarget;
       const rippleEl = ripple;
@@ -1263,6 +1263,7 @@ const Order = () => {
     if (loading || menuLoading) return <components.Loader />;
     return null;
   };
+
   return (
     <div id="screen" style={{ opacity }}>
       {renderContent()}
@@ -1293,4 +1294,6 @@ const Order = () => {
     </div>
   );
 };
-export default Order;
+
+
+

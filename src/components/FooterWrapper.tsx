@@ -6,21 +6,22 @@ import { useDispatch } from 'react-redux';
 import { actions } from '../store/actions';
 
 // List of routes where we don't want to show the footer
-const excludedRoutes = [
-  Routes.SignIn,
-  Routes.SignUp,
-  Routes.Onboarding,
-  Routes.ForgotPassword,
-  Routes.ForgotPasswordSentEmail,
-  Routes.NewPassword,
-  Routes.ConfirmationCode,
-  Routes.SignUpAccountCreated,
-  Routes.VerifyYourPhoneNumber,
-  Routes.ThankYouPage,
-  // Add any other routes where you don't want the footer to appear
+// Now empty as we want to show footer on all pages
+const excludedRoutes: Routes[] = [
+  // Routes.SignIn,
+  // Routes.SignUp,
+  // Routes.Onboarding,
+  // Routes.ForgotPassword,
+  // Routes.ForgotPasswordSentEmail,
+  // Routes.NewPassword,
+  // Routes.ConfirmationCode,
+  // Routes.SignUpAccountCreated,
+  // Routes.VerifyYourPhoneNumber,
+  // Routes.ThankYouPage,
 ];
 
 // List of routes that already have their own footer implementation
+// Keep this to avoid duplicate footers
 const routesWithOwnFooter = [
   Routes.TabNavigator, // TabNavigator has its own footer
 ];

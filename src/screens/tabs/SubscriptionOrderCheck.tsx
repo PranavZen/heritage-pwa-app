@@ -757,8 +757,8 @@ export const SubscriptionOrderCheck: React.FC = () => {
             <div className="scrollable-containers" style={{maxHeight: "100%"}}>
               <div className="card-list">
                 {Array.isArray(oneTimeOrderData) && oneTimeOrderData.length > 0 ? (
-                  oneTimeOrderData.map((orderData) => (
-                    <div key={orderData.orders_id} className="card" style={{ marginBottom: '2px' }} >
+                  oneTimeOrderData.map((order) => (
+                    <div key={order.orders_id} className="card" style={{ marginBottom: '2px' }} >
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
@@ -829,7 +829,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                           </div>
                           <div className="innerBox">
                             {/* <span>{orderData.order_status_name || "-"}</span> */}
-                            <span className="subExpiredText">{orderData.order_status_name}</span>
+                            <span className="subExpiredText">{order.order_status_name}</span>
                           </div>
                         </div>
                       </div>
@@ -841,13 +841,13 @@ export const SubscriptionOrderCheck: React.FC = () => {
                       {/* Delete Icon */}
                       <div
                         className="delete-icon ddd"
-                        onClick={() => handleDeleteClick(orderData)}
+                        onClick={() => handleDeleteClick(order)}
                         role="button"
                         aria-label="Delete order"
                         tabIndex={0}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter' || e.key === ' ') {
-                            handleDeleteClick(orderData);
+                            handleDeleteClick(order);
                           }
                         }}
                       >
