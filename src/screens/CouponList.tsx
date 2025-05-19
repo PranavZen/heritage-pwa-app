@@ -14,7 +14,7 @@ export const CouponList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [isApplying, setIsApplying] = useState<boolean>(false);
+  const [isApplying, setIsApplying] = useState<boolean>(false); 
 
   const navigate = useNavigate();
 
@@ -60,120 +60,56 @@ export const CouponList: React.FC = () => {
 
   const renderContent = (): JSX.Element => {
     if (loading) {
-      return (
-        <div className="loading">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="loading-icon">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 6v6l4 2"></path>
-          </svg>
-          Loading coupons...
-        </div>
-      );
+      return <div className="loading">Loading coupons...</div>;
     }
 
     if (error) {
-      return (
-        <div className="error">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="12"></line>
-            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
-          Error: {error}
-        </div>
-      );
+      return <div className="error">{`Error: ${error}`}</div>;
     }
 
     return (
-      <div className="coupon-list-container">
-        <h1>Your Discount Coupons</h1>
-        {coupons.length > 0 ? (
-          coupons.map((coupon) => (
-            <div className="card" key={coupon.coupon_id}>
-              <div className="circle-cutout-left" aria-hidden="true"></div>
-              <div className="circle-cutout-right" aria-hidden="true"></div>
-              <div className="card-header">
-                <h3>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20.91 8.84 8.56 2.23a1.93 1.93 0 0 0-1.81 0L3.1 4.13a2.12 2.12 0 0 0-.05 3.69l12.22 6.93a2 2 0 0 0 1.94 0L21 12.51a2.12 2.12 0 0 0-.09-3.67Z"></path>
-                    <path d="m3.09 8.84 12.35-6.61a1.93 1.93 0 0 1 1.81 0l3.65 1.9a2.12 2.12 0 0 1 .1 3.69L8.73 14.75a2 2 0 0 1-1.94 0L3 12.51a2.12 2.12 0 0 1 .09-3.67Z"></path>
-                    <line x1="12" y1="22" x2="12" y2="13"></line>
-                    <path d="M20 13.5v3.37a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13.5"></path>
-                  </svg>
-                  {coupon.name}
-                </h3>
-                <span className="discount">
-                  {coupon.coupon_display}
-                </span>
-              </div>
-              <div className="card-body">
-                <p className="description">{coupon.description}</p>
-              </div>
-              <div className="card-footer">
-                <div className="coupon-info">
-                  <div className="max-amount">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <path d="M16 8h-6.5a2.5 2.5 0 0 0 0 5h3a2.5 2.5 0 0 1 0 5H6"></path>
-                      <path d="M12 18v2"></path>
-                      <path d="M12 6v2"></path>
-                    </svg>
-                    Max Amount: ₹{coupon.cart_max_amount}
-                  </div>
-                  <div className="uses-left">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 20v-6"></path>
-                      <path d="M18 20V10"></path>
-                      <path d="M6 20v-3"></path>
-                      <path d="M18 4V3"></path>
-                      <path d="M6 4V3"></path>
-                      <path d="M12 4V3"></path>
-                      <path d="M12 14v-3"></path>
-                      <path d="M18 14v-3"></path>
-                      <path d="M6 11V8"></path>
-                    </svg>
-                    Uses Left: {coupon.uses_total_coupon}
-                  </div>
+      <>
+        <div>
+          <h1>Your Discount Coupons</h1>
+          {coupons.length > 0 ? (
+            coupons.map((coupon) => (
+              <div className="card" key={coupon.coupon_id}>
+                <div className="card-header">
+                  <h3>{coupon.name}</h3>
+                  <span className="discount">{coupon.coupon_display}</span>
                 </div>
-                <button
-                  onClick={() => {
-                    if (isApplying) return;
-                    setIsApplying(true);
-                    localStorage.setItem('couponCode', coupon.code);
+                <div className="card-body">
+                  <p className="description">{coupon.description}</p>
+                </div>
+                <div className="card-footer">
+                  <div className="max-amount">Max Cart Amount: ₹{coupon.cart_max_amount}</div>
+                  <div className="uses-left">Uses Left: {coupon.uses_total_coupon}</div>
+                  <button
+                    onClick={() => {
+                      if (isApplying) return;
+                      setIsApplying(true);
+                      localStorage.setItem('couponCode', coupon.code);
 
-                    setShowModal(true);
-                    setTimeout(() => {
-                      setShowModal(false);
-                      setIsApplying(false);
-                      navigate('/tab-navigator', {
-                        state: { couponCode: coupon.code }
-                      });
-                    }, 3000);
-                  }}
-                  aria-label={`Apply coupon ${coupon.name}`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7"></path>
-                    <path d="m16 5 5 5"></path>
-                    <path d="M21 5h-5v5"></path>
-                  </svg>
-                  Apply Coupon
-                </button>
+                      setShowModal(true);
+                      setTimeout(() => {
+                        setShowModal(false);
+                        setIsApplying(false);
+                        navigate('/tab-navigator', {
+                          state: { couponCode: coupon.code }
+                        });
+                      }, 3000); 
+                    }}
+                  >
+                    Apply Coupon
+                  </button>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="NoCoupons-available">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20.91 8.84 8.56 2.23a1.93 1.93 0 0 0-1.81 0L3.1 4.13a2.12 2.12 0 0 0-.05 3.69l12.22 6.93a2 2 0 0 0 1.94 0L21 12.51a2.12 2.12 0 0 0-.09-3.67Z"></path>
-              <path d="m3.09 8.84 12.35-6.61a1.93 1.93 0 0 1 1.81 0l3.65 1.9a2.12 2.12 0 0 1 .1 3.69L8.73 14.75a2 2 0 0 1-1.94 0L3 12.51a2.12 2.12 0 0 1 .09-3.67Z"></path>
-              <line x1="12" y1="22" x2="12" y2="13"></line>
-              <path d="M20 13.5v3.37a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13.5"></path>
-            </svg>
-            <p>No coupons available at the moment.<br />Check back later for exciting offers!</p>
-          </div>
-        )}
-      </div>
+            ))
+          ) : (
+            <div className="NoCoupons-available">No coupons available at the moment.</div>
+          )}
+        </div>
+      </>
     );
   };
 
@@ -182,20 +118,12 @@ export const CouponList: React.FC = () => {
       {renderHeader()}
       {renderContent()}
 
-      {/* Enhanced Popup Modal */}
+      {/* Popup Modal */}
       {showModal && (
         <div className="popup-modal">
           <div className="popup-content">
-            <div className="success-icon">
-              <Lottie animationData={CouponApply} style={{ width: 180, height: 180 }} />
-            </div>
-            <p>Coupon Applied Successfully!</p>
-            <div className="coupon-applied-message">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-              </svg>
-              <span>Redirecting to your cart...</span>
-            </div>
+            <Lottie animationData={CouponApply} style={{ width: 150, height: 150 }} />
+            {/* <p>Coupon Applied Successfully!</p> */}
           </div>
         </div>
       )}

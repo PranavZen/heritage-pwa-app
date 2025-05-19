@@ -124,11 +124,11 @@ export const Home: React.FC = () => {
             breakpoints={{
               320: {
                 slidesPerView: 2.8,
-                spaceBetween: 15,
+                spaceBetween: 10,
               },
               480: {
                 slidesPerView: 2.8,
-                spaceBetween: 15,
+                spaceBetween: 10,
               },
               768: {
                 slidesPerView: 3.2,
@@ -136,7 +136,7 @@ export const Home: React.FC = () => {
               },
               1024: {
                 slidesPerView: 4,
-                spaceBetween: 15,
+                spaceBetween: 10,
               },
             }}
           >
@@ -179,7 +179,7 @@ export const Home: React.FC = () => {
 
   const renderRecommendedForYou = (): JSX.Element => {
     return (
-      <div style={{ marginBottom: 40, paddingTop: 20 }}>
+      <div style={{ marginBottom: 40 }}>
         <components.BlockHeading
           title="Recommended for you"
           containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}

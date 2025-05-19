@@ -10,7 +10,7 @@ const AppLayout = () => {
   return (
     <>
       <Outlet />
-      <components.FooterWrapper />
+      {/* <components.FooterWrapper/> */}
     </>
   );
 };
