@@ -1023,7 +1023,7 @@ export const Dish: React.FC = () => {
               )}
             </span>
 
-            )} */}
+        
 
           </div>
           {/* <span className="ppText">Per Pack</span>

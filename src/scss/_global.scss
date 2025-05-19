@@ -39,21 +39,17 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-
   height: 100vh;
   min-height: 100%;
   overflow-y: visible;
   // padding-bottom: calc(var(--footer-height) + 20px); /* Add padding to account for footer height plus some extra space */
-
 }
 
 .scrollable {
   overflow-y: auto;
-
   height: auto;
-  // min-height: 100%;
-  padding-bottom: calc(var(--footer-height) + 20px); /* Add padding to account for footer height plus some extra space */
-
+  min-height: 100%;
+  padding-bottom: calc(var(--footer-height) + 0px); /* Add padding to account for footer height plus some extra space */
 }
 
 .clickable {
@@ -1144,7 +1140,7 @@ details summary {
 
 
     @media screen and (max-width: 767px) {
-      flex-wrap: wrap;
+
 
 
       small {
@@ -1171,8 +1167,7 @@ details summary {
       display: inline-block;
       margin-bottom: 5px;
     }
-  }
-}
+
 
 // Customer Care
 
@@ -1511,7 +1506,7 @@ select {
   gap: 15px;
   justify-content: space-between;
   // row-gap: 40px;
- 
+
   .innerMenu {
     width: 100%;
     height: 200px;
@@ -2589,9 +2584,24 @@ select {
   margin: 10px 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
+}
+
+// Global footer wrapper
+.global-footer-wrapper {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  z-index: 100;
+  max-width: var(--screen-width);
+  margin: 0 auto;
+  right: 0;
+  background-color: #010101;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+
+  @media screen and (max-width: 767px) {
+    max-width: 100%;
+  }
 }
 .myAddressBoxWrap {
   position: relative;

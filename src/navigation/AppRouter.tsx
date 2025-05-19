@@ -8,10 +8,9 @@ import { components } from '../components';
 // Layout component that wraps all routes and includes the footer
 const AppLayout = () => {
   return (
-    <>
+    <components.FooterWrapper>
       <Outlet />
-      {/* <components.FooterWrapper/> */}
-    </>
+    </components.FooterWrapper>
   );
 };
 

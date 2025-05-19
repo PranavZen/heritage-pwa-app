@@ -6,6 +6,7 @@ import { RootState } from './store';
 import { Loader } from './components/Loader';
 
 import AOS from 'aos';
+import { AppRouter } from './navigation/AppRouter';
 
 function App() {
   const dispatch = useAppDispatch();

@@ -26,7 +26,11 @@ const routesWithOwnFooter = [
   Routes.TabNavigator, // TabNavigator has its own footer
 ];
 
-export const FooterWrapper: React.FC = () => {
+interface FooterWrapperProps {
+  children?: React.ReactNode;
+}
+
+export const FooterWrapper: React.FC<FooterWrapperProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
@@ -43,14 +47,18 @@ export const FooterWrapper: React.FC = () => {
     navigate(Routes.TabNavigator);
   };
 
-  // Don't render the footer if we're in an excluded route or in a route with its own footer
-  if (isExcluded || hasOwnFooter) {
-    return null;
+  // Only check for routes with their own footer to avoid duplicates
+  if (hasOwnFooter) {
+    return <>{children}</>;
   }
 
+  // Always show footer on all other pages, even if they were previously excluded
   return (
-    <div className="global-footer-wrapper" onClick={handleTabNavigation}>
-      <Footer />
-    </div>
+    <>
+      {children}
+      <div className="global-footer-wrapper" onClick={handleTabNavigation}>
+        <Footer />
+      </div>
+    </>
   );
 };
