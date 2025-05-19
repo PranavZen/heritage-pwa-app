@@ -12,5 +12,9 @@
   --header-height: 100px;
   --footer-height: 70px;
 
+  @media screen and (max-width: 767px) {
+    --footer-height: 75px;
+  }
+
   --screen-width: 650px;
 }

@@ -131,7 +131,7 @@ export const Home: React.FC = () => {
                 spaceBetween: 10,
               },
               768: {
-                slidesPerView: 3.2,
+                slidesPerView: 4.2,
                 spaceBetween: 20,
               },
               1024: {

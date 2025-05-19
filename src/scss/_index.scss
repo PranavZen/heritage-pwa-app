@@ -4,59 +4,71 @@
 @use "_reset.scss";
 @use "_global.scss";
 @use "_variables.scss";
+
+@use "_upperBox.scss";
+@use "_productInfoBox.scss";
+@use "_infoBtnsWrap.scss";
+@use "_deliveryModal.scss";
+@use "_editProfile.scss";
+@use "_myAddress.scss";
+@use "_addressAdd.scss";
+@use "_wallet.scss";
+@use "_tabNavigator.scss";
+@use "_font-consistency.scss";
+
 @font-face {
-  font-family: "SF Pro Display Medium";
+  font-family: "SF Pro Display";
   font-style: normal;
-  // font-weight: 400;
+  font-weight: 500;
   src: local("SF Pro Display Medium"),
     url("../assets/fonts/sf-pro-display/SF-Pro-Display-Medium.otf")
       format("opentype");
 }
 @font-face {
-    font-family: "SF Pro Display Light";
-    font-style: normal;
-    // font-weight: 400;
-    src: local("SF Pro Display Light"),
-      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Light.otf")
-        format("opentype");
-  }
-  @font-face {
-    font-family: "SF Pro Display Regular";
-    font-style: normal;
-    // font-weight: 400;
-    src: local("SF Pro Display Regular"),
-      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Regular.otf")
-        format("opentype");
-  }
-  @font-face {
-    font-family: "SF Pro Display Semibold";
-    font-style: normal;
-    // font-weight: 400;
-    src: local("SF Pro Display Semibold"),
-      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Semibold.otf")
-        format("opentype");
-  }
-  @font-face {
-    font-family: "SF Pro Display Bold";
-    font-style: normal;
-    // font-weight: 400;
-    src: local("SF Pro Display Bold"),
-      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Bold.otf")
-        format("opentype");
-  }
-  @font-face {
-    font-family: "SF Pro Display Heavy";
-    font-style: normal;
-    // font-weight: 400;
-    src: local("SF Pro Display Heavy"),
-      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Heavy.otf")
-        format("opentype");
-  }
-  @font-face {
-    font-family: "SF Pro Display Ultralight";
-    font-style: normal;
-    // font-weight: 400;
-    src: local("SF Pro Display Ultralight"),
-      url("../assets/fonts/sf-pro-display/SF-Pro-Display-Ultralight.otf")
-        format("opentype");
-  }
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 300;
+  src: local("SF Pro Display Light"),
+    url("../assets/fonts/sf-pro-display/SF-Pro-Display-Light.otf")
+      format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 400;
+  src: local("SF Pro Display Regular"),
+    url("../assets/fonts/sf-pro-display/SF-Pro-Display-Regular.otf")
+      format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 600;
+  src: local("SF Pro Display Semibold"),
+    url("../assets/fonts/sf-pro-display/SF-Pro-Display-Semibold.otf")
+      format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 700;
+  src: local("SF Pro Display Bold"),
+    url("../assets/fonts/sf-pro-display/SF-Pro-Display-Bold.otf")
+      format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 800;
+  src: local("SF Pro Display Heavy"),
+    url("../assets/fonts/sf-pro-display/SF-Pro-Display-Heavy.otf")
+      format("opentype");
+}
+@font-face {
+  font-family: "SF Pro Display";
+  font-style: normal;
+  font-weight: 200;
+  src: local("SF Pro Display Ultralight"),
+    url("../assets/fonts/sf-pro-display/SF-Pro-Display-Ultralight.otf")
+      format("opentype");
+}

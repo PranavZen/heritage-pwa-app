@@ -1,0 +1,57 @@
+/* 
+ * This file ensures that all elements use the "SF Pro Display" font family
+ * with appropriate font weights throughout the application.
+ */
+
+/* Base font for all elements */
+* {
+  font-family: "SF Pro Display" !important;
+}
+
+/* Font weights for different elements */
+h1, h2, .bold-text {
+  font-weight: 700;
+}
+
+h3, h4, .semi-bold-text, strong, b {
+  font-weight: 600;
+}
+
+h5, h6, .medium-text {
+  font-weight: 500;
+}
+
+p, span, div, a, button, input, textarea, select, option, .regular-text {
+  font-weight: 400;
+}
+
+.light-text {
+  font-weight: 300;
+}
+
+.ultra-light-text {
+  font-weight: 200;
+}
+
+/* Ensure inputs and form elements use the correct font */
+input, 
+textarea, 
+select, 
+option, 
+button,
+::placeholder {
+  font-family: "SF Pro Display" !important;
+}
+
+/* Fix for any third-party components that might override fonts */
+[class*="fa-"],
+[class^="fa-"],
+[class*="icon-"],
+[class^="icon-"] {
+  font-family: inherit !important;
+}
+
+/* Ensure SVG text uses the correct font */
+svg text {
+  font-family: "SF Pro Display" !important;
+}

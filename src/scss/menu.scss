@@ -61,7 +61,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Always show exactly 2 columns */
   gap: 15px;
-  padding: 10px 15px;
+  // padding: 10px 15px;
   animation: fadeIn 0.5s ease;
 
   // For medium screens, maintain 2 columns but with more spacing

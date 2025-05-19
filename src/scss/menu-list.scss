@@ -22,6 +22,18 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
     padding-bottom: 80px;
     max-width: 1400px;
     margin: 0 auto;
+
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 767px) {
+    padding: 0 0 100px;
+  }
+
+  @media (max-width: 320px) {
+    padding: 0 0 10px;
+
   }
 }
 
@@ -126,34 +138,142 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 // Product List
 .product-list {
   padding: 0;
-  margin: 0 15px;
+
+  margin: 0 auto;
   list-style: none;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* Use minmax to prevent overflow */
+  gap: 8px;
+  width: calc(100% - 16px);
+  box-sizing: border-box;
+  max-width: 100%;
 
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+  // Add animation for items
+  & > li {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+    width: 100%;
+    box-sizing: border-box;
+
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.05}s;
+      }
+    }
   }
 
-  @media (min-width: 1400px) {
-    max-width: 1200px;
-    margin: 0 auto;
+  // Mobile first approach with consistent breakpoints
+  @media (max-width: 320px) {
+    gap: 6px;
+    width: calc(100% - 12px);
+  }
+
+  @media (min-width: 400px) {
+    gap: 10px;
+    width: calc(100% - 20px);
+  }
+
+  @media (min-width: 576px) {
+    gap: 12px;
+    width: calc(100% - 24px);
+  }
+
+  @media (min-width: 768px) {
+    gap: 15px;
+    width: calc(100% - 30px);
+  }
+
+  @media (min-width: 992px) {
+    gap: 20px;
+    width: calc(100% - 40px);
+  }
+
+  @media (min-width: 1200px) {
+    gap: 25px;
+    max-width: 1100px;
+    width: 100%;
+  }
+}
+
+  // Add animations
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
   }
 
   .product-item {
     margin-bottom: 0;
-    border-radius: 8px;
+
+    border-radius: 10px;
     background-color: $white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    overflow: visible;
-    transition: all 0.25s ease;
+    box-shadow: $shadow-sm;
+    overflow: hidden; /* Changed from visible to hidden to prevent content overflow */
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+
     position: relative;
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(0,0,0,0.05);
     height: 100%;
+
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 320px; /* Reduced minimum height for better fit */
+
+    @media (max-width: 768px) {
+      min-height: 300px;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 576px) {
+      min-height: 230px;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 480px) {
+      min-height: 230px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 400px) {
+      min-height: 230px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 320px) {
+      min-height: 230px;
+      border-radius: 5px;
+    }
+
+    // Add a subtle gradient background
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+
+    // Add a subtle border highlight
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0) 50%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
 
     &:hover {
       transform: translateY(-3px);
@@ -201,18 +321,88 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       position: relative;
       flex: 1; /* Allow content to expand and fill the card */
 
+      z-index: 2; /* Above the ::before highlight */
+      width: 100%;
+      box-sizing: border-box;
+
+      @media (max-width: 768px) {
+        padding: 10px;
+      }
+
+      @media (max-width: 576px) {
+        padding: 8px;
+      }
+
+      @media (max-width: 400px) {
+        padding: 6px;
+      }
+
+      @media (max-width: 320px) {
+        padding: 5px;
+      }
+
       .product-image-container {
         width: 100%;
-        height: 160px;
-        border-radius: 6px;
+        height: 140px;
+        border-radius: 8px;
         overflow: hidden;
         background-color: $light-bg;
         position: relative;
-        transition: all 0.25s ease;
-        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100px; /* Reduced minimum height for better fit */
+
+        // Add subtle gradient overlay for better text contrast
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 40%;
+          background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          z-index: 1;
+        }
+
+        @media (max-width: 992px) {
+          height: 130px;
+        }
+
+        @media (max-width: 768px) {
+          height: 120px;
+          border-radius: 7px;
+          margin-bottom: 8px;
+        }
+
 
         @media (max-width: 576px) {
-          height: 140px;
+          height: 110px;
+          border-radius: 6px;
+          margin-bottom: 6px;
+        }
+
+        @media (max-width: 480px) {
+          height: 100px;
+          margin-bottom: 5px;
+          border-radius: 5px;
+        }
+
+        @media (max-width: 400px) {
+          height: 90px;
+          margin-bottom: 4px;
+          border-radius: 4px;
+        }
+
+        @media (max-width: 320px) {
+          height: 80px;
+          margin-bottom: 3px;
+          border-radius: 4px;
         }
 
         img {
@@ -247,11 +437,37 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 90px;
+
+        min-height: 80px;
+
         padding: 0 2px;
 
+        @media (max-width: 768px) {
+          min-height: 70px;
+        }
+
+        @media (max-width: 576px) {
+          min-height: 60px;
+        }
+
+        @media (max-width: 480px) {
+          min-height: 50px;
+        }
+
+        @media (max-width: 400px) {
+          min-height: 45px;
+        }
+
+        @media (max-width: 320px) {
+          min-height: 40px;
+        }
+
         > div:first-child {
-          padding-right: 20px; // Space for wishlist button
+          padding-right: 10px; // Space for wishlist button
+
+          @media (max-width: 576px) {
+            padding-right: 5px;
+          }
         }
 
         .product-name {
@@ -260,48 +476,137 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
           color: $text-dark;
           margin-bottom: 6px;
           display: -webkit-box;
-          -webkit-line-clamp: 1;
+
+          -webkit-line-clamp: 1; /* Show only 1 line by default */
+          line-clamp: 1;
           -webkit-box-orient: vertical;
           overflow: hidden;
           line-height: 1.3;
-          transition: color 0.2s ease;
+          transition: all 0.3s ease;
+          position: relative;
+
+          // Add a subtle underline effect on hover
+          &::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: $primary-color;
+            transition: width 0.3s ease;
+          }
 
           &:hover {
             color: $primary-color;
+
+            &::after {
+              width: 40px;
+            }
+          }
+
+          @media (max-width: 768px) {
+            font-size: 14px;
+            margin-bottom: 5px;
           }
 
           @media (max-width: 576px) {
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 4px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 12px;
+            margin-bottom: 3px;
+          }
+
+          @media (max-width: 400px) {
+            font-size: 11px;
+            margin-bottom: 2px;
+
           }
         }
 
         .product-weight {
           font-size: 13px;
           color: $text-light;
-          margin-bottom: 10px;
-          display: block;
+
+          margin-bottom: 8px;
+          display: inline-block;
           line-height: 1.2;
+          background-color: $light-bg;
+          padding: 2px 6px;
+          border-radius: 10px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: rgba($primary-color, 0.1);
+            color: $primary-color;
+          }
+
+          @media (max-width: 768px) {
+            font-size: 12px;
+            margin-bottom: 6px;
+            padding: 2px 5px;
+            border-radius: 8px;
+          }
 
           @media (max-width: 576px) {
-            font-size: 12px;
-            margin-bottom: 8px;
+            font-size: 11px;
+            margin-bottom: 5px;
+            padding: 1px 4px;
+            border-radius: 6px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 10px;
+            margin-bottom: 4px;
+            padding: 1px 3px;
+            border-radius: 5px;
+          }
+
+          @media (max-width: 400px) {
+            font-size: 9px;
+            margin-bottom: 3px;
+            padding: 1px 3px;
+            border-radius: 4px;
+
           }
         }
 
         .product-price {
           font-size: 16px;
-          font-weight: 600;
+
+          font-weight: 700;
+
           color: $primary-color;
           display: flex;
           align-items: center;
           margin-top: auto;
-          padding-top: 8px;
-          border-top: 1px solid rgba(0,0,0,0.03);
+
+          padding-top: 6px;
+          border-top: 1px solid rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+
+          @media (max-width: 768px) {
+            font-size: 15px;
+            padding-top: 5px;
+          }
+
 
           @media (max-width: 576px) {
-            font-size: 15px;
-            padding-top: 6px;
+            font-size: 14px;
+            padding-top: 4px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 13px;
+            padding-top: 3px;
+          }
+
+          @media (max-width: 400px) {
+            font-size: 12px;
+            padding-top: 2px;
           }
 
           .original-price {
@@ -310,6 +615,60 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
             margin-right: 8px;
             font-weight: 400;
             font-size: 13px;
+
+            position: relative;
+
+            // Add a strike-through animation on hover
+            &::after {
+              content: "";
+              position: absolute;
+              top: 50%;
+              left: 0;
+              width: 100%;
+              height: 1px;
+              background-color: $error-color;
+              transform: scaleX(1);
+              transition: transform 0.3s ease;
+              transform-origin: right;
+            }
+
+            @media (max-width: 768px) {
+              font-size: 12px;
+              margin-right: 6px;
+            }
+
+            @media (max-width: 576px) {
+              font-size: 11px;
+              margin-right: 5px;
+            }
+
+            @media (max-width: 480px) {
+              font-size: 10px;
+              margin-right: 4px;
+            }
+
+            @media (max-width: 400px) {
+              font-size: 9px;
+              margin-right: 3px;
+            }
+          }
+
+          span:last-child {
+            position: relative;
+
+            // Add a subtle highlight effect
+            &::after {
+              content: "";
+              position: absolute;
+              bottom: -2px;
+              left: 0;
+              width: 100%;
+              height: 4px;
+              background-color: rgba($primary-color, 0.1);
+              border-radius: 2px;
+              z-index: -1;
+            }
+
           }
         }
       }
@@ -317,10 +676,46 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 
     .product-actions {
       display: flex;
-      justify-content: flex-end;
+      justify-content: center; /* Center by default */
       align-items: center;
-      padding: 0 12px 12px;
+
+      padding: 0 10px 10px; /* Reduced padding */
       margin-top: auto; /* Push to bottom of card */
+      position: relative;
+      z-index: 2;
+      min-height: 50px; /* Reduced height */
+
+      @media (min-width: 769px) {
+        justify-content: flex-end; /* Right align on desktop */
+        padding: 0 15px 15px;
+        min-height: 60px;
+      }
+
+      @media (max-width: 768px) {
+        min-height: 45px;
+        padding: 0 8px 8px;
+      }
+
+      @media (max-width: 576px) {
+        min-height: 40px;
+        padding: 0 6px 6px;
+      }
+
+      @media (max-width: 480px) {
+        min-height: 38px;
+        padding: 0 5px 5px;
+      }
+
+      @media (max-width: 400px) {
+        min-height: 36px;
+        padding: 0 4px 4px;
+      }
+
+      @media (max-width: 320px) {
+        min-height: 34px;
+        padding: 0 3px 3px;
+      }
+
 
       .cart-controls {
         display: flex;
@@ -329,51 +724,416 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
         width: 100%;
         justify-content: flex-end;
 
+
+        .buttons-container {
+          display: flex;
+          align-items: center;
+          justify-content: center; /* Center buttons by default */
+          gap: 8px; /* Reduced gap between buttons */
+          flex-wrap: nowrap; /* Prevent wrapping by default */
+          width: 100%;
+          padding: 0 2px; /* Add small padding to prevent edge cutting */
+
+          @media (min-width: 769px) {
+            // justify-content: flex-end; /* Right align on larger screens */
+            gap: 10px;
+          }
+
+          @media (max-width: 576px) {
+            gap: 6px; /* Reduce gap on smaller screens */
+            padding: 0 4px; /* Increase padding on small screens */
+          }
+
+          @media (max-width: 400px) {
+            gap: 4px; /* Further reduce gap on very small screens */
+            padding: 0 5px; /* More padding on very small screens */
+          }
+
+          @media (max-width: 320px) {
+            gap: 3px; /* Minimal gap on tiny screens */
+            padding: 0 6px; /* Maximum padding on tiny screens */
+          }
+        }
+
+        @media (max-width: 768px) {
+          justify-content: center; /* Center on mobile */
+        }
+
+        @media (min-width: 769px) {
+          justify-content: flex-end; /* Right align on desktop */
+        }
+
+        // Group for quantity controls - styled like cartButtonWrap
+        .cart-buttons-group {
+          display: flex;
+          align-items: center;
+          background-color: $primary-color;
+          justify-content: space-between; /* Better spacing between buttons */
+          border-radius: 50px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Match the box-shadow of other buttons */
+          transition: all 0.3s ease;
+          overflow: hidden;
+          min-width: 110px;
+          flex-shrink: 0;
+          height: 36px; /* Match the height of Add button */
+
+          &:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          }
+
+          @media (min-width: 769px) {
+            min-width: 120px;
+            height: 38px; /* Match the height of Add button on desktop */
+          }
+
+          @media (max-width: 768px) {
+            min-width: 100px;
+            height: 34px; /* Match the height of Add button on tablets */
+          }
+
+          @media (max-width: 576px) {
+            min-width: 90px;
+            height: 32px; /* Match the height of Add button on small tablets */
+          }
+
+          @media (max-width: 400px) {
+            min-width: 80px;
+            height: 30px; /* Match the height of Add button on mobile */
+          }
+
+          @media (max-width: 320px) {
+            min-width: 70px;
+            height: 28px; /* Match the height of Add button on small mobile */
+          }
+        }
+
+
         .cart-button {
           background-color: $primary-color;
           color: $white;
           border: none;
-          border-radius: 4px;
-          padding: 8px 16px;
+
+          border-radius: 50px;
+          padding: 6px 12px;
           font-size: 13px;
-          font-weight: 500;
+          font-weight: 600;
+
           cursor: pointer;
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
           justify-content: center;
 
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          position: relative;
+          overflow: hidden;
+          min-width: 80px; /* Smaller default width */
+          width: auto; /* Allow button to size to content */
+          height: 36px; /* Smaller default height */
+
+          @media (min-width: 769px) {
+            min-width: 90px;
+            height: 38px;
+            padding: 8px 14px;
+            font-size: 14px;
+          }
+
+          @media (max-width: 768px) {
+            min-width: 75px;
+            height: 34px;
+            padding: 5px 10px;
+            font-size: 12px;
+          }
+
+          @media (max-width: 576px) {
+            min-width: 70px;
+            height: 32px;
+            padding: 4px 8px;
+            font-size: 11px;
+          }
+
+          @media (max-width: 400px) {
+            min-width: 65px;
+            height: 30px;
+            padding: 3px 6px;
+            font-size: 10px;
+          }
+
+          @media (max-width: 320px) {
+            min-width: 60px;
+            height: 28px;
+            padding: 2px 4px;
+            font-size: 9px;
+          }
+
+          // Add shine effect
+          &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(255, 255, 255, 0.2),
+              transparent
+            );
+            transition: all 0.5s ease;
+          }
+
+
           &:hover {
             background-color: $primary-dark;
           }
 
           &:active {
-            transform: translateY(1px);
+
+            transform: translateY(0) scale(0.95);
+          }
+
+          span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+
+            // Add a plus icon before "Add"
+            &::before {
+              content: "+";
+              margin-right: 3px;
+              font-size: 14px;
+              font-weight: 700;
+
+              @media (max-width: 576px) {
+                margin-right: 2px;
+                font-size: 12px;
+              }
+
+              @media (max-width: 400px) {
+                margin-right: 1px;
+                font-size: 10px;
+              }
+            }
+
+            @media (max-width: 576px) {
+              letter-spacing: -0.5px;
+            }
+
+            @media (max-width: 400px) {
+              letter-spacing: -0.8px;
+            }
           }
 
           &.quantity-button {
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px; /* Match the height of Add button */
+            min-width: unset; /* Override min-width for quantity buttons */
+
             padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 4px;
+
+            border-radius: 50px; /* Match the border-radius of other buttons */
+            flex-shrink: 0; /* Prevent shrinking */
+            background-color: rgba(255, 255, 255, 0.1); /* Slightly visible background */
+            box-shadow: none;
+
+            &::before {
+              display: none; /* Remove shine effect */
+            }
+
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.1);
+              transform: none;
+              box-shadow: none;
+            }
+
+            @media (min-width: 769px) {
+              width: 38px;
+              height: 38px; /* Match the height of Add button on desktop */
+            }
+
+            @media (max-width: 768px) {
+              width: 34px;
+              height: 34px; /* Match the height of Add button on tablets */
+            }
+
+            @media (max-width: 576px) {
+              width: 32px;
+              height: 32px; /* Match the height of Add button on small tablets */
+            }
+
+            @media (max-width: 400px) {
+              width: 30px;
+              height: 30px; /* Match the height of Add button on mobile */
+            }
+
+            @media (max-width: 320px) {
+              width: 28px;
+              height: 28px; /* Match the height of Add button on small mobile */
+            }
+
+            svg {
+              transition: transform 0.3s ease;
+              width: 16px;
+              height: 16px;
+
+              @media (min-width: 769px) {
+                width: 18px;
+                height: 18px;
+              }
+
+              @media (max-width: 768px) {
+                width: 15px;
+                height: 15px;
+              }
+
+              @media (max-width: 576px) {
+                width: 14px;
+                height: 14px;
+              }
+
+              @media (max-width: 400px) {
+                width: 12px;
+                height: 12px;
+              }
+
+              @media (max-width: 320px) {
+                width: 10px;
+                height: 10px;
+              }
+            }
+
+            &:hover svg {
+              transform: scale(1.2);
+            }
           }
+
+          /* Removed conflicting media queries */
         }
 
         .quantity {
-          margin: 0 10px;
-          font-weight: 500;
-          color: $text-dark;
-          min-width: 20px;
+          margin: 0;
+          font-weight: 600;
+          color: $white;
+          min-width: 30px; /* Wider to ensure proper spacing */
           text-align: center;
-          font-size: 14px;
+          font-size: 15px;
+          position: relative;
+          flex-shrink: 0; /* Prevent shrinking */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%; /* Fill the height of the container */
+
+          // Remove the highlight effect to match cartButtonWrap
+          &::after {
+            display: none;
+          }
+
+          @media (min-width: 769px) {
+            font-size: 16px;
+            min-width: 32px;
+          }
+
+          @media (max-width: 768px) {
+            font-size: 14px;
+            min-width: 28px;
+          }
+
+          @media (max-width: 576px) {
+            font-size: 13px;
+            min-width: 24px;
+          }
+
+          @media (max-width: 400px) {
+            font-size: 12px;
+            min-width: 20px;
+          }
+
+          @media (max-width: 320px) {
+            font-size: 11px;
+            min-width: 18px;
+          }
+        }
+
+        // Style for the Subscribe button
+        .cart-button[style*="background-color: #ffc107"] {
+          background-color: $accent-color !important;
+          color: $text-dark !important;
+          margin-left: 0; /* Remove left margin for side-by-side alignment */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 80px; /* Match Add button width */
+          height: 36px; /* Match Add button height */
+          flex-shrink: 0; /* Prevent shrinking */
+          width: auto; /* Allow button to size to content */
+
+          @media (min-width: 769px) {
+            min-width: 90px;
+            height: 38px;
+            padding: 8px 14px;
+            font-size: 14px;
+          }
+
+          @media (max-width: 768px) {
+            min-width: 75px;
+            height: 34px;
+            padding: 5px 10px;
+            font-size: 12px;
+          }
+
+          @media (max-width: 576px) {
+            min-width: 70px;
+            height: 32px;
+            padding: 4px 8px;
+            font-size: 11px;
+          }
+
+          @media (max-width: 400px) {
+            min-width: 65px;
+            height: 30px;
+            padding: 3px 6px;
+            font-size: 10px;
+          }
+
+          @media (max-width: 320px) {
+            min-width: 60px;
+            height: 28px;
+            padding: 2px 4px;
+            font-size: 9px;
+          }
+
+          // Add a star icon before "Subscribe"
+          &::after {
+            content: "★";
+            margin-left: 3px;
+            font-size: 12px;
+
+            @media (max-width: 576px) {
+              margin-left: 2px;
+              font-size: 10px;
+            }
+
+            @media (max-width: 400px) {
+              margin-left: 1px;
+              font-size: 9px;
+            }
+          }
+
+          &:hover {
+            background-color: darken($accent-color, 5%) !important;
+          }
+
+
         }
       }
     }
   }
-}
 
 // Empty state
 .empty-state {

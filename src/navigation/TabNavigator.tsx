@@ -1,20 +1,29 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { TabScreens } from '../routes';
 import { components } from '../components';
 import { Home } from '../screens/tabs/Home';
 import { Menu } from '../screens/tabs/Menu';
-// import { Order } from '../screens/tabs/Order';
 import { Favorite } from '../screens/tabs/Favorite';
 import { Notification } from '../screens/tabs/Notification';
 import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
-import Order from '../screens/tabs/Order';
+import { actions } from '../store/actions';
+import {Order} from '../screens/tabs/Order';
 
 export const TabNavigator: React.FC = () => {
+  const dispatch = useDispatch();
   const currentTabScreen = useSelector(
     (state: RootState) => state.tabSlice.screen,
   );
+
+  // Ensure we have a valid tab screen on component mount
+  useEffect(() => {
+    const savedScreen = localStorage.getItem('curScreen');
+    if (!savedScreen || !Object.values(TabScreens).includes(savedScreen as TabScreens)) {
+      dispatch(actions.setScreen(TabScreens.Home));
+    }
+  }, [dispatch]);
 
   const renderTitle = (): string => {
     switch (currentTabScreen) {
@@ -27,7 +36,7 @@ export const TabNavigator: React.FC = () => {
       case TabScreens.Favorite:
         return 'Favorite';
       case TabScreens.Notification:
-        return 'Notification';
+        return 'Wallet';
       default:
         return 'Home';
     }
@@ -48,7 +57,7 @@ export const TabNavigator: React.FC = () => {
       case TabScreens.Notification:
         return <Notification />;
       default:
-        return null;
+        return <Home/>;
     }
   };
 
@@ -93,17 +102,16 @@ export const TabNavigator: React.FC = () => {
   };
 
   const renderFooter = (): JSX.Element | null => {
-    // if (currentTabScreen === TabScreens.Order) {
-    //   return null;
-    // }
     return <components.Footer />;
   };
 
   return (
-    <>
+    <div className="page-with-footer">
       {renderHeader()}
-      {renderScreens()}
+      <div className="tab-content" tabIndex={-1}>
+        {renderScreens()}
+      </div>
       {renderFooter()}
-    </>
+    </div>
   );
 };

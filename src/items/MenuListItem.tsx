@@ -726,6 +726,7 @@ export const MenuListItem: React.FC<Props> = ({
                   Update Subscription
                 </button>
               ) : (
+
                 <button
                   className="cart-button"
                   style={{
@@ -822,6 +823,7 @@ export const MenuListItem: React.FC<Props> = ({
                   )
               )}
             </select>
+
           </div>
         </div>
 

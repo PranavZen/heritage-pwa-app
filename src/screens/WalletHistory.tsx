@@ -16,7 +16,7 @@ export const WalletHistory: React.FC = () => {
   const [walletData, setWalletData] = useState<any>(null);
 
   // console.log("qqqqqqqqqqq", walletData);
-  
+
   const [loading, setLoading] = useState<boolean>(true);
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
@@ -79,22 +79,25 @@ export const WalletHistory: React.FC = () => {
     return (
       <>
         <div>
-          <h1 style={{ textAlign: "center", padding: "10px" }}>Wallet History</h1>
+          <h1>Wallet Transaction History</h1>
 
           <div className="walletHistoryFilter-main">
-
             <div className="walletHistoryFilter">
               <div className="datePicker">
-                <CalendarIcon className="calendar-icon" />
-
+                <svg xmlns="http://www.w3.org/2000/svg" className="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
                 <label>Start Date</label>
                 <div className="dateInput">
-
                   <input
                     type="date"
                     value={startDate}
                     onChange={(e) => handleDateChange(e, "start")}
                     max={today}
+                    aria-label="Select start date"
                   />
                 </div>
               </div>
@@ -102,47 +105,87 @@ export const WalletHistory: React.FC = () => {
 
             <div className="walletHistoryFilter">
               <div className="datePicker">
-                <CalendarIcon className="calendar-icon" />
+                <svg xmlns="http://www.w3.org/2000/svg" className="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
                 <label>End Date</label>
                 <div className="dateInput">
-                  {/* <FaCalendarAlt className="calendarIcon" /> */}
                   <input
                     type="date"
                     value={endDate}
                     onChange={(e) => handleDateChange(e, "end")}
                     min={startDate}
                     max={today}
+                    aria-label="Select end date"
                   />
                 </div>
               </div>
             </div>
           </div>
-          <button onClick={fetchWalletHistory} className="explore-btn ">Get History</button>
+
+          <button onClick={fetchWalletHistory} className="explore-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            Get History
+          </button>
+
           <div className="walletHistoryContent">
-            {walletData && walletData.length > 0 ? (
+            {loading ? (
+              <div className="loader-container">
+                <components.Loader />
+              </div>
+            ) : walletData && walletData.length > 0 ? (
               <ul className="walletHistoryList">
                 {walletData.map((entry: any, index: number) => (
                   <li key={index}>
                     <div className="transaction-detail">
                       <div className="transaction-detail-child">
-                        <div className="transaction-detail-wallet">  <span> ₹ {entry?.wallet_balance || 'N/A'}</span>  </div>
-                        <div> {entry.status} </div>
-                        <div>  {entry.payment_type} + ₹ {entry.amount} </div>
+                        <div className="transaction-detail-wallet">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                          </svg>
+                          ₹ {entry?.wallet_balance || 'N/A'}
+                        </div>
+                        <div>{entry.status}</div>
+                        <div>{entry.payment_type} + ₹ {entry.amount}</div>
                       </div>
 
                       <div className="Transaction-main">
-                        <p>Transaction Id: {entry.order_id}</p>
-                          
-                        <p>Date: {entry.payment_date}</p>
+                        <p>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
+                            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+                          </svg>
+                          Transaction ID: {entry.order_id}
+                        </p>
+                        <p>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          Date: {entry.payment_date}
+                        </p>
                       </div>
-
-
                     </div>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="noHistoryMessage">No wallet history available for the selected period.</p>
+              <div className="noHistoryMessage">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p>No wallet history available for the selected period.</p>
+                <p>Try selecting a different date range.</p>
+              </div>
             )}
           </div>
         </div>

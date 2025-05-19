@@ -1,7 +1,22 @@
+// Variables
+$primary-color: #1a712e;
+$primary-light: #e8f5e9;
+$primary-dark: #156023;
+$accent-color: #ff6f61;
+$accent-light: #ffebe9;
+$text-dark: #333;
+$text-medium: #555;
+$text-light: #777;
+$white: #fff;
+$border-radius: 12px;
+$box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+$transition-speed: 0.4s;
+
+// Animations
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -9,178 +24,541 @@
   }
 }
 
-.container {
-    max-width: 1200px;
-    margin: 20 auto;
-    padding: 20px;
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
   }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-  .tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
   }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+// Container styles
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// Tabs styling
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  animation: fadeIn 0.6s ease;
 
   .tab-button {
-    padding: 10px 20px;
+    padding: 12px 24px;
     margin: 0 10px;
-    border: 2px solid #007bff;
-    background-color: #fff;
-    color: #007bff;
+    border: none;
+    background-color: $white;
+    color: $primary-color;
     cursor: pointer;
     font-size: 16px;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  .tab-button:hover {
-    background-color: #007bff;
-    color: #fff;
-  }
-
-  .tab-button.active {
-    background-color: #007bff;
-    color: #fff;
-  }
-
-  .loading {
-    text-align: center;
-    font-size: 18px;
-    color: #007bff;
-  }
-
-  .card-container {
-    margin-top: 20px;
-  }
-
-  .card-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-
-  .scrollable-container {
-    max-height: 600px;
-    overflow-y: auto;
-    padding-right: 10px;
-  }
-
-  .card {
-    width: 250px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all $transition-speed ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: translateX(-100%);
+    }
+
+    &:hover {
+      background-color: $primary-light;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+
+      &::before {
+        animation: shimmer 2s infinite;
+      }
+    }
+
+    &.active {
+      background-color: $primary-color;
+      color: $white;
+      box-shadow: 0 6px 15px rgba($primary-color, 0.3);
+
+      &:hover {
+        background-color: $primary-dark;
+      }
+    }
+
+    @media (max-width: 480px) {
+      padding: 10px 16px;
+      font-size: 14px;
+      margin: 0 5px;
+    }
   }
-  .cardOrderId{
-    font-weight: 900;
+}
+
+// Orders container
+.ordersContainer {
+  padding: 20px;
+  animation: fadeIn 0.8s ease;
+
+  h2 {
+    font-size: 24px;
+    color: $primary-color;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    font-weight: 600;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, $primary-color, $primary-light);
+      margin: 8px auto 0;
+      border-radius: 2px;
+      animation: fadeIn 1s ease;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
   }
 
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+}
+
+// Scrollable container
+.scrollable-container {
+  max-height: 800px;
+  overflow-y: auto;
+  padding-right: 10px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
   }
 
-  /* Base state for cards - initially hidden */
-  .card {
-    // opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
   }
 
-  /* Animation classes applied when cards come into view */
-  .card.animate-card:nth-child(4n+1) {
-    animation: fadeLeft 0.8s ease forwards;
+  &::-webkit-scrollbar-thumb {
+    background: $primary-light;
+    border-radius: 10px;
+
+    &:hover {
+      background: $primary-color;
+    }
+  }
+}
+
+// Card list
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Card styling
+.card {
+  background: $white;
+  border-radius: $border-radius;
+  overflow: hidden;
+  border: 1px solid #eee;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  padding: 0;
+  transition: all $transition-speed ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.8s ease;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: $box-shadow;
   }
 
-  .card.animate-card:nth-child(4n+2) {
-    animation: fadeRight 0.8s ease forwards;
-  }
-
-  .card.animate-card:nth-child(4n+3) {
-    animation: zoomIn 0.8s ease forwards;
-  }
-
-  .card.animate-card:nth-child(4n+4) {
-    animation: zoomOut 0.8s ease forwards;
+  // Animation delays for staggered appearance
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
   }
 
   .card-img {
     width: 100%;
     height: auto;
     border-radius: 8px;
+    transition: transform 0.5s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 
   .card-info {
     margin-top: 12px;
+
+    h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: $text-dark;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 14px;
+      color: $text-medium;
+      margin-bottom: 5px;
+    }
+
+    .btn {
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 12px;
+      transition: all $transition-speed ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        background-color: $primary-dark;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba($primary-color, 0.3);
+
+        svg {
+          transform: translateX(3px);
+        }
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+// Enhanced card components
+.topCardDataWrap {
+  display: flex;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+
+  .orderImagWrap {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 15px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all $transition-speed ease;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform $transition-speed ease;
+    }
+
+    &:hover img {
+      transform: scale(1.1);
+    }
   }
 
-  .card-info h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
+  .card-info {
+    flex: 1;
 
-  .card-info p {
-    font-size: 14px;
-    color: #555;
-  }
+    .orderItmName {
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-dark;
+      margin-bottom: 8px;
+    }
 
-  .card-info .btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 12px;
-    transition: background-color 0.3s ease;
-  }
+    .orderItmWieght {
+      font-size: 14px;
+      color: $text-medium;
+      margin-bottom: 5px;
+    }
 
-  .card-info .btn:hover {
-    background-color: #0056b3;
+    .orderQuantity {
+      font-size: 14px;
+      color: $text-medium;
+      margin-bottom: 5px;
+    }
+
+    .orderPrice {
+      font-size: 16px;
+      color: $primary-color;
+      font-weight: 600;
+      margin-bottom: 5px;
+
+      small {
+        font-size: 12px;
+        color: $text-light;
+        margin-right: 5px;
+      }
+
+      span {
+        font-size: 12px;
+        color: $text-light;
+        font-weight: normal;
+      }
+    }
+
+    .orderBalAmt {
+      font-size: 15px;
+      color: $accent-color;
+      font-weight: 600;
+    }
   }
-//   *****************One time order****************************88
-.one-time-order-image{
-  width: 52%;
+}
+
+// Data wraps
+.dataWraps {
+  display: flex;
+  padding: 15px 20px;
+  // background-color: $primary-light;
+
+  .wrap {
+    flex: 1;
+    text-align: center;
+
+    p {
+      font-size: 13px;
+      color: $text-medium;
+      margin-bottom: 5px;
+    }
+
+    span {
+      font-size: 15px;
+      font-weight: 600;
+      color: $primary-color;
+    }
+  }
+}
+
+// Order date wrap
+.orderDateWrap {
+  display: flex;
+  padding: 15px 20px;
+  border-top: 1px solid #f0f0f0;
+
+  .box50 {
+    flex: 1;
+    display: flex;
+    align-items: center;
+
+    .svgWrap {
+      width: 36px;
+      height: 36px;
+      background-color: $primary-light;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      transition: all 0.3s ease;
+
+      svg {
+        fill: $primary-color;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        transform: scale(1.1);
+        background-color: $primary-color;
+
+        svg {
+          fill: $white;
+          transform: rotate(10deg);
+        }
+      }
+    }
+
+    .innerBox {
+      p {
+        font-size: 13px;
+        color: $text-medium;
+        margin-bottom: 3px;
+      }
+
+      span {
+        font-size: 14px;
+        font-weight: 600;
+        color: $text-dark;
+      }
+    }
+  }
+}
+
+// Status wrap
+.statusWrap {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: $white;
+  z-index: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+}
+
+// Subscription ID wrap
+.subscription_idWrap {
+  padding: 10px 20px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #f0f0f0;
+
+  p {
+    font-size: 13px;
+    color: $text-medium;
+    text-align: center;
+  }
+}
+
+// Expired text
+.subExpiredText {
+  padding: 8px 15px;
+  font-size: 14px;
+  color: $accent-color;
+  text-align: center;
+  font-weight: 600;
+}
+
+// One time order image
+.one-time-order-image {
+  width: 100%;
   height: auto;
   padding: 4px;
   border-radius: 10px;
-  border: 1px solid rgba(128, 128, 128, 0.26);
-  margin: 10px;
+  border: 1px solid rgba(128, 128, 128, 0.1);
+  margin: 0;
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
-.delete-icon{
+
+// Delete icon
+.delete-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
   width: 30px;
   height: 30px;
-  background-image: url('../../assets/svg/icons8-delete-200.png');
-  position: absolute;
-  top: 2px;
-  right: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-}
-// *************************************Delete icon********************************
-.delete-modal {
-  .ant-modal {
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+  z-index: 2;
+  border-radius: 50%;
+  background-color: $accent-light;
+  transition: all $transition-speed ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    stroke: $accent-color;
+    stroke-width: 2;
+    transition: all $transition-speed ease;
   }
 
-  .ant-modal-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
+  &:hover {
+    transform: scale(1.2);
+    background-color: $accent-color;
+    box-shadow: 0 4px 8px rgba($accent-color, 0.3);
+
+    svg {
+      stroke: white;
+      transform: rotate(10deg);
+    }
+  }
+}
+
+// Delete modal styling
+.delete-modal {
+  .ant-modal-content {
+    border-radius: $border-radius;
+    overflow: hidden;
+  }
+
+  .ant-modal-header {
+    background-color: $accent-light;
+    border-bottom: none;
+    padding: 16px 24px;
+
+    .ant-modal-title {
+      color: $accent-color;
+      font-weight: 600;
+      font-size: 20px;
+    }
   }
 
   .delete-modal-content {
+    margin-bottom: 15px;
     font-size: 14px;
-    margin-bottom: 10px;
-    color: #555;
+    color: $text-medium;
   }
 
   .ant-radio-group {
@@ -188,17 +566,40 @@
   }
 
   .delete-radio-btn {
-    font-size: 14px;
-    color: #555;
+    display: block;
     margin-bottom: 10px;
+    font-size: 14px;
+    color: $text-medium;
 
     .ant-radio-inner {
       border-color: #dcdcdc;
     }
 
     .ant-radio-checked .ant-radio-inner {
-      border-color: #ff4d4f;
-      background-color: #ff4d4f;
+      border-color: $accent-color;
+      background-color: $accent-color;
+    }
+  }
+
+  .ant-modal-footer {
+    border-top: none;
+    padding: 10px 24px 24px;
+
+    .ant-btn-primary {
+      background-color: $accent-color;
+      border-color: $accent-color;
+      border-radius: 50px;
+      padding: 6px 20px;
+
+      &:hover {
+        background-color: darken($accent-color, 10%);
+        border-color: darken($accent-color, 10%);
+      }
+    }
+
+    .ant-btn-default {
+      border-radius: 50px;
+      padding: 6px 20px;
     }
   }
 
@@ -208,31 +609,43 @@
     padding-top: 10px;
 
     .ant-btn {
-      border-radius: 4px;
+      border-radius: 50px;
       font-weight: 500;
       padding: 8px 20px;
       font-size: 14px;
+      transition: all 0.3s ease;
     }
 
     .delete-confirm-btn {
-      background-color: #ff4d4f;
+      background-color: $accent-color;
       color: white;
       border: none;
 
       &:hover {
-        background-color: #d9363e;
+        background-color: darken($accent-color, 10%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba($accent-color, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
     }
 
     .delete-cancel-btn {
       background-color: #f0f0f0;
-      color: #333;
+      color: $text-dark;
       border: 1px solid #dcdcdc;
 
       &:hover {
         background-color: #e6e6e6;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
-  }
   }
 }
 

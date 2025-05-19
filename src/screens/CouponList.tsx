@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { hooks } from "../hooks";
 import { components } from "../components";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,13 @@ export const CouponList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [isApplying, setIsApplying] = useState<boolean>(false); 
+
+  const [isApplying, setIsApplying] = useState<boolean>(false);
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [appliedCouponCode, setAppliedCouponCode] = useState<string | null>(null);
+  const couponRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
 
   const navigate = useNavigate();
 
@@ -24,6 +30,12 @@ export const CouponList: React.FC = () => {
   hooks.useGetNotifications();
 
   useEffect(() => {
+    // Check if there's already an applied coupon
+    const currentCouponCode = localStorage.getItem('couponCode');
+    if (currentCouponCode) {
+      setAppliedCouponCode(currentCouponCode);
+    }
+
     const fetchCoupons = async () => {
       try {
         const formData = new FormData();
@@ -67,7 +79,46 @@ export const CouponList: React.FC = () => {
       return <div className="error">{`Error: ${error}`}</div>;
     }
 
+    const handleCouponHover = (couponId: string, isHovering: boolean) => {
+      setHoveredCard(isHovering ? couponId : null);
+    };
+
+    const handleCouponClick = (couponId: string) => {
+      setActiveCard(couponId);
+
+      // Add ripple effect
+      const card = couponRefs.current[couponId];
+      if (card) {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple-effect');
+        card.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      }
+    };
+
+    const applyCoupon = (coupon: any) => {
+      if (isApplying) return;
+
+      handleCouponClick(coupon.coupon_id);
+      setIsApplying(true);
+      localStorage.setItem('couponCode', coupon.code);
+      setAppliedCouponCode(coupon.code);
+
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        setIsApplying(false);
+        navigate('/tab-navigator', {
+          state: { couponCode: coupon.code }
+        });
+      }, 3000);
+    };
+
     return (
+
       <>
         <div>
           <h1>Your Discount Coupons</h1>
@@ -103,6 +154,7 @@ export const CouponList: React.FC = () => {
                     Apply Coupon
                   </button>
                 </div>
+
               </div>
             ))
           ) : (
