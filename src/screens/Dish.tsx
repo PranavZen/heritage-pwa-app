@@ -57,6 +57,7 @@ export const Dish: React.FC = () => {
   // console.log("isModalOpen", isModalOpen);
 
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  
   const [deliveryPreference, setDeliveryPreference] = useState<string>('1');
 
   const [deliveries, setDeliveries] = useState<number>(30);
