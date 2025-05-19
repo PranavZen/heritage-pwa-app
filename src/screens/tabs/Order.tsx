@@ -42,6 +42,8 @@ interface Props {
 
 // export const Order: React.FC = () => {
 const Order = () => {
+// export const Order: React.FC = () => {
+const Order = () => {
   const location = useLocation();
   const couponCode = location.state?.couponCode;
 
@@ -93,6 +95,7 @@ const Order = () => {
 
   const [superPointCoins, SetSuperPoint] = useState<number>(0);
 
+  // console.log("setRedeemedAmount", redeemedAmount);
   // console.log("setRedeemedAmount", redeemedAmount);
 
   const maxRedeemableAmount = Math.floor(superPointCoins / 10);
@@ -150,14 +153,19 @@ const Order = () => {
 
     localStorage.setItem("isChecked", JSON.stringify(checked));
 
+    localStorage.setItem("isChecked", JSON.stringify(checked));
+
     setCoinAnimating(true);
     setAmountAnimating(true);
 
     setTimeout(() => setCoinAnimating(false), 600);
     setTimeout(() => setAmountAnimating(false), 500);
+    setTimeout(() => setCoinAnimating(false), 600);
+    setTimeout(() => setAmountAnimating(false), 500);
 
     if (checked) {
       setShowModal(true);
+      setTimeout(() => setShowModal(false), 2000);
       setTimeout(() => setShowModal(false), 2000);
 
       if (superPoint) {
@@ -168,8 +176,12 @@ const Order = () => {
       setRedeemedAmount(0);
       SetSuperPoint(0);
       localStorage.removeItem("superPointChecked");
+      localStorage.removeItem("superPointChecked");
     }
   };
+
+
+
 
   setTimeout(() => {
     setShowModal(false);
@@ -474,6 +486,7 @@ const Order = () => {
     };
     fetchCoupons();
   }, [shouldRefresh, shouldMount]);
+  }, [shouldRefresh, shouldMount]);
 
   // *******************Super Coupons *******************************
   const { menuLoading } = hooks.useGetMenu();
@@ -547,11 +560,17 @@ const Order = () => {
       const target = e.currentTarget;
       const rippleEl = ripple;
 
+      const target = e.currentTarget;
+      const rippleEl = ripple;
+
       setTimeout(() => {
+        if (target) target.classList.remove("clicked");
+        if (rippleEl && rippleEl.remove) rippleEl.remove();
         if (target) target.classList.remove("clicked");
         if (rippleEl && rippleEl.remove) rippleEl.remove();
         setIsCouponAnimating(false);
       }, 600);
+
 
       // Navigate to coupon list on mobile
       if (window.innerWidth <= 767) {
@@ -959,10 +978,10 @@ const Order = () => {
                   return (
                     total +
                     elem.quantity *
-                      elem.price *
-                      (elem.no_of_deliveries === "0"
-                        ? "1"
-                        : elem.no_of_deliveries)
+                    elem.price *
+                    (elem.no_of_deliveries === "0"
+                      ? "1"
+                      : elem.no_of_deliveries)
                   );
                 }, 0)
                 .toFixed(2)}
@@ -992,16 +1011,16 @@ const Order = () => {
             <span className="t14">
               ₹{" "}
               {superPoint &&
-              superPoint.optionListing &&
-              superPoint.optionListing.length > 0
+                superPoint.optionListing &&
+                superPoint.optionListing.length > 0
                 ? superPoint.optionListing
-                    .map((elem: any) => {
-                      return (
-                        (elem.price - elem.discount) *
-                        elem.no_of_free_deliveries
-                      );
-                    })
-                    .reduce((acc: number, current: number) => acc + current, 0)
+                  .map((elem: any) => {
+                    return (
+                      (elem.price - elem.discount) *
+                      elem.no_of_free_deliveries
+                    );
+                  })
+                  .reduce((acc: number, current: number) => acc + current, 0)
                 : 0}
             </span>
           </div>
@@ -1119,7 +1138,7 @@ const Order = () => {
 
           {/* ***********************Ordereeeeeeeeeeeeeee***************** */}
 
-          <div className="row-center-space-between">
+          <div className='row-center-space-between'>
             <h4>Total</h4>
 
             {/* Case when no cart total is available */}
@@ -1230,6 +1249,7 @@ const Order = () => {
               </h4>
             )}
           </div>
+
         </section>
       </>
     );

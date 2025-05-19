@@ -88,9 +88,9 @@ export const Onboarding: React.FC = () => {
 
       const data = await response.json();
 
-      // Debug logging
-      console.log("Pincode verification response:", data);
-      console.log("Is serviceable:", data.search_data?.[0]?.is_servicesable);
+     
+      // console.log("Pincode verification response:", data);
+      // console.log("Is serviceable:", data.search_data?.[0]?.is_servicesable);
 
       if (
         data.status === "success" &&

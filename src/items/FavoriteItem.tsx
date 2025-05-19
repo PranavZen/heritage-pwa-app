@@ -350,7 +350,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
             onClick={() => {
               localStorage.setItem('product_option_value_id', dish.product_option_value_id.toString());
               navigate(`/dish/${dish.option_name}`, {
-                state: {
+                state:{
                   dish,
                   showSubscribe: dish.subscription_product,
                 },
