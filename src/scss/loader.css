@@ -1,0 +1,91 @@
+:root {
+  --white-color: #fff;
+  --text-color: #1a712e;
+  --main-color: #0c1d2e;
+  --accent-color: #fa5555;
+  --border-color: #eeeeee;
+  --main-turquoise: #1a712e;
+  --main-background: #f6f9f9;
+  --input-background: #fbf8f2;
+  --image-background: #f7f7fd;
+  --header-height: 100px;
+  --footer-height: 70px;
+  --screen-width: 650px;
+}
+@media screen and (max-width: 767px) {
+  :root {
+    --footer-height: 75px;
+  }
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loader-container.local {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+.loader-container.local .loader-content {
+  background-color: transparent;
+  box-shadow: none;
+}
+.loader-container.global {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+.loader-container.global .loader-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  animation: fadeIn 0.3s ease forwards;
+}
+.loader-container .loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  animation: scaleIn 0.3s ease forwards;
+}
+.loader-container .loader-content .loader-message {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+  max-width: 200px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}/*# sourceMappingURL=loader.css.map */

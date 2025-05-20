@@ -929,12 +929,12 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
 
           border-radius: 50px; /* Match the border-radius of other buttons */
           flex-shrink: 0; /* Prevent shrinking */
-          background-color: rgba(
-            255,
-            255,
-            255,
-            0.1
-          ); /* Slightly visible background */
+          // background-color: rgba(
+          //   255,
+          //   255,
+          //   255,
+          //   0.1
+          // ); /* Slightly visible background */
           box-shadow: none;
 
           &::before {
@@ -942,7 +942,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
           }
 
           &:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            // background-color: rgba(255, 255, 255, 0.1);
             transform: none;
             box-shadow: none;
           }
@@ -1014,7 +1014,7 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
       .quantity {
         margin: 0;
         font-weight: 600;
-        color: $white;
+        // color: $white;
         min-width: 30px; /* Wider to ensure proper spacing */
         text-align: center;
         font-size: 15px;
