@@ -133,7 +133,12 @@ $transition-speed: 0.4s;
   gap: 2rem;
   margin-bottom: 2.5rem;
   animation: fadeInUp 0.8s ease 1s both;
-
+ .mySec{
+  margin-bottom: 10px;
+  &:last-child{
+    margin-bottom: 0;
+  }
+ }
   .order-number,
   .order-date {
     background-color: $white;

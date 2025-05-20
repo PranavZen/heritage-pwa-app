@@ -6,11 +6,11 @@ import { useDispatch } from 'react-redux';
 import { actions } from '../store/actions';
 
 // List of routes where we don't want to show the footer
-// Now empty as we want to show footer on all pages
 const excludedRoutes: Routes[] = [
-  // Routes.SignIn,
+  Routes.SignIn,           // Hide footer on sign in screen
+  Routes.Onboarding,       // Hide footer on pincode screen
+  // Other routes where footer should be hidden can be uncommented if needed
   // Routes.SignUp,
-  // Routes.Onboarding,
   // Routes.ForgotPassword,
   // Routes.ForgotPasswordSentEmail,
   // Routes.NewPassword,
@@ -47,12 +47,17 @@ export const FooterWrapper: React.FC<FooterWrapperProps> = ({ children }) => {
     navigate(Routes.TabNavigator);
   };
 
-  // Only check for routes with their own footer to avoid duplicates
+  // Don't show footer on excluded routes
+  if (isExcluded) {
+    return <>{children}</>;
+  }
+
+  // Don't show footer on routes with their own footer to avoid duplicates
   if (hasOwnFooter) {
     return <>{children}</>;
   }
 
-  // Always show footer on all other pages, even if they were previously excluded
+  // Show footer on all other pages
   return (
     <>
       {children}

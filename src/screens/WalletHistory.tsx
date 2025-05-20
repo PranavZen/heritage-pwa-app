@@ -78,7 +78,7 @@ export const WalletHistory: React.FC = () => {
   const renderContent = (): JSX.Element => {
     return (
       <>
-        <div>
+        <div className="walletHistoryContainer">
           <h1>Wallet Transaction History</h1>
 
           <div className="walletHistoryFilter-main">
