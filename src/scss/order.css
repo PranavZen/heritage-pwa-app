@@ -1,0 +1,1456 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes couponPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
+}
+@keyframes couponClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+@keyframes coinRotate {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+@keyframes coinShine {
+  0% {
+    opacity: 0.2;
+    left: -100%;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.2;
+    left: 100%;
+  }
+}
+.order-container {
+  padding: 20px 15px;
+  animation: fadeIn 0.5s ease;
+  background-color: #f9f9f9;
+}
+@media (min-width: 768px) {
+  .order-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.order-header .header-left {
+  display: flex;
+  align-items: center;
+}
+.order-header .header-left h1 {
+  font-size: 22px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  color: #1a712e;
+}
+.order-header .header-left h1 svg {
+  margin-right: 10px;
+  color: #1a712e;
+}
+@media (min-width: 768px) {
+  .order-header .header-left h1 {
+    font-size: 26px;
+  }
+}
+.order-header .header-right .order-count {
+  background-color: rgba(26, 113, 46, 0.1);
+  color: #1a712e;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.order-header .header-right .order-count .count {
+  font-size: 16px;
+  font-weight: 600;
+}
+.order-header .header-right .order-count .label {
+  font-size: 12px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  padding: 10px;
+  margin-right: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.back-button:hover {
+  background-color: rgba(26, 113, 46, 0.1);
+  transform: translateX(-5px);
+}
+.back-button:hover svg {
+  transform: scale(1.1);
+}
+.back-button:active {
+  transform: translateX(-2px) scale(0.95);
+}
+.back-button svg {
+  color: #1a712e;
+  transition: transform 0.3s ease;
+}
+
+.order-items {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  animation: slideUp 0.5s ease;
+}
+.order-items .section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.order-items .section-header svg {
+  margin-right: 10px;
+  color: #1a712e;
+}
+.order-items .section-header h2 {
+  font-size: 18px;
+  margin: 0;
+  color: #333333;
+}
+@media (min-width: 768px) {
+  .order-items .section-header h2 {
+    font-size: 20px;
+  }
+}
+.order-items .items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.order-items .items-list li {
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.order-items .items-list li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.order-items .items-list li:last-child {
+  margin-bottom: 0;
+}
+
+.couponApplied-main {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px dashed #ffc107;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+  animation: slideUp 0.6s ease, couponPulse 2s infinite;
+}
+@media (max-width: 768px) {
+  .couponApplied-main {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 767px) {
+  .couponApplied-main {
+    padding: 15px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "icon header remove" "icon discount remove";
+    align-items: center;
+    gap: 10px;
+    border-width: 2px;
+    border-radius: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .couponApplied-main {
+    padding: 12px;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "icon header remove" "discount discount discount";
+  }
+}
+.couponApplied-main .coupon-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-25deg);
+  transition: all 0.7s ease;
+}
+@media (max-width: 480px) {
+  .couponApplied-main .coupon-shine {
+    width: 70%;
+  }
+}
+.couponApplied-main.hovered {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  border-color: #1a712e;
+}
+.couponApplied-main.hovered .coupon-shine {
+  left: 150%;
+  transition: all 0.7s ease;
+}
+.couponApplied-main.hovered .coupon-icon {
+  color: #1a712e;
+}
+.couponApplied-main.hovered .coupon-icon .coupon-svg {
+  transform: scale(1.2) rotate(10deg);
+  stroke-width: 2.5;
+}
+.couponApplied-main.hovered .coupon-icon .coupon-icon-bg {
+  transform: translate(-50%, -50%) scale(1.3);
+  background-color: rgba(26, 113, 46, 0.2);
+}
+@media (max-width: 480px) {
+  .couponApplied-main.hovered {
+    transform: translateY(-2px);
+  }
+}
+.couponApplied-main.clicked {
+  animation: couponClick 0.3s ease;
+}
+.couponApplied-main.animating {
+  animation: couponActivate 0.6s ease;
+}
+.couponApplied-main .ripple-effect {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(26, 113, 46, 0.2);
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+@media (max-width: 480px) {
+  .couponApplied-main .ripple-effect {
+    width: 80px;
+    height: 80px;
+  }
+}
+.couponApplied-main .coupon-icon {
+  color: #ffc107;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.couponApplied-main .coupon-icon .coupon-svg {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  animation: iconPulse 2s infinite;
+}
+@media (min-width: 768px) {
+  .couponApplied-main .coupon-icon .coupon-svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+@media (max-width: 480px) {
+  .couponApplied-main .coupon-icon .coupon-svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+.couponApplied-main .coupon-icon .coupon-icon-bg {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  background-color: rgba(255, 193, 7, 0.15);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 0 0 rgba(255, 193, 7, 0.4);
+  animation: bgPulse 2s infinite;
+}
+@media (min-width: 768px) {
+  .couponApplied-main .coupon-icon .coupon-icon-bg {
+    width: 32px;
+    height: 32px;
+  }
+}
+.couponApplied-main .coupon-icon:hover .coupon-svg {
+  transform: scale(1.1) rotate(5deg);
+}
+.couponApplied-main .coupon-icon:hover .coupon-icon-bg {
+  transform: translate(-50%, -50%) scale(1.2);
+  background-color: rgba(255, 193, 7, 0.25);
+}
+@media (max-width: 767px) {
+  .couponApplied-main .coupon-icon {
+    grid-area: icon;
+    margin: 0;
+    width: 32px;
+    height: 32px;
+  }
+  .couponApplied-main .coupon-icon .coupon-svg {
+    width: 18px;
+    height: 18px;
+  }
+  .couponApplied-main .coupon-icon .coupon-icon-bg {
+    width: 32px;
+    height: 32px;
+  }
+}
+@media (max-width: 480px) {
+  .couponApplied-main .coupon-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .couponApplied-main .coupon-icon .coupon-svg {
+    width: 16px;
+    height: 16px;
+  }
+  .couponApplied-main .coupon-icon .coupon-icon-bg {
+    width: 28px;
+    height: 28px;
+  }
+}
+.couponApplied-main .coupon-details {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+@media (max-width: 767px) {
+  .couponApplied-main .coupon-details {
+    display: contents;
+  }
+}
+.couponApplied-main .coupon-details .coupon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+@media (max-width: 767px) {
+  .couponApplied-main .coupon-details .coupon-header {
+    grid-area: header;
+    margin-bottom: 0;
+  }
+}
+.couponApplied-main .coupon-details .coupon-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333333;
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .couponApplied-main .coupon-details .coupon-header h3 {
+    font-size: 18px;
+  }
+}
+@media (max-width: 767px) {
+  .couponApplied-main .coupon-details .coupon-header h3 {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media (max-width: 480px) {
+  .couponApplied-main .coupon-details .coupon-header h3 {
+    font-size: 14px;
+  }
+}
+.couponApplied-main .coupon-details .coupon-header .coupon-code {
+  background-color: rgba(26, 113, 46, 0.1);
+  color: #1a712e;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+@media (min-width: 768px) {
+  .couponApplied-main .coupon-details .coupon-header .coupon-code {
+    font-size: 14px;
+    padding: 4px 10px;
+  }
+}
+@media (max-width: 480px) {
+  .couponApplied-main .coupon-details .coupon-header .coupon-code {
+    margin: 0 auto;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+}
+.couponApplied-main .coupon-details .discount-text {
+  font-weight: 600;
+  color: #1a712e;
+  margin-bottom: 0;
+  font-size: 12px;
+}
+@media (max-width: 767px) {
+  .couponApplied-main .coupon-details .discount-text {
+    grid-area: discount;
+    font-size: 13px;
+    margin-top: 5px;
+    padding: 5px 8px;
+    background-color: rgba(26, 113, 46, 0.05);
+    border-radius: 20px;
+    text-align: center;
+  }
+}
+@media (max-width: 480px) {
+  .couponApplied-main .coupon-details .discount-text {
+    font-size: 12px;
+    padding: 4px 6px;
+  }
+}
+.couponApplied-main .coupon-details .discount-text span {
+  position: relative;
+  font-size: 16px;
+}
+.couponApplied-main .coupon-details .discount-text span::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #1a712e;
+  transition: width 0.3s ease;
+}
+.couponApplied-main:hover .couponApplied-main .coupon-details .discount-text span::after {
+  width: 100%;
+}
+.couponApplied-main .coupon-details .divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e9ecef, transparent);
+  margin: 12px 0;
+}
+@media (max-width: 480px) {
+  .couponApplied-main .coupon-details .divider {
+    margin: 10px 0;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+.couponApplied-main .coupon-details .view-cart {
+  color: #1a712e;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+@media (max-width: 767px) {
+  .couponApplied-main .coupon-details .view-cart {
+    font-size: 13px;
+  }
+  .couponApplied-main .coupon-details .view-cart span {
+    display: none;
+  }
+  .couponApplied-main .coupon-details .view-cart svg {
+    width: 18px;
+    height: 18px;
+    background-color: rgba(26, 113, 46, 0.1);
+    padding: 3px;
+    border-radius: 50%;
+    stroke-width: 2.5;
+  }
+  .couponApplied-main .coupon-details .view-cart:active svg {
+    background-color: rgba(26, 113, 46, 0.2);
+  }
+}
+@media (max-width: 480px) {
+  .couponApplied-main .coupon-details .view-cart svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+.couponApplied-main .coupon-details .view-cart svg {
+  transition: transform 0.3s ease;
+}
+.couponApplied-main .coupon-details .view-cart:hover {
+  color: #145a25;
+}
+.couponApplied-main .coupon-details .view-cart:hover svg {
+  transform: translateX(4px);
+}
+.couponApplied-main .coupon-details .view-cart:active {
+  transform: scale(0.98);
+}
+.couponApplied-main .removeCoupon {
+  background-color: #f8f9fa;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.couponApplied-main .removeCoupon svg {
+  transition: transform 0.3s ease;
+  width: 14px;
+  height: 14px;
+}
+.couponApplied-main .removeCoupon:hover {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+.couponApplied-main .removeCoupon:hover svg {
+  transform: rotate(90deg);
+}
+.couponApplied-main .removeCoupon:active {
+  transform: scale(0.95);
+}
+@media (max-width: 767px) {
+  .couponApplied-main .removeCoupon {
+    grid-area: remove;
+    width: 22px;
+    height: 22px;
+  }
+  .couponApplied-main .removeCoupon svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+@media (max-width: 480px) {
+  .couponApplied-main .removeCoupon {
+    width: 20px;
+    height: 20px;
+  }
+  .couponApplied-main .removeCoupon svg {
+    width: 10px;
+    height: 10px;
+  }
+}
+@media (max-width: 767px) {
+  .couponApplied-main:active {
+    background-color: rgba(26, 113, 46, 0.5);
+  }
+  .couponApplied-main::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231a712e' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3Ccircle cx='13' cy='13' r='1'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 10px;
+  }
+  .couponApplied-main::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+}
+
+@keyframes couponPulse {
+  0%, 100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+  }
+}
+@keyframes couponClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+@keyframes couponActivate {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.02);
+  }
+  20% {
+    transform: scale(0.98);
+  }
+  30% {
+    transform: scale(1.01);
+  }
+  40% {
+    transform: scale(0.99);
+  }
+  50% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+}
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+@keyframes bgPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
+}
+.summary-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  animation: slideUp 0.7s ease;
+  border: 1px solid rgba(26, 113, 46, 0.1);
+}
+.summary-section .section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.summary-section .section-header svg {
+  margin-right: 10px;
+  color: #1a712e;
+}
+.summary-section .section-header h2 {
+  font-size: 18px;
+  margin: 0;
+  color: #333333;
+}
+@media (min-width: 768px) {
+  .summary-section .section-header h2 {
+    font-size: 20px;
+  }
+}
+.summary-section .row-center-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+.summary-section .row-center-space-between:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.summary-section .t14 {
+  font-size: 14px;
+  color: #666666;
+}
+@media (min-width: 768px) {
+  .summary-section .t14 {
+    font-size: 16px;
+  }
+}
+.summary-section h4 {
+  font-size: 18px;
+  color: #1a712e;
+  font-weight: 600;
+  margin: 0;
+}
+@media (min-width: 768px) {
+  .summary-section h4 {
+    font-size: 20px;
+  }
+}
+
+.super-coins-row {
+  margin: 15px 0;
+  padding: 12px 15px;
+  background-color: rgba(255, 193, 7, 0.2901960784);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.super-coins-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.super-coins-wrapper .custom-coin-checkbox {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 5px;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .coin-face {
+  transform: rotateY(180deg);
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.7);
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-ripple {
+  transform: scale(1.5);
+  opacity: 0;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays {
+  opacity: 1;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray {
+  transform-origin: center;
+  animation: rayAnimation 1s ease-out;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray:nth-child(7) {
+  animation-delay: 0.35s;
+}
+.super-coins-wrapper .custom-coin-checkbox input[type=checkbox]:checked ~ .checkbox-design .checkbox-rays .ray:nth-child(8) {
+  animation-delay: 0.4s;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design {
+  position: relative;
+  width: 28px;
+  height: 28px;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .coin-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffc107, #ba8b00);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  z-index: 2;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .coin-face .coin-inner {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background: #ffc107;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .coin-face .coin-inner .coin-icon-svg {
+  width: 80%;
+  height: 80%;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .coin-face .coin-inner .coin-icon-svg .coin-circle {
+  fill: #ffc107;
+  stroke: #ffffff;
+  stroke-width: 1;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .coin-face .coin-inner .coin-icon-svg .coin-symbol {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .coin-face .coin-shine {
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(25deg);
+  animation: coinShine 2s infinite;
+  pointer-events: none;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .checkbox-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 193, 7, 0.3);
+  border-radius: 50%;
+  z-index: 1;
+  opacity: 1;
+  transition: all 0.5s ease-out;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .checkbox-rays {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.super-coins-wrapper .custom-coin-checkbox .checkbox-design .checkbox-rays .ray {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 0;
+  background-color: rgba(255, 193, 7, 0.7);
+  transform-origin: bottom center;
+}
+.super-coins-wrapper .super-coins-text {
+  display: flex;
+  flex-direction: column;
+}
+.super-coins-wrapper .super-coins-text .super-coins-label {
+  font-weight: 600;
+  color: #1a712e;
+  margin-bottom: 2px;
+}
+.super-coins-wrapper .super-coins-text .coins-value {
+  display: flex;
+  align-items: center;
+}
+.super-coins-wrapper .super-coins-text .coins-value .coins-amount {
+  font-weight: 700;
+  color: #ffc107;
+  font-size: 16px;
+}
+.super-coins-wrapper .super-coins-text .coins-value .coins-amount::before {
+  content: "(";
+  margin-right: 2px;
+  color: #ffffff;
+}
+.super-coins-wrapper .super-coins-text .coins-value .coins-amount::after {
+  content: " coins)";
+  margin-left: 2px;
+  color: #ffffff;
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.coins-redemption {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.coins-redemption .redemption-amount {
+  font-weight: 700;
+  color: #1a712e;
+  font-size: 18px;
+}
+.coins-redemption .redemption-label {
+  font-size: 12px;
+  color: #1a712e;
+}
+
+@keyframes coinShine {
+  0% {
+    transform: translateX(-100%) rotate(25deg);
+  }
+  50% {
+    transform: translateX(100%) rotate(25deg);
+  }
+  100% {
+    transform: translateX(-100%) rotate(25deg);
+  }
+}
+@keyframes rayAnimation {
+  0% {
+    height: 0;
+    opacity: 1;
+  }
+  50% {
+    height: 20px;
+    opacity: 0.8;
+  }
+  100% {
+    height: 0;
+    opacity: 0;
+  }
+}
+@keyframes coinSpin {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.5) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+@keyframes coinPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.coins-value {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.coins-value.animate .coins-amount {
+  animation: numberChange 0.5s ease;
+}
+
+@keyframes numberChange {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  51% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+input[type=checkbox] {
+  accent-color: #1a712e;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.address-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  animation: slideUp 0.8s ease;
+}
+.address-section .section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.address-section .section-header.addHeader {
+  padding: 20px;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.address-section .section-header svg {
+  margin-right: 10px;
+  color: #1a712e;
+}
+.address-section .section-header h2 {
+  font-size: 18px;
+  margin: 0;
+  color: #333333;
+}
+@media (min-width: 768px) {
+  .address-section .section-header h2 {
+    font-size: 20px;
+  }
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate {
+  position: relative;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e9ecef' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'%3E%3C/path%3E%3Ccircle cx='12' cy='10' r='3'%3E%3C/circle%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate:hover {
+  border-color: #1a712e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate:hover::before {
+  opacity: 0.5;
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate.selected-address, .address-section .myAddressBoxWrap .myaddress-getting-separate.default-address {
+  border-color: #1a712e;
+  background-color: rgba(26, 113, 46, 0.1);
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate .address-label {
+  display: block;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333333;
+  position: relative;
+  padding-left: 25px;
+}
+@media screen and (max-width: 767px) {
+  .address-section .myAddressBoxWrap .myaddress-getting-separate .address-label span {
+    font-size: 14px;
+  }
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate .address-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a712e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'%3E%3C/path%3E%3Cpolyline points='9 22 9 12 15 12 15 22'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+@media (min-width: 768px) {
+  .address-section .myAddressBoxWrap .myaddress-getting-separate .address-label {
+    font-size: 16px;
+  }
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate .myAddressBoxWrap-Order-Edit {
+  color: #1a712e;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: rgba(26, 113, 46, 0.1);
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate .myAddressBoxWrap-Order-Edit:hover {
+  color: #145a25;
+  background-color: rgba(26, 113, 46, 0.2);
+}
+.address-section .myAddressBoxWrap .myaddress-getting-separate .myAddressBoxWrap-Order-Edit .fa-edit {
+  margin-right: 5px;
+}
+
+.checkout-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #1a712e;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  animation: slideUp 0.9s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.checkout-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.5s ease;
+}
+.checkout-button svg {
+  transition: transform 0.3s ease;
+}
+.checkout-button:hover {
+  background-color: #145a25;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+.checkout-button:hover::before {
+  left: 100%;
+}
+.checkout-button:hover svg {
+  transform: translateX(5px);
+}
+.checkout-button:active {
+  transform: translateY(-1px) scale(0.98);
+}
+@media (min-width: 768px) {
+  .checkout-button {
+    font-size: 18px;
+    padding: 18px;
+  }
+}
+
+.popup-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+.popup-modal .popup-content {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  animation: bounce 0.5s ease;
+  max-width: 90%;
+  width: 350px;
+  position: relative;
+  overflow: hidden;
+}
+.popup-modal .popup-content::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(26, 113, 46, 0.5) 0%, transparent 70%);
+  z-index: 0;
+}
+.popup-modal .popup-content p {
+  margin-top: 15px;
+  color: #1a712e;
+  font-weight: 600;
+  font-size: 18px;
+  position: relative;
+  z-index: 1;
+}
+.popup-modal.super-coins-modal .popup-content {
+  padding: 25px;
+}
+.popup-modal.super-coins-modal .popup-content .coins-animation {
+  position: relative;
+  z-index: 2;
+  animation: floatAnimation 3s ease-in-out infinite;
+}
+.popup-modal.super-coins-modal .popup-content .coins-message {
+  position: relative;
+  z-index: 2;
+}
+.popup-modal.super-coins-modal .popup-content .coins-message p {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  color: #1a712e;
+  font-weight: 700;
+  font-size: 20px;
+  animation: pulseText 2s infinite;
+}
+.popup-modal.super-coins-modal .popup-content .coins-message .coins-value-display {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background-color: rgba(26, 113, 46, 0.1);
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+.popup-modal.super-coins-modal .popup-content .coins-message .coins-value-display .coins-label {
+  color: #333333;
+  font-size: 14px;
+}
+.popup-modal.super-coins-modal .popup-content .coins-message .coins-value-display .coins-amount {
+  color: #ffc107;
+  font-weight: 700;
+  font-size: 18px;
+  animation: coinPulse 1.5s infinite;
+}
+.popup-modal.super-coins-modal .popup-content .coins-message .coins-value-display .discount-amount {
+  color: #1a712e;
+  font-weight: 700;
+  font-size: 18px;
+  animation: numberChange 2s infinite;
+}
+
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes pulseText {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+.silver-coin {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  perspective: 1000px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.silver-coin .coin-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: coinRotate 3s infinite linear;
+}
+.silver-coin .coin-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #e6e6e6, #c0c0c0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.silver-coin .coin-face::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-20deg);
+  animation: coinShine 2s infinite;
+}
+.silver-coin .coin-face svg {
+  width: 60%;
+  height: 60%;
+  z-index: 2;
+  color: #333;
+  transition: all 0.3s ease;
+}
+.silver-coin .coin-edge {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(-2px);
+  border-radius: 50%;
+  background: #a0a0a0;
+  transition: background 0.3s ease;
+}
+
+.custom-coin-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+.custom-coin-checkbox input[type=checkbox] {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+}
+.custom-coin-checkbox input[type=checkbox]:checked + .silver-coin .coin-face {
+  background: linear-gradient(145deg, #d4e6d7, #a3c9a9);
+  box-shadow: 0 2px 8px rgba(26, 113, 46, 0.3);
+}
+.custom-coin-checkbox input[type=checkbox]:checked + .silver-coin .coin-face::after {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0) 100%);
+  animation: coinShine 1.5s infinite;
+}
+.custom-coin-checkbox input[type=checkbox]:checked + .silver-coin .coin-face svg {
+  color: #1a712e;
+  transform: scale(1.1);
+}
+.custom-coin-checkbox input[type=checkbox]:checked + .silver-coin .coin-inner {
+  animation: coinRotate 2s infinite linear;
+}
+.custom-coin-checkbox input[type=checkbox]:checked + .silver-coin .coin-edge {
+  background: #8ab891;
+}/*# sourceMappingURL=order.css.map */

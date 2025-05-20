@@ -240,12 +240,13 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     };
     getAddToCartData();
   }, [cityId, c_id]);
-
+  
+  const showSubscribe = dish.subscription_product;
   // *************************************************************************************
   const handleOpenModal = (option_name: any) => {
     // console.log("aaaacccccccccccccccccccc", option_name)
     // setIsModalOpen(true);
-    navigate(`/dish/${dish.option_name}`, { state: { dish } });
+    navigate(`/dish/${dish.option_name}`, { state: { dish , showSubscribe} });
   };
 
   // const handleOpenModalMenuList = (option_name: any) => {

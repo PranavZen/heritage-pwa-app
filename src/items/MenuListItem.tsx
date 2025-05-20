@@ -35,14 +35,14 @@ export const MenuListItem: React.FC<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
-  const [orderType, setOrderType] = useState<number>(0);
-  // console.log("orderType", orderType);
+  const [orderType, setOrderType] = useState<number>();
+  console.log("orderType", orderType);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
 
 
   useEffect(() => {
     if (shouldRefresh) {
-      setOrderType(0); 
+      setOrderType(0);
       setShouldRefresh(false);
     }
   }, [shouldRefresh]);
@@ -53,8 +53,6 @@ export const MenuListItem: React.FC<Props> = ({
   const c_id = localStorage.getItem("c_id") || "";
 
   const cityId = localStorage.getItem("cityId") || "";
-
-
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -78,13 +76,13 @@ export const MenuListItem: React.FC<Props> = ({
           notification.success({
             message: "Success",
             description: response.data.message,
-          });
-          dispatch(setShouldRefresh(true));
+          }); 
           dispatch(actions.removeItemCompletely({ ...dish }));
           setQuantity(0);
           setCartItemId(null);
           dispatch(setCartCount(Number(response.data.cart_count)));
-
+          setOrderType(0);
+          dispatch(setShouldRefresh(true));
 
         } else {
           notification.error({
@@ -134,9 +132,8 @@ export const MenuListItem: React.FC<Props> = ({
         if (matchedItem) {
           setQuantity(Number(matchedItem.quantity) || 1);
           setCartItemId(String(matchedItem.cart_id));
-
           setOrderType(matchedItem.order_type);
-
+          dispatch(setShouldRefresh(true));
         } else {
           setQuantity(0);
           setCartItemId(null);
@@ -152,9 +149,6 @@ export const MenuListItem: React.FC<Props> = ({
     fetchCartData();
   }, [cityId, c_id, dish, shouldRefresh]);
 
-
-
-
   const HandleAddToCart = async () => {
     if (!c_id) {
       Modal.confirm({
@@ -169,7 +163,6 @@ export const MenuListItem: React.FC<Props> = ({
       });
       return;
     }
-
     try {
       setLoading(true);
       const formData = new FormData();
@@ -196,12 +189,11 @@ export const MenuListItem: React.FC<Props> = ({
           message: 'Success',
           description: response.data.message,
         });
-        dispatch(setShouldRefresh(false));
+
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
-        setQuantity(1);
-
-
+        // setQuantity(1);
+        dispatch(setShouldRefresh(true));
         const newCartId =
           response.data.cart_id ||
           response.data.data?.cart_id ||
@@ -547,7 +539,7 @@ export const MenuListItem: React.FC<Props> = ({
   };
 
 
- useEffect(() => {
+  useEffect(() => {
     const deliveryData = async () => {
       const formData = new FormData();
       formData.append("c_id", c_id || "null");
@@ -654,12 +646,8 @@ export const MenuListItem: React.FC<Props> = ({
         </div>
 
 
-
-
-
         <div className="product-actions">
           <div className="cart-controls">
-
             {quantity < 1 && orderType !== 1 ? (
               <button className="cart-button" onClick={HandleAddToCart}>
                 <span>Add</span>
