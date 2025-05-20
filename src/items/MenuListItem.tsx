@@ -662,7 +662,7 @@ export const MenuListItem: React.FC<Props> = ({
 
             {quantity < 1 && orderType !== 1 ? (
               <button className="cart-button" onClick={HandleAddToCart}>
-                <span>+ Add</span>
+                <span>Add</span>
               </button>
             ) : (
               String(orderType) === '2' && (
