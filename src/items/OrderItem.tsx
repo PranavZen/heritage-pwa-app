@@ -31,8 +31,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   );
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [prevQuantity, setPrevQuantity] = useState<number>(0);
-  const [orderType, setOrderType] = useState<string>();
-  console.log("aaaaa", orderType);
+  const [orderType, setOrderType] = useState([])
+  
 
   const shouldRefresh = useSelector(
     (state: RootState) => state.cartSlice.shouldRefresh
@@ -231,22 +231,38 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           response.data.optionListing.map((elem: any) => elem.no_of_deliveries)
         );
 
-        setOrderType(
-          response.data.optionListing.map((elem: any) => elem.order_type)
-        );
+
+        if (response.data.optionListing) {
+          const matchedItem = response.data.optionListing.find(
+            (item: any) =>
+              item.order_type
+          );
+
+          console.log("zzzzzzz", matchedItem);
+          if (matchedItem) {
+            setQuantity(Number(matchedItem.quantity) || 1);
+
+            setOrderType(matchedItem.order_type);
+
+          } else {
+
+
+          }
+        }
+
       } catch (error) {
         console.error(error);
       }
     };
     getAddToCartData();
-  }, [cityId, c_id]);
-  
+  }, []);
+
   const showSubscribe = dish.subscription_product;
   // *************************************************************************************
   const handleOpenModal = (option_name: any) => {
     // console.log("aaaacccccccccccccccccccc", option_name)
     // setIsModalOpen(true);
-    navigate(`/dish/${dish.option_name}`, { state: { dish , showSubscribe} });
+    navigate(`/dish/${dish.option_name}`, { state: { dish, showSubscribe } });
   };
 
   // const handleOpenModalMenuList = (option_name: any) => {
@@ -372,13 +388,20 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 </span>
               )}
 
-              <span
-                className="t14"
-                style={{ color: "var(--main-color)", fontWeight: 500 }}
-              >
-                <span className="cartLable">Free Deliveries :</span>{" "}
-                {dish.no_of_free_deliveries}
-              </span>
+              {String(orderType) === '1' && (
+                <span
+                  className="t14"
+                  style={{ color: "var(--main-color)", fontWeight: 500 }}
+                >
+                  <span className="cartLable">Free Deliveries :</span>{" "}
+                  {dish.no_of_free_deliveries}
+                </span>
+              )}
+
+
+
+
+
               {dish.preferenceName && (
                 <span
                   className="t14"
@@ -397,13 +420,16 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 </span>
               )}
 
-              <span
+              {String(orderType) === '1' && (
+                 <span
                 className="t14"
                 style={{ color: "var(--main-color)", fontWeight: 500 }}
               >
                 <span className="cartLable">Starts on :</span>{" "}
                 {dish.cart_order_date}
               </span>
+
+              )}
             </div>
           </div>
 
