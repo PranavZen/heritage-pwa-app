@@ -1033,18 +1033,18 @@ details summary {
       color: #757575;
 
       svg {
-        width: 16px;
-        height: 16px;
+        // width: 16px;
+        // height: 16px;
         color: #1a712e;
       }
 
       @media screen and (max-width: 767px) {
         font-size: 12px;
 
-        svg {
-          width: 14px;
-          height: 14px;
-        }
+        // svg {
+        //   width: 14px;
+        //   height: 14px;
+        // }
       }
     }
 

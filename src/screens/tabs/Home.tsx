@@ -120,10 +120,10 @@ export const Home: React.FC = () => {
             pagination={false}
             navigation={true}
             mousewheel={true}
-            autoplay={true}
+            autoplay={false}
             breakpoints={{
               320: {
-                slidesPerView: 2.8,
+                slidesPerView: 2.4,
                 spaceBetween: 10,
               },
               480: {
@@ -279,7 +279,7 @@ export const Home: React.FC = () => {
             breakpoints={{
               320: {
                 slidesPerView: 1.2,
-                spaceBetween: 10,
+                spaceBetween: 16,
               },
               480: {
                 slidesPerView: 1.6,
