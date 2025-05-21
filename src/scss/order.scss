@@ -1423,9 +1423,64 @@ input[type="checkbox"] {
     transform: translateY(-1px) scale(0.98);
   }
 
+  // Loading state styles
+  &.loading {
+    background-color: darken($primary-color, 5%);
+    cursor: not-allowed;
+    transform: none;
+
+    &:hover {
+      transform: none;
+      box-shadow: $shadow-sm;
+
+      &::before {
+        left: -100%;
+      }
+    }
+
+    .spinner-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+
   @media (min-width: 768px) {
     font-size: 18px;
     padding: 18px;
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    font-size: 15px;
+    padding: 14px;
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border-width: 2px;
+    }
   }
 }
 

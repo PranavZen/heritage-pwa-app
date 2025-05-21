@@ -945,6 +945,7 @@ details summary {
           display: flex;
           justify-content: center;
           align-items: center;
+         
         }
 
         @media screen and (max-width: 767px) {
@@ -1033,18 +1034,18 @@ details summary {
       color: #757575;
 
       svg {
-        width: 16px;
-        height: 16px;
+        // width: 16px;
+        // height: 16px;
         color: #1a712e;
       }
 
       @media screen and (max-width: 767px) {
         font-size: 12px;
 
-        svg {
-          width: 14px;
-          height: 14px;
-        }
+        // svg {
+        //   width: 14px;
+        //   height: 14px;
+        // }
       }
     }
 
@@ -1150,7 +1151,7 @@ details summary {
 
       span {
         font-family: "SF Pro Display Medium";
-        font-size: 20px;
+        font-size: 14px;
       }
     }
 
@@ -1613,6 +1614,9 @@ select {
     width: 100%;
     display: flex;
     background-color: #fff;
+    @media screen and (max-width: 767px) {
+      height: 125px;
+    }
     img {
       width: 100%;
       max-width: 100%;
@@ -1704,6 +1708,7 @@ select {
   justify-content: center;
   align-items: center;
   padding: 0 20px;
+  height: 100vh;
   section {
     background: #26982152;
     border-radius: 8px;

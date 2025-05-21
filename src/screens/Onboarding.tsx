@@ -254,7 +254,7 @@ export const Onboarding: React.FC = () => {
         <div className="popup-content">
           <Lottie
             animationData={LocationPinAnimation}
-            style={{ width: 120, height: 120 }}
+            style={{ width: 120, height: 120, margin :"0 auto" }}
           />
           <p className="loading-message">
             Verifying location...

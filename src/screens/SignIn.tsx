@@ -338,7 +338,7 @@ export const SignIn: React.FC = () => {
         <div className="popup-content">
           <Lottie
             animationData={OtpVerificationAnimation}
-            style={{ width: 120, height: 120 }}
+            style={{ width: 120, height: 120, margin :"0 auto" }}
           />
           <p className="loading-message">
             {isOtpSent ? "Verifying OTP..." : "Sending OTP..."}

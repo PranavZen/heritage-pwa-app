@@ -69,6 +69,7 @@ interface Props {
   // console.log("superPoint", superPoint);
 
   const [loading, setLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [coupons, setCoupons] = useState<any[]>([]);
   const [cartDetails, setCartDetails] = useState<any>(null);
@@ -321,13 +322,15 @@ interface Props {
 
   const handleCheckout = async () => {
     setLoading(true);
+    setButtonLoading(true); // Set button loading state to true
+
     const formData = new FormData();
     formData.append("c_id", c_id || "");
     formData.append(
       "addresses_id",
       selectedAddressId ? String(selectedAddressId) : String(addressId || "")
     );
-    formData.append("redeem_reward_points", String(superPointCoins));
+    formData.append("redeem_reward_points", String(PassPointsInCheckout));
 
     try {
       const response = await axios.post(
@@ -336,16 +339,18 @@ interface Props {
       );
       if (response.data.status === "success") {
         notification.success({ message: response.data.message });
-        // setOrderPlaced(true);
         navigate("/thank-you");
         localStorage.removeItem("couponCode");
       } else if (response.data.status === "fail") {
+        setButtonLoading(false); // Reset button loading state on failure
+        setLoading(false); // Reset global loading state on failure
         notification.error({
           message: response.data.message || "Order placement failed",
         });
       }
     } catch (error) {
-      setLoading(false);
+      setButtonLoading(false); // Reset button loading state on error
+      setLoading(false); // Reset global loading state on error
       console.error(error);
       notification.error({
         message: "An error occurred while placing your order.",
@@ -692,23 +697,38 @@ interface Props {
 
   const renderButton = (): JSX.Element => {
     return (
-      <button className="checkout-button" onClick={handleCheckout}>
-        Proceed to Checkout
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ marginLeft: "10px" }}
-        >
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
+      <button
+        className={`checkout-button ${buttonLoading ? 'loading' : ''}`}
+        onClick={handleCheckout}
+        disabled={buttonLoading}
+      >
+        {buttonLoading ? (
+          <>
+            <span className="spinner-container">
+              <span className="spinner"></span>
+            </span>
+            Processing...
+          </>
+        ) : (
+          <>
+            Proceed to Checkout
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ marginLeft: "10px" }}
+            >
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </>
+        )}
       </button>
     );
   };
@@ -1008,16 +1028,16 @@ interface Props {
           {/******************************************************** */}
           <div className="row-center-space-between rowLine">
             <span className="t14"> Discount on Free Deliveries</span>
-            <span className="t14">
+            <span className="t14">    
               ₹{" "}
               {superPoint &&
                 superPoint.optionListing &&
                 superPoint.optionListing.length > 0
                 ? superPoint.optionListing
                   .map((elem: any) => {
-                    return (
+                    return(
                       (elem.price - elem.discount) *
-                      elem.no_of_free_deliveries
+                      elem.no_of_free_deliveries * elem.quantity
                     );
                   })
                   .reduce((acc: number, current: number) => acc + current, 0)
@@ -1026,7 +1046,7 @@ interface Props {
           </div>
           {/* *************************************************** */}
 
-          {localStorage.getItem("coupon") ? (
+          {localStorage.getItem("couponCode") ? (
             <>
               {" "}
               <div className="row-center-space-between rowLine">
@@ -1274,7 +1294,7 @@ interface Props {
             <div className="coins-animation">
               <Lottie
                 animationData={SuperCoins}
-                style={{ width: 150, height: 150 }}
+                style={{ width: 150, height: 150, margin :"0 auto" }}
               />
             </div>
             <div className="coins-message">

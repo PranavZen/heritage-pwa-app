@@ -36,7 +36,7 @@ export const MenuListItem: React.FC<Props> = ({
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
   const [orderType, setOrderType] = useState<number>();
-  console.log("orderType", orderType);
+  // console.log("orderType", orderType);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
 
 
@@ -76,7 +76,7 @@ export const MenuListItem: React.FC<Props> = ({
           notification.success({
             message: "Success",
             description: response.data.message,
-          }); 
+          });
           dispatch(actions.removeItemCompletely({ ...dish }));
           setQuantity(0);
           setCartItemId(null);
@@ -149,6 +149,7 @@ export const MenuListItem: React.FC<Props> = ({
     fetchCartData();
   }, [cityId, c_id, dish, shouldRefresh]);
 
+
   const HandleAddToCart = async () => {
     if (!c_id) {
       Modal.confirm({
@@ -205,6 +206,7 @@ export const MenuListItem: React.FC<Props> = ({
         } else {
           await fetchCartData();
         }
+        dispatch(setShouldRefresh(true));
       } else {
         notification.error({
           message: 'Error',
@@ -333,7 +335,7 @@ export const MenuListItem: React.FC<Props> = ({
   const [deliveryPreference, setDeliveryPreference] = useState('1');
 
 
-  console.log("deliveryPreference", deliveryPreference);
+  // console.log("deliveryPreference", deliveryPreference);
 
   const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
   const [deliveries, setDeliveries] = useState<number>(30);
@@ -344,6 +346,7 @@ export const MenuListItem: React.FC<Props> = ({
   const minDate = today.toISOString().split("T")[0];
 
   const handleOpenModal = () => {
+
     const c_id = localStorage.getItem('c_id');
     if (!c_id) {
       Modal.confirm({
@@ -551,7 +554,7 @@ export const MenuListItem: React.FC<Props> = ({
           formData
         );
 
-        console.log("paaaaaaaaaaaaaaa", response);
+        // console.log("paaaaaaaaaaaaaaa", response);
 
         setDeliveryOptionsPreference(response.data.productDetails);
       } catch (error) {

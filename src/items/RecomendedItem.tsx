@@ -37,7 +37,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
 
  const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
 
-  console.log("subscriptionData", subscriptionData)
+  // console.log("subscriptionData", subscriptionData)
 
   const c_id = localStorage.getItem("c_id") || "";
   const cityId = localStorage.getItem("cityId") || "";

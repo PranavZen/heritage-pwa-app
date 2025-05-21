@@ -62,9 +62,7 @@ export const Dish: React.FC = () => {
 
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
-  
-  const [deliveryPreference, setDeliveryPreference] = useState<string>('1');
-
+  const [deliveryPreference, setDeliveryPreference] = useState<string>("1");
 
   const [deliveries, setDeliveries] = useState<number>(30);
 
@@ -88,12 +86,11 @@ export const Dish: React.FC = () => {
 
   const dish: DishType = location.state.dish;
 
-
-console.log("abbbbbbbbbbbbb", dish);
+  // console.log("abbbbbbbbbbbbb", dish);
 
   const showSubscribe = location.state.showSubscribe;
 
-  console.log("vvvvvvvvv", showSubscribe);
+  // console.log("vvvvvvvvv", showSubscribe);
 
   // Ensure dish and the properties exist
   if (dish && dish.product_option_id && dish.product_option_value_id) {
@@ -341,7 +338,7 @@ console.log("abbbbbbbbbbbbb", dish);
         if (newCartId) {
           setCartItemId(String(newCartId));
         } else {
-          // await fetchCartData(); 
+          // await fetchCartData();
         }
       } else {
         notification.error({
@@ -836,18 +833,18 @@ console.log("abbbbbbbbbbbbb", dish);
   // const handleAddToCartWithCustomPreferences = async () => {
   //   const dishWithCustomPreferences = {
   //     c_id: c_id || "null",
-  //     // package_id: 13, 
+  //     // package_id: 13,
   //     package_days: 0,
-  //     product_id: dish.product_id, 
-  //     product_option_id: 6, 
-  //     product_option_value_id: 11, 
+  //     product_id: dish.product_id,
+  //     product_option_id: 6,
+  //     product_option_value_id: 11,
   //     quantity: 1,
-  //     weight: dish.weight, 
-  //     weight_unit: "g", 
+  //     weight: dish.weight,
+  //     weight_unit: "g",
   //     delivery_preference: deliveryPreference,
   //     no_of_deliveries: deliveries,
-  //     order_date: startDate, 
-  //     order_type: 2, 
+  //     order_date: startDate,
+  //     order_type: 2,
   //   };
 
   //   const cartCount = await addToCartApi(dishWithCustomPreferences);
@@ -945,7 +942,6 @@ console.log("abbbbbbbbbbbbb", dish);
   const renderDetails = (): JSX.Element => {
     return (
       <div className="productInfoBox">
-
         <div className="infoWrap">
           <h3
             className="number-of-lines-1"
@@ -954,6 +950,25 @@ console.log("abbbbbbbbbbbbb", dish);
             {dish.option_value_name}
           </h3>
           <span className="t16">{dish.weight} ml</span>
+          <div className="priceWrap">
+            <span>
+              {Number(dish.discount ?? 0) > 0 ? (
+                <>
+                  <span
+                    className="proPrice"
+                    style={{ textDecoration: "line-through", color: "#888" }}
+                  >
+                    ₹ {dish.price}
+                  </span>
+                  <span className="proPrice" style={{ marginLeft: "8px" }}>
+                    ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
+                  </span>
+                </>
+              ) : (
+                <span className="proPrice">₹ {dish.price}</span>
+              )}
+            </span>
+          </div>
           <div className="ppdBox">
             <span>Packs</span>
             <div className="cartButtonWrap">
@@ -976,8 +991,6 @@ console.log("abbbbbbbbbbbbb", dish);
 
               <span className="countNum">
                 {isInCart ? quantity : localQuantity}
-
-
               </span>
 
               <button
@@ -989,46 +1002,22 @@ console.log("abbbbbbbbbbbbb", dish);
                   }
                 }}
                 className="cartButton"
-
               >
                 <svg.AddSvg />
               </button>
-
             </div>
             <span>Per Day</span>
           </div>
 
           {/* Add to Cart button only if not in cart */}
-          {!isInCart && (
+          {/* {!isInCart && (
             <button
               onClick={() => handleUpdateCart(localQuantity)}
               className="addToCartButton"
             >
-              {/* Add to Cart */}
             </button>
-          )}
+          )} */}
 
-          <div className="priceWrap">
-            <span>
-              {Number(dish.discount ?? 0) > 0 ? (
-                <>
-                  <span className="proPrice" style={{ textDecoration: 'line-through', color: '#888' }}>
-                    ₹ {dish.price}
-                  </span>
-                  <span className="proPrice" style={{ marginLeft: '8px' }}>
-                    ₹ {Number(dish.price ?? 0) - Number(dish.discount ?? 0)}
-                  </span>
-                </>
-              ) : (
-                <span className="proPrice">
-                  ₹ {dish.price}
-                </span>
-              )}
-            </span>
-
-        
-
-          </div>
           {/* <span className="ppText">Per Pack</span>
           <p className="fatText">Fat 3.0%, SNF 8.5%</p> */}
         </div>
@@ -1068,7 +1057,6 @@ console.log("abbbbbbbbbbbbb", dish);
         )}
 
         {/* Subscription button */}
-        {console.log("wwwwwwww", showSubscribe)}
         {showSubscribe &&
           (!cartItemId ? (
             <components.Button
@@ -1104,33 +1092,26 @@ console.log("abbbbbbbbbbbbb", dish);
   const renderModal = (): JSX.Element => {
     if (!isModalOpen) return <> </>;
     return (
-
-      <components.Modal title="Delivery Preferences"
-
-
+      <components.Modal
+        title="Delivery Preferences"
         onClose={setIsModalOpenDaily}
       >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
-
             <label>Start Date:- </label>
 
             <DatePicker
               selected={startDate ? new Date(startDate) : null}
               onChange={(date: Date | null) => {
                 if (date) {
-
-                  setStartDate(date.toISOString().split('T')[0]);
+                  setStartDate(date.toISOString().split("T")[0]);
                 } else {
-                  setStartDate('');
-
+                  setStartDate("");
                 }
               }}
               minDate={new Date(minDate)}
               dateFormat="yyyy-MM-dd"
               placeholderText="Select a date"
-
-
               required
             />
           </div>
@@ -1139,11 +1120,11 @@ console.log("abbbbbbbbbbbbb", dish);
             onChange={(e) => setDeliveryPreference(e.target.value)}
           >
             {deliveryOptionsPreference &&
-              deliveryOptionsPreference.length > 0 ? (
+            deliveryOptionsPreference.length > 0 ? (
               deliveryOptionsPreference.map((elem) => (
                 <>
                   {elem.deliveryPreference &&
-                    elem.deliveryPreference.length > 0 ? (
+                  elem.deliveryPreference.length > 0 ? (
                     elem.deliveryPreference.map((option: any) => (
                       <option key={option.id} value={option.id}>
                         {option.name}
@@ -1173,50 +1154,42 @@ console.log("abbbbbbbbbbbbb", dish);
             >
               {deliveryOptionsPreference &&
                 deliveryOptionsPreference.length > 0 &&
-
                 deliveryOptionsPreference.map((elem) => {
                   return elem.packages && elem.packages.length > 0
                     ? elem.packages.map((option: any) => {
-                      if (option.package_name === "Daily") {
-                        return option.no_of_deliveries
-                          .split(",")
-                          .map((delivery: string, index: number) => (
-                            <option key={index} value={delivery}>
-                              {`${delivery}`}
-                            </option>
-                          ));
-                      }
-                    })
+                        if (option.package_name === "Daily") {
+                          return option.no_of_deliveries
+                            .split(",")
+                            .map((delivery: string, index: number) => (
+                              <option key={index} value={delivery}>
+                                {`${delivery}`}
+                              </option>
+                            ));
+                        }
+                      })
                     : null;
-
                 })}
             </select>
           </div>
         </div>
         <div>
-
-
-          {
-            !cartItemId
-              ? <>
-                <components.Button
-                  text="Confirm and Add to Cart"
-                  onClick={handleAddToCartWithPreferences}
-                />
-              </> :
-              <>
-                <components.Button
-                  text="update and Add to Cart"
-                  onClick={handleupdatetheAddToCartt}
-                />
-              </>
-          }
-
-
+          {!cartItemId ? (
+            <>
+              <components.Button
+                text="Confirm and Add to Cart"
+                onClick={handleAddToCartWithPreferences}
+              />
+            </>
+          ) : (
+            <>
+              <components.Button
+                text="update and Add to Cart"
+                onClick={handleupdatetheAddToCartt}
+              />
+            </>
+          )}
         </div>
       </components.Modal>
-
-
     );
   };
 
@@ -1231,25 +1204,20 @@ console.log("abbbbbbbbbbbbb", dish);
       >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
-
             <label>Start Date:- </label>
 
             <DatePicker
               selected={startDate ? new Date(startDate) : null}
               onChange={(date: Date | null) => {
                 if (date) {
-
-                  setStartDate(date.toISOString().split('T')[0]);
+                  setStartDate(date.toISOString().split("T")[0]);
                 } else {
-                  setStartDate('');
-
+                  setStartDate("");
                 }
               }}
               minDate={new Date(minDate)}
               dateFormat="yyyy-MM-dd"
               placeholderText="Select a date"
-
-
               required
             />
           </div>
@@ -1258,11 +1226,11 @@ console.log("abbbbbbbbbbbbb", dish);
             onChange={(e) => setDeliveryPreference(e.target.value)}
           >
             {deliveryOptionsPreference &&
-              deliveryOptionsPreference.length > 0 ? (
+            deliveryOptionsPreference.length > 0 ? (
               deliveryOptionsPreference.map((elem) => (
                 <>
                   {elem.deliveryPreference &&
-                    elem.deliveryPreference.length > 0 ? (
+                  elem.deliveryPreference.length > 0 ? (
                     elem.deliveryPreference.map((option: any) => (
                       <option key={option.id} value={option.id}>
                         {option.name}
@@ -1290,40 +1258,45 @@ console.log("abbbbbbbbbbbbb", dish);
                 setDeliveries(selectedValue);
               }}
             >
-
-              {deliveryOptionsPreference && deliveryOptionsPreference.length > 0 &&
+              {deliveryOptionsPreference &&
+                deliveryOptionsPreference.length > 0 &&
                 deliveryOptionsPreference.map((elem) => {
                   return elem.packages && elem.packages.length > 0
                     ? elem.packages.map((option: any) => {
-                      if (option.package_name === "Alternate Days") {
-                        return option.no_of_deliveries
-                          .split(",")
-                          .map((delivery: string, index: number) => (
-                            <option key={index} value={delivery}>
-                              {`${delivery}`}
-                            </option>
-                          ));
-                      }
-                    })
+                        if (option.package_name === "Alternate Days") {
+                          return option.no_of_deliveries
+                            .split(",")
+                            .map((delivery: string, index: number) => (
+                              <option key={index} value={delivery}>
+                                {`${delivery}`}
+                              </option>
+                            ));
+                        }
+                      })
                     : null;
-
                 })}
             </select>
           </div>
         </div>
 
         <div>
-
-          {
-            !cartItemId ? <> <components.Button
-              text="Confirm and Add to Cart"
-              onClick={handleAddToCartWithAlternate}
-            /> </> : <> <components.Button
-              text="update and Add to Cart"
-              onClick={handleupdatetheAddToCart}
-            /></>
-          }
-
+          {!cartItemId ? (
+            <>
+              {" "}
+              <components.Button
+                text="Confirm and Add to Cart"
+                onClick={handleAddToCartWithAlternate}
+              />{" "}
+            </>
+          ) : (
+            <>
+              {" "}
+              <components.Button
+                text="update and Add to Cart"
+                onClick={handleupdatetheAddToCart}
+              />
+            </>
+          )}
         </div>
       </components.Modal>
     );

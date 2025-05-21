@@ -32,7 +32,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [prevQuantity, setPrevQuantity] = useState<number>(0);
   const [orderType, setOrderType] = useState([])
-  
+
 
   const shouldRefresh = useSelector(
     (state: RootState) => state.cartSlice.shouldRefresh
@@ -224,9 +224,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           `https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv`,
           formData
         );
-
-        // console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
-
         SetSetCartData(
           response.data.optionListing.map((elem: any) => elem.no_of_deliveries)
         );
@@ -238,7 +235,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               item.order_type
           );
 
-          console.log("zzzzzzz", matchedItem);
+          // console.log("zzzzzzz", matchedItem);
           if (matchedItem) {
             setQuantity(Number(matchedItem.quantity) || 1);
 
@@ -263,6 +260,11 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     // console.log("aaaacccccccccccccccccccc", option_name)
     // setIsModalOpen(true);
     navigate(`/dish/${dish.option_name}`, { state: { dish, showSubscribe } });
+
+    localStorage.setItem(
+      "product_option_value_id",
+      dish.cart_product_option_value_id.toString()
+    );
   };
 
   // const handleOpenModalMenuList = (option_name: any) => {
@@ -271,6 +273,8 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
 
   //   });
   // }
+
+
 
   const handleOpenModalMenuList = (option_name: any) => {
     localStorage.setItem(
@@ -379,6 +383,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 <span className="cartLable">Qty :</span> {dish.quantity}
               </span>
 
+
               {noOfDeliveries > 0 && (
                 <span
                   className="t14"
@@ -388,18 +393,15 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 </span>
               )}
 
-              {String(orderType) === '1' && (
-                <span
-                  className="t14"
-                  style={{ color: "var(--main-color)", fontWeight: 500 }}
-                >
-                  <span className="cartLable">Free Deliveries :</span>{" "}
-                  {dish.no_of_free_deliveries}
-                </span>
-              )}
 
-
-
+              {String(dish.order_type) === '1' ? <>  
+              <span
+                className="t14"
+                style={{ color: "var(--main-color)", fontWeight: 500 }}
+              >
+                <span className="cartLable">Free Deliveries :</span>{" "}
+                {dish.no_of_free_deliveries}
+              </span> </> : <> </>}
 
 
               {dish.preferenceName && (
@@ -420,16 +422,13 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 </span>
               )}
 
-              {String(orderType) === '1' && (
-                 <span
+              {String(dish.order_type) === "1" ? <> <span
                 className="t14"
                 style={{ color: "var(--main-color)", fontWeight: 500 }}
               >
                 <span className="cartLable">Starts on :</span>{" "}
                 {dish.cart_order_date}
-              </span>
-
-              )}
+              </span> </> : <></>}
             </div>
           </div>
 
