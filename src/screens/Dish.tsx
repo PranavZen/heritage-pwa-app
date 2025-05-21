@@ -86,11 +86,11 @@ export const Dish: React.FC = () => {
 
   const dish: DishType = location.state.dish;
 
-  console.log("abbbbbbbbbbbbb", dish);
+  // console.log("abbbbbbbbbbbbb", dish);
 
   const showSubscribe = location.state.showSubscribe;
 
-  console.log("vvvvvvvvv", showSubscribe);
+  // console.log("vvvvvvvvv", showSubscribe);
 
   // Ensure dish and the properties exist
   if (dish && dish.product_option_id && dish.product_option_value_id) {
@@ -1057,7 +1057,6 @@ export const Dish: React.FC = () => {
         )}
 
         {/* Subscription button */}
-        {console.log("wwwwwwww", showSubscribe)}
         {showSubscribe &&
           (!cartItemId ? (
             <components.Button

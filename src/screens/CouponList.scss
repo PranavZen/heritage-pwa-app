@@ -38,8 +38,12 @@ h1 {
   animation: slideUp 0.5s ease forwards;
   transform-origin: center;
   // height: 100%;
+  width: 80%;
+  margin: 0 auto;
   cursor: pointer;
-
+  @media screen and (max-width : 767px) {
+    width: 90%;
+  }
   // Ripple effect
   .ripple-effect {
     position: absolute;

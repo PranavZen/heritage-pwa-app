@@ -174,7 +174,7 @@ export const CouponList: React.FC = () => {
       {showModal && (
         <div className="popup-modal">
           <div className="popup-content">
-            <Lottie animationData={CouponApply} style={{ width: 150, height: 150 }} />
+            <Lottie animationData={CouponApply} style={{ width: 150, height: 150, margin :"0 auto" }} />
             {/* <p>Coupon Applied Successfully!</p> */}
           </div>
         </div>

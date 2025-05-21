@@ -330,7 +330,7 @@ interface Props {
       "addresses_id",
       selectedAddressId ? String(selectedAddressId) : String(addressId || "")
     );
-    formData.append("redeem_reward_points", String(superPointCoins));
+    formData.append("redeem_reward_points", String(PassPointsInCheckout));
 
     try {
       const response = await axios.post(
@@ -1028,16 +1028,16 @@ interface Props {
           {/******************************************************** */}
           <div className="row-center-space-between rowLine">
             <span className="t14"> Discount on Free Deliveries</span>
-            <span className="t14">
+            <span className="t14">    
               ₹{" "}
               {superPoint &&
                 superPoint.optionListing &&
                 superPoint.optionListing.length > 0
                 ? superPoint.optionListing
                   .map((elem: any) => {
-                    return (
+                    return(
                       (elem.price - elem.discount) *
-                      elem.no_of_free_deliveries
+                      elem.no_of_free_deliveries * elem.quantity
                     );
                   })
                   .reduce((acc: number, current: number) => acc + current, 0)
@@ -1046,7 +1046,7 @@ interface Props {
           </div>
           {/* *************************************************** */}
 
-          {localStorage.getItem("coupon") ? (
+          {localStorage.getItem("couponCode") ? (
             <>
               {" "}
               <div className="row-center-space-between rowLine">
@@ -1294,7 +1294,7 @@ interface Props {
             <div className="coins-animation">
               <Lottie
                 animationData={SuperCoins}
-                style={{ width: 150, height: 150 }}
+                style={{ width: 150, height: 150, margin :"0 auto" }}
               />
             </div>
             <div className="coins-message">
