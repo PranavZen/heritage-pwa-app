@@ -223,9 +223,7 @@ export const Order: React.FC = () => {
         }
 
         const data = await response.json();
-        
-        console.log("Coupon data:", data);
-
+      
         setCouponsCount(data.coupon_count);
       } catch (error) {
         console.error("Error fetching coupons:", error);

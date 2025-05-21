@@ -31,11 +31,11 @@ export const MenuListItem: React.FC<Props> = ({
   // console.log("dishdishdishdishdish", showSubscribe);
   const dispatch = hooks.useDispatch();
   const [cartId, setCartId] = useState<string[]>([]);
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
-  const [orderType, setOrderType] = useState<number>();
+  const [orderType, setOrderType] = useState<number>(2);
   // console.log("orderType", orderType);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
 
@@ -325,11 +325,6 @@ export const MenuListItem: React.FC<Props> = ({
 
 
 
-
-
-
-
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [startDate, setStartDate] = useState(getTomorrowDate());
   const [deliveryPreference, setDeliveryPreference] = useState('1');
@@ -362,8 +357,6 @@ export const MenuListItem: React.FC<Props> = ({
     }
     setIsModalOpen(true);
   };
-
-
 
   const setIsModalOpenDaily = () => {
     setIsModalOpen(false);
@@ -477,9 +470,6 @@ export const MenuListItem: React.FC<Props> = ({
     }
   };
 
-
-
-
   const handleUpdateCartSubscription = async () => {
     if (deliveries < 1) {
       notification.error({ message: "Please select valid delivery days." });
@@ -563,20 +553,6 @@ export const MenuListItem: React.FC<Props> = ({
     };
     deliveryData();
   }, []);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   return (
 
     <>
@@ -647,13 +623,11 @@ export const MenuListItem: React.FC<Props> = ({
             </div>
           </div>
         </div>
-
-
         <div className="product-actions">
           <div className="cart-controls">
             {quantity < 1 && orderType !== 1 ? (
               <button className="cart-button" onClick={HandleAddToCart}>
-                <span>Add</span>
+                <span> Add </span>
               </button>
             ) : (
               String(orderType) === '2' && (
@@ -703,6 +677,7 @@ export const MenuListItem: React.FC<Props> = ({
             )}
 
             {/* Subscribe / Update Subscription */}
+            
             {String(showSubscribe) === "1" && String(orderType) !== '2' && (
               cartItemId ? (
                 <button
@@ -714,10 +689,10 @@ export const MenuListItem: React.FC<Props> = ({
                   }}
                   onClick={handleOpenModal}
                 >
-                  Update Subscription
+                  Upgrade
                 </button>
               ) : (
-
+                 
                 <button
                   className="cart-button"
                   style={{

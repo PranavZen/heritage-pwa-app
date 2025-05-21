@@ -299,8 +299,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
       });
       return;
     }
-    // console.log("dddddddd", dish)
-
+  
     const isInWishlist = wishlist.some(
       (item) => item.product_option_value_id === dish.product_option_value_id
     );

@@ -136,9 +136,9 @@ export const Notification: React.FC = () => {
     return (
       <section className="walletSection">
         <div className="walletContainer">
-          <h3>Wallet Balance Details</h3>
+          <h3>Reward & Redeem Balance </h3>
 
-          <div className="topSection">
+          {/* <div className="topSection">
             <div className="waltLeftBox">
               <span>Add money to</span>
               <p>smart wallet</p>
@@ -148,12 +148,12 @@ export const Notification: React.FC = () => {
                 <svg.WalletSvg />
               </span>
             </div>
-          </div>
+          </div> */}
 
-          <div className="walletBalanceText">
+          {/* <div className="walletBalanceText">
             Available Balance
             <span>₹{walletData?.wallet_balance || "0.00"}</span>
-          </div>
+          </div> */}
 
           <div className="pointsWrap">
             <div className="pointsBox">
@@ -182,12 +182,14 @@ export const Notification: React.FC = () => {
           </div>
         </div>
 
-        <button className="explore-btn" onClick={handleNavigateFunction}>
+        {/* <button className="explore-btn" onClick={handleNavigateFunction}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 12h18M16 5l7 7-7 7" />
           </svg>
           Wallet History
-        </button>
+        </button> */}
+
+
       </section>
     );
   };
