@@ -36,6 +36,7 @@ export const CouponList: React.FC = () => {
       setAppliedCouponCode(currentCouponCode);
     }
 
+
     const fetchCoupons = async () => {
       try {
         const formData = new FormData();
@@ -154,7 +155,6 @@ export const CouponList: React.FC = () => {
                     Apply Coupon
                   </button>
                 </div>
-
               </div>
             ))
           ) : (

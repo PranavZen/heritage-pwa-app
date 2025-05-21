@@ -81,7 +81,7 @@ export const AddressAdd: React.FC = () => {
 
   useEffect(() => {
     if (areaIdByPincode && Array.isArray(areaIdByPincode) && areaIdByPincode.length > 0) {
-      setSelectedAreaId(areaIdByPincode[0].id);  
+      setSelectedAreaId(areaIdByPincode[0].id);
     }
   }, [areaIdByPincode]);
 
@@ -95,8 +95,8 @@ export const AddressAdd: React.FC = () => {
       localStorage.setItem('cityId', newAddress.city_id);
     }
   }, [newAddress.city_id]);
-  
-  
+
+
 
   const verifyPincode = async (pincode: string) => {
     try {
@@ -379,6 +379,9 @@ export const AddressAdd: React.FC = () => {
               required
             />
           </div>
+
+
+          {/*           
           <div>
             <label className="form-label">Address Line 2</label>
             <input
@@ -402,8 +405,7 @@ export const AddressAdd: React.FC = () => {
                 }
               />
             </div>
-          </div>
-
+          </div> */}
 
           <div className="submitBtnWrap">
             <button type="submit" className="submit-btn">

@@ -199,7 +199,7 @@ export const Onboarding: React.FC = () => {
             </label>
             <Input
               type="number"
-              placeholder="Enter 4-digit pincode"
+              placeholder="Enter 6-digit pincode"
               containerStyle={{
                 marginBottom: 8,
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",

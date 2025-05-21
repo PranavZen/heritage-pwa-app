@@ -43,7 +43,7 @@ interface Props {
 // export const Order: React.FC = () => {
 // const Order = () => {
 
- export const Order: React.FC = () => {
+export const Order: React.FC = () => {
 
   const location = useLocation();
   const couponCode = location.state?.couponCode;
@@ -198,6 +198,46 @@ interface Props {
 
   const c_id = localStorage.getItem("c_id");
   const cityId = localStorage.getItem("cityId");
+
+
+
+  const [couponsCount, setCouponsCount] = useState()
+  // console.log("aaaaaa", couponsCount);
+
+
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("c_id", localStorage.getItem('c_id') || '');
+        formData.append("city_id", localStorage.getItem('cityId') || '');
+        formData.append("area_id", localStorage.getItem('area_id') || '');
+
+        const response = await fetch('https://heritage.bizdel.in/app/consumer/services_v11/couponListing', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch coupons');
+        }
+
+        const data = await response.json();
+        
+        console.log("Coupon data:", data);
+
+        setCouponsCount(data.coupon_count);
+      } catch (error) {
+        console.error("Error fetching coupons:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCoupons();
+  }, []);
+
+
 
   // ***************************************************************************************
   useEffect(() => {
@@ -627,31 +667,34 @@ interface Props {
           <div className="coupon-header">
             <h3>{codeCoupon ? "Applied Coupon" : "Discount Coupon"}</h3>
             {/* {codeCoupon && <span className="coupon-code">{codeCoupon}</span>} */}
-             <div
-            className="view-cart"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCoupon();
-            }}
-            role="button"
-            aria-label="View all available coupons"
-          >
-            <span>{couponButtonText}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+            <div
+              className="view-cart"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCoupon();
+              }}
+              role="button"
+              aria-label="View all available coupons"
             >
-              <path d="M9 18l6-6-6-6"></path>
-            </svg>
-          </div>
+              <span>{couponButtonText}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M9 18l6-6-6-6"></path>
+              </svg>
+            </div>
+
+            {/* Count coupon */}
+               <p> Coupon Available ({couponsCount})</p>
           </div>
           {cleanedDiscount && (
             <>
@@ -1028,14 +1071,14 @@ interface Props {
           {/******************************************************** */}
           <div className="row-center-space-between rowLine">
             <span className="t14"> Discount on Free Deliveries</span>
-            <span className="t14">    
+            <span className="t14">
               ₹{" "}
               {superPoint &&
                 superPoint.optionListing &&
                 superPoint.optionListing.length > 0
                 ? superPoint.optionListing
                   .map((elem: any) => {
-                    return(
+                    return (
                       (elem.price - elem.discount) *
                       elem.no_of_free_deliveries * elem.quantity
                     );
@@ -1146,9 +1189,8 @@ interface Props {
             </div>
             <div className="coins-redemption">
               <span
-                className={`t14 redemption-amount ${
-                  amountAnimating ? "animate" : ""
-                }`}
+                className={`t14 redemption-amount ${amountAnimating ? "animate" : ""
+                  }`}
               >
                 ₹{redeemedAmount ? <>{redeemedAmount}</> : <>0</>}
               </span>
@@ -1179,7 +1221,7 @@ interface Props {
                       elem.no_of_deliveries === "0"
                         ? 1
                         : Number(elem.no_of_deliveries) -
-                          (Number(elem.no_of_free_deliveries) || 0);
+                        (Number(elem.no_of_free_deliveries) || 0);
                     const lineTotal =
                       Number(elem.quantity) *
                       Number(elem.price) *
@@ -1243,7 +1285,7 @@ interface Props {
                       elem.no_of_deliveries === "0"
                         ? 1
                         : Number(elem.no_of_deliveries) -
-                          (Number(elem.no_of_free_deliveries) || 0);
+                        (Number(elem.no_of_free_deliveries) || 0);
                     const lineTotal =
                       Number(elem.quantity) *
                       Number(elem.price) *
@@ -1294,7 +1336,7 @@ interface Props {
             <div className="coins-animation">
               <Lottie
                 animationData={SuperCoins}
-                style={{ width: 150, height: 150, margin :"0 auto" }}
+                style={{ width: 150, height: 150, margin: "0 auto" }}
               />
             </div>
             <div className="coins-message">
