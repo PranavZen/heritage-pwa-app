@@ -49,7 +49,9 @@
   overflow-y: auto;
   height: auto;
   // min-height: 100%;
-  padding-bottom: calc(var(--footer-height) + 0px); /* Add padding to account for footer height plus some extra space */
+  padding-bottom: calc(
+    var(--footer-height) + 0px
+  ); /* Add padding to account for footer height plus some extra space */
 }
 
 .clickable {
@@ -63,12 +65,10 @@
   padding-right: 20px;
   position: relative;
 
-
   &.order-container,
   &.main-container {
     padding-bottom: calc(var(--footer-height) + 10px);
   }
-
 }
 
 .status-img {
@@ -342,12 +342,13 @@ details summary {
     width: 30%;
     color: #fff;
     height: 40px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     gap: 6px;
 
     @media screen and (max-width: 767px) {
       font-size: 14px;
+      width: 50%;
     }
 
     i {
@@ -384,6 +385,9 @@ details summary {
       border: 1px solid #1a712e;
       padding: 10px;
       max-width: 49%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
       @media screen and (max-width: 767px) {
         max-width: 100%;
@@ -945,7 +949,6 @@ details summary {
           display: flex;
           justify-content: center;
           align-items: center;
-         
         }
 
         @media screen and (max-width: 767px) {
@@ -955,7 +958,6 @@ details summary {
     }
   }
 }
-
 
 /* upperBox styles moved to _upperBox.scss */
 
@@ -996,179 +998,167 @@ details summary {
     }
   }
 
-
   .infoWrap {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-
-      @media screen and (max-width: 767px) {
-        font-size: 20px;
-      }
-
+    @media screen and (max-width: 767px) {
+      font-size: 20px;
     }
+  }
 
-    .t16 {
-      font-family: "SF Pro Display Light";
-      color: #0c1d2e;
-      font-size: 14px;
+  .t16 {
+    font-family: "SF Pro Display Light";
+    color: #0c1d2e;
+    font-size: 14px;
 
-      margin-bottom: 15px;
-      display: inline-block;
+    margin-bottom: 15px;
+    display: inline-block;
 
-      @media screen and (max-width: 767px) {
-        font-size: 13px;
-      }
-
-    }
-
-    .ppdBox {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 5px;
-
+    @media screen and (max-width: 767px) {
       font-size: 13px;
-      color: #757575;
+    }
+  }
 
-      svg {
-        // width: 16px;
-        // height: 16px;
-        color: #1a712e;
-      }
+  .ppdBox {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 
-      @media screen and (max-width: 767px) {
-        font-size: 12px;
+    font-size: 13px;
+    color: #757575;
 
-        // svg {
-        //   width: 14px;
-        //   height: 14px;
-        // }
-      }
+    svg {
+      // width: 16px;
+      // height: 16px;
+      color: #1a712e;
     }
 
     @media screen and (max-width: 767px) {
-      flex-wrap: wrap;
-      gap: 10px;
+      font-size: 12px;
+
+      // svg {
+      //   width: 14px;
+      //   height: 14px;
+      // }
     }
   }
 
-  /* Product features */
-  .product-features {
-    margin: 20px 0;
+  @media screen and (max-width: 767px) {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
 
-    .feature-title {
+/* Product features */
+.product-features {
+  margin: 20px 0;
+
+  .feature-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .features-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    span {
+      font-family: "SF Pro Display Light";
       font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #333;
-    }
-
-    .features-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-
-
-      span {
-        font-family: "SF Pro Display Light";
-        font-size: 14px;
-      }
-
     }
   }
+}
 
-  /* Divider */
-  .divider {
-    height: 1px;
-    background-color: #f0f0f0;
-    margin: 20px 0;
+/* Divider */
+.divider {
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 20px 0;
+}
+
+/* Quantity selector */
+.ppdBox {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+
+  .quantity-label,
+  .per-day-label {
+    font-size: 14px;
+    color: #757575;
   }
 
-  /* Quantity selector */
-  .ppdBox {
+  .cartButtonWrap {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin: 20px 0;
+    background-color: #1a712e;
+    justify-content: space-evenly;
+    border-radius: 50px;
+    width: 25%;
 
-    .quantity-label,
-    .per-day-label {
-      font-size: 14px;
-      color: #757575;
+    &.modifyBtn {
+      background-color: #f8d907;
+      border: 1px solid #333;
     }
 
-
-      .cartButtonWrap {
-        display: flex;
-        align-items: center;
-        background-color: #1a712e;
-        justify-content: space-evenly;
-        border-radius: 50px;
-        width: 25%;
-
-        &.modifyBtn {
-          background-color: #f8d907;
-          border: 1px solid #333;
-        }
-
-        .cartButton {
-          padding: 8px;
-          font-size: 16px;
-          color: #fff;
-
-          &.modifyText {
-            color: #333;
-          }
-
-          svg {
-            path {
-              stroke: #fff;
-              stroke-width: 2;
-            }
-          }
-        }
-
-        .countNum {
-          font-size: 18px;
-          font-weight: 500;
-          color: #fff;
-        }
-      }
-    }
-
-
-    @media screen and (max-width: 767px) {
-
-
-
-      small {
-        font-family: "SF Pro Display Light";
-        font-size: 14px;
-      }
-
-      span {
-        font-family: "SF Pro Display Medium";
-        font-size: 14px;
-      }
-    }
-
-    .ppText {
-      font-family: "SF Pro Display Light";
-      font-size: 14px;
-      display: inline-block;
-      margin-bottom: 5px;
-    }
-
-    .fatText {
-      font-family: "SF Pro Display Light";
+    .cartButton {
+      padding: 8px;
       font-size: 16px;
-      display: inline-block;
-      margin-bottom: 5px;
+      color: #fff;
+
+      &.modifyText {
+        color: #333;
+      }
+
+      svg {
+        path {
+          stroke: #fff;
+          stroke-width: 2;
+        }
+      }
     }
 
+    .countNum {
+      font-size: 18px;
+      font-weight: 500;
+      color: #fff;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  small {
+    font-family: "SF Pro Display Light";
+    font-size: 14px;
+  }
+
+  span {
+    font-family: "SF Pro Display Medium";
+    font-size: 14px;
+  }
+}
+
+.ppText {
+  font-family: "SF Pro Display Light";
+  font-size: 14px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.fatText {
+  font-family: "SF Pro Display Light";
+  font-size: 16px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
 
 // Customer Care
 
@@ -2639,7 +2629,6 @@ select {
   @media screen and (max-width: 767px) {
     grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
 .scroll-up {
