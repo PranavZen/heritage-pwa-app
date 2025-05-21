@@ -107,7 +107,7 @@ const tabs = [
     id: 5,
     screen: TabScreens.Notification,
     icon: <svg.WalletSvg />,
-    label: "Wallet"
+    label: "Reward"
   },
 ];
 
