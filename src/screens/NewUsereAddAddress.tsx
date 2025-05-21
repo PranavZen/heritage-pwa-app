@@ -377,7 +377,10 @@ export const NewUsereAddAddress: React.FC = () => {
               required
             />
           </div>
-          <div>
+
+
+
+          {/* <div>
             <label className="form-label">Address Line 2</label>
             <input
               type="text"
@@ -400,7 +403,7 @@ export const NewUsereAddAddress: React.FC = () => {
                 }
               />
             </div>
-          </div>
+          </div> */}
 
 
           <div className="submitBtnWrap">
