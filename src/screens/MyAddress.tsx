@@ -7,6 +7,7 @@ import { notification, Modal } from "antd";
 import { setShouldRefresh } from "../store/slices/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from '../store';
+import "../scss/_myAddress.enhanced.scss";
 
 export const MyAddress: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -207,7 +208,11 @@ export const MyAddress: React.FC = () => {
       <section className="scrollable">
         <div className="newAddressBtnWrap">
           <button onClick={movetoAddressAddPage} className="newAddressBtn">
-            <i className="fa fa-plus"></i> New Address
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            New Address
           </button>
         </div>
 
@@ -221,17 +226,37 @@ export const MyAddress: React.FC = () => {
                   <h4>{elem.firstname} {elem.lastname}</h4>
                   <p>{elem.flat_plot_no} {elem.wing} {elem.building_name} {elem.address1} {elem.address2}, {elem.area_name}, {elem.city_name}, {elem.state_name} {elem.pincode}</p>
                   <div className="myAddressActionBtnWrap">
-                    <span onClick={() => navigate(Routes.AddressAdd, { state: { cityID: elem } })} className="editBtn btns">
-                      <i className="fa fa-edit"></i>
+                    <span
+                      onClick={() => navigate(Routes.AddressAdd, { state: { cityID: elem } })}
+                      className="editBtn btns"
+                      aria-label="Edit address"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#fff" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
                     </span>
-                    <span onClick={() => confirmDelete(elem.id)} className="deleteBtn btns">
-                      <i className="fa fa-trash"></i>
+                    <span
+                      onClick={() => confirmDelete(elem.id)}
+                      className="deleteBtn btns"
+                      aria-label="Delete address"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                      </svg>
                     </span>
                     {elem.is_default === "1" ? (
-                      <p className="defaultAddressLabel">Default Address</p>
+                      <span className="defaultAddressLabel">Default Address</span>
                     ) : (
-                      <span className="setDefaultBtn btns">
-                        <p onClick={() => SetDefaultAddress(elem)} style={{ cursor: "pointer" }}> Set as default</p>
+                      <span
+                        onClick={() => SetDefaultAddress(elem)}
+                        className="defaultAddressLabel rmvMark"
+                        aria-label="Set as default address"
+                      >
+                        Set as Default
                       </span>
                     )}
                   </div>
@@ -239,8 +264,8 @@ export const MyAddress: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div style={{ borderRadius: 10, marginBottom: 10, backgroundColor: "var(--white-color)", padding: 20 }}>
-              <p style={{ textAlign: "center" }}>  No addresses found. </p>
+            <div className="empty-state">
+              <p>No addresses found. Please add a new address.</p>
             </div>
           )}
 

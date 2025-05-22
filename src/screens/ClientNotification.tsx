@@ -3,12 +3,12 @@ import axios from 'axios';
 import { hooks } from '../hooks';
 import { components } from '../components';
 import { Routes } from '../routes';
-import { text } from 'stream/consumers';
+import { svg } from '../assets/svg';
 
 export const ClientNotification: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
-  
+
 
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -57,15 +57,10 @@ export const ClientNotification: React.FC = () => {
       <main className="scrollable s">
         <div className="clientNotificationWrap">
           {notifications.length === 0 ? (
-            <div
-              style={{
-                borderRadius: 10,
-                marginBottom: 10,
-                border: '1px solid red',
-                backgroundColor: 'var(--white-color)',
-                padding: 20,
-              }}
-            >
+            <div className="empty-notification">
+              <div className="empty-icon">
+                <svg.BellTabSvg />
+              </div>
               <p>No notifications available</p>
             </div>
           ) : (
@@ -74,11 +69,16 @@ export const ClientNotification: React.FC = () => {
                 key={index}
                 className='notification-client'
                 onClick={() => {
-                  navigate(Routes.ClientNotificationDetails, { state: { notification_id: notification.notification_id } }); 
+                  navigate(Routes.ClientNotificationDetails, { state: { notification_id: notification.notification_id } });
                 }}
               >
-                <p className='notifytext'>{notification.message}</p>
-                <p className='notifyDate'>{notification.created_date}</p>
+                <div className="notification-icon">
+                  <svg.BellTabSvg />
+                </div>
+                <div className="notification-content">
+                  <p className='notifytext'>{notification.message}</p>
+                  <p className='notifyDate'>{notification.created_date}</p>
+                </div>
               </div>
             ))
           )}

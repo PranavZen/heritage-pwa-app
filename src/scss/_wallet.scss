@@ -14,28 +14,51 @@ $transition-speed: 0.4s;
 
 // Animations
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
 @keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // Loader container
@@ -49,10 +72,13 @@ $transition-speed: 0.4s;
 
 // Enhanced Wallet Section
 .walletSection {
-  padding: 20px;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   animation: fadeIn 0.5s ease;
+  // height: 100%;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
 
   @media screen and (max-width: 767px) {
     padding: 15px 10px;
@@ -84,7 +110,7 @@ $transition-speed: 0.4s;
       position: relative;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -8px;
         left: 50%;
@@ -153,7 +179,11 @@ $transition-speed: 0.4s;
       .waltRightBox {
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+        background: linear-gradient(
+          135deg,
+          $primary-color 0%,
+          $primary-dark 100%
+        );
         border-radius: 50%;
         display: flex;
         justify-content: center;
@@ -200,7 +230,11 @@ $transition-speed: 0.4s;
 
     // Wallet Balance
     .walletBalanceText {
-      background: linear-gradient(135deg, $primary-light 0%, lighten($primary-light, 5%) 100%);
+      background: linear-gradient(
+        135deg,
+        $primary-light 0%,
+        lighten($primary-light, 5%) 100%
+      );
       border-radius: $border-radius;
       padding: 20px;
       font-size: 18px;
@@ -211,13 +245,18 @@ $transition-speed: 0.4s;
       animation: slideUp 0.8s ease;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.5),
+          transparent
+        );
         transform: translateX(-100%);
         animation: shimmer 3s infinite;
       }
@@ -304,7 +343,11 @@ $transition-speed: 0.4s;
         .spanSvgBox {
           width: 50px;
           height: 50px;
-          background: linear-gradient(135deg, $primary-light 0%, lighten($primary-light, 5%) 100%);
+          background: linear-gradient(
+            135deg,
+            $primary-light 0%,
+            lighten($primary-light, 5%) 100%
+          );
           border-radius: 50%;
           display: flex;
           justify-content: center;

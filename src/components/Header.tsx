@@ -432,13 +432,8 @@ export const Header: React.FC<Props> = ({
     if (!showInstallPrompt) return null;
 
     return (
-      <div className="basketContainer" style={{ textAlign: "center", margin: 0, padding: 0 }}>
-        {/* <div style={{ textAlign: "right", margin: "5px" }}>
-         
-        </div> */}
-
-
-
+     <>  
+    
         {/* Android Install Button */}
         {true && !isIos() && (
           <button
@@ -457,10 +452,12 @@ export const Header: React.FC<Props> = ({
                 cursor: 'pointer',
                 fontSize: '10px',
                 zIndex: 1000,
+                textAlign:"center"
               }}
               className="addToHomescreenGadget"
             >
               <button
+              
                 onClick={hideInstallPrompt}
                 style={{
                   backgroundColor: 'transparent',
@@ -468,7 +465,7 @@ export const Header: React.FC<Props> = ({
                   fontSize: '24px',
                   cursor: 'pointer',
                    transition: 'transform 3s ease',
-                   margin:'4px'
+                   margin:'4px',
                 }}
                 title="Hide section"
               >
@@ -514,7 +511,7 @@ export const Header: React.FC<Props> = ({
             </p>
           </div>
         )}
-      </div>
+      </>
     );
   };
 

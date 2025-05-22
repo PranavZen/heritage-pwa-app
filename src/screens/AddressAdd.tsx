@@ -5,6 +5,7 @@ import { Routes } from "../routes";
 import { components } from "../components";
 import { notification } from "antd";
 import { useLocation } from "react-router-dom";
+import { svg } from "../assets/svg";
 
 interface Address {
   id?: string;
@@ -73,6 +74,28 @@ export const AddressAdd: React.FC = () => {
   const [areaIdByPincode, setAreaIdByPincode] = useState<any[]>([]);
   const [selectedAreaId, setSelectedAreaId] = useState('');
 
+  // Validation states
+  const [errors, setErrors] = useState<{
+    firstname?: string;
+    lastname?: string;
+    pincode?: string;
+    area_id?: string;
+    address1?: string;
+  }>({});
+  const [touched, setTouched] = useState<{
+    firstname: boolean;
+    lastname: boolean;
+    pincode: boolean;
+    area_id: boolean;
+    address1: boolean;
+  }>({
+    firstname: false,
+    lastname: false,
+    pincode: false,
+    area_id: false,
+    address1: false,
+  });
+
   // console.log("areaIdByPincode", areaIdByPincode)
 
   hooks.useScrollToTop();
@@ -136,6 +159,123 @@ export const AddressAdd: React.FC = () => {
     }
   };
 
+  // Validation functions
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case 'firstname':
+        return value.trim() === '' ? 'First name is required' : '';
+      case 'lastname':
+        return value.trim() === '' ? 'Last name is required' : '';
+      case 'pincode':
+        if (value.trim() === '') return 'Pincode is required';
+        if (!/^\d{6}$/.test(value)) return 'Pincode must be 6 digits';
+        return '';
+      case 'address1':
+        return value.trim() === '' ? 'Address is required' : '';
+      case 'area_id':
+        return value === '' ? 'Please select an area' : '';
+      default:
+        return '';
+    }
+  };
+
+  // Show error notification for a specific field
+  const showErrorNotification = (fieldName: string, errorMessage: string) => {
+    const fieldLabels: Record<string, string> = {
+      firstname: 'First Name',
+      lastname: 'Last Name',
+      pincode: 'Pincode',
+      address1: 'Address',
+      area_id: 'Area'
+    };
+
+    notification.error({
+      message: `${fieldLabels[fieldName]} Error`,
+      description: errorMessage,
+      placement: 'topRight',
+      duration: 3
+    });
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: any = {};
+    let isValid = true;
+    const errorMessages: string[] = [];
+
+    // Validate firstname
+    const firstnameError = validateField('firstname', newAddress.firstname);
+    if (firstnameError) {
+      newErrors.firstname = firstnameError;
+      errorMessages.push(`First Name: ${firstnameError}`);
+      isValid = false;
+    }
+
+    // Validate lastname
+    const lastnameError = validateField('lastname', newAddress.lastname);
+    if (lastnameError) {
+      newErrors.lastname = lastnameError;
+      errorMessages.push(`Last Name: ${lastnameError}`);
+      isValid = false;
+    }
+
+    // Validate pincode
+    const pincodeError = validateField('pincode', newAddress.pincode);
+    if (pincodeError) {
+      newErrors.pincode = pincodeError;
+      errorMessages.push(`Pincode: ${pincodeError}`);
+      isValid = false;
+    }
+
+    // Validate address1
+    const address1Error = validateField('address1', newAddress.address1);
+    if (address1Error) {
+      newErrors.address1 = address1Error;
+      errorMessages.push(`Address: ${address1Error}`);
+      isValid = false;
+    }
+
+    // Validate area_id
+    const areaIdError = validateField('area_id', selectedAreaId);
+    if (areaIdError) {
+      newErrors.area_id = areaIdError;
+      errorMessages.push(`Area: ${areaIdError}`);
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+
+    // Show a summary notification with all errors
+    if (!isValid) {
+      notification.error({
+        message: "Form Validation Errors",
+        description: (
+          <div className="error-notification-list">
+            {errorMessages.map((msg, index) => (
+              <div key={index} className="error-notification-item">• {msg}</div>
+            ))}
+          </div>
+        ),
+        placement: 'topRight',
+        duration: 5
+      });
+    }
+
+    return isValid;
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+
+    // Show notification for error if field is touched and has error
+    if (error) {
+      showErrorNotification(name, error);
+    }
+  };
+
   const handlePincodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setNewAddress((prev) => ({
@@ -143,8 +283,16 @@ export const AddressAdd: React.FC = () => {
       pincode: value,
     }));
 
+    setTouched(prev => ({ ...prev, pincode: true }));
+    const error = validateField('pincode', value);
+    setErrors(prev => ({ ...prev, pincode: error }));
+
+    // Only show notification for error if the user has stopped typing (6 digits entered)
     if (value.length === 6) {
       verifyPincode(value);
+      if (error) {
+        showErrorNotification('pincode', error);
+      }
     }
   };
 
@@ -154,6 +302,14 @@ export const AddressAdd: React.FC = () => {
       ...prev,
       [name]: value,
     }));
+
+    if (touched[name as keyof typeof touched]) {
+      const error = validateField(name, value);
+      setErrors(prev => ({ ...prev, [name]: error }));
+
+      // Don't show notifications during typing to avoid overwhelming the user
+      // Notifications will be shown on blur or form submission
+    }
   };
 
   const updateAddress = async () => {
@@ -184,15 +340,34 @@ export const AddressAdd: React.FC = () => {
       );
 
       if (response.data.status === "success") {
+        // Show enhanced success notification
+        notification.success({
+          message: "Address Updated Successfully",
+          description: response.data.message || "Your address has been updated successfully.",
+          placement: 'topRight',
+          duration: 3
+        });
         navigate(Routes.MyAddress);
-        notification.success({ message: response.data.message });
       } else {
-        notification.error({ message: response.data.message });
+        // Show enhanced error notification
+        notification.error({
+          message: "Failed to Update Address",
+          description: response.data.message || "An error occurred while updating your address.",
+          placement: 'topRight',
+          duration: 4
+        });
       }
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
       console.error("Error updating address:", error);
+      // Show error notification for unexpected errors
+      notification.error({
+        message: "Failed to Update Address",
+        description: "An unexpected error occurred. Please try again later.",
+        placement: 'topRight',
+        duration: 4
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -223,28 +398,59 @@ export const AddressAdd: React.FC = () => {
         formData
       );
 
-      // console.log("responserrrrrr", response);
-
       if (response.data.status === "success") {
+        // Show enhanced success notification
+        notification.success({
+          message: "Address Added Successfully",
+          description: response.data.message || "Your new address has been added to your account.",
+          placement: 'topRight',
+          duration: 3
+        });
         navigate(Routes.MyAddress);
-        notification.success({ message: response.data.message });
       } else if (response.data.status === "fail") {
-        notification.error({ message: response.data.message });
+        // Show enhanced error notification
+        notification.error({
+          message: "Failed to Add Address",
+          description: response.data.message || "An error occurred while adding your address.",
+          placement: 'topRight',
+          duration: 4
+        });
       }
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
       console.error("Error adding address:", error);
+      // Show error notification for unexpected errors
+      notification.error({
+        message: "Failed to Add Address",
+        description: "An unexpected error occurred. Please try again later.",
+        placement: 'topRight',
+        duration: 4
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newAddress.id) {
-      updateAddress();
-    } else {
-      addAddress();
+
+    // Mark all fields as touched
+    setTouched({
+      firstname: true,
+      lastname: true,
+      pincode: true,
+      area_id: true,
+      address1: true,
+    });
+
+    // Validate all fields
+    if (validateForm()) {
+      if (newAddress.id) {
+        updateAddress();
+      } else {
+        addAddress();
+      }
     }
+    // No need for an additional notification here since validateForm already shows one
   };
 
   const renderHeader = (): JSX.Element => {
@@ -260,21 +466,32 @@ export const AddressAdd: React.FC = () => {
   useEffect(() => {
     const GetAreaId = async () => {
       try {
-        const formData = new FormData();
-        formData.append('pincode', newAddress.pincode)
-        const response = await axios.post(`https://heritage.bizdel.in/app/consumer/services_v11/getAreaByPincode`, formData);
-        // console.log("kkkkkkk", response);
-        setAreaIdByPincode(response.data.areaDetails)
-      } catch (eror) {
-        // console.log(eror)
+        if (newAddress.pincode && newAddress.pincode.length === 6) {
+          const formData = new FormData();
+          formData.append('pincode', newAddress.pincode);
+          const response = await axios.post(`https://heritage.bizdel.in/app/consumer/services_v11/getAreaByPincode`, formData);
+          setAreaIdByPincode(response.data.areaDetails);
+        }
+      } catch (error) {
+        console.error("Error fetching area details:", error);
+        setAreaIdByPincode([]);
       }
     }
     GetAreaId();
-  }, [newAddress.city_id])
+  }, [newAddress.city_id, newAddress.pincode])
 
   const handleAreaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedAreaId(event.target.value);
-    // console.log('Selected Area ID:', event.target.value);
+    const { value } = event.target;
+    setSelectedAreaId(value);
+
+    setTouched(prev => ({ ...prev, area_id: true }));
+    const error = validateField('area_id', value);
+    setErrors(prev => ({ ...prev, area_id: error }));
+
+    // Show notification for error when area is selected/changed
+    if (error) {
+      showErrorNotification('area_id', error);
+    }
   };
 
 
@@ -285,131 +502,271 @@ export const AddressAdd: React.FC = () => {
     return (
       <section className="scrollable">
         <form onSubmit={handleSubmit} className="form-container">
-          <div className="inputWrap">
-            <div className="col-6">
-              <label className="form-label">First Name</label>
-              <input
-                type="text"
-                name="firstname"
-                value={newAddress.firstname}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
-            </div>
-            <div className="col-6">
-              <label className="form-label">Last Name</label>
-              <input
-                type="text"
-                name="lastname"
-                value={newAddress.lastname}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
+          <div className="form-header">
+           
+            <h2>{newAddress.id ? "Update Your Address" : "Add New Address"}</h2>
+          </div>
+
+          <div className="form-section">
+            <h3>Personal Information</h3>
+            <div className="inputWrap">
+              <div className="col-6">
+                <label className="form-label">First Name <span>*</span></label>
+                <div className={`input-container ${touched.firstname && !errors.firstname ? 'valid' : ''}`}>
+                  <div className="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#1a712e"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    name="firstname"
+                    value={newAddress.firstname}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    className="form-input"
+                    placeholder="Enter first name"
+                    required
+                  />
+                  {touched.firstname && errors.firstname && (
+                    <div className="validation-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#ff6f61"/>
+                      </svg>
+                    </div>
+                  )}
+                  {touched.firstname && !errors.firstname && (
+                    <div className="validation-icon valid">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#4caf50"/>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {touched.firstname && errors.firstname && (
+                  <div className="error-message">{errors.firstname}</div>
+                )}
+              </div>
+              <div className="col-6">
+                <label className="form-label">Last Name <span>*</span></label>
+                <div className={`input-container ${touched.lastname && !errors.lastname ? 'valid' : ''}`}>
+                  <div className="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#1a712e"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    name="lastname"
+                    value={newAddress.lastname}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    className="form-input"
+                    placeholder="Enter last name"
+                    required
+                  />
+                  {touched.lastname && errors.lastname && (
+                    <div className="validation-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#ff6f61"/>
+                      </svg>
+                    </div>
+                  )}
+                  {touched.lastname && !errors.lastname && (
+                    <div className="validation-icon valid">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#4caf50"/>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {touched.lastname && errors.lastname && (
+                  <div className="error-message">{errors.lastname}</div>
+                )}
+              </div>
             </div>
           </div>
 
+          <div className="form-section">
+            <h3>Location Details</h3>
+            <div className="inputWrap">
+              <div className="col-6">
+                <label className="form-label">Pincode <span>*</span></label>
+                <div className={`input-container ${touched.pincode && !errors.pincode ? 'valid' : ''}`}>
+                  <div className="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#1a712e"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    name="pincode"
+                    value={newAddress.pincode}
+                    onChange={handlePincodeChange}
+                    onBlur={handleBlur}
+                    className="form-input"
+                    placeholder="Enter 6-digit pincode"
+                    maxLength={6}
+                    required
+                  />
+                  {touched.pincode && errors.pincode && (
+                    <div className="validation-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#ff6f61"/>
+                      </svg>
+                    </div>
+                  )}
+                  {touched.pincode && !errors.pincode && (
+                    <div className="validation-icon valid">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#4caf50"/>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {touched.pincode && errors.pincode && (
+                  <div className="error-message">{errors.pincode}</div>
+                )}
+              </div>
 
-          <div className="inputWrap">
-
-            <div className="col-6">
-              <label className="form-label">Pincode</label>
-              <input
-                type="text"
-                name="pincode"
-                value={newAddress.pincode}
-                onChange={handlePincodeChange}
-                className="form-input"
-                maxLength={6}
-              />
+              <div className="col-6">
+                <label className="form-label">Select Area <span>*</span></label>
+                <div className={`select-container ${touched.area_id && !errors.area_id ? 'valid' : ''}`}>
+                  <div className="select-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#1a712e"/>
+                    </svg>
+                  </div>
+                  <select
+                    name="area_id"
+                    value={selectedAreaId}
+                    onChange={handleAreaChange}
+                    onBlur={handleBlur}
+                    className="form-select"
+                    required
+                  >
+                    <option value="" disabled>Select your area</option>
+                    {(areaIdByPincode && Array.isArray(areaIdByPincode) && areaIdByPincode.length > 0) ? (
+                      areaIdByPincode.map((elem: any) => (
+                        <option key={elem.id} value={elem.id}>
+                          {elem.name}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="">No areas available</option>
+                    )}
+                  </select>
+                  {touched.area_id && errors.area_id && (
+                    <div className="validation-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#ff6f61"/>
+                      </svg>
+                    </div>
+                  )}
+                  {touched.area_id && !errors.area_id && (
+                    <div className="validation-icon valid">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#4caf50"/>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {touched.area_id && errors.area_id && (
+                  <div className="error-message">{errors.area_id}</div>
+                )}
+              </div>
             </div>
-
-
 
             <div className="inputWrap">
-              <label className="form-label">Select Area ID</label>
+              <div className="col-6">
+                <label className="form-label">State</label>
+                <div className="input-container">
+                  <div className="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z" fill="#1a712e"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    name="state_name"
+                    value={newAddress.state_name}
+                    className="form-input"
+                    placeholder="State will appear here"
+                    readOnly
+                  />
+                </div>
+              </div>
 
-              <select value={selectedAreaId} onChange={handleAreaChange}>
-                {(areaIdByPincode && Array.isArray(areaIdByPincode) && areaIdByPincode.length > 0) ? (
-                  areaIdByPincode.map((elem: any) => (
-                    <option key={elem.id} value={elem.id}>
-                      {elem.name}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">No areas available</option>
+              <div className="col-6">
+                <label className="form-label">City</label>
+                <div className="input-container">
+                  <div className="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z" fill="#1a712e"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    name="city_name"
+                    value={newAddress.city_name}
+                    className="form-input"
+                    placeholder="City will appear here"
+                    readOnly
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>Address Details</h3>
+            <div className="inputWrap">
+              <div className="col-12">
+                <label className="form-label">Address Line 1 <span>*</span></label>
+                <div className={`input-container ${touched.address1 && !errors.address1 ? 'valid' : ''}`}>
+                  <div className="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#1a712e"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    name="address1"
+                    value={newAddress.address1}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    className="form-input"
+                    placeholder="Enter your street address"
+                    required
+                  />
+                  {touched.address1 && errors.address1 && (
+                    <div className="validation-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#ff6f61"/>
+                      </svg>
+                    </div>
+                  )}
+                  {touched.address1 && !errors.address1 && (
+                    <div className="validation-icon valid">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#4caf50"/>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                {touched.address1 && errors.address1 && (
+                  <div className="error-message">{errors.address1}</div>
                 )}
-              </select>
-            </div>
-
-
-
-          </div>
-          <div className="inputWrap">
-            <div className="col-6">
-              <label className="form-label">State</label>
-              <input
-                type="text"
-                name="city_name"
-                value={newAddress.state_name}
-                className="form-input"
-              />
-            </div>
-
-
-            <div className="col-6">
-              <label className="form-label">City</label>
-              <input
-                type="text"
-                name="city_name"
-                value={newAddress.city_name}
-                className="form-input"
-              />
+              </div>
             </div>
           </div>
-          <div>
-            <label className="form-label">Address Line 1</label>
-            <input
-              type="text"
-              name="address1"
-              value={newAddress.address1}
-              onChange={handleInputChange}
-              className="form-input"
-              required
-            />
-          </div>
-
-
-          {/*           
-          <div>
-            <label className="form-label">Address Line 2</label>
-            <input
-              type="text"
-              name="address2"
-              value={newAddress.address2}
-              onChange={handleInputChange}
-              className="form-input"
-            />
-            <div className="checkBoxWrap">
-              <label className="form-label">Default Address</label>
-              <input
-                type="checkbox"
-                name="is_default"
-                checked={newAddress.is_default === "1"}
-                onChange={(e) =>
-                  setNewAddress((prev) => ({
-                    ...prev,
-                    is_default: e.target.checked ? "1" : "0",
-                  }))
-                }
-              />
-            </div>
-          </div> */}
 
           <div className="submitBtnWrap">
             <button type="submit" className="submit-btn">
-              {newAddress.id ? "Update Address" : "Add Address"}
+              <span>{newAddress.id ? "Update Address" : "Add Address"}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="white"/>
+              </svg>
             </button>
           </div>
         </form>

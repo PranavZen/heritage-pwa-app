@@ -120,7 +120,7 @@ $transition-speed: 0.3s;
 
 // Fix for pages with footer to ensure content doesn't get hidden
 .page-with-footer {
-  padding-bottom: calc($footer-height + 0px);
+  // padding-bottom: calc($footer-height + 0px);
   min-height: 100vh;
   overflow-y: auto;
   display: flex;
@@ -153,7 +153,7 @@ $transition-speed: 0.3s;
 // Fix for iOS Safari to prevent content from being hidden behind the footer
 @supports (-webkit-touch-callout: none) {
   .page-with-footer {
-    padding-bottom: calc(#{$footer-height} + env(safe-area-inset-bottom, 20px));
+    // padding-bottom: calc(#{$footer-height} + env(safe-area-inset-bottom, 20px));
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }

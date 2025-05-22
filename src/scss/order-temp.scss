@@ -1,0 +1,393 @@
+// Coupon Section
+.couponApplied-main {
+  background-color: $white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+  animation: slideUp 0.6s ease;
+  border: 1px solid #f0f0f0;
+
+  // Different styling when coupon is applied
+  &.coupon-applied {
+    border: 1px solid rgba($success-color, 0.2);
+    background-color: rgba($success-color, 0.03);
+    box-shadow: 0 3px 10px rgba($success-color, 0.1);
+  }
+
+  // Hover effect
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+    
+    &.coupon-applied {
+      box-shadow: 0 8px 15px rgba($success-color, 0.15);
+    }
+  }
+
+  // Active state for touch devices
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  // Responsive base styles
+  @media (max-width: 768px) {
+    padding: 14px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 767px) {
+    padding: 14px;
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "icon header remove"
+      "icon discount discount";
+    align-items: center;
+    gap: 10px;
+    
+    &.coupon-applied {
+      border-width: 1px;
+      border-left: 3px solid $success-color;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "icon header remove"
+      "discount discount discount";
+    gap: 8px;
+  }
+
+  &.clicked {
+    animation: couponClick 0.3s ease;
+  }
+
+  // Coupon icon
+  .coupon-icon {
+    color: $accent-color;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba($accent-color, 0.12);
+    border-radius: 8px;
+
+    // Different styling when coupon is applied
+    .coupon-applied & {
+      color: $success-color;
+      background-color: rgba($success-color, 0.12);
+    }
+
+    .coupon-svg {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.25s ease;
+      
+      .coupon-applied & {
+        transform: scale(1.05);
+      }
+
+      @media (min-width: 768px) {
+        width: 22px;
+        height: 22px;
+      }
+
+      @media (max-width: 480px) {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .coupon-icon-bg {
+      display: none; // Simplifying the design by removing this element
+    }
+
+    @media (max-width: 767px) {
+      grid-area: icon;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+
+      .coupon-svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      width: 28px;
+      height: 28px;
+
+      .coupon-svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    &:hover {
+      .coupon-svg {
+        transform: scale(1.1) rotate(5deg);
+      }
+    }
+  }
+
+  .coupon-details {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+
+    @media (max-width: 767px) {
+      display: contents;
+    }
+
+    .coupon-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+
+      // Add a badge for available coupons count
+      p {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        margin: 0;
+        font-weight: 500;
+        color: $text-light;
+        background-color: #f5f5f5;
+        margin-left: 8px;
+        
+        .coupon-applied & {
+          background-color: rgba($success-color, 0.1);
+          color: $success-color;
+        }
+
+        @media (max-width: 767px) {
+          font-size: 10px;
+          padding: 1px 6px;
+          margin-left: 6px;
+        }
+      }
+
+      @media (max-width: 767px) {
+        grid-area: header;
+        margin-bottom: 0;
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        color: $text-dark;
+        font-weight: 600;
+
+        .coupon-applied & {
+          color: $success-color;
+        }
+
+        @media (min-width: 768px) {
+          font-size: 16px;
+        }
+
+        @media (max-width: 767px) {
+          font-size: 14px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 13px;
+        }
+      }
+    }
+
+    .discount-text {
+      font-weight: 500;
+      color: $text-light;
+      margin-bottom: 0;
+      font-size: 13px;
+      transition: all 0.25s ease;
+
+      // Add a subtle highlight for the discount text
+      .coupon-applied & {
+        color: $success-color;
+        font-weight: 600;
+      }
+
+      @media (max-width: 767px) {
+        grid-area: discount;
+        font-size: 12px;
+        margin-top: 4px;
+        padding: 4px 0;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 12px;
+        width: 100%;
+      }
+
+      span {
+        position: relative;
+        font-size: 14px;
+
+        .coupon-applied & {
+          font-weight: 600;
+        }
+      }
+    }
+
+    .view-cart {
+      color: $primary-color;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+      background-color: rgba($primary-color, 0.08);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-left: auto;
+
+      // Different styling when coupon is applied
+      .coupon-applied & {
+        background-color: rgba($success-color, 0.08);
+        color: $success-color;
+      }
+
+      @media (max-width: 767px) {
+        font-size: 11px;
+        padding: 3px 8px;
+
+        span {
+          display: inline-block;
+        }
+
+        svg {
+          width: 14px;
+          height: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        padding: 3px 6px;
+
+        svg {
+          width: 12px;
+          height: 12px;
+        }
+      }
+
+      svg {
+        transition: transform 0.25s ease;
+      }
+
+      &:hover {
+        background-color: rgba($primary-color, 0.12);
+
+        .coupon-applied & {
+          background-color: rgba($success-color, 0.12);
+        }
+
+        svg {
+          transform: translateX(2px);
+        }
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+
+  .removeCoupon {
+    background-color: transparent;
+    color: #aaa;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    svg {
+      transition: all 0.25s ease;
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background-color: rgba(#dc3545, 0.08);
+      color: #dc3545;
+    }
+
+    &:active {
+      transform: scale(0.95);
+      background-color: rgba(#dc3545, 0.12);
+    }
+
+    @media (max-width: 767px) {
+      grid-area: remove;
+      width: 22px;
+      height: 22px;
+
+      svg {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      width: 20px;
+      height: 20px;
+
+      svg {
+        width: 10px;
+        height: 10px;
+      }
+    }
+  }
+
+  // Touch feedback for mobile
+  @media (max-width: 767px) {
+    &:active {
+      background-color: rgba($primary-light, 0.5);
+    }
+  }
+}
+
+// Coupon animations
+@keyframes couponClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
