@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { hooks } from "../hooks";
 import { components } from "../components";
 import { useNavigate } from "react-router-dom";
-import './CouponList.scss';
+import "./CouponList.scss";
 import Lottie from "lottie-react";
 import CouponApply from "../components/Animation/CouponApply.json";
+import svgCoupon from "../assets/bg/coupon.svg";
+import svgWhiteCoupon from "../assets/bg/coupon-white.svg";
 
 export const CouponList: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -18,9 +20,10 @@ export const CouponList: React.FC = () => {
   const [isApplying, setIsApplying] = useState<boolean>(false);
   const [activeCard, setActiveCard] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const [appliedCouponCode, setAppliedCouponCode] = useState<string | null>(null);
+  const [appliedCouponCode, setAppliedCouponCode] = useState<string | null>(
+    null
+  );
   const couponRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-
 
   const navigate = useNavigate();
 
@@ -31,26 +34,28 @@ export const CouponList: React.FC = () => {
 
   useEffect(() => {
     // Check if there's already an applied coupon
-    const currentCouponCode = localStorage.getItem('couponCode');
+    const currentCouponCode = localStorage.getItem("couponCode");
     if (currentCouponCode) {
       setAppliedCouponCode(currentCouponCode);
     }
 
-
     const fetchCoupons = async () => {
       try {
         const formData = new FormData();
-        formData.append("c_id", localStorage.getItem('c_id') || '');
-        formData.append("city_id", localStorage.getItem('cityId') || '');
-        formData.append("area_id", localStorage.getItem('area_id') || '');
+        formData.append("c_id", localStorage.getItem("c_id") || "");
+        formData.append("city_id", localStorage.getItem("cityId") || "");
+        formData.append("area_id", localStorage.getItem("area_id") || "");
 
-        const response = await fetch('https://heritage.bizdel.in/app/consumer/services_v11/couponListing', {
-          method: 'POST',
-          body: formData,
-        });
+        const response = await fetch(
+          "https://heritage.bizdel.in/app/consumer/services_v11/couponListing",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch coupons');
+          throw new Error("Failed to fetch coupons");
         }
 
         const data = await response.json();
@@ -58,7 +63,7 @@ export const CouponList: React.FC = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        setError('Unable to load coupons.');
+        setError("Unable to load coupons.");
       }
     };
 
@@ -66,9 +71,7 @@ export const CouponList: React.FC = () => {
   }, []);
 
   const renderHeader = (): JSX.Element => {
-    return (
-      <components.Header showGoBack={true} showBasket={true} />
-    );
+    return <components.Header showGoBack={true} showBasket={true} />;
   };
 
   const renderContent = (): JSX.Element => {
@@ -90,8 +93,8 @@ export const CouponList: React.FC = () => {
       // Add ripple effect
       const card = couponRefs.current[couponId];
       if (card) {
-        const ripple = document.createElement('span');
-        ripple.classList.add('ripple-effect');
+        const ripple = document.createElement("span");
+        ripple.classList.add("ripple-effect");
         card.appendChild(ripple);
 
         setTimeout(() => {
@@ -105,60 +108,121 @@ export const CouponList: React.FC = () => {
 
       handleCouponClick(coupon.coupon_id);
       setIsApplying(true);
-      localStorage.setItem('couponCode', coupon.code);
+      localStorage.setItem("couponCode", coupon.code);
       setAppliedCouponCode(coupon.code);
 
       setShowModal(true);
       setTimeout(() => {
         setShowModal(false);
         setIsApplying(false);
-        navigate('/tab-navigator', {
-          state: { couponCode: coupon.code }
+        navigate("/tab-navigator", {
+          state: { couponCode: coupon.code },
         });
       }, 3000);
     };
 
     return (
-
       <>
-        <div>
-          <h1>Your Discount Coupons</h1>
+        <div className="coupon-list-container">
+          <h1>Coupons Cards</h1>
           {coupons.length > 0 ? (
-            coupons.map((coupon) => (
-              <div className="card" key={coupon.coupon_id}>
-                <div className="card-header">
-                  <h3>{coupon.name}</h3>
-                  <span className="discount">{coupon.coupon_display}</span>
-                </div>
-                <div className="card-body">
-                  <p className="description">{coupon.description}</p>
-                </div>
-                <div className="card-footer">
-                  <div className="max-amount">Max Cart Amount: ₹{coupon.cart_max_amount}</div>
-                  <div className="uses-left">Uses Left: {coupon.uses_total_coupon}</div>
-                  <button
-                    onClick={() => {
-                      if (isApplying) return;
-                      setIsApplying(true);
-                      localStorage.setItem('couponCode', coupon.code);
-
-                      setShowModal(true);
-                      setTimeout(() => {
-                        setShowModal(false);
-                        setIsApplying(false);
-                        navigate('/tab-navigator', {
-                          state: { couponCode: coupon.code }
-                        });
-                      }, 3000); 
-                    }}
+            <div className="coupon-cards-wrapper">
+              {coupons.map((coupon) => {
+                const isApplied = appliedCouponCode === coupon.code;
+                return (
+                  <div
+                    className={`coupon-card ${isApplied ? "applied" : ""}`}
+                    key={coupon.coupon_id}
+                    ref={(el) => (couponRefs.current[coupon.coupon_id] = el)}
                   >
-                    Apply Coupon
-                  </button>
-                </div>
-              </div>
-            ))
+                    {/* {isApplied && (
+                      <div className="coupon-applied-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        Applied
+                      </div>
+                    )} */}
+                    <div className="coupon-left-section">
+                      <div className="coupon-svg-icon">
+                        {isApplied ? (
+                          <img src={svgCoupon} alt={coupon.name} />
+                        ) : (
+                          <img src={svgWhiteCoupon} alt={coupon.name} />
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="coupon-content">
+                      <div className="coupon-code">{coupon.name}</div>
+                      <div className="coupon-amount-info">
+                        {coupon.cart_min_amount > 0 && (
+                          <div className="amount-needed">
+                            Add ₹{coupon.cart_min_amount} more to avail this
+                            offer
+                          </div>
+                        )}
+                        <div className="discount-info">
+                          Get {coupon.coupon_display}
+                        </div>
+                      </div>
+                      <div className="coupon-details">
+                        <div className="coupon-description">
+                          Use code {coupon.name} & get {coupon.coupon_display}{" "}
+                          on orders above ₹{coupon.cart_min_amount || 0}.
+                          {coupon.cart_max_amount > 0 &&
+                            ` Maximum discount: ₹${coupon.cart_max_amount}.`}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="coupon-action">
+                      {isApplied ? (
+                        <div className="coupon-applied-status">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 6 9 17l-5-5"/>
+                          </svg>
+                          <span>APPLIED</span>
+                        </div>
+                      ) : (
+                        <button
+                          className="apply-button"
+                          onClick={() => {
+                            if (isApplying) return;
+                            setIsApplying(true);
+                            localStorage.setItem("couponCode", coupon.code);
+                            setAppliedCouponCode(coupon.code);
+
+                            setShowModal(true);
+                            setTimeout(() => {
+                              setShowModal(false);
+                              setIsApplying(false);
+                              navigate("/tab-navigator", {
+                                state: { couponCode: coupon.code },
+                              });
+                            }, 3000);
+                          }}
+                          disabled={isApplying}
+                        >
+                          {isApplying ? (
+                            <div className="button-loader">
+                              <div className="spinner"></div>
+                              <span>APPLYING...</span>
+                            </div>
+                          ) : (
+                            "APPLY"
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           ) : (
-            <div className="NoCoupons-available">No coupons available at the moment.</div>
+            <div className="NoCoupons-available">
+              No coupons available at the moment.
+            </div>
           )}
         </div>
       </>
@@ -173,9 +237,19 @@ export const CouponList: React.FC = () => {
       {/* Popup Modal */}
       {showModal && (
         <div className="popup-modal">
-          <div className="popup-content">
-            <Lottie animationData={CouponApply} style={{ width: 150, height: 150, margin :"0 auto" }} />
-            {/* <p>Coupon Applied Successfully!</p> */}
+          <div className="popup-content couponApplied-main">
+            <Lottie
+              animationData={CouponApply}
+              style={{ width: 150, height: 150, margin: "0 auto" }}
+            />
+            <div className="success-message">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <h3>Coupon Applied Successfully!</h3>
+              <p>Your discount will be applied at checkout</p>
+            </div>
           </div>
         </div>
       )}

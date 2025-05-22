@@ -1,0 +1,353 @@
+// Variables
+$primary-color: #1a712e;
+$primary-light: #e8f5e9;
+$primary-dark: #156023;
+$accent-color: #ff6f61;
+$text-dark: #333;
+$text-medium: #555;
+$text-light: #777;
+$white: #fff;
+$border-radius: 12px;
+$box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+$transition-speed: 0.3s;
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+// Customer Care Section
+.customer-care-section {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-in-out;
+
+  .customer-care-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    animation: slideUp 0.5s ease-in-out;
+
+    .customer-care-icon {
+      flex-shrink: 0;
+      margin-right: 20px;
+      
+      svg {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    .customer-care-title {
+      h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: $primary-color;
+        margin: 0 0 8px 0;
+        font-family: "SF Pro Display";
+      }
+
+      p {
+        font-size: 16px;
+        color: $text-medium;
+        margin: 0;
+        font-family: "SF Pro Display";
+      }
+    }
+  }
+
+  .customer-care-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+
+    .option-div {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background-color: $white;
+      border-radius: $border-radius;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: all $transition-speed ease;
+      border-left: 3px solid transparent;
+      animation: slideUp 0.5s ease-in-out;
+
+      &:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      &.active {
+        border-left: 3px solid $primary-color;
+        background-color: $primary-light;
+      }
+
+      .option-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: rgba($primary-color, 0.1);
+        border-radius: 50%;
+        margin-right: 15px;
+        flex-shrink: 0;
+
+        svg {
+          width: 24px;
+          height: 24px;
+          fill: $primary-color;
+        }
+      }
+
+      span {
+        font-size: 16px;
+        color: $text-dark;
+        font-family: "SF Pro Display";
+        font-weight: 500;
+      }
+    }
+  }
+
+  .customer-care-input {
+    animation: slideUp 0.5s ease-in-out;
+    animation-delay: 0.4s;
+    animation-fill-mode: both;
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      background-color: $white;
+      border-radius: $border-radius;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #e0e0e0;
+      transition: all $transition-speed ease;
+
+      &:focus-within {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        border-color: $primary-color;
+      }
+
+      .input-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+
+        svg {
+          width: 24px;
+          height: 24px;
+          fill: $primary-color;
+        }
+      }
+
+      .message-input-box {
+        flex: 1;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        font-family: "SF Pro Display";
+        outline: none;
+        background: transparent;
+      }
+    }
+
+    .error-message {
+      color: $accent-color;
+      font-size: 14px;
+      margin: 5px 0 15px;
+      font-family: "SF Pro Display";
+    }
+
+    .cutomercare-submit-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 14px;
+      background-color: $primary-color;
+      color: $white;
+      border: none;
+      border-radius: $border-radius;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all $transition-speed ease;
+      position: relative;
+      overflow: hidden;
+      font-family: "SF Pro Display";
+
+      &:hover {
+        background-color: $primary-dark;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba($primary-color, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      span {
+        margin-right: 10px;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: $white;
+      }
+    }
+  }
+}
+
+// Responsive styles
+@media screen and (max-width: 767px) {
+  .customer-care-section {
+    padding: 15px;
+
+    .customer-care-header {
+      margin-bottom: 20px;
+
+      .customer-care-icon {
+        margin-right: 15px;
+        
+        svg {
+          width: 50px;
+          height: 50px;
+        }
+      }
+
+      .customer-care-title {
+        h2 {
+          font-size: 20px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .customer-care-options {
+      gap: 12px;
+      margin-bottom: 20px;
+
+      .option-div {
+        padding: 12px;
+
+        .option-icon {
+          width: 36px;
+          height: 36px;
+          margin-right: 12px;
+
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        span {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .customer-care-input {
+      .input-wrapper {
+        padding: 3px;
+
+        .input-icon {
+          width: 36px;
+          height: 36px;
+
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        .message-input-box {
+          padding: 10px;
+          font-size: 14px;
+        }
+      }
+
+      .cutomercare-submit-button {
+        padding: 12px;
+        font-size: 14px;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+}

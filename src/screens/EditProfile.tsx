@@ -5,6 +5,7 @@ import { Routes } from "../routes";
 import { components } from "../components";
 import { notification } from "antd";
 import placeholderImg from '../assets/icons/placeholder.jpg';
+import { svg } from '../assets/svg';
 
 interface User {
   id: string;
@@ -141,7 +142,7 @@ export const EditProfile: React.FC = () => {
       [name]: value,
     }));
   };
-  
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -201,7 +202,9 @@ export const EditProfile: React.FC = () => {
                 </span>
               )}
               <span className="upload-icon">
-                <i className="fas fa-camera"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <path d="M9 3h6l2 2h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4l2-2zm3 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="white"/>
+                </svg>
               </span>
             </label>
 
@@ -230,83 +233,133 @@ export const EditProfile: React.FC = () => {
 
             <div className="col-6">
               <label className="form-label">First Name</label>
-              <input
-                type="text"
-                name="firstname"
-                value={userDetails.firstname}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
+              <div className="input-container">
+                <div className="input-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#1a712e"/>
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  name="firstname"
+                  value={userDetails.firstname}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  placeholder="Enter first name"
+                  required
+                />
+              </div>
             </div>
 
             <div className="col-6">
               <label className="form-label">Last Name</label>
-              <input
-                type="text"
-                name="lastname"
-                value={userDetails.lastname}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
+              <div className="input-container">
+                <div className="input-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#1a712e"/>
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  name="lastname"
+                  value={userDetails.lastname}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  placeholder="Enter last name"
+                  required
+                />
+              </div>
             </div>
           </div>
 
           <div className="inputWrap">
             <div className="col-6">
               <label className="form-label">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={userDetails.email}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
+              <div className="input-container">
+                <div className="input-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#1a712e"/>
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  value={userDetails.email}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  placeholder="Enter email address"
+                  required
+                />
+              </div>
             </div>
 
             <div className="col-6">
               <label className="form-label">Mobile</label>
-              <input
-                type="text"
-                name="mobile"
-                value={userDetails.mobile}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
+              <div className="input-container">
+                <div className="input-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M16 1H8C6.34 1 5 2.34 5 4v16c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V4c0-1.66-1.34-3-3-3zm-2 20h-4v-1h4v1zm3-3H7V4h10v14z" fill="#1a712e"/>
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  name="mobile"
+                  value={userDetails.mobile}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  placeholder="Enter mobile number"
+                  required
+                />
+              </div>
             </div>
           </div>
           <div className="inputWrap">
             <div className="col-6">
               <label className="form-label">Gender</label>
-              <select
-                name="gender"
-                value={userDetails.gender}
-                onChange={handleInputChange}
-                className="form-input"
-              >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
+              <div className="select-container">
+                <div className="select-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#1a712e"/>
+                  </svg>
+                </div>
+                <select
+                  name="gender"
+                  value={userDetails.gender}
+                  onChange={handleInputChange}
+                  className="form-select"
+                >
+                  <option value="" disabled>Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
             </div>
 
             <div className="col-6">
               <label className="form-label">Date of Birth</label>
-              <input
-                type="date"
-                name="dob"
-                value={userDetails.dob}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
+              <div className="input-container">
+                <div className="input-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z" fill="#1a712e"/>
+                  </svg>
+                </div>
+                <input
+                  type="date"
+                  name="dob"
+                  value={userDetails.dob}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  required
+                />
+              </div>
             </div>
           </div>
           <div className="submitBtnWrap">
             <button type="submit" className="submit-btn">
-              Update User
+              <span>Update Profile</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="white"/>
+              </svg>
             </button>
           </div>
         </form>

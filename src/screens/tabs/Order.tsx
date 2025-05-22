@@ -44,7 +44,6 @@ interface Props {
 // const Order = () => {
 
 export const Order: React.FC = () => {
-
   const location = useLocation();
   const couponCode = location.state?.couponCode;
 
@@ -120,7 +119,6 @@ export const Order: React.FC = () => {
   const [extraDiscount, setExtraDiscount] = useState<any[]>([]);
 
   const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
-  const [isCouponAnimating, setIsCouponAnimating] = useState(false);
 
   // console.log("extraDiscount", extraDiscount);
 
@@ -182,9 +180,6 @@ export const Order: React.FC = () => {
     }
   };
 
-
-
-
   setTimeout(() => {
     setShowModal(false);
     setIsApplying(false);
@@ -199,31 +194,31 @@ export const Order: React.FC = () => {
   const c_id = localStorage.getItem("c_id");
   const cityId = localStorage.getItem("cityId");
 
-
-
-  const [couponsCount, setCouponsCount] = useState()
+  const [couponsCount, setCouponsCount] = useState();
   // console.log("aaaaaa", couponsCount);
-
 
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
         const formData = new FormData();
-        formData.append("c_id", localStorage.getItem('c_id') || '');
-        formData.append("city_id", localStorage.getItem('cityId') || '');
-        formData.append("area_id", localStorage.getItem('area_id') || '');
+        formData.append("c_id", localStorage.getItem("c_id") || "");
+        formData.append("city_id", localStorage.getItem("cityId") || "");
+        formData.append("area_id", localStorage.getItem("area_id") || "");
 
-        const response = await fetch('https://heritage.bizdel.in/app/consumer/services_v11/couponListing', {
-          method: 'POST',
-          body: formData,
-        });
+        const response = await fetch(
+          "https://heritage.bizdel.in/app/consumer/services_v11/couponListing",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch coupons');
+          throw new Error("Failed to fetch coupons");
         }
 
         const data = await response.json();
-      
+
         setCouponsCount(data.coupon_count);
       } catch (error) {
         console.error("Error fetching coupons:", error);
@@ -234,8 +229,6 @@ export const Order: React.FC = () => {
 
     fetchCoupons();
   }, []);
-
-
 
   // ***************************************************************************************
   useEffect(() => {
@@ -582,38 +575,11 @@ export const Order: React.FC = () => {
 
       // Add clicked class for animation
       e.currentTarget.classList.add("clicked");
-      setIsCouponAnimating(true);
 
-      // Create ripple effect
-      const ripple = document.createElement("span");
-      ripple.classList.add("ripple-effect");
-
-      // Position the ripple at click coordinates
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      ripple.style.left = `${x}px`;
-      ripple.style.top = `${y}px`;
-
-      // Add ripple to element
-      e.currentTarget.appendChild(ripple);
-
-      // Remove the ripple and clicked class after animation completes
-      // const target = e.currentTarget;
-      // const rippleEl = ripple;
-
-      const target = e.currentTarget;
-      const rippleEl = ripple;
-
+      // Remove the clicked class after animation completes
       setTimeout(() => {
-        if (target) target.classList.remove("clicked");
-        if (rippleEl && rippleEl.remove) rippleEl.remove();
-        if (target) target.classList.remove("clicked");
-        if (rippleEl && rippleEl.remove) rippleEl.remove();
-        setIsCouponAnimating(false);
-      }, 600);
-
+        e.currentTarget.classList.remove("clicked");
+      }, 300);
 
       // Navigate to coupon list on mobile
       if (window.innerWidth <= 767) {
@@ -636,35 +602,57 @@ export const Order: React.FC = () => {
 
     return (
       <div
-        className={`couponApplied-main ${isCouponAnimating ? "animating" : ""}`}
-        onMouseEnter={(e) => e.currentTarget.classList.add("hovered")}
-        onMouseLeave={(e) => e.currentTarget.classList.remove("hovered")}
+        className={`couponApplied-main ${codeCoupon ? "coupon-applied" : ""}`}
         onClick={handleCouponClick}
         role="button"
         aria-label="Coupon section"
       >
         <div className="coupon-icon" aria-hidden="true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="coupon-svg"
-          >
-            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-            <path d="m9 12 2 2 4-4" />
-          </svg>
-          <div className="coupon-icon-bg"></div>
+          {codeCoupon ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="coupon-svg"
+            >
+              <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="coupon-svg"
+            >
+              <path d="M22 12c0 5.5-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2s10 4.5 10 10" />
+              <path d="M15 9.3v-1a2.3 2.3 0 0 0-2.3-2.3h-1.4a2.3 2.3 0 0 0-2.3 2.3v0a2.3 2.3 0 0 0 2.3 2.3h1.4a2.3 2.3 0 0 1 2.3 2.3v0a2.3 2.3 0 0 1-2.3 2.3h-1.4a2.3 2.3 0 0 1-2.3-2.3v-1" />
+              <path d="M12 6v12" />
+            </svg>
+          )}
         </div>
         <div className="coupon-details">
           <div className="coupon-header">
-            <h3>{codeCoupon ? "Applied Coupon" : "Discount Coupon"}</h3>
-            {/* {codeCoupon && <span className="coupon-code">{codeCoupon}</span>} */}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <h3>{codeCoupon ? "Applied Coupon" : "Discount Coupon"}</h3>
+              {/* Count coupon */}
+              <p>
+                Available Coupon (
+                {(couponsCount || 0) > 0 ? `${couponsCount}` : "0"})
+              </p>
+            </div>
             <div
               className="view-cart"
               onClick={(e) => {
@@ -674,7 +662,61 @@ export const Order: React.FC = () => {
               role="button"
               aria-label="View all available coupons"
             >
-              <span>{couponButtonText}</span>
+              <span>{codeCoupon ? "Change" : couponButtonText}</span>
+              {codeCoupon ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                  <path d="m15 5 4 4" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 18l6-6-6-6"></path>
+                </svg>
+              )}
+            </div>
+          </div>
+          {cleanedDiscount && (
+            <>
+              <p className="discount-text">
+                <span>{formatDiscount(cleanedDiscount)}</span>
+              </p>
+              {/* <hr className="divider" /> */}
+            </>
+          )}
+        </div>
+        {codeCoupon && (
+          <div className="rmvWrap">
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemoveCoupon();
+              }}
+              className="removeCoupon"
+              role="button"
+              aria-label="Remove coupon"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -687,51 +729,12 @@ export const Order: React.FC = () => {
                 strokeLinejoin="round"
                 aria-hidden="true"
               >
-                <path d="M9 18l6-6-6-6"></path>
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </div>
-
-            {/* Count coupon */}
-               <p> Coupon Available ({couponsCount})</p>
-          </div>
-          {cleanedDiscount && (
-            <>
-              <p className="discount-text">
-                <span>{formatDiscount(cleanedDiscount)}</span>
-              </p>
-              {/* <hr className="divider" /> */}
-            </>
-          )}
-
-        </div>
-        {codeCoupon && (
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              handleRemoveCoupon();
-            }}
-            className="removeCoupon"
-            role="button"
-            aria-label="Remove coupon"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
           </div>
         )}
-        <div className="coupon-shine" aria-hidden="true"></div>
       </div>
     );
   };
@@ -739,7 +742,7 @@ export const Order: React.FC = () => {
   const renderButton = (): JSX.Element => {
     return (
       <button
-        className={`checkout-button ${buttonLoading ? 'loading' : ''}`}
+        className={`checkout-button ${buttonLoading ? "loading" : ""}`}
         onClick={handleCheckout}
         disabled={buttonLoading}
       >
@@ -1039,10 +1042,10 @@ export const Order: React.FC = () => {
                   return (
                     total +
                     elem.quantity *
-                    elem.price *
-                    (elem.no_of_deliveries === "0"
-                      ? "1"
-                      : elem.no_of_deliveries)
+                      elem.price *
+                      (elem.no_of_deliveries === "0"
+                        ? "1"
+                        : elem.no_of_deliveries)
                   );
                 }, 0)
                 .toFixed(2)}
@@ -1072,16 +1075,17 @@ export const Order: React.FC = () => {
             <span className="t14">
               ₹{" "}
               {superPoint &&
-                superPoint.optionListing &&
-                superPoint.optionListing.length > 0
+              superPoint.optionListing &&
+              superPoint.optionListing.length > 0
                 ? superPoint.optionListing
-                  .map((elem: any) => {
-                    return (
-                      (elem.price - elem.discount) *
-                      elem.no_of_free_deliveries * elem.quantity
-                    );
-                  })
-                  .reduce((acc: number, current: number) => acc + current, 0)
+                    .map((elem: any) => {
+                      return (
+                        (elem.price - elem.discount) *
+                        elem.no_of_free_deliveries *
+                        elem.quantity
+                      );
+                    })
+                    .reduce((acc: number, current: number) => acc + current, 0)
                 : 0}
             </span>
           </div>
@@ -1187,8 +1191,9 @@ export const Order: React.FC = () => {
             </div>
             <div className="coins-redemption">
               <span
-                className={`t14 redemption-amount ${amountAnimating ? "animate" : ""
-                  }`}
+                className={`t14 redemption-amount ${
+                  amountAnimating ? "animate" : ""
+                }`}
               >
                 ₹{redeemedAmount ? <>{redeemedAmount}</> : <>0</>}
               </span>
@@ -1198,7 +1203,7 @@ export const Order: React.FC = () => {
 
           {/* ***********************Ordereeeeeeeeeeeeeee***************** */}
 
-          <div className='row-center-space-between'>
+          <div className="row-center-space-between">
             <h4>Total</h4>
 
             {/* Case when no cart total is available */}
@@ -1219,7 +1224,7 @@ export const Order: React.FC = () => {
                       elem.no_of_deliveries === "0"
                         ? 1
                         : Number(elem.no_of_deliveries) -
-                        (Number(elem.no_of_free_deliveries) || 0);
+                          (Number(elem.no_of_free_deliveries) || 0);
                     const lineTotal =
                       Number(elem.quantity) *
                       Number(elem.price) *
@@ -1283,7 +1288,7 @@ export const Order: React.FC = () => {
                       elem.no_of_deliveries === "0"
                         ? 1
                         : Number(elem.no_of_deliveries) -
-                        (Number(elem.no_of_free_deliveries) || 0);
+                          (Number(elem.no_of_free_deliveries) || 0);
                     const lineTotal =
                       Number(elem.quantity) *
                       Number(elem.price) *
@@ -1309,7 +1314,6 @@ export const Order: React.FC = () => {
               </h4>
             )}
           </div>
-
         </section>
       </>
     );
@@ -1354,6 +1358,3 @@ export const Order: React.FC = () => {
     </div>
   );
 };
-
-
-

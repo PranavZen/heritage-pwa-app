@@ -3,6 +3,7 @@ import axios from "axios";
 import { hooks } from "../hooks";
 import { components } from "../components";
 import { useLocation } from "react-router-dom";
+import { svg } from "../assets/svg";
 
 export const ClientNotificationDetails: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -71,43 +72,43 @@ export const ClientNotificationDetails: React.FC = () => {
       <main className="scrollable x">
         <section className="clientNotificationWrap" style={{ paddingTop: 10 }}>
           {notifications.length === 0 ? (
-            <div
-              style={{
-                borderRadius: 10,
-                marginBottom: 10,
-                border: "1px solid red",
-                backgroundColor: "var(--white-color)",
-                padding: 20,
-              }}
-            >
+            <div className="empty-notification">
+              <div className="empty-icon">
+                <svg.BellTabSvg />
+              </div>
               <p>No notifications available</p>
             </div>
           ) : (
             notifications.map((notification, index) => (
-              <div key={index} className="notification-client">
-                <h3 className="mainText">{notification.title}</h3>
-                {notification.message
-                  .split("\r\n\r\n")
-                  .map(
-                    (
-                      sentence:
-                        | string
-                        | number
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | null
-                        | undefined,
-                      index: React.Key | null | undefined
-                    ) => (
-                      <p key={index} className="subText">{sentence}</p>
-                    )
-                  )}
-                <p className="notifyDate">{notification.created_date}</p>
+              <div key={index} className="notification-client notification-detail">
+                <div className="notification-icon">
+                  <svg.BellTabSvg />
+                </div>
+                <div className="notification-content">
+                  <h3 className="mainText">{notification.title}</h3>
+                  {notification.message
+                    .split("\r\n\r\n")
+                    .map(
+                      (
+                        sentence:
+                          | string
+                          | number
+                          | boolean
+                          | React.ReactElement<
+                              any,
+                              string | React.JSXElementConstructor<any>
+                            >
+                          | Iterable<React.ReactNode>
+                          | React.ReactPortal
+                          | null
+                          | undefined,
+                        index: React.Key | null | undefined
+                      ) => (
+                        <p key={index} className="subText">{sentence}</p>
+                      )
+                    )}
+                  <p className="notifyDate">{notification.created_date}</p>
+                </div>
               </div>
             ))
           )}
