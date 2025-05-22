@@ -219,7 +219,7 @@ export const Home: React.FC = () => {
               },
             }}
           >
-            {dishes.map((dish: DishType, index: number, array: DishType[]) => {
+            {dishes?.map((dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;
               return (
                 <SwiperSlide key={`first-${dish.id}`} style={{ width: "auto" }}>
@@ -323,7 +323,7 @@ export const Home: React.FC = () => {
     if (loading) return <components.Loader local={true} message="Loading content..." />;
 
     return (
-      <main className="">
+      <main>
         {renderCarousel()}
         {renderMenu()}
         {renderRecommendedForYou()}
