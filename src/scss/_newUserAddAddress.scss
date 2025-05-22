@@ -1,0 +1,353 @@
+/* Enhanced styling for New User Add Address page */
+
+// Variables
+$primary-color: #1a712e;
+$primary-light: rgba(26, 113, 46, 0.1);
+$primary-dark: #156023;
+$accent-color: #ff6f61;
+$text-dark: #333;
+$text-medium: #555;
+$text-light: #777;
+$white: #fff;
+$border-radius: 12px;
+$box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+$transition-speed: 0.3s;
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+
+
+/* Form container */
+.form-container {
+  background-color: $white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  padding: 30px;
+  width: 90%;
+  max-width: 700px;
+  margin: 20px auto;
+  animation: fadeIn 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, $primary-color, lighten($primary-color, 20%));
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 24px;
+    margin: 16px auto;
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 20px;
+    margin: 12px auto;
+    border-radius: 8px;
+  }
+
+  /* Form header */
+  .form-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    animation: slideUp 0.5s ease-in-out;
+
+    .form-icon {
+      margin-right: 20px;
+      flex-shrink: 0;
+
+      svg {
+        width: 60px;
+        height: 60px;
+        animation: pulse 2s infinite;
+      }
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: $primary-color;
+      margin: 0;
+      font-family: "SF Pro Display";
+      @media screen and (max-width: 768px) {
+        text-align: center;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      .form-icon {
+        margin-right: 15px;
+
+        svg {
+          width: 50px;
+          height: 50px;
+        }
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+  }
+
+  /* Form sections */
+  .form-section {
+    // margin-bottom: 25px;
+    animation: slideUp 0.5s ease-in-out;
+    animation-fill-mode: both;
+
+    &:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: $primary-color;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e0e0e0;
+      font-family: "SF Pro Display";
+
+      @media screen and (max-width: 768px) {
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+    }
+  }
+
+  /* Input wrapper */
+  .inputWrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+
+    @media screen and (max-width: 768px) {
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    @media screen and (max-width: 767px) {
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    /* Column widths */
+    .col-6 {
+      flex: 0 0 calc(50% - 8px);
+      width: calc(50% - 8px);
+
+      @media screen and (max-width: 600px) {
+        flex: 0 0 100%;
+        width: 100%;
+      }
+    }
+
+    .col-12 {
+      flex: 0 0 100%;
+      width: 100%;
+    }
+  }
+
+  /* Form labels */
+  .form-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: $text-dark;
+    margin-bottom: 8px;
+    font-family: "SF Pro Display";
+    transition: all $transition-speed ease;
+
+    span {
+      color: $accent-color;
+      margin-left: 2px;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+  }
+
+  /* Input container */
+  .input-container, .select-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: $white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: all $transition-speed ease;
+    overflow: hidden;
+
+    &:focus-within {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba(26, 113, 46, 0.1);
+    }
+
+    &:hover {
+      border-color: $primary-color;
+    }
+
+    &.valid {
+      border-color: #4caf50;
+      background-color: rgba(76, 175, 80, 0.05);
+
+      &:focus-within {
+        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+      }
+    }
+
+    .input-icon, .select-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        transition: all $transition-speed ease;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      .input-icon, .select-icon {
+        width: 40px;
+        height: 40px;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  /* Form inputs */
+  .form-input {
+    flex: 1;
+    padding: 12px 14px 12px 0;
+    border: none;
+    font-size: 15px;
+    color: $text-dark;
+    background: transparent;
+    font-family: "SF Pro Display";
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: $text-light;
+    }
+
+    &:read-only {
+      background-color: #f9f9f9;
+      cursor: not-allowed;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 10px 12px 10px 0;
+      font-size: 14px;
+    }
+  }
+
+  /* Select dropdown */
+  .form-select {
+    flex: 1;
+    padding: 12px 14px 12px 0;
+    border: none;
+    font-size: 15px;
+    color: $text-dark;
+    background: transparent;
+    appearance: none;
+    font-family: "SF Pro Display";
+    cursor: pointer;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+    }
+
+    option {
+      padding: 10px;
+      font-family: "SF Pro Display";
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 10px 12px 10px 0;
+      font-size: 14px;
+    }
+  }
+
+  .select-container {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid $primary-color;
+      pointer-events: none;
+      transition: all $transition-speed ease;
+    }
+
+    &:focus-within::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+}
