@@ -42,6 +42,7 @@ export const MyAddress: React.FC = () => {
           "https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById",
           formData
         );
+        console.log("nnnnn", response)
         setAddresses(response.data.addresses);
         setLoading(false);
       } catch (error) {
