@@ -9,6 +9,9 @@ import { TabNavigator } from './TabNavigator';
 const c_id = localStorage.getItem('c_id');
 const cityId = localStorage.getItem('cityId');
 
+
+console.log("sss", cityId)
+
 const stack = createBrowserRouter([
   {
     path: Routes.SignIn,

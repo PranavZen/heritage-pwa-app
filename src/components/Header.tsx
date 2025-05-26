@@ -190,12 +190,10 @@ export const Header: React.FC<Props> = ({
   };
 
 
-
-
-
   // Render the go back button if needed
   const renderGoBack = (): JSX.Element | null => {
-    if (showGoBack && location.key !== 'default')
+  
+    if (showGoBack )
       return (
         <div
           onClick={() => navigate(-1)}
@@ -216,6 +214,13 @@ export const Header: React.FC<Props> = ({
       );
     return null;
   };
+
+
+
+
+
+
+  
 
   // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
@@ -242,7 +247,6 @@ export const Header: React.FC<Props> = ({
     const handleCancel = () => {
       setIsModalOpen(false);
     };
-
     return (
       <>
         <div className="basketContainer">
@@ -376,7 +380,7 @@ export const Header: React.FC<Props> = ({
                     }
                   >
                     {item.title === 'Sign out'
-                      ? localStorage.getItem('c_id')
+                      ? localStorage.getItem('c_id') && localStorage.getItem('area_id')
                         ? 'Log Out'
                         : 'Sign In'
                       : item.title}
@@ -386,8 +390,6 @@ export const Header: React.FC<Props> = ({
               );
             })}
           </ul>
-
-
         </div>
       </div>
     );
@@ -435,6 +437,7 @@ export const Header: React.FC<Props> = ({
 
     return (
       <>
+
         {/* Android Install Button */}
         {true && !isIos() && (
           <div className="enhanced-floating-container">
@@ -448,6 +451,7 @@ export const Header: React.FC<Props> = ({
                 <svg.DownloadSvg className="download-icon" />
                 <span className="button-text">Add to Home Screen</span>
                 
+
               </button>
               <button
                   onClick={hideInstallPrompt}

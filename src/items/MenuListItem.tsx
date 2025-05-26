@@ -710,9 +710,8 @@ export const MenuListItem: React.FC<Props> = ({
                 </button>
               )
             )}
-
-            {/* Deliver Once Button if orderType === 2 */}
             {String(orderType) === '2' && (
+
               <span
                 className=""
                 style={{
@@ -723,16 +722,12 @@ export const MenuListItem: React.FC<Props> = ({
               >
                 Deliver Once
               </span>
+
             )}
 
           </div>
         </div>
-
-
-
       </div>
-
-
       <Modal
         closable
         onCancel={setIsModalOpenDaily}

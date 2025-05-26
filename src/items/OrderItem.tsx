@@ -389,38 +389,45 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                   className="t14"
                   style={{ color: "var(--main-color)", fontWeight: 500 }}
                 >
-                  Deliveries : {noOfDeliveries}
+                  Deliveries : {noOfDeliveries}({dish.packages_name && dish.packages_name !== "0" && (
+                <span
+                  // className="t14"
+                  // style={{ color: "var(--main-color)", fontWeight: 500 }}
+                >
+                   {dish.packages_name}
+                </span>
+              )})
                 </span>
               )}
 
 
-              {String(dish.order_type) === '1' ? <>  
+              {/* {String(dish.order_type) === '1' ? <>  
               <span
                 className="t14"
                 style={{ color: "var(--main-color)", fontWeight: 500 }}
               >
                 <span className="cartLable">Free Deliveries :</span>{" "}
                 {dish.no_of_free_deliveries}
-              </span> </> : <> </>}
+              </span> </> : <> </>} */}
 
 
-              {dish.preferenceName && (
+              {/* {dish.preferenceName && (
                 <span
                   className="t14"
                   style={{ color: "var(--main-color)", fontWeight: 500 }}
                 >
                   Preference : {dish.preferenceName}
                 </span>
-              )}
+              )} */}
 
-              {dish.packages_name && dish.packages_name !== "0" && (
+              {/* {dish.packages_name && dish.packages_name !== "0" && (
                 <span
                   className="t14"
                   style={{ color: "var(--main-color)", fontWeight: 500 }}
                 >
                   Package : {dish.packages_name}
                 </span>
-              )}
+              )} */}
 
               {String(dish.order_type) === "1" ? <> <span
                 className="t14"
