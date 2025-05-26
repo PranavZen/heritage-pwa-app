@@ -33,7 +33,6 @@ export const SignIn: React.FC = () => {
   const [otpSentTime, setOtpSentTime] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [animateForm, setAnimateForm] = useState<boolean>(false);
-  console.log("aaaaaa", isOtpSent)
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
@@ -207,7 +206,7 @@ export const SignIn: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP",
         formData
       );
-      console.log("API response:", response);
+ 
 
       if (response?.data?.status === "success") {
         const customer = response?.data?.CustomerDetail?.[0];

@@ -74,7 +74,6 @@ export const NewUsereAddAddress: React.FC = () => {
   const [areaIdByPincode, setAreaIdByPincode] = useState<any[]>([]);
   const [selectedAreaId, setSelectedAreaId] = useState('');
 
-  console.log("selectedAreaId", selectedAreaId);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
