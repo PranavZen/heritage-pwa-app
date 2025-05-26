@@ -832,7 +832,7 @@ export const Order: React.FC = () => {
                         cursor: "pointer",
                       }}
                     >
-                      <i className="fa fa-edit" /> Edit
+                      <i className="fa fa-edit" /> Change
                     </span>
                   </div>
                 ) : (
@@ -861,7 +861,7 @@ export const Order: React.FC = () => {
                           cursor: "pointer",
                         }}
                       >
-                        <i className="fa fa-edit" /> Edit
+                        <i className="fa fa-edit" /> Change
                       </span>
                     </div>
                   )

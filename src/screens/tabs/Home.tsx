@@ -115,7 +115,7 @@ export const Home: React.FC = () => {
         >
           <Swiper
             modules={[Pagination, Navigation]}
-            spaceBetween={15}
+            // spaceBetween={15}
             slidesPerView={"auto"}
             pagination={false}
             navigation={true}
@@ -124,19 +124,19 @@ export const Home: React.FC = () => {
             breakpoints={{
               320: {
                 slidesPerView: 2.4,
-                spaceBetween: 10,
+                spaceBetween: 5,
               },
               480: {
                 slidesPerView: 2.8,
-                spaceBetween: 10,
+                spaceBetween: 5,
               },
               768: {
-                slidesPerView: 4.2,
-                spaceBetween: 20,
+                slidesPerView: 3.5,
+                spaceBetween: 5,
               },
               1024: {
                 slidesPerView: 4,
-                spaceBetween: 10,
+                spaceBetween: 5,
               },
             }}
           >
@@ -219,7 +219,7 @@ export const Home: React.FC = () => {
               },
             }}
           >
-            {dishes?.map((dish: DishType, index: number, array: DishType[]) => {
+            {dishes.map((dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;
               return (
                 <SwiperSlide key={`first-${dish.id}`} style={{ width: "auto" }}>
@@ -323,7 +323,7 @@ export const Home: React.FC = () => {
     if (loading) return <components.Loader local={true} message="Loading content..." />;
 
     return (
-      <main>
+      <main className="">
         {renderCarousel()}
         {renderMenu()}
         {renderRecommendedForYou()}

@@ -9,6 +9,7 @@
 @use "_productInfoBox.scss";
 @use "_infoBtnsWrap.scss";
 @use "_deliveryModal.scss";
+@use "_confirmModal.scss";
 @use "_editProfile.scss";
 @use "_myAddress.scss";
 @use "_addressAdd.scss";
@@ -17,6 +18,7 @@
 @use "_tabNavigator.scss";
 @use "_font-consistency.scss";
 @use "_customerCare.scss";
+@use "_floatingButton.scss";
 
 @font-face {
   font-family: "SF Pro Display";

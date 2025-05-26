@@ -124,12 +124,14 @@ export const Footer: React.FC = () => {
       Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to access this feature.',
+        okText: 'Sign In',
+        cancelText: 'Cancel',
+        className: 'sign-in-modal',
+        centered: true,
         onOk() {
           navigate('/');
         },
         onCancel() { },
-        cancelText: 'Cancel',
-        okText: 'Sign In',
       });
       return;
     }
