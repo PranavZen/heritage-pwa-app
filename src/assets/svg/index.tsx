@@ -38,6 +38,7 @@ import {SearchTabSvg} from './tabs/SearchTabSvg';
 import { WalletSvg } from './tabs/WalletSvg';
 import { DiamondSvg } from './tabs/DiamondSvg';
 import { TrophySvg } from './tabs/TrophySvg';
+import { DownloadSvg } from './DownloadSvg';
 
 export const svg = {
   KeySvg,
@@ -78,5 +79,6 @@ export const svg = {
   NotificationCheckSvg,
   WalletSvg,
   DiamondSvg,
-  TrophySvg
+  TrophySvg,
+  DownloadSvg
 };

@@ -746,12 +746,14 @@ export const Dish: React.FC = () => {
       Modal.confirm({
         title: "Please Sign In",
         content: "You need to sign in to add items to your cart.",
+        okText: "Sign In",
+        cancelText: "Cancel",
+        className: "sign-in-modal",
+        centered: true,
         onOk() {
           navigate("/");
         },
         onCancel() {},
-        cancelText: "Cancel",
-        okText: "Sign In",
       });
       return;
     }
@@ -777,12 +779,14 @@ export const Dish: React.FC = () => {
       Modal.confirm({
         title: "Please Sign In",
         content: "You need to sign in to add items to your cart.",
+        okText: "Sign In",
+        cancelText: "Cancel",
+        className: "sign-in-modal",
+        centered: true,
         onOk() {
           navigate("/");
         },
         onCancel() {},
-        cancelText: "Cancel",
-        okText: "Sign In",
       });
       return;
     }

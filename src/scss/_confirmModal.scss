@@ -1,0 +1,427 @@
+/* Enhanced Modal.confirm and Modal.info styling for milk products ecommerce */
+
+// Variables
+$primary-color: #1a712e;
+$primary-light: #e8f5e9;
+$primary-dark: #156023;
+$accent-color: #ff6f61;
+$accent-light: #ffebe9;
+$text-dark: #333;
+$text-medium: #555;
+$text-light: #777;
+$white: #fff;
+$border-radius: 20px;
+$box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+$transition-speed: 0.3s;
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Enhanced Modal.confirm styling
+.ant-modal-confirm,
+.ant-modal-info,
+.ant-modal-warning,
+.ant-modal-error,
+.ant-modal-success {
+  
+  // Modal mask (backdrop)
+  .ant-modal-mask {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(5px) !important;
+    animation: fadeIn $transition-speed cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  // Modal wrapper
+  .ant-modal-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 20px !important;
+  }
+
+  // Modal content container
+  .ant-modal {
+    top: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 480px !important;
+    width: 90% !important;
+    border-radius: $border-radius !important;
+    box-shadow: $box-shadow !important;
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    overflow: hidden !important;
+    position: relative !important;
+
+    // Green accent bar at the top
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, $primary-color, #2a9d4a);
+      border-radius: $border-radius $border-radius 0 0;
+      z-index: 1;
+    }
+  }
+
+  // Modal content
+  .ant-modal-content {
+    border-radius: $border-radius !important;
+    padding: 0 !important;
+    background: $white !important;
+    position: relative !important;
+    overflow: hidden !important;
+    .ant-modal-body{
+      .ant-modal-confirm-body-wrapper{
+        .anticon.anticon-exclamation-circle{
+          display: none !important;
+        }
+      }
+    }
+  }
+
+  // Modal body
+  .ant-modal-body {
+    padding: 30px 24px 20px !important;
+    position: relative !important;
+    text-align: center !important;
+    font-family: 'SF Pro Display', sans-serif !important;
+
+    // Background decoration
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -50px;
+      right: -50px;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba($primary-color, 0.05) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    // Content wrapper
+    > div {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  // Modal icon styling
+  .ant-modal-confirm-icon {
+    margin-bottom: 20px !important;
+    display: flex !important;
+    justify-content: center !important;
+    
+    .anticon {
+      font-size: 48px !important;
+      animation: pulse 2s infinite ease-in-out;
+      
+      // Different colors for different modal types
+      &.anticon-question-circle {
+        color: $primary-color !important;
+      }
+      
+      &.anticon-info-circle {
+        color: #1890ff !important;
+      }
+      
+      &.anticon-exclamation-circle {
+        color: #faad14 !important;
+      }
+      
+      &.anticon-close-circle {
+        color: $accent-color !important;
+      }
+      
+      &.anticon-check-circle {
+        color: #52c41a !important;
+      }
+    }
+  }
+
+  // Modal title
+  .ant-modal-confirm-title {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: $text-dark !important;
+    margin-bottom: 15px !important;
+    line-height: 1.3 !important;
+    font-family: 'SF Pro Display', sans-serif !important;
+    position: relative !important;
+
+    // Underline decoration
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: $primary-color;
+      border-radius: 3px;
+    }
+  }
+
+  // Modal content text
+  .ant-modal-confirm-content {
+    font-size: 16px !important;
+    color: $text-medium !important;
+    line-height: 1.5 !important;
+    margin-bottom: 25px !important;
+    font-family: 'SF Pro Display', sans-serif !important;
+  }
+
+  // Button container
+  .ant-modal-confirm-btns {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    margin-top: 25px !important;
+    padding: 0 !important;
+
+    // Button styling
+    .ant-btn {
+      height: 44px !important;
+      padding: 0 24px !important;
+      border-radius: 12px !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      font-family: 'SF Pro Display', sans-serif !important;
+      transition: all $transition-speed ease !important;
+      position: relative !important;
+      overflow: hidden !important;
+      min-width: 100px !important;
+
+      // Shimmer effect
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -200%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.5s ease;
+      }
+
+      &:hover::before {
+        left: 200%;
+      }
+
+      // Primary button (OK/Confirm)
+      &.ant-btn-primary {
+        background-color: $primary-color !important;
+        border-color: $primary-color !important;
+        color: $white !important;
+
+        &:hover {
+          background-color: $primary-dark !important;
+          border-color: $primary-dark !important;
+          transform: translateY(-2px) !important;
+          box-shadow: 0 5px 15px rgba($primary-color, 0.3) !important;
+        }
+
+        &:active {
+          transform: translateY(0) !important;
+          box-shadow: 0 2px 5px rgba($primary-color, 0.2) !important;
+        }
+      }
+
+      // Default button (Cancel)
+      &.ant-btn-default {
+        background-color: #f5f5f5 !important;
+        border-color: #d9d9d9 !important;
+        color: $text-dark !important;
+
+        &:hover {
+          background-color: #e6e6e6 !important;
+          border-color: #bfbfbf !important;
+          transform: translateY(-2px) !important;
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        &:active {
+          transform: translateY(0) !important;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        }
+      }
+
+      // Danger button for delete actions
+      &.ant-btn-dangerous {
+        background-color: $accent-color !important;
+        border-color: $accent-color !important;
+        color: $white !important;
+
+        &:hover {
+          background-color: darken($accent-color, 10%) !important;
+          border-color: darken($accent-color, 10%) !important;
+          transform: translateY(-2px) !important;
+          box-shadow: 0 5px 15px rgba($accent-color, 0.3) !important;
+        }
+
+        &:active {
+          transform: translateY(0) !important;
+          box-shadow: 0 2px 5px rgba($accent-color, 0.2) !important;
+        }
+      }
+    }
+  }
+}
+
+// Special styling for delete confirmation modals
+.ant-modal-confirm.delete-modal {
+  .ant-modal-confirm-icon .anticon {
+    color: $accent-color !important;
+  }
+
+  .ant-modal-confirm-title::after {
+    background-color: $accent-color !important;
+  }
+}
+
+// Special styling for sign-in modals
+.ant-modal-confirm.sign-in-modal,
+.ant-modal-info.sign-in-modal {
+  .ant-modal-confirm-icon .anticon,
+  .ant-modal-info-icon .anticon {
+    color: $primary-color !important;
+  }
+
+  .ant-modal-confirm-title::after,
+  .ant-modal-info-title::after {
+    background-color: $primary-color !important;
+  }
+}
+
+// Responsive design
+@media screen and (max-width: 768px) {
+  .ant-modal-confirm,
+  .ant-modal-info,
+  .ant-modal-warning,
+  .ant-modal-error,
+  .ant-modal-success {
+    
+    .ant-modal {
+      width: 92% !important;
+      max-width: 450px !important;
+    }
+
+    .ant-modal-body {
+      padding: 25px 20px 18px !important;
+    }
+
+    .ant-modal-confirm-icon .anticon {
+      font-size: 40px !important;
+    }
+
+    .ant-modal-confirm-title {
+      font-size: 20px !important;
+      margin-bottom: 12px !important;
+    }
+
+    .ant-modal-confirm-content {
+      font-size: 15px !important;
+      margin-bottom: 20px !important;
+    }
+
+    .ant-modal-confirm-btns {
+      gap: 10px !important;
+      margin-top: 20px !important;
+
+      .ant-btn {
+        height: 40px !important;
+        padding: 0 20px !important;
+        font-size: 15px !important;
+        min-width: 90px !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .ant-modal-confirm,
+  .ant-modal-info,
+  .ant-modal-warning,
+  .ant-modal-error,
+  .ant-modal-success {
+    
+    .ant-modal {
+      width: 95% !important;
+      border-radius: 16px !important;
+    }
+
+    .ant-modal-body {
+      padding: 20px 16px 15px !important;
+    }
+
+    .ant-modal-confirm-icon .anticon {
+      font-size: 36px !important;
+      margin-bottom: 15px !important;
+    }
+
+    .ant-modal-confirm-title {
+      font-size: 18px !important;
+      margin-bottom: 10px !important;
+    }
+
+    .ant-modal-confirm-content {
+      font-size: 14px !important;
+      margin-bottom: 18px !important;
+    }
+
+    .ant-modal-confirm-btns {
+      flex-direction: column-reverse !important;
+      gap: 8px !important;
+      margin-top: 18px !important;
+
+      .ant-btn {
+        width: 100% !important;
+        height: 42px !important;
+        padding: 0 16px !important;
+        font-size: 14px !important;
+        border-radius: 10px !important;
+      }
+    }
+  }
+}

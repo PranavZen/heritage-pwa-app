@@ -347,11 +347,13 @@ export const MenuListItem: React.FC<Props> = ({
       Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
+        okText: 'Sign In',
+        cancelText: 'Cancel',
+        className: 'sign-in-modal',
+        centered: true,
         onOk() {
           navigate('/');
         },
-        cancelText: 'Cancel',
-        okText: 'Sign In',
       });
       return;
     }
@@ -369,12 +371,14 @@ export const MenuListItem: React.FC<Props> = ({
       Modal.confirm({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
+        okText: 'Sign In',
+        cancelText: 'Cancel',
+        className: 'sign-in-modal',
+        centered: true,
         onOk() {
           navigate('/');
         },
         onCancel() { },
-        cancelText: 'Cancel',
-        okText: 'Sign In',
       });
       return;
     }
@@ -677,7 +681,7 @@ export const MenuListItem: React.FC<Props> = ({
             )}
 
             {/* Subscribe / Update Subscription */}
-            
+
             {String(showSubscribe) === "1" && String(orderType) !== '2' && (
               cartItemId ? (
                 <button
@@ -692,7 +696,7 @@ export const MenuListItem: React.FC<Props> = ({
                   Upgrade
                 </button>
               ) : (
-                 
+
                 <button
                   className="cart-button"
                   style={{
@@ -709,16 +713,16 @@ export const MenuListItem: React.FC<Props> = ({
 
             {/* Deliver Once Button if orderType === 2 */}
             {String(orderType) === '2' && (
-              <button
-                className="cart-button"
+              <span
+                className=""
                 style={{
                   marginLeft: "10px",
-                  backgroundColor: "#28a745",
-                  color: "#fff",
+                  color: "red",
+                  fontSize: 12
                 }}
               >
                 Deliver Once
-              </button>
+              </span>
             )}
 
           </div>

@@ -123,7 +123,7 @@ export const Home: React.FC = () => {
             autoplay={false}
             breakpoints={{
               320: {
-                slidesPerView: 2.4,
+                slidesPerView: 2.8,
                 spaceBetween: 10,
               },
               480: {
@@ -219,7 +219,7 @@ export const Home: React.FC = () => {
               },
             }}
           >
-            {dishes?.map((dish: DishType, index: number, array: DishType[]) => {
+            {dishes.map((dish: DishType, index: number, array: DishType[]) => {
               const isLast = index === array.length - 1;
               return (
                 <SwiperSlide key={`first-${dish.id}`} style={{ width: "auto" }}>
@@ -323,7 +323,7 @@ export const Home: React.FC = () => {
     if (loading) return <components.Loader local={true} message="Loading content..." />;
 
     return (
-      <main>
+      <main className="">
         {renderCarousel()}
         {renderMenu()}
         {renderRecommendedForYou()}
