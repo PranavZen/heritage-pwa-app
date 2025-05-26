@@ -115,7 +115,7 @@ export const Home: React.FC = () => {
         >
           <Swiper
             modules={[Pagination, Navigation]}
-            spaceBetween={15}
+            // spaceBetween={15}
             slidesPerView={"auto"}
             pagination={false}
             navigation={true}
@@ -123,20 +123,20 @@ export const Home: React.FC = () => {
             autoplay={false}
             breakpoints={{
               320: {
-                slidesPerView: 2.8,
-                spaceBetween: 10,
+                slidesPerView: 2.4,
+                spaceBetween: 5,
               },
               480: {
                 slidesPerView: 2.8,
-                spaceBetween: 10,
+                spaceBetween: 5,
               },
               768: {
-                slidesPerView: 4.2,
-                spaceBetween: 20,
+                slidesPerView: 3.5,
+                spaceBetween: 5,
               },
               1024: {
                 slidesPerView: 4,
-                spaceBetween: 10,
+                spaceBetween: 5,
               },
             }}
           >
