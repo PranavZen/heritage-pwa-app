@@ -11,6 +11,8 @@ import { Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartCount } from '../store/slices/cartSlice';
 import NoCartData from '../screens/NoCartData';
+import homeImg from '../assets/icons/home.png'
+import { Color } from 'antd/es/color-picker';
 
 type Props = {
   title?: string;
@@ -187,6 +189,10 @@ export const Header: React.FC<Props> = ({
     );
   };
 
+
+
+
+
   // Render the go back button if needed
   const renderGoBack = (): JSX.Element | null => {
     if (showGoBack && location.key !== 'default')
@@ -276,7 +282,7 @@ export const Header: React.FC<Props> = ({
           width={500} // Set appropriate width
           closable={true} // Allow closing with X button
         >
-           <NoCartData/>
+          <NoCartData />
         </Modal>
       </>
     );
@@ -384,9 +390,134 @@ export const Header: React.FC<Props> = ({
       </div>
     );
   };
+  // *******************************************
+  const [showInstallPrompt, setShowInstallPrompt] = useState(true);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
+
+  const hideInstallPrompt = () => {
+    setShowInstallPrompt(false);
+  };
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault(); 
+      setDeferredPrompt(e); 
+      setIsInstallable(true); 
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult: any) => {
+      
+        setIsInstallable(false);
+      });
+    }
+  };
+
+  const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = () => 'standalone' in window.navigator && window.navigator['standalone'];
+
+
+
+  const AddToHomeScreen = () => {
+    if (!showInstallPrompt) return null;
+
+    return (
+     <>  
+    
+        {/* Android Install Button */}
+        {true && !isIos() && (
+          <button
+            onClick={handleInstallClick}
+          >
+
+            <div
+              style={{
+                display: 'block',
+                position: 'fixed',
+                bottom: "140px",
+                right: "33%",
+                transform: 'translateX(-50%)',
+                height: '70px',
+                width: '70px',
+                cursor: 'pointer',
+                fontSize: '10px',
+                zIndex: 1000,
+                textAlign:"center"
+              }}
+              className="addToHomescreenGadget"
+            >
+              <button
+              
+                onClick={hideInstallPrompt}
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                   transition: 'transform 3s ease',
+                   margin:'4px',
+                }}
+                title="Hide section"
+              >
+               &#10006;
+              </button>
+
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                x="0px" y="0px" viewBox="0 0 222 222"
+                xmlSpace="preserve">
+                <path fill="#FFFFFF" stroke="#D3D3D3" strokeWidth="10" strokeLinecap="round"
+                  strokeLinejoin="round" strokeMiterlimit="10"
+                  d="M18.005,5C10.827,5,5,9.48,5,15v167c0,5.52,5.827,10,13.006,10H83.43l28.22,25l26.959-25h65.386c7.18,0,13.006-4.48,13.006-10V15
+                c0-5.52-5.826-10-13.006-10H18.005z" />
+                <text transform="matrix(1 0 0 1 20.0195 173.2598)" fill="#666666" fontFamily="'TrebuchetMS', 'Segoe Ui'" fontSize="31">Home Screen</text>
+                <g>
+                  <path fill="#666666" d="M165,127.189c0,6.627-5.373,12-12,12H69c-6.627,0-12-5.373-12-12v-84c0-6.628,5.373-12,12-12h84
+                  c6.627,0,12,5.372,12,12V127.189z" />
+                  <line fill="none" stroke="#FFFFFF" strokeWidth="9" x1="111" y1="52.189" x2="111" y2="116.189" />
+                  <line fill="none" stroke="#FFFFFF" strokeWidth="9" x1="79" y1="84.189" x2="143" y2="84.189" />
+                </g>
+              </svg>
+            </div>
+          </button>
+        )}
+
+        {/* iOS Instruction Message */}
+        {isIos() && !isInStandaloneMode() && (
+          <div
+            style={{
+              position: 'fixed',
+              bottom: '20px',
+              left: '20px',
+              backgroundColor: '#f8f9fa',
+              padding: '10px 20px',
+              borderRadius: '5px',
+              fontSize: '16px',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+              zIndex: 1000,
+            }}
+          >
+            <p>
+              To install this app on your iPhone/iPad, tap <strong>Share</strong> and then <strong>"Add to Home Screen"</strong>.
+            </p>
+          </div>
+        )}
+      </>
+    );
+  };
 
   return (
     <>
+      {AddToHomeScreen()}
       <header className="topHeader">
         {renderUser()}
         {renderGoBack()}
