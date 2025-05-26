@@ -226,12 +226,12 @@ export const SignIn: React.FC = () => {
               value={mobile}
               onChange={(e) => {
                 const value = e.target.value;
-                if (/^\d{0,10}$/.test(value)) {
+                if (/^\d{0,10}$/.test(value)){
                   setMobile(value);
                 }
               }}
             />
-            {mobile.length > 0 && mobile.length !== 10 && (
+            {mobile.length > 0 && mobile.length === 10 && (
               <span className="error-message">
                 Mobile number must be exactly 10 digits.
               </span>
