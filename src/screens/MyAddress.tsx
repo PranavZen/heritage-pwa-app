@@ -109,6 +109,11 @@ export const MyAddress: React.FC = () => {
     Modal.confirm({
       title: "Are you sure you want to delete this address?",
       content: "This action cannot be undone.",
+      okText: "Delete",
+      cancelText: "Cancel",
+      okType: "danger",
+      className: "delete-modal",
+      centered: true,
       onOk: () => {
         setDeleteAddressId(id);
       },
@@ -125,6 +130,9 @@ export const MyAddress: React.FC = () => {
       Modal.info({
         title: 'Please Sign In',
         content: 'You need to sign in to add items to your cart.',
+        okText: 'Sign In',
+        className: 'sign-in-modal',
+        centered: true,
         onOk() {
           navigate('/');
         },

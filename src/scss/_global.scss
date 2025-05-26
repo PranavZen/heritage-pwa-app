@@ -314,6 +314,14 @@ details summary {
       top: 90%;
       left: 65%;
       transform: translate(-50%, -50%);
+      background-color: #1a712e;
+      border-radius: 50%;
+      padding: 10px;
+      svg{
+        path{
+          fill: #fff;
+        }
+      }
 
       @media screen and (max-width: 767px) {
         left: 70%;
@@ -1654,8 +1662,8 @@ select {
   }
 }
 .itemWrap {
-  height: 150px;
-  width: 135px;
+  height: 205px;
+  // width: 135px;
   .bg-cover {
     height: 100%;
     width: 100%;
@@ -1720,7 +1728,7 @@ select {
     display: flex;
     background-color: #fff;
     @media screen and (max-width: 767px) {
-      height: 125px;
+      height: 170px;
     }
     img {
       width: 100%;

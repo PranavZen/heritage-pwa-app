@@ -170,10 +170,10 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 0 || !cartItemId) return;
 
-    const preferenceName = subscriptionData?.delivery_preference || "0";  
+    const preferenceName = subscriptionData?.delivery_preference || "0";
 
     // console.log("preferenceName", preferenceName);
-    const noOfDeliveries = subscriptionData?.no_of_deliveries || "0";  
+    const noOfDeliveries = subscriptionData?.no_of_deliveries || "0";
     const orderDate = subscriptionData?.cart_order_date || getTomorrowDate() || "0";
     const orderType = (subscriptionData?.delivery_preference && subscriptionData?.no_of_deliveries && subscriptionData?.cart_order_date) ? "1" : "2";
 
@@ -276,11 +276,13 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       Modal.confirm({
         title: "Please Sign In",
         content: "You need to sign in to manage your wishlist.",
+        okText: "Sign In",
+        cancelText: "Cancel",
+        className: "sign-in-modal",
+        centered: true,
         onOk() {
           navigate("/");
         },
-        cancelText: "Cancel",
-        okText: "Sign In",
       });
       return;
     }
