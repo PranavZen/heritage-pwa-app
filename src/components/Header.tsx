@@ -190,12 +190,10 @@ export const Header: React.FC<Props> = ({
   };
 
 
-
-
-
   // Render the go back button if needed
   const renderGoBack = (): JSX.Element | null => {
-    if (showGoBack && location.key !== 'default')
+  
+    if (showGoBack )
       return (
         <div
           onClick={() => navigate(-1)}
@@ -216,6 +214,13 @@ export const Header: React.FC<Props> = ({
       );
     return null;
   };
+
+
+
+
+
+
+  
 
   // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
@@ -242,7 +247,6 @@ export const Header: React.FC<Props> = ({
     const handleCancel = () => {
       setIsModalOpen(false);
     };
-
     return (
       <>
         <div className="basketContainer">
@@ -374,7 +378,7 @@ export const Header: React.FC<Props> = ({
                     }
                   >
                     {item.title === 'Sign out'
-                      ? localStorage.getItem('c_id')
+                      ? localStorage.getItem('c_id') && localStorage.getItem('area_id')
                         ? 'Log Out'
                         : 'Sign In'
                       : item.title}
@@ -384,8 +388,6 @@ export const Header: React.FC<Props> = ({
               );
             })}
           </ul>
-
-
         </div>
       </div>
     );
@@ -401,9 +403,9 @@ export const Header: React.FC<Props> = ({
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault(); 
-      setDeferredPrompt(e); 
-      setIsInstallable(true); 
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -417,7 +419,7 @@ export const Header: React.FC<Props> = ({
     if (deferredPrompt) {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult: any) => {
-      
+
         setIsInstallable(false);
       });
     }
@@ -432,8 +434,8 @@ export const Header: React.FC<Props> = ({
     if (!showInstallPrompt) return null;
 
     return (
-     <>  
-    
+      <>
+
         {/* Android Install Button */}
         {true && !isIos() && (
           <button
@@ -452,24 +454,24 @@ export const Header: React.FC<Props> = ({
                 cursor: 'pointer',
                 fontSize: '10px',
                 zIndex: 1000,
-                textAlign:"center"
+                textAlign: "center"
               }}
               className="addToHomescreenGadget"
             >
               <button
-              
+
                 onClick={hideInstallPrompt}
                 style={{
                   backgroundColor: 'transparent',
                   border: 'none',
                   fontSize: '24px',
                   cursor: 'pointer',
-                   transition: 'transform 3s ease',
-                   margin:'4px',
+                  transition: 'transform 3s ease',
+                  margin: '4px',
                 }}
                 title="Hide section"
               >
-               &#10006;
+                &#10006;
               </button>
 
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg"

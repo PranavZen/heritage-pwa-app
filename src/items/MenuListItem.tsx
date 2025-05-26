@@ -706,29 +706,17 @@ export const MenuListItem: React.FC<Props> = ({
                 </button>
               )
             )}
-
-            {/* Deliver Once Button if orderType === 2 */}
             {String(orderType) === '2' && (
-              <button
-                className="cart-button"
-                style={{
-                  marginLeft: "10px",
-                  backgroundColor: "#28a745",
-                  color: "#fff",
-                }}
-              >
-                Deliver Once
-              </button>
+             <p style={{
+                    marginLeft: "10px",
+                    backgroundColor: "#ffc107",
+                    color: "#333",
+                  }}>pack- 1</p>
             )}
 
           </div>
         </div>
-
-
-
       </div>
-
-
       <Modal
         closable
         onCancel={setIsModalOpenDaily}

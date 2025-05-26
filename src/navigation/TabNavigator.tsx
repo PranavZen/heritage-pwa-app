@@ -10,8 +10,10 @@ import { Notification } from '../screens/tabs/Notification';
 import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
 import { actions } from '../store/actions';
 import {Order} from '../screens/tabs/Order';
+import { useNavigate } from 'react-router-dom';
 
 export const TabNavigator: React.FC = () => {
+  const navigate=useNavigate();
   const dispatch = useDispatch();
   const currentTabScreen = useSelector(
     (state: RootState) => state.tabSlice.screen,

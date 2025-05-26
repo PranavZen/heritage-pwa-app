@@ -1,12 +1,15 @@
 import React from 'react';
 import { RouterProvider, createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
-import { Routes } from '../routes';
+
 import { screens } from '../screens';
 import { TabNavigator } from './TabNavigator';
 import { components } from '../components';
+import { Routes } from '../routes';
 
-// Layout component that wraps all routes and includes the footer
+
+
 const AppLayout = () => {
+ 
   return (
     <components.FooterWrapper>
       <Outlet />
@@ -15,7 +18,7 @@ const AppLayout = () => {
 };
 
 const c_id = localStorage.getItem('c_id');
-const cityId = localStorage.getItem('cityId');
+
 
 const stack = createBrowserRouter([
   {
@@ -121,6 +124,7 @@ const stack = createBrowserRouter([
         path: Routes.TabNavigator,
         element: <TabNavigator />,
       },
+  
       {
         path: Routes.MyAddress,
         element: <screens.MyAddress />,
@@ -167,19 +171,19 @@ const stack = createBrowserRouter([
       },
       {
         path: Routes.SubscriptionOrderCheck,
-        element:<screens.SubscriptionOrderCheck/>
+        element: <screens.SubscriptionOrderCheck />
       },
       {
         path: Routes.SelectMyAddress,
-        element:<screens.SelectMyAddress/>
+        element: <screens.SelectMyAddress />
       },
       {
         path: Routes.ThankYouPage,
-        element:<screens.ThankYouPage/>
+        element: <screens.ThankYouPage />
       },
       {
         path: Routes.NewUsereAddAddress,
-        element:<screens.NewUsereAddAddress/>
+        element: <screens.NewUsereAddAddress />
       },
       // Default route
       {

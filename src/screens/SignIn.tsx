@@ -33,7 +33,7 @@ export const SignIn: React.FC = () => {
   const [otpSentTime, setOtpSentTime] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [animateForm, setAnimateForm] = useState<boolean>(false);
-
+  console.log("aaaaaa", isOtpSent)
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
@@ -75,7 +75,6 @@ export const SignIn: React.FC = () => {
     }
     if (mobile.length === 10) {
       try {
-        // Show loading state
         setIsLoading(true);
 
         const formData = new FormData();
@@ -89,6 +88,7 @@ export const SignIn: React.FC = () => {
         if (
           response.data.status === "success" &&
           response.data.action === "existing user"
+
         ) {
           setIsOtpSent(true);
           dispatch(fetchWishlist());
@@ -99,7 +99,21 @@ export const SignIn: React.FC = () => {
           });
           localStorage.setItem("c_id", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
-        } else {
+        }
+        else if (
+          response.data.status === "success" &&
+          response.data.action === "new user"
+        ) {
+          setIsOtpSent(true);
+          notification.success({
+            message: response.data.message || "OTP sent to your mobile number",
+            placement: "bottomRight",
+          });
+          localStorage.setItem("c_id", response.data.c_id);
+          localStorage.setItem("cityId", response.data.city_id);
+        }
+
+        else {
           notification.error({
             message: response.data.message || "Failed to send OTP",
             placement: "bottomRight",
@@ -112,7 +126,6 @@ export const SignIn: React.FC = () => {
           placement: "bottomRight",
         });
       } finally {
-        // Hide loading state
         setIsLoading(false);
       }
     } else {
@@ -123,37 +136,106 @@ export const SignIn: React.FC = () => {
     }
   };
 
+  // const handleVerifyOtp = async () => {
+  //   try {
+  //     // Show loading state
+  //     setIsLoading(true);
+
+  //     const formData = new FormData();
+  //     formData.append("mobile", mobile);
+  //     formData.append("otp", otp);
+
+  //     const response = await axios.post(
+  //       "https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP",
+  //       formData
+  //     );
+  //     console.log("aaaabbb", response);
+  //     if (response.data.status == "success") {
+  //       const addressDetails = response?.data?.CustomerDetail[0]?.address_details;
+
+  //       // console.log("addressDetailsaddressDetails", addressDetails)
+  //       navigate(Routes.NewUsereAddAddress);
+  //       localStorage.setItem(
+  //         "profileId",
+  //         JSON.stringify(response.data.CustomerDetail[0].id)
+  //       );
+  //       localStorage.setItem(
+  //         "area_id",
+  //         response.data.CustomerDetail[0].address_details[0].area_id
+  //       );
+  //       if (addressDetails.length === 0){
+  //         notification.success({
+  //           message: "OTP Verified. Please add your address.",
+  //           placement: "bottomRight",
+  //         });
+
+  //       } else {
+  //         notification.success({
+  //           message: "OTP Verified.",
+  //           placement: "bottomRight",
+  //         });
+  //         navigate(Routes.TabNavigator);
+  //         dispatch(fetchWishlist());
+  //       }
+  //     } else {
+  //       notification.error({
+  //         message: response.data.message || "OTP verification failed",
+  //         placement: "bottomRight",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during OTP verification:", error);
+  //     notification.error({
+  //       message: "Error verifying OTP. Please try again.",
+  //       placement: "bottomRight",
+  //     });
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+
   const handleVerifyOtp = async () => {
+    setIsLoading(true); 
+
+    const formData = new FormData();
+    formData.append("mobile", mobile);
+    formData.append("otp", otp);
+
     try {
-      // Show loading state
-      setIsLoading(true);
-
-      const formData = new FormData();
-      formData.append("mobile", mobile);
-      formData.append("otp", otp);
-
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP",
         formData
       );
+      console.log("API response:", response);
 
-      if (response.data.status === "success"){
-        const addressDetails = response.data.CustomerDetail[0].address_details;
-        navigate(Routes.NewUsereAddAddress);
-        localStorage.setItem(
-          "profileId",
-          JSON.stringify(response.data.CustomerDetail[0].id)
-        );
-        localStorage.setItem(
-          "area_id",
-          response.data.CustomerDetail[0].address_details[0].area_id
-        );
-        if (addressDetails.length === 0) {
+      if (response?.data?.status === "success") {
+        const customer = response?.data?.CustomerDetail?.[0];
+
+        if (!customer) {
+          throw new Error("Customer detail is missing in the response.");
+        }
+
+        const addressDetails = customer?.address_details ?? [];
+        const profileId = customer?.id ?? null;
+        const areaId = addressDetails?.[0]?.area_id ?? null;
+
+  
+        if (profileId) {
+          localStorage.setItem("profileId", JSON.stringify(profileId));
+        }
+
+        if (areaId) {
+          localStorage.setItem("area_id", areaId);
+        }
+
+        // Notification and navigation based on address availability
+        if (Array.isArray(addressDetails) && addressDetails.length === 0) {
           notification.success({
             message: "OTP Verified. Please add your address.",
             placement: "bottomRight",
           });
-
+          navigate(Routes.NewUsereAddAddress);
         } else {
           notification.success({
             message: "OTP Verified.",
@@ -164,7 +246,7 @@ export const SignIn: React.FC = () => {
         }
       } else {
         notification.error({
-          message: response.data.message || "OTP verification failed",
+          message: response?.data?.message || "OTP verification failed",
           placement: "bottomRight",
         });
       }
@@ -175,12 +257,9 @@ export const SignIn: React.FC = () => {
         placement: "bottomRight",
       });
     } finally {
-      // Hide loading state
       setIsLoading(false);
     }
   };
-
-  // Header removed as requested
 
   const redirectToCity = () => {
     navigate("/pincode");
@@ -226,12 +305,12 @@ export const SignIn: React.FC = () => {
               value={mobile}
               onChange={(e) => {
                 const value = e.target.value;
-                if (/^\d{0,10}$/.test(value)){
+                if (/^\d{0,11}$/.test(value)) {
                   setMobile(value);
                 }
               }}
             />
-            {mobile.length > 0 && mobile.length === 10 && (
+            {mobile.length > 0 && mobile.length === 11 && (
               <span className="error-message">
                 Mobile number must be exactly 10 digits.
               </span>
@@ -338,7 +417,7 @@ export const SignIn: React.FC = () => {
         <div className="popup-content">
           <Lottie
             animationData={OtpVerificationAnimation}
-            style={{ width: 120, height: 120, margin :"0 auto" }}
+            style={{ width: 120, height: 120, margin: "0 auto" }}
           />
           <p className="loading-message">
             {isOtpSent ? "Verifying OTP..." : "Sending OTP..."}

@@ -74,7 +74,7 @@ export const NewUsereAddAddress: React.FC = () => {
   const [areaIdByPincode, setAreaIdByPincode] = useState<any[]>([]);
   const [selectedAreaId, setSelectedAreaId] = useState('');
 
-  // console.log("areaIdByPincode", areaIdByPincode);
+  console.log("selectedAreaId", selectedAreaId);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
@@ -156,53 +156,14 @@ export const NewUsereAddAddress: React.FC = () => {
     }));
   };
 
-  // const updateAddress = async () => {
-  //   const formData = new FormData();
-  //   formData.append("address_id", newAddress.id || "");
-  //   formData.append("c_id", newAddress.c_id);
-  //   formData.append("country_id", newAddress.country_id);
-  //   formData.append("state_id", newAddress.state_id);
-  //   formData.append("city_id", newAddress.city_id);
-  //   formData.append("area_id", localStorage.getItem('area_id') || '');
-  //   formData.append("address1", newAddress.address1);
-  //   formData.append("address2", newAddress.address2);
-  //   formData.append("pincode", newAddress.pincode);
-  //   formData.append("is_default", newAddress.is_default);
-  //   formData.append("firstname", newAddress.firstname);
-  //   formData.append("lastname", newAddress.lastname);
-  //   formData.append("building_name", newAddress.building_name);
-
-  //   if (newAddress.building_id) {
-  //     formData.append("building_id", newAddress.building_id);
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     const response = await axios.post(
-  //       "https://heritage.bizdel.in/app/consumer/services_v11/updateAddress",
-  //       formData
-  //     );
-
-  //     if (response.data.status === "success") {
-  //       navigate(Routes.MyAddress);
-  //       notification.success({ message: response.data.message });
-  //     } else {
-  //       notification.error({ message: response.data.message });
-  //     }
-  //     setLoading(false);
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error("Error updating address:", error);
-  //   }
-  // };
-
+  
   const addAddress = async () => {
     const formData = new FormData();
     formData.append("c_id", localStorage.getItem('c_id') || '');
     formData.append("country_id", newAddress.country_id);
     formData.append("state_id", newAddress.state_id);
     formData.append("city_id", newAddress.city_id);
-    formData.append("area_id", localStorage.getItem('area_id') || '' || selectedAreaId);
+    formData.append("area_id",  selectedAreaId);
     formData.append("address1", newAddress.address1);
     formData.append("address2", newAddress.address2);
     formData.append("pincode", newAddress.pincode);
