@@ -192,8 +192,8 @@ export const Header: React.FC<Props> = ({
 
   // Render the go back button if needed
   const renderGoBack = (): JSX.Element | null => {
-  
-    if (showGoBack )
+
+    if (showGoBack && location.key !== 'default')
       return (
         <div
           onClick={() => navigate(-1)}
@@ -220,7 +220,7 @@ export const Header: React.FC<Props> = ({
 
 
 
-  
+
 
   // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
@@ -395,9 +395,17 @@ export const Header: React.FC<Props> = ({
     );
   };
   // *******************************************
-  const [showInstallPrompt, setShowInstallPrompt] = useState(true);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(() => {
+    const storedValue = localStorage.getItem('hideInstallPrompt');
+    return storedValue !== 'true';
+  });
+
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
+
+
+  
+
 
   const hideInstallPrompt = () => {
     setShowInstallPrompt(false);
@@ -405,9 +413,9 @@ export const Header: React.FC<Props> = ({
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setIsInstallable(true);
+      e.preventDefault(); // Prevent the default mini-infobar from appearing
+      setDeferredPrompt(e); // Store the event to trigger later
+      setIsInstallable(true); // Allow showing the "Add to Home Screen" button
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -418,11 +426,14 @@ export const Header: React.FC<Props> = ({
   }, []);
 
   const handleInstallClick = () => {
+
     if (deferredPrompt) {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult: any) => {
-
+        // setDeferredPrompt(null); 
         setIsInstallable(false);
+        localStorage.setItem('hideInstallPrompt', 'true');
+        setShowInstallPrompt(false);
       });
     }
   };
@@ -430,18 +441,26 @@ export const Header: React.FC<Props> = ({
   const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
   const isInStandaloneMode = () => 'standalone' in window.navigator && window.navigator['standalone'];
 
+console.log("PWAisinstalled",isInStandaloneMode());
+
+  useEffect(() => {
+  if (isInStandaloneMode()){
+    setShowInstallPrompt(false);
+  }
+}, []);
 
 
   const AddToHomeScreen = () => {
     if (!showInstallPrompt) return null;
-
     return (
       <>
         {/* Android Install Button */}
-        {true && !isIos() && (
-          <div className="enhanced-floating-container">
-            <div className="floating-button-wrapper">
+        {true && !isIos() &&  (
+          <div className="enhanced-floating-container"
+          >
+            <div className="floating-button-wrapper" >
               <button
+                id="install-button"
                 onClick={handleInstallClick}
                 className="enhanced-floating-button"
                 title="Add to Home Screen"
@@ -449,16 +468,16 @@ export const Header: React.FC<Props> = ({
               >
                 <svg.DownloadSvg className="download-icon" />
                 <span className="button-text">Add to Home Screen</span>
-                
+
               </button>
               <button
-                  onClick={hideInstallPrompt}
-                  className="close-btn"
-                  title="Hide install prompt"
-                  aria-label="Hide install prompt"
-                >
-                  ×
-                </button>
+                onClick={hideInstallPrompt}
+                className="close-btn"
+                title="Hide install prompt"
+                aria-label="Hide install prompt"
+              >
+                ×
+              </button>
             </div>
           </div>
         )}
@@ -489,7 +508,7 @@ export const Header: React.FC<Props> = ({
 
   return (
     <>
-      {AddToHomeScreen()}
+      <AddToHomeScreen />
       <header className="topHeader">
         {renderUser()}
         {renderGoBack()}

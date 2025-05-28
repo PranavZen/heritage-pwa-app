@@ -33,11 +33,14 @@ export const MenuListItem: React.FC<Props> = ({
   const [cartId, setCartId] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+
+
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
-  const [orderType, setOrderType] = useState<number>(2);
-  // console.log("orderType", orderType);
+  const [orderType, setOrderType] = useState<number>(0);
+  console.log("orderType", orderType);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
+  const [refreshData, setRefreshData]= useState<boolean>(false)
 
 
   useEffect(() => {
@@ -144,10 +147,9 @@ export const MenuListItem: React.FC<Props> = ({
     }
   };
 
-
   useEffect(() => {
     fetchCartData();
-  }, [cityId, c_id, dish, shouldRefresh]);
+  }, [cityId, c_id, dish, shouldRefresh, refreshData]);
 
 
   const HandleAddToCart = async () => {
@@ -426,6 +428,7 @@ export const MenuListItem: React.FC<Props> = ({
           description: response.data.message,
         });
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
+        setRefreshData(true);
         setQuantity(1);
         dispatch(setShouldRefresh(true));
 
@@ -716,10 +719,10 @@ export const MenuListItem: React.FC<Props> = ({
                 style={{
                   marginLeft: "10px",
                   color: "red",
-                  fontSize: 12
+                  fontSize: 16
                 }}
               >
-                Deliver Once
+                pack- 1
               </span>
             )}
 

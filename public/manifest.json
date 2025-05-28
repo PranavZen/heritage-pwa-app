@@ -1,19 +1,19 @@
 {
   "short_name": "Heritage",
-  "name": "Heritage Touch",
+  "name": "Heritage Health and Happiness",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo.png",
+      "src": "https://webapp.heritage.bizdel.in/static/media/logo.2ddf95400899b323160d.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo.png",
+      "src": "https://webapp.heritage.bizdel.in/static/media/logo.2ddf95400899b323160d.png",
       "type": "image/png",
       "sizes": "512x512"
     }

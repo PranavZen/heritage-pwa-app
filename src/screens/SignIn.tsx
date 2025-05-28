@@ -96,7 +96,7 @@ export const SignIn: React.FC = () => {
             message: response.data.message || "OTP sent to your mobile number",
             placement: "bottomRight",
           });
-          localStorage.setItem("c_id", response.data.c_id);
+          // localStorage.setItem("c_idd", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
         }
         else if (
@@ -108,7 +108,7 @@ export const SignIn: React.FC = () => {
             message: response.data.message || "OTP sent to your mobile number",
             placement: "bottomRight",
           });
-          localStorage.setItem("c_id", response.data.c_id);
+          // localStorage.setItem("c_idd", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
         }
 
@@ -195,7 +195,7 @@ export const SignIn: React.FC = () => {
 
 
   const handleVerifyOtp = async () => {
-    setIsLoading(true); 
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append("mobile", mobile);
@@ -206,11 +206,20 @@ export const SignIn: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP",
         formData
       );
- 
+
+      const addressDetails = response.data.CustomerDetail[0].address_details;
+      const parsedDetails = typeof addressDetails === "string" ? JSON.parse(addressDetails) : addressDetails;
+
+      if (Array.isArray(parsedDetails) && parsedDetails.length === 0) {
+        localStorage.setItem("c_idd", response.data.CustomerDetail[0].id);
+
+      } else {
+        localStorage.setItem("c_id", response.data.CustomerDetail[0].id);
+      }
 
       if (response?.data?.status === "success") {
         const customer = response?.data?.CustomerDetail?.[0];
-
+       
         if (!customer) {
           throw new Error("Customer detail is missing in the response.");
         }
@@ -219,7 +228,7 @@ export const SignIn: React.FC = () => {
         const profileId = customer?.id ?? null;
         const areaId = addressDetails?.[0]?.area_id ?? null;
 
-  
+
         if (profileId) {
           localStorage.setItem("profileId", JSON.stringify(profileId));
         }
@@ -235,11 +244,13 @@ export const SignIn: React.FC = () => {
             placement: "bottomRight",
           });
           navigate(Routes.NewUsereAddAddress);
+         
         } else {
           notification.success({
             message: "OTP Verified.",
             placement: "bottomRight",
           });
+          navigate(0);
           navigate(Routes.TabNavigator);
           dispatch(fetchWishlist());
         }
