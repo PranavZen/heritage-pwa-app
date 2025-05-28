@@ -94,7 +94,7 @@ export const Home: React.FC = () => {
 
   const renderMenu = (): JSX.Element => {
     return (
-      <section className="product-category-section">
+      <section className="product-category-section" style={{ padding: "20px 0px 15px", marginBottom: 25 }}>
         <components.BlockHeading
           title="Product Category"
           viewAllOnClick={() => {
@@ -179,13 +179,13 @@ export const Home: React.FC = () => {
 
   const renderRecommendedForYou = (): JSX.Element => {
     return (
-      <div style={{ marginBottom: 40 }}>
+      <div style={{ marginBottom: 30 }}>
         <components.BlockHeading
           title="Recommended for you"
           containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 14 }}
         />
         <div
-          style={{ width: "100%", padding: "0 20px" }}
+          style={{ width: "100%", padding: "0px 0px 0px 20px" }}
           className="swiper-container"
         >
           <Swiper
@@ -195,14 +195,10 @@ export const Home: React.FC = () => {
             pagination={false}
             navigation={true}
             mousewheel={true}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
+            autoplay={false}
             breakpoints={{
               320: {
-                slidesPerView: 1.8,
+                slidesPerView: 1.6,
                 spaceBetween: 10,
               },
               480: {
