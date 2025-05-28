@@ -376,6 +376,24 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 </span>
               )}
 
+
+              {String(dish.order_type) === '1' ?
+                <>
+                  <span
+                    className="t14"
+                    style={{
+                      color: "var(--main-color)",
+                      fontWeight: 600,
+                      fontSize: 16,
+                    }}
+                  >
+                    Total: ₹ {Number(dish.price || 0) * (Number(dish.no_of_deliveries || 0) - (Number(dish?.no_of_free_deliveries) || 0))}
+                  </span>
+                </> :
+                <>
+                </>}
+
+
               <span
                 className="t14"
                 style={{ color: "var(--main-color)", fontWeight: 500 }}
@@ -389,14 +407,35 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                   className="t14"
                   style={{ color: "var(--main-color)", fontWeight: 500 }}
                 >
-                  Deliveries : {noOfDeliveries}({dish.packages_name && dish.packages_name !== "0" && (
-                <span
-                  // className="t14"
-                  // style={{ color: "var(--main-color)", fontWeight: 500 }}
-                >
-                   {dish.packages_name}
-                </span>
-              )})
+                  Deliveries: {
+                    Math.max(0, (Number(noOfDeliveries) || 0) - (Number(dish?.no_of_free_deliveries) || 0))
+                  }
+
+                  {String(dish.order_type) === '1' ? <>
+                    <span
+                      className="t14"
+                      style={{ color: "var(--main-color)", fontWeight: 500 }}
+                    >
+
+                      + {Number(dish.no_of_free_deliveries) * Number(dish.quantity)}
+
+
+                      ({dish.packages_name && dish.packages_name !== "0" && (
+                        <span
+                        // className="t14"
+                        // style={{ color: "var(--main-color)", fontWeight: 500 }}
+                        >
+                          {dish.packages_name}
+                        </span>
+                      )})
+
+                    </span> </> : <> </>}
+
+
+
+
+
+                  {/* {dish.packages_name && dish.packages_name !== "0" } */}
                 </span>
               )}
 

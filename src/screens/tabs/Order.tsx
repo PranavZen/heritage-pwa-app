@@ -1135,6 +1135,7 @@ export const Order: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={isChecked}
+                   disabled={superPoint?.available_points === 0}
                   onChange={handleCheckboxChange}
                 />
                 <div className="silver-coin">
