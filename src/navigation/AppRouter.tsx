@@ -5,11 +5,12 @@ import { screens } from '../screens';
 import { TabNavigator } from './TabNavigator';
 import { components } from '../components';
 import { Routes } from '../routes';
+import ProtectedComponent from '../components/ProtectedComponent';
 
 
 
 const AppLayout = () => {
- 
+
   return (
     <components.FooterWrapper>
       <Outlet />
@@ -122,9 +123,13 @@ const stack = createBrowserRouter([
       },
       {
         path: Routes.TabNavigator,
-        element: <TabNavigator />,
+        element: (
+          <ProtectedComponent>
+            <TabNavigator />
+          </ProtectedComponent>
+        ),
       },
-  
+
       {
         path: Routes.MyAddress,
         element: <screens.MyAddress />,

@@ -3,14 +3,13 @@ import { RouterProvider, createBrowserRouter, Navigate } from 'react-router-dom'
 import { Routes } from '../routes';
 import { screens } from '../screens';
 import { TabNavigator } from './TabNavigator';
+import ProtectedComponent from '../components/ProtectedComponent';
 
-
+// console.log("eeee", ProtectedComponent);
 
 const c_id = localStorage.getItem('c_id');
 const cityId = localStorage.getItem('cityId');
 
-
-console.log("sss", cityId)
 
 const stack = createBrowserRouter([
   {
@@ -113,10 +112,20 @@ const stack = createBrowserRouter([
     path: Routes.EditProfile,
     element: <screens.EditProfile />,
   },
+  // {
+  //   path: Routes.TabNavigator,
+  //   element: <TabNavigator />,
+
+  // },
   {
     path: Routes.TabNavigator,
-    element: <TabNavigator />,
+    element: (
+      <ProtectedComponent>
+        <TabNavigator />
+      </ProtectedComponent>
+    ),
   },
+
   {
     path: Routes.MyAddress,
     element: <screens.MyAddress />,
@@ -157,26 +166,26 @@ const stack = createBrowserRouter([
     path: Routes.CouponList,
     element: <screens.CouponList />
   },
-  
+
   {
     path: Routes.CouponSummary,
     element: <screens.CouponSummary />
   },
   {
     path: Routes.SubscriptionOrderCheck,
-    element:<screens.SubscriptionOrderCheck/>
+    element: <screens.SubscriptionOrderCheck />
   },
   {
     path: Routes.SelectMyAddress,
-    element:<screens.SelectMyAddress/>
+    element: <screens.SelectMyAddress />
   },
   {
     path: Routes.ThankYouPage,
-    element:<screens.ThankYouPage/>
+    element: <screens.ThankYouPage />
   },
   {
     path: Routes.NewUsereAddAddress,
-    element:<screens.NewUsereAddAddress/>
+    element: <screens.NewUsereAddAddress />
   },
   // {
   //   path: Routes.OrderItemCoupon,

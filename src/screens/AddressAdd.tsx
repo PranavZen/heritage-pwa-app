@@ -25,6 +25,7 @@ interface Address {
   building_id?: string;
   city_name?: string;
   state_name?: string;
+  order_active?:string;
 }
 
 export const AddressAdd: React.FC = () => {
@@ -62,10 +63,8 @@ export const AddressAdd: React.FC = () => {
     city_name: "",
     state_name: "",
     area_name: "NallaSupara (West)",
+    order_active:""
   });
-
-
-  // console.log("newAddress", newAddress);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [states, setStates] = useState<any[]>([]);
@@ -312,7 +311,18 @@ export const AddressAdd: React.FC = () => {
     }
   };
 
+  
   const updateAddress = async () => {
+
+     if (newAddress.order_active === '1') {
+    notification.warning({
+      message: "Address Cannot Be Updated",
+      description: "You have an active order. This address cannot be modified at the moment.",
+      placement: 'topRight',
+      duration: 4,
+    });
+    return; 
+  }
     const formData = new FormData();
     formData.append("address_id", newAddress.id || "");
     formData.append("c_id", newAddress.c_id);

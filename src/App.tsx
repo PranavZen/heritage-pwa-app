@@ -23,10 +23,9 @@ function App() {
 
   return (
     <div id="app">
-
       <AppRouter />
       <Loader />
-
+     
     </div>
   );
 }
