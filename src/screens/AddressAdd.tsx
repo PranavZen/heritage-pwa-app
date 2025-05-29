@@ -35,7 +35,7 @@ export const AddressAdd: React.FC = () => {
   const { cityID } = location.state || {};
 
 
-  // console.log("cityIDcityID", cityID)
+  console.log("cityIDcityID", cityID)
 
   useEffect(() => {
     if (cityID) {
@@ -65,6 +65,8 @@ export const AddressAdd: React.FC = () => {
     area_name: "NallaSupara (West)",
     order_active:""
   });
+
+  console.log("id", newAddress)
 
   const [loading, setLoading] = useState<boolean>(false);
   const [states, setStates] = useState<any[]>([]);
@@ -313,7 +315,6 @@ export const AddressAdd: React.FC = () => {
 
   
   const updateAddress = async () => {
-
      if (newAddress.order_active === '1') {
     notification.warning({
       message: "Address Cannot Be Updated",
@@ -481,6 +482,7 @@ export const AddressAdd: React.FC = () => {
           formData.append('pincode', newAddress.pincode);
           const response = await axios.post(`https://heritage.bizdel.in/app/consumer/services_v11/getAreaByPincode`, formData);
           setAreaIdByPincode(response.data.areaDetails);
+          console.log('bbbbb', response);
         }
       } catch (error) {
         console.error("Error fetching area details:", error);
@@ -513,10 +515,8 @@ export const AddressAdd: React.FC = () => {
       <section className="scrollable">
         <form onSubmit={handleSubmit} className="form-container">
           <div className="form-header">
-           
             <h2>{newAddress.id ? "Update Your Address" : "Add New Address"}</h2>
           </div>
-
           <div className="form-section">
             <h3>Personal Information</h3>
             <div className="inputWrap">

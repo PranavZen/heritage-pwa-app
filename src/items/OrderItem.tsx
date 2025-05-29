@@ -417,7 +417,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                       style={{ color: "var(--main-color)", fontWeight: 500 }}
                     >
 
-                      + {Number(dish.no_of_free_deliveries) * Number(dish.quantity)}
+                      + ({Number(dish.no_of_free_deliveries) * Number(dish.quantity)} FD)
 
 
                       ({dish.packages_name && dish.packages_name !== "0" && (
