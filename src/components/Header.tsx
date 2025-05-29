@@ -394,28 +394,29 @@ export const Header: React.FC<Props> = ({
       </div>
     );
   };
-  // *******************************************
-  const [showInstallPrompt, setShowInstallPrompt] = useState(() => {
-    const storedValue = localStorage.getItem('hideInstallPrompt');
-    return storedValue !== 'true';
-  });
-
+  // *******************************************************************************************************
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
+  const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = () =>
+    window.matchMedia('(display-mode: standalone)').matches ||
+    (window.navigator as any)?.standalone;
 
-  
-
-
-  const hideInstallPrompt = () => {
-    setShowInstallPrompt(false);
-  };
 
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault(); // Prevent the default mini-infobar from appearing
-      setDeferredPrompt(e); // Store the event to trigger later
-      setIsInstallable(true); // Allow showing the "Add to Home Screen" button
+    if (isInStandaloneMode()) {
+      setShowInstallPrompt(false);
+      setIsInstallable(false);
+      return;
+    }
+
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallPrompt(true);
+      setIsInstallable(true);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -426,28 +427,22 @@ export const Header: React.FC<Props> = ({
   }, []);
 
   const handleInstallClick = () => {
+    if (!deferredPrompt || isInStandaloneMode()) return; 
 
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult: any) => {
-        // setDeferredPrompt(null); 
-        setIsInstallable(false);
-        localStorage.setItem('hideInstallPrompt', 'true');
+    deferredPrompt.prompt();
+
+    deferredPrompt.userChoice.then((choiceResult: any) => {
+      if (choiceResult.outcome === 'accepted') {
         setShowInstallPrompt(false);
-      });
-    }
+        setIsInstallable(false);
+        setDeferredPrompt(null); 
+      }
+    });
   };
 
-  const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-  const isInStandaloneMode = () => 'standalone' in window.navigator && window.navigator['standalone'];
-
-console.log("PWAisinstalled",isInStandaloneMode());
-
-  useEffect(() => {
-  if (isInStandaloneMode()){
+  const hideInstallPrompt = () => {
     setShowInstallPrompt(false);
-  }
-}, []);
+  };
 
 
   const AddToHomeScreen = () => {
@@ -455,7 +450,7 @@ console.log("PWAisinstalled",isInStandaloneMode());
     return (
       <>
         {/* Android Install Button */}
-        {true && !isIos() &&  (
+        {true && !isIos() && (
           <div className="enhanced-floating-container"
           >
             <div className="floating-button-wrapper" >

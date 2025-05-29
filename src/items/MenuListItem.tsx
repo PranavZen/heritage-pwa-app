@@ -39,7 +39,7 @@ export const MenuListItem: React.FC<Props> = ({
   );
 
   const [orderType, setOrderType] = useState<number>(0);
-  console.log("orderType", orderType);
+  // console.log("orderType", orderType);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
   const [refreshData, setRefreshData] = useState<boolean>(false);
 

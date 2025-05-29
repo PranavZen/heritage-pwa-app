@@ -56,8 +56,8 @@ export const SubscriptionOrder: React.FC = () => {
 
   const [subscriptionnextTotalData, SetSubscriptionTotalData] = useState<number>(0)
 
-  console.log("mm", oneTimeNextId);
-  console.log("mmm", nextId);
+  // console.log("mm", oneTimeNextId);
+  // console.log("mmm", nextId);
 
 
   // console.log("qqqqqq", pauseToggle);
@@ -401,7 +401,7 @@ export const SubscriptionOrder: React.FC = () => {
         formData
       )
       .then((response) => {
-        console.log("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", response);
+        // console.log("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", response);
         if (response.data.subscriptionListing && Array.isArray(response.data.subscriptionListing)) {
           setSubscriptionData(response.data.subscriptionListing);
           setSubscriptionNextId(response.data.next[0].next_id || "0")
@@ -440,7 +440,7 @@ export const SubscriptionOrder: React.FC = () => {
         setOneTimeNextId(response.data.next[0].next_id || "0")
         setOneTimeTotalData(response.data.next[0].total || 0);
 
-        console.log("kkkkkkkkkkkkkkkkkkk", response.data.next[0].next_id);
+        // console.log("kkkkkkkkkkkkkkkkkkk", response.data.next[0].next_id);
       })
       .catch((error) => {
         console.error("Error fetching one-time order data", error);
