@@ -363,6 +363,13 @@ export const Order: React.FC = () => {
     );
     formData.append("redeem_reward_points", String(PassPointsInCheckout));
 
+    const couponCode = localStorage.getItem("couponCode");
+
+    if (couponCode) {
+      formData.append("is_coupon_appiled", "1");
+      formData.append("coupon_code", couponCode);
+    }
+
     try {
       const response = await axios.post(
         `https://heritage.bizdel.in/app/consumer/services_v11/placeOrder`,
@@ -1042,10 +1049,10 @@ export const Order: React.FC = () => {
                   return (
                     total +
                     elem.quantity *
-                      elem.price *
-                      (elem.no_of_deliveries === "0"
-                        ? "1"
-                        : elem.no_of_deliveries)
+                    elem.price *
+                    (elem.no_of_deliveries === "0"
+                      ? "1"
+                      : elem.no_of_deliveries)
                   );
                 }, 0)
                 .toFixed(2)}
@@ -1075,17 +1082,17 @@ export const Order: React.FC = () => {
             <span className="t14">
               ₹{" "}
               {superPoint &&
-              superPoint.optionListing &&
-              superPoint.optionListing.length > 0
+                superPoint.optionListing &&
+                superPoint.optionListing.length > 0
                 ? superPoint.optionListing
-                    .map((elem: any) => {
-                      return (
-                        (elem.price - elem.discount) *
-                        elem.no_of_free_deliveries *
-                        elem.quantity
-                      );
-                    })
-                    .reduce((acc: number, current: number) => acc + current, 0)
+                  .map((elem: any) => {
+                    return (
+                      (elem.price - elem.discount) *
+                      elem.no_of_free_deliveries *
+                      elem.quantity
+                    );
+                  })
+                  .reduce((acc: number, current: number) => acc + current, 0)
                 : 0}
             </span>
           </div>
@@ -1135,6 +1142,7 @@ export const Order: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={isChecked}
+                  disabled={superPoint?.available_points === 0}
                   onChange={handleCheckboxChange}
                 />
                 <div className="silver-coin">
@@ -1191,9 +1199,8 @@ export const Order: React.FC = () => {
             </div>
             <div className="coins-redemption">
               <span
-                className={`t14 redemption-amount ${
-                  amountAnimating ? "animate" : ""
-                }`}
+                className={`t14 redemption-amount ${amountAnimating ? "animate" : ""
+                  }`}
               >
                 ₹{redeemedAmount ? <>{redeemedAmount}</> : <>0</>}
               </span>
@@ -1224,7 +1231,7 @@ export const Order: React.FC = () => {
                       elem.no_of_deliveries === "0"
                         ? 1
                         : Number(elem.no_of_deliveries) -
-                          (Number(elem.no_of_free_deliveries) || 0);
+                        (Number(elem.no_of_free_deliveries) || 0);
                     const lineTotal =
                       Number(elem.quantity) *
                       Number(elem.price) *
@@ -1288,7 +1295,7 @@ export const Order: React.FC = () => {
                       elem.no_of_deliveries === "0"
                         ? 1
                         : Number(elem.no_of_deliveries) -
-                          (Number(elem.no_of_free_deliveries) || 0);
+                        (Number(elem.no_of_free_deliveries) || 0);
                     const lineTotal =
                       Number(elem.quantity) *
                       Number(elem.price) *

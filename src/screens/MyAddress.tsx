@@ -210,8 +210,6 @@ export const MyAddress: React.FC = () => {
     };
 
 
-
-
     return (
       <section className="scrollable">
         <div className="newAddressBtnWrap">

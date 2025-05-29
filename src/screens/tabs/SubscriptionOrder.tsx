@@ -44,7 +44,20 @@ export const SubscriptionOrder: React.FC = () => {
   const [pauseToggle, SetPauseToggle] = useState<{ [key: number]: boolean }>({});
   const [currentSubscription, setCurrentSubscription] = useState<any>(null);
 
-  // console.log("currentSubscriptioncurrentSubscription", currentSubscription);
+  const [oneTimeNextId, setOneTimeNextId] = useState<number>(0);
+
+  const [oneTimeTotalData, setOneTimeTotalData] = useState<number>(0);
+
+  const [nextId, setNextId] = useState<number>(0)
+
+  const [subscriptionNextId, setSubscriptionNextId] = useState<number>(0);
+
+  const [subscriptionnextId, SetSubscriptionNextId] = useState<number>(0)
+
+  const [subscriptionnextTotalData, SetSubscriptionTotalData] = useState<number>(0)
+
+  console.log("mm", oneTimeNextId);
+  console.log("mmm", nextId);
 
 
   // console.log("qqqqqq", pauseToggle);
@@ -82,7 +95,7 @@ export const SubscriptionOrder: React.FC = () => {
     order_id: string;
     order_status_id: string;
     payment_method: string;
-    order_option_id:string;
+    order_option_id: string;
   }
   const [orderToDelete, setOrderToDelete] = useState<orderToDelete | null>(null);
 
@@ -375,12 +388,12 @@ export const SubscriptionOrder: React.FC = () => {
 
   useEffect(() => {
     fetchSubscriptionData();
-  }, []);
+  }, [subscriptionnextId]);
 
   const fetchSubscriptionData = () => {
     const formData = new FormData();
     formData.append("c_id", c_id || "");
-    formData.append("next_id", "0");
+    formData.append("next_id", String(subscriptionnextId) || "0");
     setIsLoading(true);
     axios
       .post(
@@ -388,10 +401,11 @@ export const SubscriptionOrder: React.FC = () => {
         formData
       )
       .then((response) => {
-        // console.log("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", response);
+        console.log("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", response);
         if (response.data.subscriptionListing && Array.isArray(response.data.subscriptionListing)) {
           setSubscriptionData(response.data.subscriptionListing);
-
+          setSubscriptionNextId(response.data.next[0].next_id || "0")
+          SetSubscriptionTotalData(response.data.next[0].total);
           const initialPauseToggle: { [key: number]: boolean } = response.data.subscriptionListing.reduce((acc: any, curr: any) => {
             acc[curr.subscription_id] = curr.status === 'Paused';
             return acc;
@@ -412,7 +426,7 @@ export const SubscriptionOrder: React.FC = () => {
   const fetchOneTimeOrderData = () => {
     const formData = new FormData();
     formData.append("c_id", c_id || "");
-    formData.append("next_id", "0");
+    formData.append("next_id", String(nextId) || '0');
     setIsLoading(true);
 
     axios
@@ -423,8 +437,10 @@ export const SubscriptionOrder: React.FC = () => {
       .then((response) => {
         setOneTimeOrderData(response.data.ordersListing);
         setIsLoading(false);
+        setOneTimeNextId(response.data.next[0].next_id || "0")
+        setOneTimeTotalData(response.data.next[0].total || 0);
 
-        // console.log("kkkkkkkkkkkkkkkkkkk", response);
+        console.log("kkkkkkkkkkkkkkkkkkk", response.data.next[0].next_id);
       })
       .catch((error) => {
         console.error("Error fetching one-time order data", error);
@@ -435,7 +451,7 @@ export const SubscriptionOrder: React.FC = () => {
   useEffect(() => {
     fetchSubscriptionData();
     fetchOneTimeOrderData();
-  }, []);
+  }, [nextId]);
 
   // Set up Intersection Observer for card animations
   useEffect(() => {
@@ -552,13 +568,13 @@ export const SubscriptionOrder: React.FC = () => {
         {activeTab === "subscriptions" && (
           <div className="ordersContainer">
             <h2>Subscription Orders</h2>
-            <div className="scrollable-containers" style={{maxHeight: "100%"}}>
+            <div className="scrollable-containers" style={{ maxHeight: "100%" }}>
               <div className="card-list">
                 {Array.isArray(subscriptionData) &&
                   subscriptionData.length > 0 ? (
                   subscriptionData.map((subscription) => (
 
-                    <div  className="card" key={subscription.subscription_id}>
+                    <div className="card" key={subscription.subscription_id}>
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
@@ -699,6 +715,32 @@ export const SubscriptionOrder: React.FC = () => {
                 )}
               </div>
             </div>
+
+
+            <button
+              onClick={() =>
+                SetSubscriptionNextId(prev =>
+                  Math.max(Math.floor(Number(prev) / 20) * 20 - 20, 0)
+                )
+              }
+              disabled={Number(subscriptionNextId) === 0}
+            >
+              Previous
+            </button>
+
+            <button
+              onClick={() =>
+                SetSubscriptionNextId(prev => {
+                  const nextValue = Math.floor((Number(prev) + 20) / 20) * 20;
+                  return nextValue >= subscriptionnextTotalData ? prev : nextValue;
+                })
+              }
+              disabled={subscriptionNextId === subscriptionnextTotalData}
+            >
+              Next
+            </button>
+
+
           </div>
         )}
 
@@ -752,7 +794,7 @@ export const SubscriptionOrder: React.FC = () => {
         {activeTab === "one-time-orders" && (
           <div className="ordersContainer">
             <h2>One Time Orders</h2>
-            <div className="scrollable-containers" style={{maxHeight: "100%"}}>
+            <div className="scrollable-containers" style={{ maxHeight: "100%" }}>
               <div className="card-list">
                 {Array.isArray(oneTimeOrderData) &&
                   oneTimeOrderData.length > 0 ? (
@@ -816,17 +858,16 @@ export const SubscriptionOrder: React.FC = () => {
 
 
 
-
                         <div className="orderDateRightBox box50">
                           <div className="svgWrap">
-                             <svg
+                            <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
                               width={24}
                               height={24}
                             >
                               <path d="M19,2h-1V1c0-.552-.447-1-1-1s-1,.448-1,1v1H8V1c0-.552-.447-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5ZM5,4h14c1.654,0,3,1.346,3,3v1H2v-1c0-1.654,1.346-3,3-3Zm14,18H5c-1.654,0-3-1.346-3-3V10H22v9c0,1.654-1.346,3-3,3Zm0-8c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h12c.553,0,1,.448,1,1Zm-7,4c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h5c.553,0,1,.448,1,1Z" />
-                            </svg>  
+                            </svg>
                           </div>
                           <div className="innerBox">
                             {/* <p>Delivery : </p> */}
@@ -861,6 +902,32 @@ export const SubscriptionOrder: React.FC = () => {
                 )}
               </div>
             </div>
+
+
+            <button
+              onClick={() =>
+                setNextId(prev =>
+                  Math.max(Math.floor(Number(prev) / 20) * 20 - 20, 0)
+                )
+              }
+              disabled={Number(oneTimeNextId) === 0}
+            >
+              Previous
+            </button>
+
+            <button
+              onClick={() =>
+                setNextId(prev => {
+                  if (oneTimeNextId === oneTimeTotalData) {
+                    return prev; 
+                  }
+                  const nextValue = Math.floor((Number(prev) + 20) / 20) * 20;
+                  return nextValue;
+                })
+              }
+            >
+              Next
+            </button>
           </div>
         )}
 
@@ -891,15 +958,15 @@ export const SubscriptionOrder: React.FC = () => {
 
   // ****************header and Footer**************************
 
-    // const renderHeader = (): JSX.Element => {
-    //   return (
-    //     <components.Header showGoBack={true} showBasket={true} />
-    //   );
-    // };
+  // const renderHeader = (): JSX.Element => {
+  //   return (
+  //     <components.Header showGoBack={true} showBasket={true} />
+  //   );
+  // };
 
-    // const renderFooter = (): JSX.Element => {
-    //   return <components.Footer />;
-    // };
+  // const renderFooter = (): JSX.Element => {
+  //   return <components.Footer />;
+  // };
 
   return (
     <div id="screen" style={{ opacity }}>
