@@ -404,7 +404,7 @@ export const Header: React.FC<Props> = ({
   const [isInstallable, setIsInstallable] = useState(false);
 
 
-  
+
 
 
   const hideInstallPrompt = () => {
@@ -430,7 +430,7 @@ export const Header: React.FC<Props> = ({
     if (deferredPrompt) {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult: any) => {
-        // setDeferredPrompt(null); 
+        // setDeferredPrompt(null);
         setIsInstallable(false);
         localStorage.setItem('hideInstallPrompt', 'true');
         setShowInstallPrompt(false);
@@ -484,22 +484,20 @@ console.log("PWAisinstalled",isInStandaloneMode());
 
         {/* iOS Instruction Message */}
         {isIos() && !isInStandaloneMode() && (
-          <div
-            style={{
-              position: 'fixed',
-              bottom: '20px',
-              left: '20px',
-              backgroundColor: '#f8f9fa',
-              padding: '10px 20px',
-              borderRadius: '5px',
-              fontSize: '16px',
-              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-              zIndex: 1000,
-            }}
-          >
-            <p>
-              To install this app on your iPhone/iPad, tap <strong>Share</strong> and then <strong>"Add to Home Screen"</strong>.
-            </p>
+          <div className="ios-instruction-container">
+            <div className="ios-instruction-message">
+              <button
+                onClick={hideInstallPrompt}
+                className="ios-close-btn"
+                title="Hide install prompt"
+                aria-label="Hide install prompt"
+              >
+                ×
+              </button>
+              <p className="ios-instruction-text">
+                To install this app on your iPhone/iPad, tap <strong>Share</strong> and then <strong>"Add to Home Screen"</strong>.
+              </p>
+            </div>
           </div>
         )}
       </>

@@ -758,7 +758,6 @@ export const Order: React.FC = () => {
             <span className="spinner-container">
               <span className="spinner"></span>
             </span>
-            Processing...
           </>
         ) : (
           <>
