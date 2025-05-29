@@ -317,8 +317,8 @@ details summary {
       background-color: #1a712e;
       border-radius: 50%;
       padding: 10px;
-      svg{
-        path{
+      svg {
+        path {
           fill: #fff;
         }
       }
@@ -522,7 +522,8 @@ details summary {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -935,7 +936,7 @@ details summary {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 15px;
+  // margin-bottom: 15px;
   background-color: #d2e7c4;
   padding: 15px;
   border-radius: 12px;
@@ -951,8 +952,8 @@ details summary {
 
   // Responsive layout for small devices
   @media screen and (max-width: 767px) {
-    flex-direction: column;
-    gap: 15px;
+    // flex-direction: column;
+    gap: 5px;
     padding: 12px;
   }
 
@@ -964,6 +965,7 @@ details summary {
 
     @media screen and (max-width: 767px) {
       width: 100%;
+      gap: 5px;
     }
 
     .cartItmImgWrap {
@@ -979,8 +981,8 @@ details summary {
       flex-shrink: 0;
 
       @media screen and (max-width: 767px) {
-        width: 70px;
-        height: 70px;
+        width: 35px;
+        height: 35px;
       }
 
       img {
@@ -999,27 +1001,36 @@ details summary {
     .cartItemDetailsWrap {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 2px;
       flex: 1;
 
       @media screen and (max-width: 767px) {
         padding-right: 0;
       }
-
+      .delText{
+        font-size: 18px;
+        color: #999;
+        @media screen and (max-width: 767px) {
+        font-size: 12px;
+      }
+      }
       .cartLable {
         font-size: 14px;
         font-weight: 600;
         color: #1a712e;
+        @media screen and (max-width: 767px) {
+          font-size: 10px;
+        }
       }
 
       // Fix for long text overflow
       .t14 {
-        white-space: normal !important;
-        width: auto !important;
-        overflow: visible !important;
-
         @media screen and (max-width: 767px) {
-          font-size: 14px !important;
+          font-size: 10px !important;
+          white-space: nowrap;
+          width: 145px;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
     }
@@ -1031,10 +1042,10 @@ details summary {
     justify-content: center;
 
     @media screen and (max-width: 767px) {
-      width: 100%;
-      flex-direction: row;
-      justify-content: flex-end;
-      align-items: center;
+      // width: 100%;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-end;
       gap: 10px;
     }
 
@@ -1050,7 +1061,7 @@ details summary {
 
       @media screen and (max-width: 767px) {
         margin-top: 0;
-        width: auto;
+        width: 75px;
       }
 
       &:hover {
@@ -1077,9 +1088,9 @@ details summary {
         }
 
         @media screen and (max-width: 767px) {
-          padding: 6.5px 10px;
-          font-size: 14px;
-          height: 35px;
+          padding: 6.5px 4px;
+          font-size: 10px;
+          height: 25px;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -1123,6 +1134,9 @@ details summary {
           display: flex;
           justify-content: center;
           align-items: center;
+          @media screen and (max-width:767px){
+            font-size: 12px;
+          }
         }
 
         @media screen and (max-width: 767px) {
@@ -1820,6 +1834,7 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   padding: 0 20px;
   height: 100vh;
   section {
@@ -2498,6 +2513,7 @@ select {
   margin: 0 0 8px;
   color: #2e7d32;
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .divider {
@@ -2793,4 +2809,13 @@ select {
 .rowLine {
   padding-bottom: 13px;
   margin-bottom: 20px;
+}
+
+.redSmallText {
+  font-size: 14px;
+  color: rgb(255, 26, 26);
+  margin-left: 10px;
+  @media screen and (max-width: 767px) {
+    font-size: 10px;
+  }
 }

@@ -12,8 +12,8 @@ import {
 } from "../store/slices/wishlistSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { components } from '../components';
-import DatePicker from 'react-datepicker';
+import { components } from "../components";
+import DatePicker from "react-datepicker";
 import { addItemToCartAPI } from "../store/slices/addItemToCartApi";
 
 type Props = {
@@ -34,14 +34,14 @@ export const MenuListItem: React.FC<Props> = ({
   const [quantity, setQuantity] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
 
-
-  const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
+  const shouldRefresh = useSelector(
+    (state: RootState) => state.cartSlice.shouldRefresh
+  );
 
   const [orderType, setOrderType] = useState<number>(0);
   console.log("orderType", orderType);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
-  const [refreshData, setRefreshData]= useState<boolean>(false)
-
+  const [refreshData, setRefreshData] = useState<boolean>(false);
 
   useEffect(() => {
     if (shouldRefresh) {
@@ -49,7 +49,6 @@ export const MenuListItem: React.FC<Props> = ({
       setShouldRefresh(false);
     }
   }, [shouldRefresh]);
-
 
   // console.log("aaasssss", cartItemId);
 
@@ -86,7 +85,6 @@ export const MenuListItem: React.FC<Props> = ({
           dispatch(setCartCount(Number(response.data.cart_count)));
           setOrderType(0);
           dispatch(setShouldRefresh(true));
-
         } else {
           notification.error({
             message: "Error",
@@ -109,7 +107,6 @@ export const MenuListItem: React.FC<Props> = ({
     return tomorrow.toISOString().split("T")[0];
   };
 
-
   const fetchCartData = async () => {
     try {
       const formData = new FormData();
@@ -131,7 +128,6 @@ export const MenuListItem: React.FC<Props> = ({
         );
         setLoading(true);
 
-
         if (matchedItem) {
           setQuantity(Number(matchedItem.quantity) || 1);
           setCartItemId(String(matchedItem.cart_id));
@@ -143,7 +139,7 @@ export const MenuListItem: React.FC<Props> = ({
         }
       }
     } catch (error) {
-      console.error('Error fetching cart data:', error);
+      console.error("Error fetching cart data:", error);
     }
   };
 
@@ -151,48 +147,49 @@ export const MenuListItem: React.FC<Props> = ({
     fetchCartData();
   }, [cityId, c_id, dish, shouldRefresh, refreshData]);
 
-
   const HandleAddToCart = async () => {
     if (!c_id) {
       Modal.confirm({
-        title: 'Please Sign In',
-        content: 'You need to sign in to add items to your cart.',
+        title: "Please Sign In",
+        content: "You need to sign in to add items to your cart.",
         onOk() {
-          navigate('/');
+          navigate("/");
         },
-        onCancel() { },
-        cancelText: 'Cancel',
-        okText: 'Sign In',
+        onCancel() {},
+        cancelText: "Cancel",
+        okText: "Sign In",
       });
       return;
     }
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append('c_id', c_id);
-      formData.append('product_id', String(dish.product_id));
-      formData.append('package_id', '13');
-      formData.append('product_option_id', String(dish.product_option_id));
-      formData.append('product_option_value_id', String(dish.product_option_value_id));
-      formData.append('quantity', '1');
-      formData.append('weight', String(dish.weight));
-      formData.append('weight_unit', String(dish.weight_unit));
-      formData.append('delivery_preference', '0');
-      formData.append('no_of_deliveries', '0');
-      formData.append('order_date', getTomorrowDate());
-      formData.append('order_type', '2');
+      formData.append("c_id", c_id);
+      formData.append("product_id", String(dish.product_id));
+      formData.append("package_id", "13");
+      formData.append("product_option_id", String(dish.product_option_id));
+      formData.append(
+        "product_option_value_id",
+        String(dish.product_option_value_id)
+      );
+      formData.append("quantity", "1");
+      formData.append("weight", String(dish.weight));
+      formData.append("weight_unit", String(dish.weight_unit));
+      formData.append("delivery_preference", "0");
+      formData.append("no_of_deliveries", "0");
+      formData.append("order_date", getTomorrowDate());
+      formData.append("order_type", "2");
 
       const response = await axios.post(
-        'https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart',
+        "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
         formData
       );
 
-      if (response.data.status === 'success') {
+      if (response.data.status === "success") {
         notification.success({
-          message: 'Success',
+          message: "Success",
           description: response.data.message,
         });
-
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
         // setQuantity(1);
@@ -211,17 +208,83 @@ export const MenuListItem: React.FC<Props> = ({
         dispatch(setShouldRefresh(true));
       } else {
         notification.error({
-          message: 'Error',
-          description: response.data.message || 'Something went wrong.',
+          message: "Error",
+          description: response.data.message || "Something went wrong.",
         });
-
       }
     } catch (error) {
       // console.error('Error adding to cart:', error);
       notification.error({
-        message: 'Error',
-        description: 'Failed to add item to cart.',
+        message: "Error",
+        description: "Failed to add item to cart.",
       });
+    }
+  };
+  const handleupdatetheAddToCartt = async () => {
+    if (deliveries < 1) {
+      notification.error({ message: "Please select valid delivery days." });
+      return;
+    }
+
+    const c_id = localStorage.getItem("c_id");
+    if (!cartItemId) {
+      Modal.confirm({
+        title: "Please Add the Item",
+        content: "You need to add to cart first.",
+        onCancel() {},
+        cancelText: "Cancel",
+        okText: "Ok",
+      });
+      return;
+    }
+
+    if (!c_id) {
+      Modal.confirm({
+        title: "Please Sign In",
+        content: "You need to sign in to update the cart.",
+        onOk() {
+          navigate("/");
+        },
+        onCancel() {},
+        cancelText: "Cancel",
+        okText: "Sign In",
+      });
+      return;
+    }
+    setIsModalOpen(false);
+    // setIsAlternateModalOpen(false);
+
+    const formData = new FormData();
+    // Date validation
+    const formattedDate = startDate
+      ? new Date(startDate).toISOString().split("T")[0]
+      : new Date().toISOString().split("T")[0];
+    formData.append("id", cartItemId || "");
+    formData.append("c_id", c_id);
+    formData.append("package_days", "mon,tue,wed,thu,fri,sat,sun");
+    formData.append("package_id", "13");
+    formData.append("quantity", String(quantity));
+    formData.append("delivery_preference", String(deliveryPreference));
+    formData.append("no_of_deliveries", String(deliveries));
+    formData.append("order_date", formattedDate);
+    const orderType = deliveryPreference !== "0" ? "1" : "2";
+    formData.append("order_type", orderType);
+    try {
+      const response = await axios.post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
+        formData
+      );
+
+      // console.log('zzz', response);
+
+      if (response.data.status === "success") {
+        notification.success({ message: response.data.message });
+        // window.location.reload();
+      } else {
+        notification.error({ message: "Failed to update cart. Try again!" });
+      }
+    } catch (error) {
+      notification.error({ message: "Error updating cart!" });
     }
   };
   const handleUpdateCart = async (newQuantity: number) => {
@@ -325,16 +388,15 @@ export const MenuListItem: React.FC<Props> = ({
 
   // ****************************************************************************************
 
-
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [startDate, setStartDate] = useState(getTomorrowDate());
-  const [deliveryPreference, setDeliveryPreference] = useState('1');
-
+  const [deliveryPreference, setDeliveryPreference] = useState("1");
 
   // console.log("deliveryPreference", deliveryPreference);
 
-  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<any[]>([]);
+  const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<
+    any[]
+  >([]);
   const [deliveries, setDeliveries] = useState<number>(30);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
@@ -343,18 +405,17 @@ export const MenuListItem: React.FC<Props> = ({
   const minDate = today.toISOString().split("T")[0];
 
   const handleOpenModal = () => {
-
-    const c_id = localStorage.getItem('c_id');
+    const c_id = localStorage.getItem("c_id");
     if (!c_id) {
       Modal.confirm({
-        title: 'Please Sign In',
-        content: 'You need to sign in to add items to your cart.',
-        okText: 'Sign In',
-        cancelText: 'Cancel',
-        className: 'sign-in-modal',
+        title: "Please Sign In",
+        content: "You need to sign in to add items to your cart.",
+        okText: "Sign In",
+        cancelText: "Cancel",
+        className: "sign-in-modal",
         centered: true,
         onOk() {
-          navigate('/');
+          navigate("/");
         },
       });
       return;
@@ -366,56 +427,62 @@ export const MenuListItem: React.FC<Props> = ({
     setIsModalOpen(false);
   };
 
-
-
   const addToCartApi = async (cartData: any) => {
     if (!c_id) {
       Modal.confirm({
-        title: 'Please Sign In',
-        content: 'You need to sign in to add items to your cart.',
-        okText: 'Sign In',
-        cancelText: 'Cancel',
-        className: 'sign-in-modal',
+        title: "Please Sign In",
+        content: "You need to sign in to add items to your cart.",
+        okText: "Sign In",
+        cancelText: "Cancel",
+        className: "sign-in-modal",
         centered: true,
         onOk() {
-          navigate('/');
+          navigate("/");
         },
-        onCancel() { },
+        onCancel() {},
       });
       return;
     }
 
     try {
       const formData = new FormData();
-      formData.append('c_id', String(c_id || '1'));
-      formData.append('product_id', String(cartData.product_id));
-      formData.append('package_id', '13');
-      formData.append('package_days', '0');
+      formData.append("c_id", String(c_id || "1"));
+      formData.append("product_id", String(cartData.product_id));
+      formData.append("package_id", "13");
+      formData.append("package_days", "0");
 
       // Apply fallback for product_option_id and product_option_value_id
-      const productOptionId = cartData.product_option_id || localStorage.getItem('product_option_id');
-      const productOptionValueId = cartData.product_option_value_id || localStorage.getItem('product_option_value_id');
+      const productOptionId =
+        cartData.product_option_id || localStorage.getItem("product_option_id");
+      const productOptionValueId =
+        cartData.product_option_value_id ||
+        localStorage.getItem("product_option_value_id");
 
       // If both are still missing, handle the error
       if (!productOptionId || !productOptionValueId) {
-        console.error('Error: product_option_id or product_option_value_id is missing');
+        console.error(
+          "Error: product_option_id or product_option_value_id is missing"
+        );
         notification.error({
-          message: 'Error',
-          description: 'Missing product options. Please try again.',
+          message: "Error",
+          description: "Missing product options. Please try again.",
         });
         return null;
       }
 
-      formData.append('product_option_id', String(productOptionId));
-      formData.append('product_option_value_id', String(productOptionValueId));
+      formData.append("product_option_id", String(productOptionId));
+      formData.append("product_option_value_id", String(productOptionValueId));
       // formData.append('quantity', String(localQuantity));
-      formData.append('quantity', String('1'));
-      formData.append('weight', String(cartData.weight));
-      formData.append('weight_unit', String(cartData.weight_unit));
-      formData.append('delivery_preference', String(cartData.deliveryPreference) || String(1));
-      formData.append('no_of_deliveries', String(cartData.deliveries));
-      formData.append('order_date', startDate);
-      formData.append('order_type', '1');
+      formData.append("quantity", String("1"));
+      formData.append("weight", String(cartData.weight));
+      formData.append("weight_unit", String(cartData.weight_unit));
+      formData.append(
+        "delivery_preference",
+        String(cartData.deliveryPreference) || String(1)
+      );
+      formData.append("no_of_deliveries", String(cartData.deliveries));
+      formData.append("order_date", startDate);
+      formData.append("order_type", "1");
 
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/addItemToCart",
@@ -450,7 +517,6 @@ export const MenuListItem: React.FC<Props> = ({
     }
   };
 
-
   const handleAddToCartWithPreferences = async () => {
     try {
       const dishWithPreferences = {
@@ -463,17 +529,20 @@ export const MenuListItem: React.FC<Props> = ({
 
       const cartCount = await addToCartApi(dishWithPreferences);
 
-
       if (cartCount) {
         dispatch(actions.addToCart(dishWithPreferences));
         dispatch(setShouldRefresh(true));
         setIsModalOpen(false);
       } else {
-        notification.error({ message: "Failed to add to cart. Please try again." });
+        notification.error({
+          message: "Failed to add to cart. Please try again.",
+        });
       }
     } catch (error) {
       console.error("Add to cart error:", error);
-      notification.error({ message: "Something went wrong while adding to cart." });
+      notification.error({
+        message: "Something went wrong while adding to cart.",
+      });
     }
   };
 
@@ -483,26 +552,26 @@ export const MenuListItem: React.FC<Props> = ({
       return;
     }
 
-    const c_id = localStorage.getItem('c_id');
+    const c_id = localStorage.getItem("c_id");
     if (!cartItemId) {
       Modal.confirm({
-        title: 'Please Add the Item',
-        content: 'You need to add to cart first.',
-        cancelText: 'Cancel',
-        okText: 'Ok',
+        title: "Please Add the Item",
+        content: "You need to add to cart first.",
+        cancelText: "Cancel",
+        okText: "Ok",
       });
       return;
     }
 
     if (!c_id) {
       Modal.confirm({
-        title: 'Please Sign In',
-        content: 'You need to sign in to update the cart.',
+        title: "Please Sign In",
+        content: "You need to sign in to update the cart.",
         onOk() {
-          navigate('/');
+          navigate("/");
         },
-        cancelText: 'Cancel',
-        okText: 'Sign In',
+        cancelText: "Cancel",
+        okText: "Sign In",
       });
       return;
     }
@@ -510,17 +579,19 @@ export const MenuListItem: React.FC<Props> = ({
     setIsModalOpen(false);
 
     const formData = new FormData();
-    const formattedDate = startDate ? new Date(startDate).toISOString().split('T')[0] : getTomorrowDate();
-    formData.append('id', cartItemId || '');
-    formData.append('c_id', c_id);
-    formData.append('package_days', 'mon,tue,wed,thu,fri,sat,sun');
-    formData.append('package_id', '13');
-    formData.append('quantity', String(quantity));
-    formData.append('delivery_preference', deliveryPreference);
-    formData.append('no_of_deliveries', String(deliveries));
-    formData.append('order_date', formattedDate);
-    const orderType = deliveryPreference !== '0' ? '1' : '2';
-    formData.append('order_type', orderType);
+    const formattedDate = startDate
+      ? new Date(startDate).toISOString().split("T")[0]
+      : getTomorrowDate();
+    formData.append("id", cartItemId || "");
+    formData.append("c_id", c_id);
+    formData.append("package_days", "mon,tue,wed,thu,fri,sat,sun");
+    formData.append("package_id", "13");
+    formData.append("quantity", String(quantity));
+    formData.append("delivery_preference", deliveryPreference);
+    formData.append("no_of_deliveries", String(deliveries));
+    formData.append("order_date", formattedDate);
+    const orderType = deliveryPreference !== "0" ? "1" : "2";
+    formData.append("order_type", orderType);
 
     try {
       const response = await axios.post(
@@ -538,13 +609,12 @@ export const MenuListItem: React.FC<Props> = ({
     }
   };
 
-
   useEffect(() => {
     const deliveryData = async () => {
       const formData = new FormData();
       formData.append("c_id", c_id || "null");
       formData.append("city_id", cityId || "null");
-      formData.append("product_option_value_id", '326');
+      formData.append("product_option_value_id", "326");
       try {
         const response = await axios.post(
           `https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`,
@@ -561,7 +631,6 @@ export const MenuListItem: React.FC<Props> = ({
     deliveryData();
   }, []);
   return (
-
     <>
       <div className="product-item">
         <button
@@ -594,8 +663,8 @@ export const MenuListItem: React.FC<Props> = ({
           >
             {Number(dish.discount ?? 0) > 0 && (
               <div className="discount-badge">
-                {Math.round((Number(dish.discount) / Number(dish.price)) * 100)}%
-                OFF
+                {Math.round((Number(dish.discount) / Number(dish.price)) * 100)}
+                % OFF
               </div>
             )}
             <img src={dish.option_value_image} alt={dish.name} loading="lazy" />
@@ -637,7 +706,7 @@ export const MenuListItem: React.FC<Props> = ({
                 <span> Add </span>
               </button>
             ) : (
-              String(orderType) === '2' && (
+              String(orderType) === "2" && (
                 <>
                   <button
                     className="cart-button quantity-button"
@@ -685,8 +754,9 @@ export const MenuListItem: React.FC<Props> = ({
 
             {/* Subscribe / Update Subscription */}
 
-            {String(showSubscribe) === "1" && String(orderType) !== '2' && (
-              cartItemId ? (
+            {String(showSubscribe) === "1" &&
+              String(orderType) !== "2" &&
+              (cartItemId ? (
                 <button
                   className="cart-button"
                   style={{
@@ -699,7 +769,6 @@ export const MenuListItem: React.FC<Props> = ({
                   Upgrade
                 </button>
               ) : (
-
                 <button
                   className="cart-button"
                   style={{
@@ -711,21 +780,19 @@ export const MenuListItem: React.FC<Props> = ({
                 >
                   Subscribe
                 </button>
-              )
-            )}
-            {String(orderType) === '2' && (
+              ))}
+            {String(orderType) === "2" && (
               <span
-                className=""
-                style={{
-                  marginLeft: "10px",
-                  color: "red",
-                  fontSize: 16
-                }}
+                className="redSmallText"
+                // style={{
+                //   marginLeft: "10px",
+                //   color: "red",
+                //   fontSize: 10
+                // }}
               >
-                pack- 1
+                Deliver Once
               </span>
             )}
-
           </div>
         </div>
       </div>
@@ -734,8 +801,7 @@ export const MenuListItem: React.FC<Props> = ({
         onCancel={setIsModalOpenDaily}
         open={isModalOpen}
         title="Select Delivery Options"
-        onOk={cartItemId ? handleUpdateCartSubscription : handleAddToCartWithPreferences}
-
+        footer={null}
       >
         <div className="main-card-daily-delivery">
           <div className="main-card-daily-delivery-box">
@@ -743,7 +809,7 @@ export const MenuListItem: React.FC<Props> = ({
             <DatePicker
               selected={startDate ? new Date(startDate) : null}
               onChange={(date: Date | null) => {
-                setStartDate(date ? date.toISOString().split('T')[0] : '');
+                setStartDate(date ? date.toISOString().split("T")[0] : "");
               }}
               minDate={new Date(minDate)}
               dateFormat="yyyy-MM-dd"
@@ -779,22 +845,39 @@ export const MenuListItem: React.FC<Props> = ({
               onChange={(e) => setDeliveries(Number(e.target.value))}
             >
               {deliveryOptionsPreference.flatMap((elem) =>
-                elem.packages?.filter((pkg: any) => pkg.package_name === "Daily")
+                elem.packages
+                  ?.filter((pkg: any) => pkg.package_name === "Daily")
                   .flatMap((pkg: any) =>
-                    pkg.no_of_deliveries.split(',').map((day: string, index: number) => (
-                      <option key={index} value={day}>
-                        {day}
-                      </option>
-                    ))
+                    pkg.no_of_deliveries
+                      .split(",")
+                      .map((day: string, index: number) => (
+                        <option key={index} value={day}>
+                          {day}
+                        </option>
+                      ))
                   )
               )}
             </select>
-
           </div>
         </div>
-
+        <div>
+          {!cartItemId ? (
+            <>
+              <components.Button
+                text="Confirm and Add to Cart"
+                onClick={handleAddToCartWithPreferences}
+              />
+            </>
+          ) : (
+            <>
+              <components.Button
+                text="update and Add to Cart"
+                onClick={handleupdatetheAddToCartt}
+              />
+            </>
+          )}
+        </div>
       </Modal>
-
     </>
   );
 };

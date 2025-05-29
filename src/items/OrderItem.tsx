@@ -336,7 +336,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 }}
               >
                 {dish.option_value_name}{" "}
-                <span className="t10" style={{ fontSize: 14 }}>
+                <span className="t10">
                   ({dish.weight}ml)
                 </span>
               </span>
@@ -344,11 +344,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               {dish.discount ? (
                 <>
                   <del
-                    style={{
-                      color: "#999",
-                      marginRight: 8,
-                      fontSize: 14,
-                    }}
+                    className="delText"
                   >
                     MRP ₹{dish.price}
                   </del>

@@ -22,12 +22,6 @@ $border-radius-md: 12px;
 $border-radius-lg: 20px;
 $border-radius-xl: 30px;
 
-/* Main container */
-.signInWrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 /* Background animation container */
 .background-animation {
@@ -53,7 +47,7 @@ $border-radius-xl: 30px;
   background: $white;
   box-shadow: $shadow-lg;
   overflow: hidden;
-  
+
   &::before {
     content: "";
     position: absolute;
@@ -63,7 +57,7 @@ $border-radius-xl: 30px;
     height: 5px;
     background: linear-gradient(to right, $primary-color, $accent-color);
   }
-  
+
   &.fade-in {
     opacity: 1;
     transform: translateY(0);
@@ -88,13 +82,13 @@ $border-radius-xl: 30px;
   transition: $transition-normal;
   z-index: 2;
   box-shadow: $shadow-sm;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-md;
     background-color: $primary-light;
   }
-  
+
   &:active {
     transform: translateY(0);
     box-shadow: $shadow-sm;
@@ -135,7 +129,7 @@ $border-radius-xl: 30px;
   margin-bottom: 5px;
   position: relative;
   display: inline-block;
-  
+
   &::after {
     content: "";
     position: absolute;
@@ -156,7 +150,7 @@ $border-radius-xl: 30px;
 
 /* Form groups */
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 0;
   position: relative;
 }
 
@@ -180,28 +174,19 @@ $border-radius-xl: 30px;
 
 /* Terms container */
 .terms-container {
-  margin: 15px 0 25px;
-  padding: 15px;
-  border-radius: $border-radius-sm;
-  background: $light-bg;
-  border: 1px solid $border-color;
-  transition: $transition-normal;
-  
-  &:hover {
-    box-shadow: $shadow-sm;
-    transform: translateY(-2px);
-  }
+  margin: 5px 0 25px;
 }
 
 .terms-label {
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
+  width: fit-content;
 }
 
 .terms-checkbox {
-  margin-right: 10px;
+  margin-right: 5px;
   width: 18px;
   height: 18px;
   accent-color: $primary-color;
@@ -214,7 +199,7 @@ $border-radius-xl: 30px;
   text-decoration: none;
   border-bottom: 1px dashed $primary-color;
   transition: $transition-fast;
-  
+  font-size: 14px;
   &:hover {
     color: $primary-dark;
     border-bottom: 1px solid $primary-dark;
@@ -252,7 +237,7 @@ $border-radius-xl: 30px;
   padding: 0;
   text-decoration: underline;
   transition: $transition-fast;
-  
+
   &:hover {
     color: $primary-dark;
   }
@@ -273,7 +258,7 @@ $border-radius-xl: 30px;
   position: relative;
   overflow: hidden;
   z-index: 1;
-  
+
   &::before {
     content: "";
     position: absolute;
@@ -285,16 +270,16 @@ $border-radius-xl: 30px;
     transition: $transition-normal;
     z-index: -1;
   }
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-md;
-    
+
     &::before {
       left: 0;
     }
   }
-  
+
   &:active {
     transform: translateY(0);
     box-shadow: $shadow-sm;
@@ -342,12 +327,12 @@ $border-radius-xl: 30px;
   border-radius: $border-radius-sm;
   border: 1px solid $border-color;
   text-align: center;
-  
+
   p {
     margin: 5px 0;
     color: $text-dark;
   }
-  
+
   .city {
     font-weight: 600;
     color: $primary-color;
@@ -379,16 +364,21 @@ $border-radius-xl: 30px;
 }
 
 @keyframes shake {
-  10%, 90% {
+  10%,
+  90% {
     transform: translateX(-1px);
   }
-  20%, 80% {
+  20%,
+  80% {
     transform: translateX(2px);
   }
-  30%, 50%, 70% {
+  30%,
+  50%,
+  70% {
     transform: translateX(-4px);
   }
-  40%, 60% {
+  40%,
+  60% {
     transform: translateX(4px);
   }
 }
@@ -398,26 +388,129 @@ $border-radius-xl: 30px;
   .signInWrap {
     padding: 15px;
   }
-  
+
   .login-form-container {
     padding: 25px 20px;
   }
-  
+
   .welcome-animation {
     width: 100px;
     height: 100px;
   }
-  
+
   .login-title {
     font-size: 24px;
   }
-  
+
   .login-subtitle {
     font-size: 14px;
   }
-  
+
   .popup-content {
     padding: 20px;
     width: 85%;
+  }
+
+  .otp-input-container {
+    gap: 8px;
+  }
+
+  .otp-input-box {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+}
+
+/* OTP Input Boxes */
+.otp-input-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.otp-input-box {
+  width: 55px;
+  height: 55px;
+  border: 2px solid $border-color;
+  border-radius: $border-radius-sm;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: $text-dark;
+  background: $white;
+  transition: all $transition-normal;
+  outline: none;
+  font-family: 'SF Pro Display', sans-serif;
+
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &:hover {
+    border-color: lighten($primary-color, 20%);
+  }
+
+  &.filled {
+    border-color: $primary-color;
+    background: $primary-light;
+    color: $primary-color;
+  }
+
+  &.error {
+    border-color: $error-color;
+    background: rgba($error-color, 0.05);
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  // Remove number input arrows
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+}
+
+// OTP Error Message
+.otp-error-message {
+  color: $error-color;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  font-family: 'SF Pro Display', sans-serif;
+  font-weight: 500;
+  animation: fadeInError 0.3s ease-in-out;
+}
+
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Add shake animation for error state
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
   }
 }
