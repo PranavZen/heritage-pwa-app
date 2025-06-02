@@ -8,7 +8,7 @@ import { actions } from "../store/actions";
 import { components } from "../components";
 import axios from "axios";
 import { notification, Modal } from "antd";
-import { setCartCount } from "../store/slices/cartSlice";
+import { setCartCount, setShouldRefresh } from "../store/slices/cartSlice";
 import { toggleWishlistItem } from "../store/slices/wishlistSlice";
 import { fetchWishlist } from "../store/slices/wishlistSlice";
 
@@ -33,17 +33,10 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [prevQuantity, setPrevQuantity] = useState<number>(0);
   const [orderType, setOrderType] = useState<number>(0);
-
-
- const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
-
-  // console.log("subscriptionData", subscriptionData)
-
+  const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
   const c_id = localStorage.getItem("c_id") || "";
   const cityId = localStorage.getItem("cityId") || "";
   const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
-  // setQuantity(newQuantity);
-  // console.log("wishlistccccc", wishlist);
 
   const getTomorrowDate = () => {
     const tomorrow = new Date();
@@ -132,7 +125,7 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
           message: "Success",
           description: response.data.message,
         });
-
+        dispatch(setShouldRefresh(true));
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
         setPrevQuantity(quantity);
         setQuantity(1);
@@ -164,19 +157,15 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       });
     }
   };
-
-
-
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 0 || !cartItemId) return;
-
     const preferenceName = subscriptionData?.delivery_preference || "0";
-
-    // console.log("preferenceName", preferenceName);
     const noOfDeliveries = subscriptionData?.no_of_deliveries || "0";
     const orderDate = subscriptionData?.cart_order_date || getTomorrowDate() || "0";
-    const orderType = (subscriptionData?.delivery_preference && subscriptionData?.no_of_deliveries && subscriptionData?.cart_order_date) ? "1" : "2";
-
+    const orderType = (
+      subscriptionData?.delivery_preference &&
+      Number(subscriptionData?.no_of_deliveries ?? 0) > 1
+    ) ? "1" : "2";
     try {
       const formData = new FormData();
       formData.append("id", cartItemId);
@@ -187,7 +176,6 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       formData.append("no_of_deliveries", noOfDeliveries);
       formData.append("order_date", orderDate);
       formData.append("order_type", orderType);
-
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
         formData
@@ -216,14 +204,9 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
       });
     }
   };
-
-
-
-
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
     if (!cartItemId) return;
-
     if (quantity > 1) {
       handleUpdateCart(quantity - 1);
     } else {
@@ -292,7 +275,6 @@ export const RecomendedItem: React.FC<Props> = ({ index, dish, isLast }) => {
     );
 
     const type = isInWishlist ? 2 : 1;
-    //  console.log("product_option_value_id", dish.product_option_value_id)
     try {
       const resultAction = await dispatch(
         toggleWishlistItem({

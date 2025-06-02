@@ -134,68 +134,9 @@ export const SignIn: React.FC = () => {
       });
     }
   };
-
-  // const handleVerifyOtp = async () => {
-  //   try {
-  //     // Show loading state
-  //     setIsLoading(true);
-
-  //     const formData = new FormData();
-  //     formData.append("mobile", mobile);
-  //     formData.append("otp", otp);
-
-  //     const response = await axios.post(
-  //       "https://heritage.bizdel.in/app/consumer/services_v11/verifyOTP",
-  //       formData
-  //     );
-  //     console.log("aaaabbb", response);
-  //     if (response.data.status == "success") {
-  //       const addressDetails = response?.data?.CustomerDetail[0]?.address_details;
-
-  //       // console.log("addressDetailsaddressDetails", addressDetails)
-  //       navigate(Routes.NewUsereAddAddress);
-  //       localStorage.setItem(
-  //         "profileId",
-  //         JSON.stringify(response.data.CustomerDetail[0].id)
-  //       );
-  //       localStorage.setItem(
-  //         "area_id",
-  //         response.data.CustomerDetail[0].address_details[0].area_id
-  //       );
-  //       if (addressDetails.length === 0){
-  //         notification.success({
-  //           message: "OTP Verified. Please add your address.",
-  //           placement: "bottomRight",
-  //         });
-
-  //       } else {
-  //         notification.success({
-  //           message: "OTP Verified.",
-  //           placement: "bottomRight",
-  //         });
-  //         navigate(Routes.TabNavigator);
-  //         dispatch(fetchWishlist());
-  //       }
-  //     } else {
-  //       notification.error({
-  //         message: response.data.message || "OTP verification failed",
-  //         placement: "bottomRight",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error during OTP verification:", error);
-  //     notification.error({
-  //       message: "Error verifying OTP. Please try again.",
-  //       placement: "bottomRight",
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const handleVerifyOtp = React.useCallback(async () => {
     setIsLoading(true);
-    setOtpError(""); // Clear previous errors
+    setOtpError(""); 
 
     const formData = new FormData();
     formData.append("mobile", mobile);
@@ -294,11 +235,11 @@ export const SignIn: React.FC = () => {
 
   // Debug OTP changes and auto-verify when complete
   React.useEffect(() => {
-    console.log("OTP changed:", otp, "Length:", otp.length);
+    // console.log("OTP changed:", otp, "Length:", otp.length);
 
     // Auto-verify when OTP is complete (4 digits)
     if (otp.length === 4 && /^\d{4}$/.test(otp)) {
-      console.log("Auto-verifying OTP:", otp);
+      // console.log("Auto-verifying OTP:", otp);
       setTimeout(() => {
         handleVerifyOtp();
       }, 300);

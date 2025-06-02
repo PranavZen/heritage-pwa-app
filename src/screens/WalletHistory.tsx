@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { hooks } from "../hooks";
-import { svg } from "../assets/svg";
 import { components } from "../components";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ReactComponent as CalendarIcon } from '../assets/svg/calendar (1).svg';
-import { ReactComponent as WalletIcon } from '../assets/icons/wallet.svg'
-
 import './WalletHistory.scss';
 
 export const WalletHistory: React.FC = () => {
   const dispatch = hooks.useDispatch();
-
   const [opacity, setOpacity] = useState<number>(0);
   const [walletData, setWalletData] = useState<any>(null);
-
-  // console.log("qqqqqqqqqqq", walletData);
-
+  const [totalRewards, setTotalRewards] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
-  const [nextId, setNextId] = useState<number>(0);
-  const navigate = useNavigate();
-
-
   const today = new Date().toISOString().split("T")[0];
 
   hooks.useScrollToTop();
@@ -36,7 +24,7 @@ export const WalletHistory: React.FC = () => {
   useEffect(() => {
     setStartDate(today);
     setEndDate(today);
-  }, []);
+  },[]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
     if (type === 'start') {
@@ -53,15 +41,14 @@ export const WalletHistory: React.FC = () => {
     formData.append('start_date', startDate);
     formData.append('end_date', endDate || '');
     formData.append('next_id', String(0));
-    try {
+    try { 
       const response = await axios.post(
-        'https://heritage.bizdel.in/app/consumer/services_v11/getWalletHistoryByCustomerId',
+        'https://heritage.bizdel.in/app/consumer/services_v11/getrewardtransactions',
         formData
       );
-
-      // console.log("responseresponse", response);
-
-      setWalletData(response.data.walletHistoryDetails);
+      setWalletData(response.data.transactions || []);
+      setTotalRewards(response.data.total_earned_points || 0);
+    
     } catch (error) {
       console.error('Error fetching wallet history', error);
     } finally {
@@ -79,7 +66,7 @@ export const WalletHistory: React.FC = () => {
     return (
       <>
         <div className="walletHistoryContainer">
-          <h1>Wallet Transaction History</h1>
+          <h1>Rewards Transaction History</h1>
 
           <div className="walletHistoryFilter-main">
             <div className="walletHistoryFilter">
@@ -150,10 +137,10 @@ export const WalletHistory: React.FC = () => {
                             <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
                             <line x1="2" y1="10" x2="22" y2="10"></line>
                           </svg>
-                          ₹ {entry?.wallet_balance || 'N/A'}
+                          ₹ {totalRewards || 'N/A'}
                         </div>
-                        <div>{entry.status}</div>
-                        <div>{entry.payment_type} + ₹ {entry.amount}</div>
+                        <div>{entry.type}</div>
+                        <div> + ₹ {entry.points}</div>
                       </div>
 
                       <div className="Transaction-main">
@@ -162,14 +149,14 @@ export const WalletHistory: React.FC = () => {
                             <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
                             <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
                           </svg>
-                          Transaction ID: {entry.order_id}
+                          Transaction ID: {entry.reference_id}
                         </p>
                         <p>
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
                           </svg>
-                          Date: {entry.payment_date}
+                          Date: {entry.created_at}
                         </p>
                       </div>
                     </div>
@@ -183,7 +170,7 @@ export const WalletHistory: React.FC = () => {
                   <line x1="12" y1="8" x2="12" y2="12"></line>
                   <line x1="12" y1="16" x2="12.01" y2="16"></line>
                 </svg>
-                <p>No wallet history available for the selected period.</p>
+                <p>No Rewards history available for the selected period.</p>
                 <p>Try selecting a different date range.</p>
               </div>
             )}

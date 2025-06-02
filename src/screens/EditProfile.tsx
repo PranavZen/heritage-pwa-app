@@ -23,15 +23,8 @@ interface User {
 export const EditProfile: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
-
   const cityId = localStorage.getItem("c_id");
-
   const [profileData, SetProfileData] = useState();
-
-  // console.log("profileDataprofileDataprofileData", profileData);
-
-  // console.log("cityIda", cityId);
-
   const [opacity, setOpacity] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [userDetails, setUserDetails] = useState<User>({
@@ -57,20 +50,10 @@ export const EditProfile: React.FC = () => {
           "https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById",
           formData
         );
-
-        // console.log("response data", response.data.CustomerDetail);
-
         if (response.data.status === "success") {
-          // console.log("User profile data:", response.data.data);
           const profile = response.data.CustomerDetail[0];
-
           SetProfileData(response.data.CustomerDetail[0]);
-
-          // Check if photo is a URL or base64 string
           const photoUrl = profile.photo ? profile.photo : null;
-
-          // console.log("photoUrlphotoUrl", photoUrl);
-
           setUserDetails({
             id: profile.id,
             salutation: profile.saluation,
@@ -121,7 +104,6 @@ export const EditProfile: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/updateUser",
         formData
       );
-      // console.log("responseweeupdatedProfile", response);
       if (response.data.status === "success") {
         navigate(Routes.EditProfile);
         notification.success({ message: response.data.message });
@@ -142,8 +124,6 @@ export const EditProfile: React.FC = () => {
       [name]: value,
     }));
   };
-
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     setUserDetails((prev) => ({

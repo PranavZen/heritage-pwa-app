@@ -1,15 +1,21 @@
 import React from 'react';
-import { RouterProvider, createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter, Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import { screens } from '../screens';
 import { TabNavigator } from './TabNavigator';
 import { components } from '../components';
 import { Routes } from '../routes';
 import ProtectedComponent from '../components/ProtectedComponent';
-
+import { useEffect } from 'react';
 
 
 const AppLayout = () => {
+
+  const location = useLocation();
+
+  useEffect(() => {
+    localStorage.setItem('hello', location.pathname);
+  }, [location.pathname]);
 
   return (
     <components.FooterWrapper>

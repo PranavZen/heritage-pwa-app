@@ -33,10 +33,6 @@ export const AddressAdd: React.FC = () => {
   const navigate = hooks.useNavigate();
   const location = useLocation();
   const { cityID } = location.state || {};
-
-
-  // console.log("cityIDcityID", cityID)
-
   useEffect(() => {
     if (cityID) {
       setNewAddress({
@@ -65,9 +61,6 @@ export const AddressAdd: React.FC = () => {
     area_name: "NallaSupara (West)",
     order_active:""
   });
-
-  // console.log("id", newAddress)
-
   const [loading, setLoading] = useState<boolean>(false);
   const [states, setStates] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
@@ -96,8 +89,6 @@ export const AddressAdd: React.FC = () => {
     area_id: false,
     address1: false,
   });
-
-  // console.log("areaIdByPincode", areaIdByPincode)
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
@@ -130,9 +121,6 @@ export const AddressAdd: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/pincodeverify",
         formData
       );
-
-      // console.log("uuuuuu", response);
-
       if (response.data.status === "success") {
         const cityData = response.data.search_data?.[0];
         if (cityData) {
@@ -482,7 +470,6 @@ export const AddressAdd: React.FC = () => {
           formData.append('pincode', newAddress.pincode);
           const response = await axios.post(`https://heritage.bizdel.in/app/consumer/services_v11/getAreaByPincode`, formData);
           setAreaIdByPincode(response.data.areaDetails);
-          // console.log('bbbbb', response);
         }
       } catch (error) {
         console.error("Error fetching area details:", error);

@@ -8,9 +8,6 @@ export const useCartHandler = () => {
   const dispatch = useDispatch();
 
   const cart = useSelector((state: RootState) =>  state.cartSlice);
-
-  // console.log("cart", cart);
-
   const addToCart = (
     dish: DishType,
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -28,7 +25,6 @@ export const useCartHandler = () => {
   };
 
   const getDishQty = (id: string): number =>{  
-    // console.log("id",id);
     const dishInCart = cart.list.find((dish) => (dish.option_value_name) === (id));
     
     return dishInCart ? (Number(dishInCart.quantity) || 0) : 0;

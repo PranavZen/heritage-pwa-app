@@ -67,27 +67,20 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [deliveryPreference, setDeliveryPreference] = useState<string>(
     String(dish.delivery_preference) || ""
   );
+
+   console.log("kkkkk", deliveryPreference)
   const [noOfDeliveries, setNoOfDeliveries] = useState<number>(
     Number(dish.no_of_deliveries)
   );
-  // console.log('[noOfDeliveries[noOfDeliveries[noOfDeliveries', noOfDeliveries);
   const [selectedPackage, setSelectedPackage] = useState<string>(
     dish.packages_name || ""
   );
   const [selectedPackageDetails, setSelectedPackageDetails] =
     useState<string>();
   const [cartData, SetSetCartData] = useState<string>();
-
-  // console.log('quantityquantityquantity', quantity);
   const c_id = localStorage.getItem("c_id");
   const cityId = localStorage.getItem("cityId");
-
-  // console.log("dis", dish);
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  // console.log("selectedPackageDetails", deliveryPreference);
-
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 1) return;
     setIsLoading(true);
@@ -101,9 +94,13 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       "no_of_deliveries",
       String(selectedPackageDetails || noOfDeliveries)
     );
+
     formData.append("order_date", String(dish.cart_order_date));
 
-    const orderType = deliveryPreference !== "0" ? "1" : "2";
+    const orderType = String(deliveryPreference) !== "0" ? "1" : "2";
+
+
+    
     formData.append("order_type", orderType);
 
     try {
@@ -111,9 +108,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
         formData
       );
-
-      // console.log("mmm", response);
-
       if (response.data.status === "success") {
         setPrevQuantity(quantity);
         setQuantity(newQuantity);
@@ -228,22 +222,16 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
           response.data.optionListing.map((elem: any) => elem.no_of_deliveries)
         );
 
-
         if (response.data.optionListing) {
           const matchedItem = response.data.optionListing.find(
             (item: any) =>
               item.order_type
           );
-
-          // console.log("zzzzzzz", matchedItem);
           if (matchedItem) {
             setQuantity(Number(matchedItem.quantity) || 1);
-
             setOrderType(matchedItem.order_type);
 
           } else {
-
-
           }
         }
 
@@ -255,10 +243,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   }, []);
 
   const showSubscribe = dish.subscription_product;
-  // *************************************************************************************
   const handleOpenModal = (option_name: any) => {
-    // console.log("aaaacccccccccccccccccccc", option_name)
-    // setIsModalOpen(true);
     navigate(`/dish/${dish.option_name}`, { state: { dish, showSubscribe } });
 
     localStorage.setItem(
@@ -266,15 +251,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       dish.cart_product_option_value_id.toString()
     );
   };
-
-  // const handleOpenModalMenuList = (option_name: any) => {
-
-  //   navigate(`/dish/${dish.option_name}`, { state: { dish } ,
-
-  //   });
-  // }
-
-
 
   const handleOpenModalMenuList = (option_name: any) => {
     localStorage.setItem(
@@ -295,22 +271,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     setIsModalOpen(false);
   };
 
-  // Handle modal Cancel click
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  // ******************************
-
-  // if (cartCount === 0) {
-  //   return <h1>Cart is empty</h1>;
-  // }
-
-  // useEffect(() => {
-  //   if (cartCount === 0) {
-  //     localStorage.removeItem('curScreen');
-  //   }
-  // }, [cartCount]);
-
   return (
     <>
       <div className="itemListBox">

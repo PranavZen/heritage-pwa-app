@@ -11,7 +11,6 @@ const ProtectedComponent: React.FC<ProtectedComponentProps> = ({ children }) => 
     const [checkedAuth, setCheckedAuth] = useState(false);
     const [authorized, setAuthorized] = useState(false);
     const c_id = localStorage.getItem('c_id');
-    // console.log("aaa", c_id)
     const area_id = localStorage.getItem('cityId');
     useEffect(() => {
         const isInvalid =

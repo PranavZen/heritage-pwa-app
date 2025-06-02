@@ -1,10 +1,9 @@
-
 import { Modal, notification, Radio } from "antd";
 import axios from "axios";
-import moment from 'moment';
+import moment from "moment";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { components } from "../../components";
 import { hooks } from "../../hooks";
 import { RootState } from "../../store";
@@ -26,26 +25,39 @@ export const SubscriptionOrderCheck: React.FC = () => {
 
   const [subscriptionData, setSubscriptionData] = useState<any[]>([]);
 
-
   // console.log("aaaaaaaaaaaaaaaaaaaa", subscriptionData);
-
 
   const [oneTimeOrderData, setOneTimeOrderData] = useState<any[]>([]);
 
   // console.log("oneTimeOrderDataoneTimeOrderData", oneTimeOrderData);
 
-  const [activeTab, setActiveTab] = useState('subscriptions');
+  const [activeTab, setActiveTab] = useState("subscriptions");
   const [isLoading, setIsLoading] = useState(false);
 
   const [subscriptionID, SetSubscriptionID] = useState<any[]>([]);
 
   // console.log("subscriptionIDwwwwwwwwwwwwwwwwwww", subscriptionID);
 
-  const [pauseToggle, SetPauseToggle] = useState<{ [key: number]: boolean }>({});
+  const [pauseToggle, SetPauseToggle] = useState<{ [key: number]: boolean }>(
+    {}
+  );
   const [currentSubscription, setCurrentSubscription] = useState<any>(null);
 
-  // console.log("currentSubscriptioncurrentSubscription", currentSubscription);
+  const [oneTimeNextId, setOneTimeNextId] = useState<number>(0);
 
+  const [oneTimeTotalData, setOneTimeTotalData] = useState<number>(0);
+
+  const [nextId, setNextId] = useState<number>(0);
+
+  const [subscriptionNextId, setSubscriptionNextId] = useState<number>(0);
+
+  const [subscriptionnextId, SetSubscriptionNextId] = useState<number>(0);
+
+  const [subscriptionnextTotalData, SetSubscriptionTotalData] =
+    useState<number>(0);
+
+  // console.log("mm", oneTimeNextId);
+  // console.log("mmm", nextId);
 
   // console.log("qqqqqq", pauseToggle);
 
@@ -82,9 +94,12 @@ export const SubscriptionOrderCheck: React.FC = () => {
     order_id: string;
     order_status_id: string;
     payment_method: string;
-    order_option_id:string;
+    order_option_id: string;
   }
-  const [orderToDelete, setOrderToDelete] = useState<orderToDelete | null>(null);
+  const [orderToDelete, setOrderToDelete] = useState<orderToDelete | null>(
+    null
+  );
+
   interface CancelReason {
     id: number;
     reason: string;
@@ -94,7 +109,9 @@ export const SubscriptionOrderCheck: React.FC = () => {
   // *************************One time order**************************
   useEffect(() => {
     axios
-      .post("https://heritage.bizdel.in/app/consumer/services_v11/get_order_cancel_reason")
+      .post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/get_order_cancel_reason"
+      )
       .then((response) => {
         // console.log('mmmmm', response);
         setCancelReasons(response.data.order_cancel_reason);
@@ -118,25 +135,26 @@ export const SubscriptionOrderCheck: React.FC = () => {
   const handleConfirmDelete = () => {
     if (selectedReason && orderToDelete) {
       const formData = new FormData();
-      formData.append("c_id", localStorage.getItem('c_id') || '');
+      formData.append("c_id", localStorage.getItem("c_id") || "");
       formData.append("order_option_id", orderToDelete.order_option_id);
-      formData.append("order_status_id", '5');
+      formData.append("order_status_id", "5");
       formData.append("cancel_reason_id", String(selectedReason));
       // formData.append("comment", "ffffffffffff");
-      formData.append("payment_method", orderToDelete.payment_method
-      );
+      formData.append("payment_method", orderToDelete.payment_method);
 
       axios
-        .post("https://heritage.bizdel.in/app/consumer/services_v11/oneTimeOrderCancel", formData)
+        .post(
+          "https://heritage.bizdel.in/app/consumer/services_v11/oneTimeOrderCancel",
+          formData
+        )
         .then((response) => {
-          if (response.data.status === 'success') {
-            notification.success({ message: response.data.message })
+          if (response.data.status === "success") {
+            notification.success({ message: response.data.message });
             fetchOneTimeOrderData();
           } else {
-            notification.error({ message: response.data.message })
+            notification.error({ message: response.data.message });
           }
           setIsModalVisible(false);
-
         })
         .catch((error) => {
           console.error("Error cancelling order:", error);
@@ -146,42 +164,48 @@ export const SubscriptionOrderCheck: React.FC = () => {
     }
   };
 
-
   const handleCancelModal = () => {
     setIsModalVisible(false);
   };
 
-
   const handlePauseConfirm = () => {
     if (!pauseDate) {
-      notification.error({ message: 'Please select a pause date.' });
+      notification.error({ message: "Please select a pause date." });
       return;
     }
     // Handle the pause logic (API call, etc.)
     const formData = new FormData();
-    formData.append('c_id', String(localStorage.getItem('c_id')));
-    formData.append('usertype', 'user');
-    formData.append('subscription_id', String(subscription?.subscription_id));
-    formData.append('product_name', subscription?.product_name || '');
-    formData.append('option_value', subscription?.option_value || '');
-    formData.append('delivery_opt', subscription?.delivery_opt || '');
-    formData.append('package_days', subscription?.package_days || '');
-    formData.append('subscription_pause_date', String(pauseDate));
-    formData.append('status', '3');
-    formData.append('quantity', '1');
+    formData.append("c_id", String(localStorage.getItem("c_id")));
+    formData.append("usertype", "user");
+    formData.append("subscription_id", String(subscription?.subscription_id));
+    formData.append("product_name", subscription?.product_name || "");
+    formData.append("option_value", subscription?.option_value || "");
+    formData.append("delivery_opt", subscription?.delivery_opt || "");
+    formData.append("package_days", subscription?.package_days || "");
+    formData.append("subscription_pause_date", String(pauseDate));
+    formData.append("status", "3");
+    formData.append("quantity", "1");
 
     // Example API call
-    axios.post('https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume', formData)
+    axios
+      .post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
+        formData
+      )
       .then((response) => {
         if (response.data.status === "success") {
-          notification.success({ message: 'Subscription paused successfully!' });
+          notification.success({
+            message: "Subscription paused successfully!",
+          });
           setIsModalVisiblePause(false);
         } else {
           notification.error({ message: response.data.message });
         }
       })
       .catch((error) => {
-        notification.error({ message: 'Error occurred while pausing the subscription.' });
+        notification.error({
+          message: "Error occurred while pausing the subscription.",
+        });
       });
   };
 
@@ -189,32 +213,35 @@ export const SubscriptionOrderCheck: React.FC = () => {
   //   setIsModalVisiblePause(false);  // Hide modal if canceled
   // };
 
-
   const handleResumeConfirm = () => {
     // setLoading(true);
     const formData = new FormData();
-    formData.append('c_id', String(localStorage.getItem('c_id')));
-    formData.append('usertype', 'user');
-    formData.append('subscription_id', String(subscription?.subscription_id));
-    formData.append('product_name', subscription?.product_name || '');
-    formData.append('option_value', subscription?.option_value || '');
-    formData.append('delivery_opt', subscription?.delivery_opt || '');
-    formData.append('package_days', subscription?.package_days || '');
-    formData.append('subscription_pause_date', pauseDate!);
-    formData.append('subscription_resume_date', subscription?.resumeDate || '');
-    formData.append('status', '2');
-    formData.append('extra_quantity', '0');
-    formData.append('declined_quantity', '0');
-    formData.append('default_quantity', '1');
-    formData.append('quantity', '1');
+    formData.append("c_id", String(localStorage.getItem("c_id")));
+    formData.append("usertype", "user");
+    formData.append("subscription_id", String(subscription?.subscription_id));
+    formData.append("product_name", subscription?.product_name || "");
+    formData.append("option_value", subscription?.option_value || "");
+    formData.append("delivery_opt", subscription?.delivery_opt || "");
+    formData.append("package_days", subscription?.package_days || "");
+    formData.append("subscription_pause_date", pauseDate!);
+    formData.append("subscription_resume_date", subscription?.resumeDate || "");
+    formData.append("status", "2");
+    formData.append("extra_quantity", "0");
+    formData.append("declined_quantity", "0");
+    formData.append("default_quantity", "1");
+    formData.append("quantity", "1");
 
     axios
-      .post("https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume", formData)
+      .post(
+        "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
+        formData
+      )
       .then((response) => {
         // console.log("nnnnnnnnnnnn", response);
         if (response.data.status === "success") {
-
-          notification.success({ message: "Subscription resumed successfully!" });
+          notification.success({
+            message: "Subscription resumed successfully!",
+          });
           setIsModalVisibleResume(false);
           window.location.reload();
         } else {
@@ -223,7 +250,9 @@ export const SubscriptionOrderCheck: React.FC = () => {
       })
       .catch((error) => {
         // setLoading(false);
-        notification.error({ message: "Error occurred while resuming the subscription." });
+        notification.error({
+          message: "Error occurred while resuming the subscription.",
+        });
       });
   };
 
@@ -231,7 +260,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
   // *************************One time order**************************************
 
   const toggle = (subscription: any) => (checked: boolean) => {
-
     // console.log("subscriptionsubscriptionsubscription", subscription);
 
     if (checked) {
@@ -242,10 +270,10 @@ export const SubscriptionOrderCheck: React.FC = () => {
       }
     } else {
       if (subscription.status === "Paused") {
-        const resumeDate = moment().add(1, 'day').format('YYYY-MM-DD');
+        const resumeDate = moment().add(1, "day").format("YYYY-MM-DD");
         setPauseDate(resumeDate);
         setCurrentSubscription(subscription);
-        SetSubscription(subscription)
+        SetSubscription(subscription);
         setIsModalVisibleResume(true);
       } else if (String(subscription.status) === "Active") {
         setCurrentSubscription(subscription);
@@ -254,7 +282,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
       }
     }
 
-    SetPauseToggle(prevState => ({
+    SetPauseToggle((prevState) => ({
       ...prevState,
       [subscription.subscription_id]: checked,
     }));
@@ -263,7 +291,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
   const handlePauseCancel = () => {
     setIsModalVisiblePause(false);
     if (currentSubscription) {
-      SetPauseToggle(prevState => ({
+      SetPauseToggle((prevState) => ({
         ...prevState,
         [currentSubscription.subscription_id]: false,
       }));
@@ -274,7 +302,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
     setIsModalVisibleResume(false);
     window.location.reload();
     if (currentSubscription) {
-      SetPauseToggle(prevState => ({
+      SetPauseToggle((prevState) => ({
         ...prevState,
         [currentSubscription.subscription_id]: false,
       }));
@@ -297,58 +325,62 @@ export const SubscriptionOrderCheck: React.FC = () => {
   };
 
   const handleOk = async () => {
-
     if (!pauseDate || !resumeDate) {
-      notification.error({ message: 'Please select both pause and resume dates.' });
+      notification.error({
+        message: "Please select both pause and resume dates.",
+      });
       return;
     }
 
-    const currentDate = moment().startOf('day');
+    const currentDate = moment().startOf("day");
 
-    const selectedPauseDate = moment(pauseDate).startOf('day');
+    const selectedPauseDate = moment(pauseDate).startOf("day");
     if (selectedPauseDate.isBefore(currentDate)) {
-      notification.error({ message: 'Subscription pause date must be greater than the current date.' });
+      notification.error({
+        message:
+          "Subscription pause date must be greater than the current date.",
+      });
       return;
     }
     const formData = new FormData();
-    formData.append('c_id', String(localStorage.getItem('c_id')));
-    formData.append('usertype', 'user');
-    formData.append('subscription_id', String(subscription?.subscription_id));
-    formData.append('product_name', subscription?.product_name || '');
-    formData.append('option_value', subscription?.option_value || '');
-    formData.append('delivery_opt', subscription?.delivery_opt || '');
-    formData.append('package_days', subscription?.package_days || '');
-    formData.append('subscription_pause_date', pauseDate);
-    formData.append('subscription_resume_date', resumeDate);
-    formData.append('status', '3');
-    formData.append('extra_quantity', '0');
-    formData.append('declined_quantity', '0');
-    formData.append('default_quantity', '1');
-    formData.append('quantity', '1');
+    formData.append("c_id", String(localStorage.getItem("c_id")));
+    formData.append("usertype", "user");
+    formData.append("subscription_id", String(subscription?.subscription_id));
+    formData.append("product_name", subscription?.product_name || "");
+    formData.append("option_value", subscription?.option_value || "");
+    formData.append("delivery_opt", subscription?.delivery_opt || "");
+    formData.append("package_days", subscription?.package_days || "");
+    formData.append("subscription_pause_date", pauseDate);
+    formData.append("subscription_resume_date", resumeDate);
+    formData.append("status", "3");
+    formData.append("extra_quantity", "0");
+    formData.append("declined_quantity", "0");
+    formData.append("default_quantity", "1");
+    formData.append("quantity", "1");
 
     try {
-
       const response = await axios.post(
-        'https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume',
+        "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
         formData
       );
 
       // console.log("qqqqqqqqqqqqq11111111", response.data)
 
       if (response.data.status === "success") {
-
-        notification.success({ message: response.data.subscription_resume_note });
+        notification.success({
+          message: response.data.subscription_resume_note,
+        });
         setIsModalVisiblePause(false);
         window.location.reload();
       } else if (response.data.status === "fail") {
         notification.error({ message: response.data.message });
       }
     } catch (error) {
-      notification.error({ message: 'Error occurred while pausing subscription.' });
+      notification.error({
+        message: "Error occurred while pausing subscription.",
+      });
     }
   };
-
-
 
   const [opacity, setOpacity] = useState<number>(0);
 
@@ -357,7 +389,9 @@ export const SubscriptionOrderCheck: React.FC = () => {
   const handleSubscriptionID = (subscription_id: string) => {
     // console.log("subscription_id string:", subscription_id);
 
-    const uniqueSubscriptionIDs = Array.from(new Set(subscription_id.split(',').map(id => id.trim())));
+    const uniqueSubscriptionIDs = Array.from(
+      new Set(subscription_id.split(",").map((id) => id.trim()))
+    );
 
     // console.log("Unique subscription ID:", uniqueSubscriptionIDs);
 
@@ -369,17 +403,16 @@ export const SubscriptionOrderCheck: React.FC = () => {
     }
   };
 
-
   const c_id = localStorage.getItem("c_id");
 
   useEffect(() => {
     fetchSubscriptionData();
-  }, []);
+  }, [subscriptionnextId]);
 
   const fetchSubscriptionData = () => {
     const formData = new FormData();
     formData.append("c_id", c_id || "");
-    formData.append("next_id", "0");
+    formData.append("next_id", String(subscriptionnextId) || "0");
     setIsLoading(true);
     axios
       .post(
@@ -388,13 +421,18 @@ export const SubscriptionOrderCheck: React.FC = () => {
       )
       .then((response) => {
         // console.log("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", response);
-        if (response.data.subscriptionListing && Array.isArray(response.data.subscriptionListing)) {
+        if (
+          response.data.subscriptionListing &&
+          Array.isArray(response.data.subscriptionListing)
+        ) {
           setSubscriptionData(response.data.subscriptionListing);
-
-          const initialPauseToggle: { [key: number]: boolean } = response.data.subscriptionListing.reduce((acc: any, curr: any) => {
-            acc[curr.subscription_id] = curr.status === 'Paused';
-            return acc;
-          }, {});
+          setSubscriptionNextId(response.data.next[0].next_id || "0");
+          SetSubscriptionTotalData(response.data.next[0].total);
+          const initialPauseToggle: { [key: number]: boolean } =
+            response.data.subscriptionListing.reduce((acc: any, curr: any) => {
+              acc[curr.subscription_id] = curr.status === "Paused";
+              return acc;
+            }, {});
 
           SetPauseToggle(initialPauseToggle);
         } else {
@@ -411,7 +449,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
   const fetchOneTimeOrderData = () => {
     const formData = new FormData();
     formData.append("c_id", c_id || "");
-    formData.append("next_id", "0");
+    formData.append("next_id", String(nextId) || "0");
     setIsLoading(true);
 
     axios
@@ -422,9 +460,11 @@ export const SubscriptionOrderCheck: React.FC = () => {
       .then((response) => {
         setOneTimeOrderData(response.data.ordersListing);
         setIsLoading(false);
+        setOneTimeNextId(response.data.next[0].next_id || "0");
+        setOneTimeTotalData(response.data.next[0].total || 0);
 
+        // console.log("kkkkkkkkkkkkkkkkkkk", response.data.next[0].next_id);
       })
-
       .catch((error) => {
         console.error("Error fetching one-time order data", error);
         setIsLoading(false);
@@ -434,11 +474,11 @@ export const SubscriptionOrderCheck: React.FC = () => {
   useEffect(() => {
     fetchSubscriptionData();
     fetchOneTimeOrderData();
-  }, []);
+  }, [nextId]);
 
   // Set up Intersection Observer for card animations
   useEffect(() => {
-    const cards = document.querySelectorAll('.card');
+    const cards = document.querySelectorAll(".card");
 
     if (cards.length === 0) return;
 
@@ -459,35 +499,41 @@ export const SubscriptionOrderCheck: React.FC = () => {
       cardIndexMap.set(card, index);
     });
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const card = entry.target;
-          const index = cardIndexMap.get(card);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const card = entry.target;
+            const index = cardIndexMap.get(card);
 
-          // Set a custom property for staggered animation delay
-          // The delay increases as the user scrolls up
-          (card as HTMLElement).style.setProperty('--card-index', String(index));
+            // Set a custom property for staggered animation delay
+            // The delay increases as the user scrolls up
+            (card as HTMLElement).style.setProperty(
+              "--card-index",
+              String(index)
+            );
 
-          // Add a class to trigger the animation
-          setTimeout(() => {
-            (card as HTMLElement).classList.add('animate-card');
-          }, 50 * index); // Staggered delay
+            // Add a class to trigger the animation
+            setTimeout(() => {
+              (card as HTMLElement).classList.add("animate-card");
+            }, 50 * index); // Staggered delay
 
-          observer.unobserve(card);
-        }
-      });
-    }, {
-      threshold: 0.15, // Increased threshold for better timing
-      rootMargin: '0px 0px -50px 0px' // Adjusted to trigger a bit earlier
-    });
+            observer.unobserve(card);
+          }
+        });
+      },
+      {
+        threshold: 0.15, // Increased threshold for better timing
+        rootMargin: "0px 0px -50px 0px", // Adjusted to trigger a bit earlier
+      }
+    );
 
-    cardsArray.forEach(card => {
+    cardsArray.forEach((card) => {
       observer.observe(card);
     });
 
     return () => {
-      cardsArray.forEach(card => {
+      cardsArray.forEach((card) => {
         observer.unobserve(card);
       });
     };
@@ -495,14 +541,16 @@ export const SubscriptionOrderCheck: React.FC = () => {
 
   useEffect(() => {
     if (Array.isArray(subscriptionID) && subscriptionID.length !== 0) {
-
       Modal.confirm({
-        title: 'Are you sure you want to resubscribe to this subscription?',
+        title: "Are you sure you want to resubscribe to this subscription?",
         onOk: async () => {
           const formData = new FormData();
           formData.append("c_id", c_id || "");
           formData.append("subscription_id", String(subscriptionID));
-          formData.append("addresses_id", String(localStorage.getItem('area_id') || ''));
+          formData.append(
+            "addresses_id",
+            String(localStorage.getItem("area_id") || "")
+          );
 
           try {
             const response = await axios.post(
@@ -512,7 +560,9 @@ export const SubscriptionOrderCheck: React.FC = () => {
 
             if (response.data.status === "success") {
               notification.success({ message: response.data.message });
-              navigate(`/dish/${subscriptionData[0].option_name}`, { state: { subscriptionData } });
+              navigate(`/dish/${subscriptionData[0].option_name}`, {
+                state: { subscriptionData },
+              });
             } else {
               notification.error({ message: response.data.message });
             }
@@ -522,7 +572,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
         },
         onCancel() {
           // Handle cancel (optional)
-        }
+        },
       });
     }
   }, [subscriptionID]);
@@ -551,12 +601,15 @@ export const SubscriptionOrderCheck: React.FC = () => {
         {activeTab === "subscriptions" && (
           <div className="ordersContainer">
             <h2>Subscription Orders</h2>
-            <div className="scrollable-containers" style={{maxHeight: "100%"}}>
+            <div
+              className="scrollable-containers"
+              style={{ maxHeight: "100%" }}
+            >
               <div className="card-list">
                 {Array.isArray(subscriptionData) &&
                   subscriptionData.length > 0 ? (
                   subscriptionData.map((subscription) => (
-                    <div key={subscription.subscription_id} className="card" style={{ marginBottom: '0px' }}>
+                    <div className="card" key={subscription.subscription_id}>
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
@@ -585,7 +638,8 @@ export const SubscriptionOrderCheck: React.FC = () => {
                             <span>per pack</span>
                           </p>
                           <p className="orderBalAmt">
-                            Total Amount : ₹ {subscription.subscription_block_amount}
+                            Paid Amount: ₹{" "}
+                            {subscription.subscription_block_amount}
                           </p>
                         </div>
                       </div>
@@ -642,7 +696,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
                         Subscription Expired
                       </span> */}
 
-
                       <div className="orderBtnsWraps">
                         {/* <button className="btn">Pause Delivery</button> */}
 
@@ -666,7 +719,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
                         {/* {
                           subscription.status === 'expire' ? <>  <button
 
-
                             onClick={() =>
                               handleSubscriptionID(subscription.subscription_id)
                             }
@@ -674,7 +726,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
                           >
                             Renew
                           </button> </> : <>
-
 
                           </>
                         } */}
@@ -692,13 +743,69 @@ export const SubscriptionOrderCheck: React.FC = () => {
                         <span>{subscription.status}</span>
                       </div>
                     </div>
-
                   ))
                 ) : (
                   <p>No subscriptions found.</p>
                 )}
               </div>
             </div>
+
+            {subscriptionnextTotalData > 20 && (
+              <div className="paginationButtonWrap">
+                <button
+                  className="pagination-nav-btn pagination-prev"
+                  onClick={() =>
+                    SetSubscriptionNextId((prev) =>
+                      Math.max(Math.floor(Number(prev) / 20) * 20 - 20, 0)
+                    )
+                  }
+                  disabled={Number(subscriptionNextId) === 0}
+                  aria-label="Go to previous page"
+                >
+                  <svg
+                    className="pagination-nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                  </svg>
+                  <span className="pagination-text">Previous</span>
+                </button>
+
+                <button
+                  className="pagination-nav-btn pagination-next"
+                  onClick={() =>
+                    SetSubscriptionNextId((prev) => {
+                      const nextValue = Math.floor((Number(prev) + 20) / 20) * 20;
+                      return nextValue >= subscriptionnextTotalData
+                        ? prev
+                        : nextValue;
+                    })
+                  }
+                  disabled={Number(subscriptionNextId) + 20 >= subscriptionnextTotalData}
+                  aria-label="Go to next page"
+                >
+                  <span className="pagination-text">Next</span>
+                  <svg
+                    className="pagination-nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -727,10 +834,8 @@ export const SubscriptionOrderCheck: React.FC = () => {
             <label>Resume Date:</label>
             <DatePicker
               value={resumeDate ? moment(resumeDate) : null}
-              value={resumeDate ? moment(resumeDate) : null}
               onChange={(date) => setResumeDate(date ? date.format('YYYY-MM-DD') : '')}
               format="YYYY-MM-DD"
-              disabledDate={(current) => current && current < moment().add(1, 'days').startOf('day')}
               disabledDate={(current) => current && current < moment().add(1, 'days').startOf('day')}
             />
           </div>
@@ -754,11 +859,15 @@ export const SubscriptionOrderCheck: React.FC = () => {
         {activeTab === "one-time-orders" && (
           <div className="ordersContainer">
             <h2>One Time Orders</h2>
-            <div className="scrollable-containers" style={{maxHeight: "100%"}}>
+            <div
+              className="scrollable-containers"
+              style={{ maxHeight: "100%" }}
+            >
               <div className="card-list">
-                {Array.isArray(oneTimeOrderData) && oneTimeOrderData.length > 0 ? (
+                {Array.isArray(oneTimeOrderData) &&
+                  oneTimeOrderData.length > 0 ? (
                   oneTimeOrderData.map((order) => (
-                    <div key={order.orders_id} className="card" style={{ marginBottom: '2px' }} >
+                    <div key={order.subscription_id} className="card">
                       <div className="topCardDataWrap">
                         <div className="orderImagWrap">
                           <img
@@ -768,9 +877,7 @@ export const SubscriptionOrderCheck: React.FC = () => {
                           />
                         </div>
                         <div className="card-info">
-                          <h3 className="orderItmName">
-                            {order.product_name}
-                          </h3>
+                          <h3 className="orderItmName">{order.product_name}</h3>
                           <p className="orderItmWieght">
                             {order.weight} {order.weight_unit}
                           </p>
@@ -783,17 +890,20 @@ export const SubscriptionOrderCheck: React.FC = () => {
                             {order.lastDeliveryDate || "-"}
                           </p> */}
                           <p className="orderPrice">
-                            <small>MRP</small> ₹{order.price}{" "}
-                            <span>per pack</span>
+
+                            {order.discount > 0 && (
+                              <>
+                                ₹{order.price - order.discount}
+                              </>
+                            )}
+                            <span> per pack</span>
                           </p>
                           <p className="orderBalAmt">
-                            Total Amount : ₹ {order.price * order.quantity}
+                            Paid Amount: ₹ {order.total}
                           </p>
                         </div>
                       </div>
-                      <div className="dataWraps">
-
-                      </div>
+                      <div className="dataWraps"></div>
                       <div className="orderDateWrap">
                         <div className="orderDateLeftBox box50">
                           <div className="svgWrap">
@@ -813,60 +923,110 @@ export const SubscriptionOrderCheck: React.FC = () => {
                           </div>
                         </div>
 
-
-
-
                         <div className="orderDateRightBox box50">
                           <div className="svgWrap">
-                            {/* <svg
+                            <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
                               width={24}
                               height={24}
                             >
                               <path d="M19,2h-1V1c0-.552-.447-1-1-1s-1,.448-1,1v1H8V1c0-.552-.447-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5ZM5,4h14c1.654,0,3,1.346,3,3v1H2v-1c0-1.654,1.346-3,3-3Zm14,18H5c-1.654,0-3-1.346-3-3V10H22v9c0,1.654-1.346,3-3,3Zm0-8c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h12c.553,0,1,.448,1,1Zm-7,4c0,.552-.447,1-1,1H6c-.553,0-1-.448-1-1s.447-1,1-1h5c.553,0,1,.448,1,1Z" />
-                            </svg> */}
+                            </svg>
                           </div>
                           <div className="innerBox">
-                            {/* <span>{orderData.order_status_name || "-"}</span> */}
-                            <span className="subExpiredText">{order.order_status_name}</span>
+                            {/* <p>Delivery : </p> */}
+                            <span>{order.status_name || "-"}</span>
                           </div>
                         </div>
                       </div>
-
+                      <span className="subExpiredText">{order.status}</span>
                       <div className="subscription_idWrap">
                         <p>Order Id: #{order.order_id}</p>
                       </div>
 
-                      {/* Delete Icon */}
                       <div
-                        className="delete-icon ddd"
+                        className="delete-icon"
                         onClick={() => handleDeleteClick(order)}
-                        role="button"
-                        aria-label="Delete order"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            handleDeleteClick(order);
-                          }
-                        }}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
                           <polyline points="3 6 5 6 21 6"></polyline>
                           <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                           <line x1="10" y1="11" x2="10" y2="17"></line>
                           <line x1="14" y1="11" x2="14" y2="17"></line>
                         </svg>
                       </div>
-
                     </div>
-
                   ))
                 ) : (
-                  <p>No order  found.</p>
+                  <p>No order found.</p>
                 )}
               </div>
             </div>
+
+            {oneTimeTotalData > 20 && (
+              <div className="paginationButtonWrap">
+                <button
+                  className="pagination-nav-btn pagination-prev"
+                  onClick={() =>
+                    setNextId((prev) =>
+                      Math.max(Math.floor(Number(prev) / 20) * 20 - 20, 0)
+                    )
+                  }
+                  disabled={Number(oneTimeNextId) === 0}
+                  aria-label="Go to previous page"
+                >
+                  <svg
+                    className="pagination-nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                  </svg>
+                  <span className="pagination-text">Previous</span>
+                </button>
+
+                <button
+                  className="pagination-nav-btn pagination-next"
+                  onClick={() =>
+                    setNextId((prev) => {
+                      if (oneTimeNextId >= oneTimeTotalData) {
+                        return prev;
+                      }
+                      const nextValue = Math.floor((Number(prev) + 20) / 20) * 20;
+                      return nextValue;
+                    })
+                  }
+                  disabled={Number(oneTimeNextId) + 20 >= oneTimeTotalData}
+                  aria-label="Go to next page"
+                >
+                  <span className="pagination-text">Next</span>
+                  <svg
+                    className="pagination-nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -880,37 +1040,42 @@ export const SubscriptionOrderCheck: React.FC = () => {
           okText="Confirm"
           cancelText="Cancel"
         >
-          <p className="delete-modal-content">Select a reason to cancel the order:</p>
+          <p className="delete-modal-content">
+            Select a reason to cancel the order:
+          </p>
           <Radio.Group onChange={handleReasonChange} value={selectedReason}>
             {cancelReasons.map((reason) => (
-              <Radio key={reason?.id} value={reason?.id} className="delete-radio-btn">
+              <Radio
+                key={reason?.id}
+                value={reason?.id}
+                className="delete-radio-btn"
+              >
                 {reason?.reason}
               </Radio>
             ))}
           </Radio.Group>
         </Modal>
-
       </main>
     );
   };
 
-
   // ****************header and Footer**************************
 
-    const renderHeader = (): JSX.Element => {
-      return (
-        <components.Header showGoBack={true} showBasket={true} />
-      );
-    };
+  const renderHeader = (): JSX.Element => {
+    return (
+      <components.Header showGoBack={true} showBasket={true} />
+    );
+  };
 
-    // const renderFooter = (): JSX.Element => {
-    //   return <components.Footer />;
-    // };
+  // const renderFooter = (): JSX.Element => {
+  //   return <components.Footer />;
+  // };
 
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
       {renderContent()}
+
       {/* {renderFooter()} */}
     </div>
   );

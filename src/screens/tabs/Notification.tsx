@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { components } from "../../components";
-import { svg } from "../../assets/svg";
 import axios from "axios";
-
 export const Notification: React.FC = () => {
   const [walletData, setWalletData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [rewardPoints, setRewardPoints] = useState<number>(0);
   const [getrewardbalance, setGetrewardBalance] = useState<any[]>([]);
-
-
-
   const [redeemPoints, setRedeemPoints] = useState<number>(0);
-
-  // console.log("redeemPoints", redeemPoints)
   const navigate = useNavigate();
 
   const fetchWalletBalance = async () => {
@@ -80,7 +73,7 @@ export const Notification: React.FC = () => {
   };
 
   const handleNavigateFunction = () => {
-    navigate("/wallet-history");
+    navigate("/transaction-history");
   };
 
   useEffect(() => {
@@ -103,9 +96,7 @@ export const Notification: React.FC = () => {
           'https://heritage.bizdel.in/app/consumer/services_v11/getrewardbalance',
           formData
         );
-        //  console.log("rrtttttttttt", response)
-
-
+      
         if (response.data.status === "success") {
           setGetrewardBalance(response.data.points);
           localStorage.setItem("reward_balance", response.data.points);
@@ -182,13 +173,12 @@ export const Notification: React.FC = () => {
           </div>
         </div>
 
-        {/* <button className="explore-btn" onClick={handleNavigateFunction}>
+        <button className="explore-btn" onClick={handleNavigateFunction}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 12h18M16 5l7 7-7 7" />
           </svg>
-          Wallet History
-        </button> */}
-
+          Rewards History
+        </button>
 
       </section>
     );

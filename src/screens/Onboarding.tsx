@@ -87,11 +87,6 @@ export const Onboarding: React.FC = () => {
       );
 
       const data = await response.json();
-
-     
-      // console.log("Pincode verification response:", data);
-      // console.log("Is serviceable:", data.search_data?.[0]?.is_servicesable);
-
       if (
         data.status === "success" &&
         data.search_data &&
@@ -100,26 +95,18 @@ export const Onboarding: React.FC = () => {
       ) {
         const locationInfo = data.search_data[0];
         setLocationData(locationInfo);
-
-        // Store city ID in localStorage
         localStorage.setItem("cityId", locationInfo.city_id);
-
-        // Show success notification
         notification.success({
           message: "Location Verified",
           description: `Your location ${locationInfo.city_name} is serviceable. Redirecting...`,
           placement: "bottomRight",
           duration: 3
         });
-
-        // Redirect after a short delay to show the success message
         setTimeout(() => {
           navigate(Routes.TabNavigator);
         }, 2000);
       } else {
         setIsValid(false);
-
-        // Check if we have search data
         if (data.search_data && data.search_data.length > 0) {
           setErrorMessage("This pincode is not serviceable. Please try a different one.");
           notification.error({
@@ -149,15 +136,6 @@ export const Onboarding: React.FC = () => {
       setIsLoading(false);
     }
   };
-
-  // const renderHeader = (): JSX.Element => {
-  //   return <components.Header title="Location" showGoBack={true} />;
-  // };
-
-  // We don't need this function as we're using the Input component
-
-  // We've moved these functions directly into the JSX
-
   const goBack = () => {
     navigate(-1);
   };
@@ -165,7 +143,6 @@ export const Onboarding: React.FC = () => {
   const renderContent = (): JSX.Element => {
     return (
       <main className="scrollable signInWrap">
-        {/* Background animation */}
         <div className="background-animation">
           <Lottie
             animationData={FormBackground}
@@ -173,7 +150,6 @@ export const Onboarding: React.FC = () => {
           />
         </div>
 
-        {/* Back button */}
         <button className="back-button" onClick={goBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 12H5" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

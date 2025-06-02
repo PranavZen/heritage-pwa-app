@@ -16,8 +16,6 @@ export const useGetMenu = (): {
   const [menuLoadingBanner, setMenuLoadingBanner] = useState<boolean>(false);
   const [selectedProductId, setSelectedProductId] = useState<string | string[] | null>(null); 
 
-  // console.log("Selected Product IDs:", selectedProductId);  
-
   const c_id = localStorage.getItem('c_id');
   const cityId = localStorage.getItem('cityId');
 
@@ -35,17 +33,9 @@ export const useGetMenu = (): {
         `https://heritage.bizdel.in/app/consumer/services_v11/productCategories`, 
         formData,
       );
-      // console.log("Menu response:", response);  
-
       setMenu(response.data.productCategories);
       setBanner(response.data.banner);
-
-
-      setSelectedProductId(response.data.productCategories.map((elem: any) => elem.product_id));
-
-  
-      // setSelectedProductId(response.data.productCategories[0]?.product_id || null);
-      
+      setSelectedProductId(response.data.productCategories.map((elem: any) => elem.product_id));  
     } catch (error) {
       console.error("Error fetching menu:", error);
     } finally {

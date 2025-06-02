@@ -15,7 +15,6 @@ export const MyAddress: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
-  // console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq', addresses);
   const [newAddress, setNewAddress] = useState<any | null>(null);
   const [opacity, setOpacity] = useState<number>(0);
   const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
@@ -24,11 +23,7 @@ export const MyAddress: React.FC = () => {
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
-
   const [shouldRefresh, setShouldRefresh] = useState(false);
-
-  // console.log("shouldRefresh", shouldRefresh)
-
   const c_id = localStorage.getItem("c_id");
 
   useEffect(() => {

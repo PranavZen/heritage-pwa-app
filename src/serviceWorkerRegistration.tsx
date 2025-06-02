@@ -31,9 +31,6 @@ export function register(config?: Config) {
         // Check if a service worker still exists or needs to be updated
         checkValidServiceWorker(swUrl, config);
         navigator.serviceWorker.ready.then(() => {
-        //   console.log(
-        //     'This web app is being served cache-first by a service worker.'
-        //   );
         });
       } else {
         // Register service worker
@@ -54,8 +51,6 @@ function registerValidSW(swUrl: string, config?: Config) {
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
-            //   console.log('New content is available; please refresh.');
-
               if (config?.onUpdate) {
                 config.onUpdate(registration);
               }

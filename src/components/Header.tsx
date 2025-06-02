@@ -84,17 +84,9 @@ export const Header: React.FC<Props> = ({
   const cart = useSelector((state: RootState) => state.cartSlice);
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-
-
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
 
-  // console.log("qqqqqq", shouldRefresh);
-
-
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
-  // console.log("cartCount", cartCount);
-
-  // Add animation when cartCount changes
   useEffect(() => {
     if (cartCount > 0) {
       setIsAnimating(true);
@@ -114,10 +106,6 @@ export const Header: React.FC<Props> = ({
     }, 1000)
 
   }, [shouldRefresh]);
-
-  // const removeCart = useSelector((state: RootState) => state.cartSlice.cartCount);
-
-  // console.log('xxxxxxxxxxxx', cartCount);
 
   const cityId = localStorage.getItem('c_id');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -214,13 +202,6 @@ export const Header: React.FC<Props> = ({
       );
     return null;
   };
-
-
-
-
-
-
-
 
   // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
@@ -404,7 +385,6 @@ export const Header: React.FC<Props> = ({
     window.matchMedia('(display-mode: standalone)').matches ||
     (window.navigator as any)?.standalone;
 
-
   useEffect(() => {
     if (isInStandaloneMode()) {
       setShowInstallPrompt(false);
@@ -427,7 +407,7 @@ export const Header: React.FC<Props> = ({
   }, []);
 
   const handleInstallClick = () => {
-    if (!deferredPrompt || isInStandaloneMode()) return; 
+    if (!deferredPrompt || isInStandaloneMode()) return;
 
     deferredPrompt.prompt();
 
@@ -435,7 +415,7 @@ export const Header: React.FC<Props> = ({
       if (choiceResult.outcome === 'accepted') {
         setShowInstallPrompt(false);
         setIsInstallable(false);
-        setDeferredPrompt(null); 
+        setDeferredPrompt(null);
       }
     });
   };
@@ -450,53 +430,55 @@ export const Header: React.FC<Props> = ({
     return (
       <>
         {/* Android Install Button */}
-        {true && !isIos() && (
-          <div className="enhanced-floating-container"
-          >
-            <div className="floating-button-wrapper" >
-              <button
-                id="install-button"
-                onClick={handleInstallClick}
-                className="enhanced-floating-button"
-                title="Add to Home Screen"
-                aria-label="Add app to home screen"
+  
+       {localStorage.getItem('curScreen') === 'Home'   && localStorage.getItem('hello') === "/tab-navigator" ? 
+          <>
+            {true && !isIos() && (
+              <div className="enhanced-floating-container"
               >
-                <svg.DownloadSvg className="download-icon" />
-                <span className="button-text">Add to Home Screen</span>
+                <div className="floating-button-wrapper" >
+                  <button
+                    id="install-button"
+                    onClick={handleInstallClick}
+                    className="enhanced-floating-button"
+                    title="Add to Home Screen"
+                    aria-label="Add app to home screen"
+                  >
+                    <svg.DownloadSvg className="download-icon" />
+                    <span className="button-text">Add to Home Screen</span>
 
-              </button>
-              <button
-                onClick={hideInstallPrompt}
-                className="close-btn"
-                title="Hide install prompt"
-                aria-label="Hide install prompt"
-              >
-                ×
-              </button>
-            </div>
-          </div>
-        )}
+                  </button>
+                  <button
+                    onClick={hideInstallPrompt}
+                    className="close-btn"
+                    title="Hide install prompt"
+                    aria-label="Hide install prompt"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            )}
 
-        {/* iOS Instruction Message */}
-        {isIos() && !isInStandaloneMode() && (
-          <div
-            style={{
-              position: 'fixed',
-              bottom: '20px',
-              left: '20px',
-              backgroundColor: '#f8f9fa',
-              padding: '10px 20px',
-              borderRadius: '5px',
-              fontSize: '16px',
-              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-              zIndex: 1000,
-            }}
-          >
-            <p>
-              To install this app on your iPhone/iPad, tap <strong>Share</strong> and then <strong>"Add to Home Screen"</strong>.
-            </p>
-          </div>
-        )}
+            {/* iOS Instruction Message */}
+            {isIos() && !isInStandaloneMode() && (
+              <div className="ios-instruction-container">
+                <div className="ios-instruction-message">
+                  <button
+                    onClick={hideInstallPrompt}
+                    className="ios-close-btn"
+                    title="Hide install prompt"
+                    aria-label="Hide install prompt"
+                  >
+                    ×
+                  </button>
+                  <p className="ios-instruction-text">
+                    To install this app on your iPhone/iPad, tap <strong>Share</strong> and then <strong>"Add to Home Screen"</strong>.
+                  </p>
+                </div>
+              </div>
+            )}
+          </> : <> </>}
       </>
     );
   };

@@ -19,7 +19,6 @@ export const TabNavigator: React.FC = () => {
     (state: RootState) => state.tabSlice.screen,
   );
 
-  // Ensure we have a valid tab screen on component mount
   useEffect(() => {
     const savedScreen = localStorage.getItem('curScreen');
     if (!savedScreen || !Object.values(TabScreens).includes(savedScreen as TabScreens)) {

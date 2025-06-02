@@ -10,9 +10,6 @@ export const CustomerCare: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
   const location = useLocation();
-
-  // console.log('Location state:', location.state);
-
   const { notification_id } = location.state || {};
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -69,7 +66,6 @@ export const CustomerCare: React.FC = () => {
         'https://heritage.bizdel.in/app/consumer/services_v11/generateTicket',
         formData
       );
-      // console.log('Ticket generation response:', response.data);
       if (response.data.status === 'success') {
         notification.success({ message: response.data.message });
       }

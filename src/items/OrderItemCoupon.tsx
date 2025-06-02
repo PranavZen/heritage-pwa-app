@@ -11,15 +11,11 @@ type Props = {
 };
 
 export const OrderItemCoupon: React.FC<Props> = ({ dish}) => {
-//   console.log("dish", dish);
   const navigate = hooks.useNavigate();
   const { removeFromCart } = hooks.useCartHandler();
   const [deliveryPreferenceInModal, setDeliveryPreferenceInModal] = useState<any[]>([]);
   const [deliveriesInModal, setDeliveriesInModal] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // console.log("deliveriesInModaldeliveriesInModal", deliveriesInModal);
-
   useEffect(() => {
     const getData = async () => {
       const formData = new FormData();
@@ -40,15 +36,9 @@ export const OrderItemCoupon: React.FC<Props> = ({ dish}) => {
   const [quantity, setQuantity] = useState<number>(Number(dish.quantity) || 1);
   const [deliveryPreference, setDeliveryPreference] = useState<string>(String(dish.delivery_preference) || '');
   const [noOfDeliveries, setNoOfDeliveries] = useState<number>(Number(dish.no_of_deliveries));
-  // console.log('[noOfDeliveries[noOfDeliveries[noOfDeliveries', noOfDeliveries);
   const [selectedPackage, setSelectedPackage] = useState<string>(dish.packages_name || '');
   const [selectedPackageDetails, setSelectedPackageDetails] = useState<string>();
   const [cartData, SetSetCartData] = useState<string>();
-
-  // console.log('zzzzzzzzzzzzzzzz', cartData);
-
-  // console.log("dis", dish);
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleUpdateCart = async (newQuantity: number) => {
@@ -123,10 +113,7 @@ export const OrderItemCoupon: React.FC<Props> = ({ dish}) => {
       try {
         const formData = new FormData();
         formData.append('id', String(dish.cart_id));
-        formData.append('c_id', localStorage.getItem('c_id') || '');
-
-        // console.log('Sending data to API:', formData);
-        
+        formData.append('c_id', localStorage.getItem('c_id') || ''); 
         const response = await axios.post(
           'https://heritage.bizdel.in/app/consumer/services_v11/deleteCartItem',
           formData
@@ -163,9 +150,6 @@ export const OrderItemCoupon: React.FC<Props> = ({ dish}) => {
           `https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv`,
           formData
         );
-
-        // console.log('xzxzxzxzxzxzxzxzxzxzxzxzxzxzxzx', response.data);
-
         SetSetCartData(response.data.optionListing.map((elem: any) => elem.no_of_deliveries));
       } catch (error) {
         console.error(error);
@@ -176,8 +160,6 @@ export const OrderItemCoupon: React.FC<Props> = ({ dish}) => {
 
   // *************************************************************************************
   const handleOpenModal = (option_name: any) => {
-    // console.log("aaaacccccccccccccccccccc", option_name)
-    // setIsModalOpen(true);
     navigate(`/dish/${dish.option_name}`, { state: { dish } });
   }
 
@@ -186,7 +168,6 @@ export const OrderItemCoupon: React.FC<Props> = ({ dish}) => {
     setIsModalOpen(false);
   };
   
-  // Handle modal Cancel click
   const handleCancel = () => {
     setIsModalOpen(false);
   };

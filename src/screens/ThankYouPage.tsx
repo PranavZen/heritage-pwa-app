@@ -92,6 +92,7 @@ const ThankYouPage: React.FC = () => {
           <div className="action-buttons">
             <button
               onClick={() => navigate("/your-order")}
+              // onClick={() => navigate(TabScreens.Subscription)}
               className="view-order-button"
             >
               <svg

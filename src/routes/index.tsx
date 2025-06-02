@@ -5,10 +5,10 @@ export enum TabScreens {
   Order = 'Order',
   Favorite = 'Favorite',
   Notification = 'Notification',
-}
+} 
 export enum Routes{
   SubscriptionModify='/subscription-modify',
-  WalletHistory='/wallet-history',
+  WalletHistory='/transaction-history',
   Onboarding = '/pincode',
   SignIn = '/',
   OrderHistory = '/profile/orders',

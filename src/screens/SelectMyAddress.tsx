@@ -12,9 +12,6 @@ export const SelectMyAddress: React.FC = () => {
   const navigate = hooks.useNavigate();
   const location = useLocation();
   const { id } = location.state || {};
-
-  // console.log("iddddddddddddddd", id);
-
   const [loading, setLoading] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
   const [newAddress, setNewAddress] = useState<any | null>(null);
@@ -24,9 +21,6 @@ export const SelectMyAddress: React.FC = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null
   );
-
-  // console.log("selectedAddressIdddddd", selectedAddressId);
-
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);

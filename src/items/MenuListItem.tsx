@@ -28,7 +28,6 @@ export const MenuListItem: React.FC<Props> = ({
   selectedCategory,
 }) => {
   const showSubscribe = dish.subscription_product;
-  // console.log("dishdishdishdishdish", showSubscribe);
   const dispatch = hooks.useDispatch();
   const [cartId, setCartId] = useState<string[]>([]);
   const [quantity, setQuantity] = useState<number>(1);
@@ -39,7 +38,6 @@ export const MenuListItem: React.FC<Props> = ({
   );
 
   const [orderType, setOrderType] = useState<number>(0);
-  // console.log("orderType", orderType);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
   const [refreshData, setRefreshData] = useState<boolean>(false);
 
@@ -49,8 +47,6 @@ export const MenuListItem: React.FC<Props> = ({
       setShouldRefresh(false);
     }
   }, [shouldRefresh]);
-
-  // console.log("aaasssss", cartItemId);
 
   const c_id = localStorage.getItem("c_id") || "";
 
@@ -274,12 +270,8 @@ export const MenuListItem: React.FC<Props> = ({
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
         formData
       );
-
-      // console.log('zzz', response);
-
       if (response.data.status === "success") {
         notification.success({ message: response.data.message });
-        // window.location.reload();
       } else {
         notification.error({ message: "Failed to update cart. Try again!" });
       }
@@ -391,12 +383,11 @@ export const MenuListItem: React.FC<Props> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [startDate, setStartDate] = useState(getTomorrowDate());
   const [deliveryPreference, setDeliveryPreference] = useState("1");
-
-  // console.log("deliveryPreference", deliveryPreference);
-
   const [deliveryOptionsPreference, setDeliveryOptionsPreference] = useState<
     any[]
   >([]);
+
+  // console.log("aaaaaaa", deliveryPreference)
   const [deliveries, setDeliveries] = useState<number>(30);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
@@ -620,9 +611,6 @@ export const MenuListItem: React.FC<Props> = ({
           `https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`,
           formData
         );
-
-        // console.log("paaaaaaaaaaaaaaa", response);
-
         setDeliveryOptionsPreference(response.data.productDetails);
       } catch (error) {
         // console.log(error);

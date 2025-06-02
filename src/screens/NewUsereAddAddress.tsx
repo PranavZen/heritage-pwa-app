@@ -32,10 +32,6 @@ export const NewUsereAddAddress: React.FC = () => {
   const navigate = hooks.useNavigate();
   const location = useLocation();
   const { cityID } = location.state || {};
-
-
-  // console.log("cityIDcityID", cityID)
-
   useEffect(() => {
     if (cityID) {
       setNewAddress({
@@ -63,18 +59,12 @@ export const NewUsereAddAddress: React.FC = () => {
     state_name: "",
     area_name: "NallaSupara (West)",
   });
-
-
-  // console.log("newAddress", newAddress);
-
   const [loading, setLoading] = useState<boolean>(false);
   const [states, setStates] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
   const [isPincodeVerified, setIsPincodeVerified] = useState<boolean>(false);
   const [areaIdByPincode, setAreaIdByPincode] = useState<any[]>([]);
   const [selectedAreaId, setSelectedAreaId] = useState('');
-
-
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
@@ -105,9 +95,6 @@ export const NewUsereAddAddress: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/pincodeverify",
         formData
       );
-
-      // console.log("uuuuuu", response);
-
       if (response.data.status === "success") {
         const cityData = response.data.search_data?.[0];
         if (cityData) {
@@ -182,9 +169,6 @@ export const NewUsereAddAddress: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/addAddress",
         formData
       );
-
-      // console.log("responserrrrrr", response);
-
       if (response.data.status === "success") {
         const cidFromTemp = localStorage.getItem("c_idd");
 
@@ -229,7 +213,7 @@ export const NewUsereAddAddress: React.FC = () => {
         const formData = new FormData();
         formData.append('pincode', newAddress.pincode)
         const response = await axios.post(`https://heritage.bizdel.in/app/consumer/services_v11/getAreaByPincode`, formData);
-        // console.log("kkkkkkk", response);
+
         setAreaIdByPincode(response.data.areaDetails)
       } catch (eror) {
         // console.log(eror)
@@ -240,11 +224,7 @@ export const NewUsereAddAddress: React.FC = () => {
 
   const handleAreaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAreaId(event.target.value);
-    // console.log('Selected Area ID:', event.target.value);
   };
-
-
-  // ***********************End Area Id***************************
 
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader />;

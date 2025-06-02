@@ -36,30 +36,18 @@ export const Dish: React.FC = () => {
   const shouldRefresh = useSelector(
     (state: RootState) => state.cartSlice.shouldRefresh
   );
-  // console.log("deliveryOptionsPreference", shouldRefresh);
   const [quantity, setQuantity] = useState<number>(1);
-  // console.log("aaaaaaa", quantity);
-
   const [cartId, setCartId] = useState<string[]>([]);
   const [cartItemId, setCartItemId] = useState<string | null>(null);
   const [cartType, setCartType] = useState<string | null>(null);
-
-  // console.log("cartItemIdz", cartType);
-
   const [opacity, setOpacity] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
   const [isAlternateModalOpen, setIsAlternateModalOpen] =
     useState<boolean>(false);
-  // const [startDate, setStartDate] = useState<string>("");
-
-  // console.log("isAlternateModalOpen", isAlternateModalOpen);
-
   const setIsModalOpenDaily = () => {
     setIsModalOpen(false);
   };
-  // console.log("isModalOpen", isModalOpen);
-
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
   const [deliveryPreference, setDeliveryPreference] = useState<string>("1");
@@ -68,31 +56,17 @@ export const Dish: React.FC = () => {
 
   const [customSelectedDays, setCustomSelectedDays] = useState<string[]>([]);
 
-  // const [checkCartData, SetCheckCartData] = useState<CheckCartData>({});
-
   const [checkCartData, SetCheckCartData] = useState<CheckCartData>({
-    order_type: "", // Initial value for `order_type`, adjust as needed
+    order_type: "",
   });
-
-  // console.log("checkCartData", checkCartData);
 
   interface CartItem {
     quantity: number;
   }
 
   const [cartData, setCartData] = useState<CartItem[] | undefined>(undefined);
-
-  // console.log("ccccccccccccccccc", cartData);
-
   const dish: DishType = location.state.dish;
-
-  // console.log("abbbbbbbbbbbbb", dish);
-
   const showSubscribe = location.state.showSubscribe;
-
-  // console.log("vvvvvvvvv", showSubscribe);
-
-  // Ensure dish and the properties exist
   if (dish && dish.product_option_id && dish.product_option_value_id) {
     localStorage.setItem(
       "product_option_id",
@@ -159,10 +133,6 @@ export const Dish: React.FC = () => {
     (item) => item.option_value_id === dish.option_value_id
   );
 
-  // console.log("roshannnnnnnnnnnn", dish);
-
-  // **************************************Modify cart data*************************************************************
-  // **************************************Modify cart data*************************************************************
   useEffect(() => {
     const fetchCartData = async () => {
       try {
@@ -176,9 +146,6 @@ export const Dish: React.FC = () => {
           "https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv",
           formData
         );
-
-        // console.log("ssssssssssssssssss", response.data.optionListing);
-
         if (response.data.optionListing) {
           const cartItems = response.data.optionListing.map(
             (item: any) => item.cart_product_option_value_id
@@ -207,11 +174,6 @@ export const Dish: React.FC = () => {
         console.error("Error fetching cart data:", error);
       }
     };
-    // if (shouldRefresh) {
-    //   fetchCartData().finally(() => {
-    //     dispatch(setShouldRefresh(true));
-    //   });
-    // }
     fetchCartData();
   }, [cityId, c_id, dish.product_option_value_id, shouldRefresh]);
 
@@ -354,10 +316,6 @@ export const Dish: React.FC = () => {
       });
     }
   };
-
-  // console.log("deliveryOptionsPreferencedeliveryOptionsPreference", deliveryOptionsPreference);
-
-  // ***************************************ADDddddddddddddddddddddddddddddddddddddd
   const addToCartApi = async (cartData: any) => {
     if (!c_id) {
       Modal.confirm({
@@ -446,16 +404,11 @@ export const Dish: React.FC = () => {
 
   // ******************update api start*****************************
   const [localQuantity, setLocalQuantity] = useState<number>(1);
-
-  // console.log("localQuantitylocalQuantity", localQuantity);
-
   const isInCart = !!cartItemId;
 
   const handleUpdateCart = async (newQuantity: number) => {
     if (newQuantity < 1) return;
-
     const c_id = localStorage.getItem("c_id");
-
     if (!c_id) {
       Modal.confirm({
         title: "Please Sign In",
@@ -683,12 +636,8 @@ export const Dish: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
         formData
       );
-
-      // console.log('zzz', response);
-
       if (response.data.status === "success") {
         notification.success({ message: response.data.message });
-        // window.location.reload();
       } else {
         notification.error({ message: "Failed to update cart. Try again!" });
       }
@@ -696,11 +645,6 @@ export const Dish: React.FC = () => {
       notification.error({ message: "Error updating cart!" });
     }
   };
-
-  // ((((())))))))))))))))))(((((()()()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
-
-  //*******************************************update api end**********************************************
-
   useEffect(() => {
     const deliveryData = async () => {
       const formData = new FormData();
@@ -715,9 +659,6 @@ export const Dish: React.FC = () => {
           `https://heritage.bizdel.in/app/consumer/services_v11/productDetailsByOption`,
           formData
         );
-
-        // console.log("paaaaaaaaaaaaaaa", response);
-
         setDeliveryOptionsPreference(response.data.productDetails);
       } catch (error) {
         // console.log(error);
@@ -725,16 +666,11 @@ export const Dish: React.FC = () => {
     };
     deliveryData();
   }, []);
-
-  //********************************************************************
-
   const today = new Date();
   today.setDate(today.getDate() + 1);
   const minDate = today.toISOString().split("T")[0];
 
   const { getDishQty } = hooks.useCartHandler();
-  // const { addToWishlist, removeFromWishlist, ifInWishlist } =
-  //   hooks.useWishlistHandler();
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
@@ -763,15 +699,6 @@ export const Dish: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  // const handleOpenCustomModal = () => {
-  //   setIsCustomModalOpen(true);
-  // };
-
-  // const handleCloseCustomModal = () => {
-  //   setIsCustomModalOpen(false);
-  // };
-
   const handleOpenModalAlternateDays = () => {
     const c_id = localStorage.getItem("c_id");
 
@@ -797,7 +724,6 @@ export const Dish: React.FC = () => {
 
   const handleCloseModalAlternateDays = () => {
     setIsAlternateModalOpen(false);
-    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaa");
   };
 
   const handleAddToCartWithPreferences = async () => {
@@ -809,7 +735,6 @@ export const Dish: React.FC = () => {
       deliveries: deliveries ?? 0,
     };
     const cartCount = await addToCartApi(dishWithPreferences);
-    // console.log('lllllll', cartData);
     if (cartCount) {
       dispatch(actions.addToCart(dishWithPreferences));
       setIsModalOpen(false);
@@ -1152,7 +1077,6 @@ export const Dish: React.FC = () => {
               value={deliveries}
               onChange={(e) => {
                 const selectedValue = Number(e.target.value);
-                // console.log("Selected Delivery :", selectedValue);
                 setDeliveries(selectedValue);
               }}
             >
@@ -1258,7 +1182,6 @@ export const Dish: React.FC = () => {
               value={deliveries}
               onChange={(e) => {
                 const selectedValue = Number(e.target.value);
-                // console.log("Selected Delivery :", selectedValue);
                 setDeliveries(selectedValue);
               }}
             >

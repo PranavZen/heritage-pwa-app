@@ -64,30 +64,16 @@ export const Search: React.FC = () => {
       setDishes([]);
       return;
     }
-
-    // console.log("Searching for:", query);
-
     const formData = new FormData();
     formData.append("search_key", query);
     formData.append("city_id", localStorage.getItem('cityId') || '');
-
-    // Add any other required parameters
     const c_id = localStorage.getItem('c_id');
     if (c_id) {
       formData.append("c_id", c_id);
     }
-
-    // Log form data for debugging
-    // console.log("Form data:", {
-    //   search_key: query,
-    //   city_id: localStorage.getItem('cityId') || '',
-    //   c_id: c_id || ''
-    // });
-
     setDishesLoading(true);
 
     try {
-      // Set a timeout to handle slow API responses
       const timeoutPromise = new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Request timeout')), 10000)
       );
@@ -96,17 +82,10 @@ export const Search: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/search",
         formData
       );
-
-      // Race between the fetch and the timeout
       const response = await Promise.race([fetchPromise, timeoutPromise]) as any;
-
-      // console.log("Search response:", response.data);
-
       if (response.data && Array.isArray(response.data.search_data)) {
-        // Handle array response
         setDishes(response.data.search_data as DishType[]);
       } else if (response.data && typeof response.data.search_data === 'object') {
-        // Handle case where search_data might be an object instead of array
         try {
           const searchDataArray = Object.values(response.data.search_data) as DishType[];
           setDishes(searchDataArray);
@@ -115,10 +94,8 @@ export const Search: React.FC = () => {
           setDishes([]);
         }
       } else if (response.data && Array.isArray(response.data)) {
-        // Handle direct array response
         setDishes(response.data as DishType[]);
       } else {
-        // If search_data is not in expected format, set empty array
         console.warn("Unexpected search data format:", response.data);
         setDishes([]);
       }

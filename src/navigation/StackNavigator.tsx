@@ -4,12 +4,8 @@ import { Routes } from '../routes';
 import { screens } from '../screens';
 import { TabNavigator } from './TabNavigator';
 import ProtectedComponent from '../components/ProtectedComponent';
-
-// console.log("eeee", ProtectedComponent);
-
 const c_id = localStorage.getItem('c_id');
 const cityId = localStorage.getItem('cityId');
-
 
 const stack = createBrowserRouter([
   {

@@ -18,20 +18,10 @@ export const MenuList: React.FC = () => {
   const navigate = hooks.useNavigate();
 
   const { menuLoading, menu, selectedProductId } = hooks.useGetMenu();
-
-
-
-  // console.log("menueeeeeeeeeeeeeeeeeeeeeeeeeeeeee", menu);
-
   const location = hooks.useLocation();
 
   const product_cat_id: string = location.state.menuName;
-  // console.log("zzzz", product_cat_id);
-
   const searchId: string = location.state.id;
-
-  // console.log("searchIdsearchId", searchId);
-
   const [opacity, setOpacity] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] =
     useState<string>(product_cat_id);
@@ -40,22 +30,13 @@ export const MenuList: React.FC = () => {
   const [productId, setProductId] = useState<string | null>(null);
 
   const [filterData, setFilterData] = useState<DishType[] | null>(null);
-
-  // console.log("filterDatafilterData", filterData);
-
   const [filterDataLoading, setFilterDataDishesLoading] =
     useState<boolean>(false);
 
   const { dishesLoading, dishes } = hooks.useGetDishes(selectedCategory);
 
   const c_id = localStorage.getItem('c_id');
-
-
-
-
-  // Use our custom loader hook
   const { withLoader } = hooks.useLoader();
-
   const getDishes = async () => {
     const cityId = localStorage.getItem("cityId");
     setFilterDataDishesLoading(true);
@@ -67,7 +48,6 @@ export const MenuList: React.FC = () => {
     formData.append('product_id', searchId || '');
     formData.append('next_id', '0');
     try {
-      // Example of using the global loader for API calls
       const response = await withLoader(
         async () => {
           return await axios.post(
@@ -183,9 +163,6 @@ export const MenuList: React.FC = () => {
       </section>
     );
   };
-
-
-
   const renderContent = (): JSX.Element | null => {
     if (menuLoading || dishesLoading || menu.length === 0 || dishes.length === 0) {
       return null;

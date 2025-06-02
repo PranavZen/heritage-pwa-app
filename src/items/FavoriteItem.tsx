@@ -32,22 +32,14 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
 
   const c_id = localStorage.getItem('c_id') || '';
   const cityId = localStorage.getItem('cityId') || '';
-  const [wishlistData, setWishlistData] = useState([])
-
-
-  // console.log("wishlistDatawishlistData", wishlistData);
-
+  const [wishlistData, setWishlistData] = useState([]);
   const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
-
-  // console.log("wishlistccccc", wishlist);
-
   const getTomorrowDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0];
   };
 
-  // *************************************************************
   useEffect(() => {
     const functionData = async () => {
       try {
@@ -71,17 +63,12 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
         );
         const wishlistData = response.data.wishlistListing
         setWishlistData(wishlistData);
-
-        // console.log("rrrrr", response);
       } catch (error) {
         // console.log("error")
       }
     }
     functionData()
   }, [])
-
-
-  // ********************************************************************
 
   const fetchCartData = async () => {
     try {
@@ -115,7 +102,6 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
       console.error('Error fetching cart data:', error);
     }
   };
-  // console.log("product_option_value_id", dish);
 
   useEffect(() => {
     fetchCartData();
@@ -284,7 +270,6 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
   // ******************************************************************************************************************
 
   const wishlistHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    // alert("helooooooooooooooooooo");
     event.stopPropagation();
     const c_id_num = parseInt(localStorage.getItem('c_id') || '0');
     if (!c_id_num) {
@@ -303,13 +288,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
     const isInWishlist = wishlist.some(
       (item) => item.product_option_value_id === dish.product_option_value_id
     );
-
-    // console.log("tttttt", isInWishlist);
-
-
     const type = isInWishlist ? 2 : 1;
-
-    // console.log("hhhh", dish.option_value_id);
     try {
       const resultAction = await dispatch(toggleWishlistItem({
         product_id: dish.product_id,
@@ -330,14 +309,8 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
   // ********************************************************************************************************************
 
   const isInWishlist = wishlist.some((item) => {
-    // console.log('Item product_option_value_id:', item.product_option_value_id);
-
-    // console.log('Dish product_option_value_id:', dish.product_option_value_id);
-
     return item.product_option_value_id === dish.product_option_value_id;
   });
-
-  // console.log("mmmm", isInWishlist);
 
   return (
     <>

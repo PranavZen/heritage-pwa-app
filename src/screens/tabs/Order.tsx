@@ -57,6 +57,8 @@ export const Order: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const [opacity, setOpacity] = useState<number>(0);
   const [totalPrice, SetTotalPrice] = useState<any[]>([]);
+
+  // console.log("ffffffffffffff", totalPrice)
   const [freeNoOfdeliveries, SetfreeNoOfdeliveries] = useState<any[]>([]);
   const [Subtotal, setSubtotal] = useState<any>({});
 
@@ -120,7 +122,9 @@ export const Order: React.FC = () => {
 
   const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
 
-  // console.log("extraDiscount", extraDiscount);
+  const [gstTax, setGstTax] = useState<number>(0)
+
+  // console.log("gstTax", gstTax);
 
   // console.log("extraDiscount", extraDiscount);
   const [isChecked, setIsChecked] = useState<boolean>(() => {
@@ -268,7 +272,7 @@ export const Order: React.FC = () => {
           `https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv`,
           formData
         );
-
+        setGstTax(response.data.gst_tax_total || 0)
         SetTotalPrice(response.data.optionListing);
         SetDeliveries(
           response.data.optionListing.map((elem: any) => elem.no_of_deliveries)
@@ -379,6 +383,7 @@ export const Order: React.FC = () => {
         notification.success({ message: response.data.message });
         navigate("/thank-you");
         localStorage.removeItem("couponCode");
+        localStorage.removeItem("discount_total");
       } else if (response.data.status === "fail") {
         setButtonLoading(false); // Reset button loading state on failure
         setLoading(false); // Reset global loading state on failure
@@ -584,9 +589,9 @@ export const Order: React.FC = () => {
       e.currentTarget.classList.add("clicked");
 
       // Remove the clicked class after animation completes
-      setTimeout(() => {
-        e.currentTarget.classList.remove("clicked");
-      }, 300);
+      // setTimeout(() => {
+      //   e.currentTarget.classList.remove("clicked");
+      // }, 300);
 
       // Navigate to coupon list on mobile
       if (window.innerWidth <= 767) {
@@ -758,7 +763,6 @@ export const Order: React.FC = () => {
             <span className="spinner-container">
               <span className="spinner"></span>
             </span>
-            Processing...
           </>
         ) : (
           <>
@@ -1125,14 +1129,15 @@ export const Order: React.FC = () => {
             <></>
           )}
           <div className="row-center-space-between rowLine">
-            <span className="t14">GST</span>
-            {localStorage.getItem("couponCode") ? (
-              <>
-                <span className="t14">₹{cartDetails?.gst_tax_total}</span>{" "}
-              </>
-            ) : (
-              <> ₹ 0 </>
-            )}
+            <span className="t14">Total GST</span>
+
+            <span className="t14">
+              ₹
+              {
+                cartDetails?.total_gst
+                || (localStorage.getItem("couponCode") ? cartDetails?.gst_tax_total : gstTax)
+              }
+            </span>
           </div>
 
           {/* ***************************yyyy*******************Orderrrrrrrrrrr */}
@@ -1245,7 +1250,7 @@ export const Order: React.FC = () => {
               </h4>
             ) : localStorage.getItem("couponCode") || redeemedAmount > 1 ? (
               <h4>
-                {/* {cartDetails?.after_discount_total} */}₹{" "}
+               ₹{" "}
                 {(() => {
                   const cartTotal = Subtotal.cart_grand_total;
                   //  totalPrice
@@ -1262,10 +1267,11 @@ export const Order: React.FC = () => {
                     discount = Number(cartDetails?.after_discount_total || 0);
                   }
                   const gst = Number(cartDetails?.gst_tax_total || 0);
+
+                  
                   const total =
                     Number(cartTotal) -
-                    (Number(extraDiscount) || 0) +
-                    gst -
+                    (Number(extraDiscount) || 0)  -
                     (redeemedAmount > 0 ? redeemedAmount : 0) -
                     discount;
                   return total.toLocaleString("en-IN");

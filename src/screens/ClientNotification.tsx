@@ -32,7 +32,6 @@ export const ClientNotification: React.FC = () => {
           'https://heritage.bizdel.in/app/consumer/services_v11/notificationList',
           formData
         );
-        // console.log('Notification response:', response.data.notificationList);
         setNotifications(response.data.notificationList || []);
       } catch (error) {
         setError('Failed to fetch notifications.');
