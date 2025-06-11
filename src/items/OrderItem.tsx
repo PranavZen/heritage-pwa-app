@@ -67,8 +67,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [deliveryPreference, setDeliveryPreference] = useState<string>(
     String(dish.delivery_preference) || ""
   );
-
-   console.log("kkkkk", deliveryPreference)
   const [noOfDeliveries, setNoOfDeliveries] = useState<number>(
     Number(dish.no_of_deliveries)
   );

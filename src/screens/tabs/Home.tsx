@@ -12,6 +12,7 @@ import { Routes, TabScreens } from "../../routes";
 import { actions } from "../../store/actions";
 import type { DishType, MenuType } from "../../types";
 import "../../scss/product-category.scss";
+import { SpinTheWheel } from "../../components/SpinTheWheel/SpinTheWheel";
 
 export const Home: React.FC = () => {
   const dispatch = hooks.useDispatch();
@@ -20,9 +21,9 @@ export const Home: React.FC = () => {
   const { dishesLoading, dishes } = hooks.useGetDishes();
   const { reviewsLoading, reviews } = hooks.useGetReviews();
   const { carouselLoading, carousel } = hooks.useGetCarousel();
-  const { menuLoadingBanner, banner } = hooks.useGetMenu();
+  const { menuLoadingBanner, banner, spinId } = hooks.useGetMenu();
 
-  // console.log("aqaqaqaqaqaqaqaqaqaqaq",banner);
+  console.log("aqaqaqaqaqaqaqaqaqaqaq",spinId);
 
   // {console.log('dishesdishes',dishes)}
 
@@ -67,7 +68,7 @@ export const Home: React.FC = () => {
                   index % 2 === 0 ? "fade-in" : "slide-up"
                 }`}
                 style={{ position: "relative" }}
-              >
+              >  
                 <img
                   alt="banner"
                   src={banner.image}
@@ -315,15 +316,26 @@ export const Home: React.FC = () => {
     );
   };
 
+   const SpinTheWheelComponent = (): JSX.Element => {
+    return (
+      <section
+        id="spinWheelerSetion"
+      >
+        <SpinTheWheel/>
+      </section>
+    );
+  };
+  
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader local={true} message="Loading content..." />;
-
     return (
       <main className="">
         {renderCarousel()}
         {renderMenu()}
         {renderRecommendedForYou()}
         {renderReviews()}
+        {String(spinId) === '1' && !localStorage.getItem('spinStop') && <SpinTheWheelComponent />}
+
       </main>
     );
   };

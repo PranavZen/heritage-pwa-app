@@ -9,12 +9,16 @@ export const useGetMenu = (): {
   menuLoadingBanner: boolean; 
   banner: MenuType[]; 
   selectedProductId: string | string[] | null;  
+  spinId:MenuType[];
 } => {
   const [menu, setMenu] = useState<MenuType[]>([]);
   const [banner, setBanner] = useState<MenuType[]>([]);
   const [menuLoading, setMenuLoading] = useState<boolean>(false);
   const [menuLoadingBanner, setMenuLoadingBanner] = useState<boolean>(false);
   const [selectedProductId, setSelectedProductId] = useState<string | string[] | null>(null); 
+    const [spinId, setShowSpinId] = useState<MenuType[]>([]);
+
+    // console.log("bbbb", spinId)
 
   const c_id = localStorage.getItem('c_id');
   const cityId = localStorage.getItem('cityId');
@@ -33,6 +37,7 @@ export const useGetMenu = (): {
         `https://heritage.bizdel.in/app/consumer/services_v11/productCategories`, 
         formData,
       );
+      setShowSpinId(response.data.is_show_spin);
       setMenu(response.data.productCategories);
       setBanner(response.data.banner);
       setSelectedProductId(response.data.productCategories.map((elem: any) => elem.product_id));  
@@ -42,10 +47,9 @@ export const useGetMenu = (): {
       setMenuLoading(false);
     }
   };
-
   useEffect(() => {
     getMenu();
   }, []);
 
-  return { menuLoading, menu, menuLoadingBanner, banner, selectedProductId };
+  return { menuLoading, menu, menuLoadingBanner, banner, selectedProductId,spinId };
 };

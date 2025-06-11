@@ -7,4 +7,5 @@ export type MenuType = {
   product_id:string;
   totalProducts:string;
   banner_for_id:string;
+  spinId:string;
 };

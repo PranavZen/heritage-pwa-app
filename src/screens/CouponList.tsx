@@ -12,6 +12,7 @@ export const CouponList: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const [opacity, setOpacity] = useState<number>(0);
   const [coupons, setCoupons] = useState<any[]>([]);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,12 +34,10 @@ export const CouponList: React.FC = () => {
   hooks.useGetNotifications();
 
   useEffect(() => {
-    // Check if there's already an applied coupon
     const currentCouponCode = localStorage.getItem("couponCode");
     if (currentCouponCode) {
       setAppliedCouponCode(currentCouponCode);
     }
-
     const fetchCoupons = async () => {
       try {
         const formData = new FormData();
@@ -59,9 +58,12 @@ export const CouponList: React.FC = () => {
         }
 
         const data = await response.json();
-        setCoupons(data.couponListing);
+        const cleanedCoupons = (data.couponListing || []).filter(Boolean);
+
+        setCoupons(cleanedCoupons);
         setLoading(false);
       } catch (error) {
+        console.error("Error fetching coupons:", error);
         setLoading(false);
         setError("Unable to load coupons.");
       }
@@ -70,9 +72,21 @@ export const CouponList: React.FC = () => {
     fetchCoupons();
   }, []);
 
+
+
+
+
+
   const renderHeader = (): JSX.Element => {
     return <components.Header showGoBack={true} showBasket={true} />;
   };
+
+
+
+
+
+
+
 
   const renderContent = (): JSX.Element => {
     if (loading) {
@@ -103,23 +117,23 @@ export const CouponList: React.FC = () => {
       }
     };
 
-    const applyCoupon = (coupon: any) => {
-      if (isApplying) return;
+    // const applyCoupon = (coupon: any) => {
+    //   if (isApplying) return;
 
-      handleCouponClick(coupon.coupon_id);
-      setIsApplying(true);
-      localStorage.setItem("couponCode", coupon.code);
-      setAppliedCouponCode(coupon.code);
+    //   handleCouponClick(coupon.coupon_id);
+    //   setIsApplying(true);
+    //   localStorage.setItem("couponCode", coupon.code);
+    //   setAppliedCouponCode(coupon.code);
 
-      setShowModal(true);
-      setTimeout(() => {
-        setShowModal(false);
-        setIsApplying(false);
-        navigate("/tab-navigator", {
-          state: { couponCode: coupon.code },
-        });
-      }, 3000);
-    };
+    //   setShowModal(true);
+    //   setTimeout(() => {
+    //     setShowModal(false);
+    //     setIsApplying(false);
+    //     navigate("/tab-navigator", {
+    //       state: { couponCode: coupon.code },
+    //     });
+    //   }, 3000);
+    // };
 
     return (
       <>
@@ -180,7 +194,7 @@ export const CouponList: React.FC = () => {
                       {isApplied ? (
                         <div className="coupon-applied-status">
                           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 6 9 17l-5-5"/>
+                            <path d="M20 6 9 17l-5-5" />
                           </svg>
                           <span>APPLIED</span>
                         </div>
@@ -228,6 +242,12 @@ export const CouponList: React.FC = () => {
       </>
     );
   };
+
+
+
+
+
+
 
   return (
     <div id="screen" style={{ opacity }}>
