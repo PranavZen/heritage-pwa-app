@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
   const { carouselLoading, carousel } = hooks.useGetCarousel();
   const { menuLoadingBanner, banner, spinId } = hooks.useGetMenu();
 
-  console.log("aqaqaqaqaqaqaqaqaqaqaq",spinId);
+  console.log("aqaqaqaqaqaqaqaqaqaqaq", spinId);
 
   // {console.log('dishesdishes',dishes)}
 
@@ -43,7 +43,7 @@ export const Home: React.FC = () => {
 
   const renderCarousel = (): JSX.Element => {
     return (
-      <section style={{ position: "relative"}}>
+      <section style={{ position: "relative" }}>
         <Swiper
           modules={[Pagination, Navigation, Autoplay]}
           slidesPerView={1}
@@ -64,11 +64,10 @@ export const Home: React.FC = () => {
           {banner.map((banner, index) => (
             <SwiperSlide key={banner.id}>
               <div
-                className={`carousel-slide ${
-                  index % 2 === 0 ? "fade-in" : "slide-up"
-                }`}
+                className={`carousel-slide ${index % 2 === 0 ? "fade-in" : "slide-up"
+                  }`}
                 style={{ position: "relative" }}
-              >  
+              >
                 <img
                   alt="banner"
                   src={banner.image}
@@ -145,9 +144,8 @@ export const Home: React.FC = () => {
               return (
                 <SwiperSlide key={menuItem.id} style={{ width: "auto" }}>
                   <div
-                    className={`itemWrap item-${index + 1} ${
-                      index % 2 === 0 ? "fade-in" : "slide-up"
-                    }`}
+                    className={`itemWrap item-${index + 1} ${index % 2 === 0 ? "fade-in" : "slide-up"
+                      }`}
                     onClick={() => {
                       navigate(Routes.MenuList, {
                         state: { menuName: menuItem.product_cat_id },
@@ -221,9 +219,8 @@ export const Home: React.FC = () => {
               return (
                 <SwiperSlide key={`first-${dish.id}`} style={{ width: "auto" }}>
                   <div
-                    className={`item-${index + 1} ${
-                      index % 2 === 0 ? "fade-in" : "slide-up"
-                    }`}
+                    className={`item-${index + 1} ${index % 2 === 0 ? "fade-in" : "slide-up"
+                      }`}
                   >
                     <items.RecomendedItem
                       index={index}
@@ -297,9 +294,8 @@ export const Home: React.FC = () => {
               return (
                 <SwiperSlide key={review.id} style={{ width: "auto" }}>
                   <div
-                    className={`item-${index + 1} ${
-                      index % 2 === 0 ? "fade-in" : "slide-up"
-                    }`}
+                    className={`item-${index + 1} ${index % 2 === 0 ? "fade-in" : "slide-up"
+                      }`}
                   >
                     <items.HomeReviewItem
                       index={index}
@@ -315,17 +311,26 @@ export const Home: React.FC = () => {
       </section>
     );
   };
+  const [isSpinStopped, setIsSpinStopped] = useState(false);
 
-   const SpinTheWheelComponent = (): JSX.Element => {
+  useEffect(() => {
+    const spinStop = localStorage.getItem('spinStop');
+    if (spinStop === 'true') {
+      setIsSpinStopped(true);
+    }
+  }, []);
+
+  const SpinTheWheelComponent = (): JSX.Element => {
     return (
       <section
         id="spinWheelerSetion"
+      style={{ display: isSpinStopped ? 'block' : '' }}
       >
-        <SpinTheWheel/>
+        <SpinTheWheel />
       </section>
     );
   };
-  
+
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader local={true} message="Loading content..." />;
     return (

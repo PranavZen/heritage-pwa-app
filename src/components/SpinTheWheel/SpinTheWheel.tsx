@@ -114,7 +114,7 @@ export const SpinTheWheel: React.FC = () => {
         setTimeout(() => {
           setShowWheel(false);
           localStorage.setItem("spinStop", "true");
-        }, 6000);
+        }, 3000);
       }
     } catch (error) {
       console.error("Spin error:", error);
@@ -134,7 +134,6 @@ export const SpinTheWheel: React.FC = () => {
     setRewardText("NO");
     setShowWheel(false);
     localStorage.setItem("spinStop", "true");
-    window.location.reload()
   };
 
   return (
@@ -148,7 +147,6 @@ export const SpinTheWheel: React.FC = () => {
               onClick={() => {
                 setShowWheel(false);
                 localStorage.setItem("spinStop", "true");
-                 window.location.reload();
               }}
             >
               ✕
