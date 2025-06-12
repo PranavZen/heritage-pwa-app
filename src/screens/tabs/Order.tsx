@@ -65,6 +65,9 @@ export const Order: React.FC = () => {
   // console.log("freeNoOfdeliveries", freeNoOfdeliveries);
 
   const [addressId, SetAddressId] = useState("");
+
+  // console.log("aaa", addressId)
+
   const [superPoint, setSuperPoint] = useState<any>(null);
 
   // console.log("superPoint", superPoint);
@@ -78,6 +81,8 @@ export const Order: React.FC = () => {
   const [deliveries, SetDeliveries] = useState<any[]>([]);
 
   const [addresses, setAddresses] = useState<any[]>([]);
+
+  // console.log("aaaaa",  addresses);
 
   const [getrewardbalance, setGetrewardBalance] = useState<any[]>([]);
 
@@ -324,7 +329,7 @@ export const Order: React.FC = () => {
           `https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById`,
           formData
         );
-
+        //  console.log("aaaa", response);
         const addresses = response.data.addresses;
 
         // const defaultAddress = addresses.find((addr: any) => addr.is_default === 1);
@@ -336,8 +341,10 @@ export const Order: React.FC = () => {
         // }
         if (Array.isArray(addresses)) {
           const defaultAddress = addresses.find(
-            (addr: any) => addr.is_default === 1
+            (addr: any) => addr.is_default === '1'
           );
+
+          // console.log("xx", defaultAddress);
 
           if (defaultAddress) {
             SetAddressId(defaultAddress.id);
@@ -1111,13 +1118,15 @@ export const Order: React.FC = () => {
                 <span className="t14">
                   Coupon {localStorage.getItem("couponCode") || "₹ 0"} applied
                   {localStorage.getItem("couponCode") &&
-                    ` of ₹${cartDetails?.after_discount_total || 0}`}
-                  !
+                    cartDetails?.after_discount_total > 0 &&
+                    ` of ₹ ${cartDetails.after_discount_total}`}
+                  ! 
                 </span>
+
                 {localStorage.getItem("couponCode") ? (
                   <>
                     <span className="t14">
-                      ₹{cartDetails?.after_discount_total}
+                      ₹ {cartDetails?.after_discount_total || 0}
                     </span>{" "}
                   </>
                 ) : (
@@ -1126,20 +1135,18 @@ export const Order: React.FC = () => {
               </div>{" "}
             </>
           ) : (
-            <></>
+            <> </>
           )}
           <div className="row-center-space-between rowLine">
             <span className="t14">Total GST</span>
-
             <span className="t14">
               ₹
               {
                 cartDetails?.total_gst
-                || (localStorage.getItem("couponCode") ? cartDetails?.gst_tax_total : gstTax)
+                || (localStorage.getItem("couponCode") ? cartDetails?.gst_tax_total : gstTax || 0)
               }
             </span>
           </div>
-
           {/* ***************************yyyy*******************Orderrrrrrrrrrr */}
           <div className="row-center-space-between rowLine super-coins-row">
             <div className="super-coins-wrapper">
@@ -1250,7 +1257,7 @@ export const Order: React.FC = () => {
               </h4>
             ) : localStorage.getItem("couponCode") || redeemedAmount > 1 ? (
               <h4>
-               ₹{" "}
+                ₹{" "}
                 {(() => {
                   const cartTotal = Subtotal.cart_grand_total;
                   //  totalPrice
@@ -1268,10 +1275,10 @@ export const Order: React.FC = () => {
                   }
                   const gst = Number(cartDetails?.gst_tax_total || 0);
 
-                  
+
                   const total =
                     Number(cartTotal) -
-                    (Number(extraDiscount) || 0)  -
+                    (Number(extraDiscount) || 0) -
                     (redeemedAmount > 0 ? redeemedAmount : 0) -
                     discount;
                   return total.toLocaleString("en-IN");

@@ -10,7 +10,6 @@ export const useGetPromocodes = () => {
 
   const getDishes = async () => {
     setPromocodesLoading(true);
-
     try {
       const response = await axios.get(URLS.GET_PROMOCODES);
       setPromocodes(response.data.promocodes);

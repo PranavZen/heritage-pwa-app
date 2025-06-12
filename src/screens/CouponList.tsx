@@ -56,8 +56,9 @@ export const CouponList: React.FC = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch coupons");
         }
-
         const data = await response.json();
+        
+        // console.log("aaa", data);
         const cleanedCoupons = (data.couponListing || []).filter(Boolean);
 
         setCoupons(cleanedCoupons);
@@ -72,21 +73,9 @@ export const CouponList: React.FC = () => {
     fetchCoupons();
   }, []);
 
-
-
-
-
-
   const renderHeader = (): JSX.Element => {
     return <components.Header showGoBack={true} showBasket={true} />;
   };
-
-
-
-
-
-
-
 
   const renderContent = (): JSX.Element => {
     if (loading) {
@@ -242,13 +231,6 @@ export const CouponList: React.FC = () => {
       </>
     );
   };
-
-
-
-
-
-
-
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
