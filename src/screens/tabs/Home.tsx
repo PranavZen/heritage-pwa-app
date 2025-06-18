@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
   const { carouselLoading, carousel } = hooks.useGetCarousel();
   const { menuLoadingBanner, banner, spinId } = hooks.useGetMenu();
 
-  console.log("aqaqaqaqaqaqaqaqaqaqaq", spinId);
+  // console.log("aqaqaqaqaqaqaqaqaqaqaq", spinId);
 
   // {console.log('dishesdishes',dishes)}
 

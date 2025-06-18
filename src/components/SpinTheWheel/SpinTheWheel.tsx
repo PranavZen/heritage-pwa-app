@@ -20,20 +20,16 @@ interface SpinData {
 
 export const SpinTheWheel: React.FC = () => {
   const [rewards, setRewards] = useState<Reward[]>([]);
-
-
-
   const [spinData, setSpinData] = useState<SpinData | null>(null);
   const [userId] = useState<string>("123207");
   const [deg, setDeg] = useState<number>(0);
   const [isSpinning, setIsSpinning] = useState<boolean>(false);
   const [rewardText, setRewardText] = useState<string>("NO");
-
   const [offerMessage, setOfferMessage] = useState<string>("Selected");
   const [idspin, setIdSpin] = useState<number>(1);
   const [showWheel, setShowWheel] = useState<boolean>(localStorage.getItem("spinStop") !== "true");
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false); // NEW STATE
 
-  // console.log("local sotage itmes", localStorage.getItem("spinStop"));
   useEffect(() => {
     const fetchRewards = async () => {
       try {
@@ -60,10 +56,9 @@ export const SpinTheWheel: React.FC = () => {
   }, []);
 
   const handleSpin = async () => {
-    // if (isSpinning || rewards.length === 0 || spinData?.spins_left === 0) return;
-
     setIsSpinning(true);
     setDeg(0);
+
     try {
       const formData = new FormData();
       formData.append("user_id", localStorage.getItem("c_id") || "0");
@@ -76,6 +71,7 @@ export const SpinTheWheel: React.FC = () => {
 
       if (data.success === true) {
         setSpinData(data);
+
         const totalSegments = rewards.length;
         const segmentAngle = 360 / totalSegments;
         const rounds = 6;
@@ -84,21 +80,19 @@ export const SpinTheWheel: React.FC = () => {
         setIdSpin(rewardId);
 
         const matchedRewardIndex = rewards.findIndex((r) => r.id === rewardId);
-
-        if (matchedRewardIndex === -1) {
-          throw new Error("Reward ID not found in active rewards");
-        }
+        if (matchedRewardIndex === -1) throw new Error("Reward ID not found");
 
         const rewardTitle = rewards[matchedRewardIndex].title;
-
         const stopAngle = 360 - matchedRewardIndex * segmentAngle + segmentAngle / 2;
         const finalDeg = rounds * 360 + stopAngle + 720;
+
         setDeg(finalDeg);
 
         setTimeout(() => {
           setIsSpinning(false);
           setRewardText(rewardTitle);
           setOfferMessage(data.message || `You won: ${rewardTitle}`);
+          setIsModalVisible(true); // Show modal immediately
 
           const confetti = document.createElement("div");
           confetti.className = styles.confetti;
@@ -114,6 +108,7 @@ export const SpinTheWheel: React.FC = () => {
         setTimeout(() => {
           setShowWheel(false);
           localStorage.setItem("spinStop", "true");
+          window.location.reload();
         }, 3000);
       }
     } catch (error) {
@@ -128,25 +123,24 @@ export const SpinTheWheel: React.FC = () => {
   };
 
   const handleCloseModal = () => {
-
-    const modal = document.getElementById("resultModal");
-    if (modal) modal.style.display = "none";
+    setIsModalVisible(false);
     setRewardText("NO");
     setShowWheel(false);
     localStorage.setItem("spinStop", "true");
+    window.location.reload();
   };
 
   return (
     <>
       {showWheel && (
         <div className="spinnerInnerWrap">
-          <div
-            className={styles.container}>
+          <div className={styles.container}>
             <div
               className={styles["close-btn"]}
               onClick={() => {
                 setShowWheel(false);
                 localStorage.setItem("spinStop", "true");
+                window.location.reload();
               }}
             >
               ✕
@@ -157,7 +151,7 @@ export const SpinTheWheel: React.FC = () => {
               onClick={handleSpin}
               disabled={isSpinning || spinData?.spins_left === 0}
             >
-              {isSpinning ? "Spin" : "Spin"}
+              {isSpinning ? "spin" : "Spin"}
             </button>
 
             <div
@@ -191,21 +185,19 @@ export const SpinTheWheel: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/** Modal */}
       <div
         className={styles["result-modal"]}
         id="resultModal"
-        style={{ display: rewardText === "NO" ? "none" : "block" }}
+        style={{ display: isModalVisible ? "block" : "none" }}
       >
         <h1 id="rewardText">{rewardText}</h1>
         <p id="offerMessage">{offerMessage}</p>
 
-       
-            <button
-              className={styles["done-btn"]}
-              onClick={handleCloseModal}
-            >
-             {rewardText !== 'Better Luck Next Time' ? <>  Claim Now</>: <> Close</>}
-            </button>
+        <button className={styles["done-btn"]} onClick={handleCloseModal}>
+          {rewardText !== "Better Luck Next Time" ? <>Claim Now</> : <>Close</>}
+        </button>
       </div>
     </>
   );

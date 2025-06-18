@@ -1,5 +1,5 @@
 .product-category-section {
-  margin-bottom: 25px;
+  margin-bottom: 50px;
   background-color: #f0f7ed;
   padding: 20px 0 30px;
   position: relative;
@@ -29,7 +29,6 @@
 
 .itemWrap {
   position: relative;
-  width: 160px;
   height: 200px;
   padding: 0;
   margin: 10px 5px;
@@ -120,11 +119,10 @@
 }
 @media screen and (max-width: 767px) {
   .product-category-section {
-    padding: 15px 0 25px;
+    padding: 15px 0 50px;
   }
   .itemWrap {
     height: 180px;
-    width: 140px;
   }
   .itemWrap .bg-cover {
     height: 100px;

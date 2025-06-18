@@ -1,0 +1,165 @@
+.container {
+  position: relative;
+  width: 329px;
+  height: 329px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container .close-btn {
+  position: absolute;
+  top: -17px;
+  right: -8px;
+  background: #104d1e;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.container .close-btn:hover {
+  background: #104d1e;
+}
+.container .spinBtn {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  background: #fff;
+  border-radius: 50%;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #333;
+  border: 4px solid rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.container .spinBtn::before {
+  content: "";
+  position: absolute;
+  top: -32px;
+  width: 24px;
+  height: 35px;
+  background: #fff;
+  -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+          clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+.container .wheel {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 0 10px #fff, 0 0 0 18px #444;
+  transition: transform 6s cubic-bezier(0.1, 0.9, 0.1, 1);
+}
+.container .number {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  transform-origin: bottom right;
+  -webkit-clip-path: polygon(0 0, 85% 0, 100% 100%, 0 62%);
+          clip-path: polygon(0 0, 85% 0, 100% 100%, 0 62%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.container .number span {
+  text-align: center;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 600;
+  rotate: -40deg;
+  word-break: break-word;
+  padding-left: 16px;
+  width: 100px;
+}
+
+.result-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(145deg, #ffffff, #e6ffe6);
+  color: #2d2d2d;
+  border: 4px solid #28a745;
+  padding: 40px 50px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 999;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+  animation: popIn 0.4s ease;
+  max-width: 90%;
+  width: 400px;
+  font-family: "Segoe UI", sans-serif;
+}
+.result-modal h1 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #28a745;
+}
+.result-modal p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  line-height: 1.4;
+  color: #333;
+}
+.result-modal .done-btn {
+  background: linear-gradient(145deg, #ffc107, #e6b800);
+  border: none;
+  padding: 12px 28px;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  color: #000;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.result-modal .done-btn:hover {
+  background: #ffb300;
+  transform: scale(1.05);
+}
+
+.confetti {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 998;
+  background-image: url("https://cdn.pixabay.com/photo/2016/11/21/15/47/confetti-1843650_1280.png");
+  background-size: cover;
+  opacity: 0.3;
+  animation: fall 1s ease-out forwards;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8) translate(-50%, -50%);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+@keyframes fall {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}/*# sourceMappingURL=SpinTheWheel.module.css.map */
