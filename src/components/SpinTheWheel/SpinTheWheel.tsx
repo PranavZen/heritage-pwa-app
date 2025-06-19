@@ -92,7 +92,7 @@ export const SpinTheWheel: React.FC = () => {
           setIsSpinning(false);
           setRewardText(rewardTitle);
           setOfferMessage(data.message || `You won: ${rewardTitle}`);
-          setIsModalVisible(true); // Show modal immediately
+          setIsModalVisible(true); 
 
           const confetti = document.createElement("div");
           confetti.className = styles.confetti;
