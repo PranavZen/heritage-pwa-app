@@ -806,7 +806,7 @@ export const MenuListItem: React.FC<Props> = ({
             />
           </div>
 
-          <div>
+          {/* <div>
             <label>Delivery Preference:</label>
             <select
               value={deliveryPreference}
@@ -824,7 +824,7 @@ export const MenuListItem: React.FC<Props> = ({
                 <option value="">No delivery options available</option>
               )}
             </select>
-          </div>
+          </div> */}
 
           <div className="delivery-dropdown">
             <label>Select Days:</label>

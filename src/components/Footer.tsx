@@ -85,17 +85,18 @@ const tabs = [
     icon: <svg.HomeTabSvg />,
     label: "Home"
   },
-  // {
-  //   id: 2,
-  //   screen: TabScreens.Menu,
-  //   icon: <svg.SearchTabSvg />,
-  //   label: "Search"
-  // },
+  
   {
     id: 3,
     screen: TabScreens.Subscription,
     icon: <svg.OrderTabSvg />,
     label: "Orders"
+  },
+  {
+    id: 2,
+    screen: TabScreens.Offer,
+    icon: <svg.SearchTabSvg />,
+    label: "Offers"
   },
   {
     id: 4,

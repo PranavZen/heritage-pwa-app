@@ -11,6 +11,7 @@ import { SubscriptionOrder } from '../screens/tabs/SubscriptionOrder';
 import { actions } from '../store/actions';
 import {Order} from '../screens/tabs/Order';
 import { useNavigate } from 'react-router-dom';
+import {Offer} from '../screens/tabs/Offer';
 
 export const TabNavigator: React.FC = () => {
   const navigate=useNavigate();
@@ -38,6 +39,8 @@ export const TabNavigator: React.FC = () => {
         return 'Favorite';
       case TabScreens.Notification:
         return 'Wallet';
+      case TabScreens.Offer:
+        return 'Offer';
       default:
         return 'Home';
     }
@@ -57,6 +60,8 @@ export const TabNavigator: React.FC = () => {
         return <Favorite/>;
       case TabScreens.Notification:
         return <Notification />;
+      case TabScreens.Offer:
+        return <Offer />;
       default:
         return <Home/>;
     }
@@ -70,6 +75,7 @@ export const TabNavigator: React.FC = () => {
       case TabScreens.Order:
       case TabScreens.Favorite:
       case TabScreens.Notification:
+      case TabScreens.Offer:
         return true;
       default:
         return false;
@@ -85,6 +91,7 @@ export const TabNavigator: React.FC = () => {
       case TabScreens.Order:
       case TabScreens.Favorite:
       case TabScreens.Notification:
+      case TabScreens.Offer:
         return false;
       default:
         return false;

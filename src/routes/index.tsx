@@ -5,6 +5,7 @@ export enum TabScreens {
   Order = 'Order',
   Favorite = 'Favorite',
   Notification = 'Notification',
+  Offer='Offer'
 } 
 export enum Routes{
   SubscriptionModify='/subscription-modify',
@@ -69,5 +70,7 @@ export enum Routes{
   OrderItemCoupon='/order-item',
   SelectMyAddress='/select-Address',
   ThankYouPage='/thank-you',
-  NewUsereAddAddress='new-address'
+  NewUsereAddAddress='new-address',
+  
+
 }

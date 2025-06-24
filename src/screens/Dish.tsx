@@ -989,7 +989,7 @@ export const Dish: React.FC = () => {
         {showSubscribe &&
           (!cartItemId ? (
             <components.Button
-              text="Subscribe for Regular Delivery"
+              text="Subscribe For Daily Delivery"
               onClick={handleOpenModal}
               containerStyle={{ marginBottom: 16 }}
             />
@@ -1044,7 +1044,9 @@ export const Dish: React.FC = () => {
               required
             />
           </div>
-          <select
+
+
+          {/* <select
             value={deliveryPreference}
             onChange={(e) => setDeliveryPreference(e.target.value)}
           >
@@ -1069,7 +1071,7 @@ export const Dish: React.FC = () => {
             ) : (
               <option value="">No delivery options available</option>
             )}
-          </select>
+          </select> */}
 
           <div className="delivery-dropdown">
             <label>Select Days:</label>
