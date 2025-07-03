@@ -37,6 +37,7 @@ import { OrderItemCoupon} from '../items/OrderItemCoupon';
 import {SelectMyAddress} from './SelectMyAddress';
 import ThankYouPage from './ThankYouPage';
 import { NewUsereAddAddress } from './NewUsereAddAddress';
+import {SelectAddressFromHome} from './SelectAddressFromHome';
 
 export const screens = {
   OrderItemCoupon,
@@ -77,5 +78,6 @@ export const screens = {
   SubscriptionOrderCheck,
   SelectMyAddress,
   ThankYouPage,
-  NewUsereAddAddress
+  NewUsereAddAddress,
+  SelectAddressFromHome
 };

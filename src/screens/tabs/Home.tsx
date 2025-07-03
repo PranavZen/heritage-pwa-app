@@ -23,10 +23,6 @@ export const Home: React.FC = () => {
   const { carouselLoading, carousel } = hooks.useGetCarousel();
   const { menuLoadingBanner, banner, spinId } = hooks.useGetMenu();
 
-  // console.log("aqaqaqaqaqaqaqaqaqaqaq", spinId);
-
-  // {console.log('dishesdishes',dishes)}
-
   const loading: boolean =
     menuLoading || dishesLoading || reviewsLoading || carouselLoading;
 
@@ -314,22 +310,11 @@ export const Home: React.FC = () => {
   const [isSpinStopped, setIsSpinStopped] = useState(false);
 
   useEffect(() => {
-    const spinStop = localStorage.getItem('spinStop');
+    const spinStop = sessionStorage.getItem('spinStop');
     if (spinStop === 'true') {
       setIsSpinStopped(true);
     }
   }, []);
-
-  const SpinTheWheelComponent = (): JSX.Element => {
-    return (
-      <section
-        id="spinWheelerSetion"
-      style={{ display: isSpinStopped ? 'block' : '' }}
-      >
-        <SpinTheWheel />
-      </section>
-    );
-  };
 
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader local={true} message="Loading content..." />;
@@ -339,8 +324,7 @@ export const Home: React.FC = () => {
         {renderMenu()}
         {renderRecommendedForYou()}
         {renderReviews()}
-        {String(spinId) === '1' && !localStorage.getItem('spinStop') && <SpinTheWheelComponent />}
-
+        {String(spinId) === '1' && !sessionStorage.getItem('spinStop') && <SpinTheWheel />}
       </main>
     );
   };

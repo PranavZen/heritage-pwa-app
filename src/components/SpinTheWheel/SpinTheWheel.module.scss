@@ -1,5 +1,3 @@
-
-
 .container {
   position: relative;
   width: 329px;
@@ -73,7 +71,7 @@
     width: 50%;
     height: 50%;
     transform-origin: bottom right;
-   clip-path: polygon(0 0, 90% 0, 100% 100%, 0 79%);
+    clip-path: polygon(0 0, 90% 0, 100% 100%, 0 79%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -103,7 +101,7 @@
   padding: 40px 50px;
   border-radius: 20px;
   text-align: center;
-  z-index: 999;
+  z-index: 1001;
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
   animation: popIn 0.4s ease;
   max-width: 90%;
@@ -175,3 +173,35 @@
     opacity: 0.3;
   }
 }
+
+
+.spinCountBox{
+  position: absolute;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 18px;
+  z-index: 2222;
+  left: 43%;
+  bottom: 22%;
+  background-color: green;
+  padding: 6px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.spin-count-box p {
+  margin: 0;
+}
+
+@media screen and (max-width: 480px) {
+  .spinCountBox{
+    font-size: 14px;
+    left: 44%;
+    bottom:27%;
+    padding: 4px 8px;
+  }
+}
+
+
+

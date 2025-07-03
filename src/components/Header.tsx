@@ -7,12 +7,13 @@ import { TabScreens, Routes } from '../routes';
 import { setScreen } from '../store/slices/tabSlice';
 import axios from 'axios';
 import pic1 from '../assets/icons/logo.png';
-import { Modal } from 'antd';
+import { Modal, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartCount } from '../store/slices/cartSlice';
 import NoCartData from '../screens/NoCartData';
 import homeImg from '../assets/icons/home.png'
 import { Color } from 'antd/es/color-picker';
+import { SpinTheWheel } from './SpinTheWheel/SpinTheWheel';
 
 type Props = {
   title?: string;
@@ -104,7 +105,6 @@ export const Header: React.FC<Props> = ({
         localStorage.removeItem('isChecked');
       }
     }, 1000)
-
   }, [shouldRefresh]);
 
   const cityId = localStorage.getItem('c_id');
@@ -137,9 +137,7 @@ export const Header: React.FC<Props> = ({
         }
       } catch (error) {
         console.error('Error fetching profile data:', error);
-      } finally {
-        // setIsLoading(false);
-      }
+      } 
     };
 
     GetProfileData();
@@ -147,6 +145,7 @@ export const Header: React.FC<Props> = ({
 
   const signOut = () => {
     localStorage.clear();
+    sessionStorage.removeItem('spinStop');
     navigate(Routes.SignIn);
     navigate(0)
   };
@@ -177,10 +176,7 @@ export const Header: React.FC<Props> = ({
     );
   };
 
-
-  // Render the go back button if needed
   const renderGoBack = (): JSX.Element | null => {
-
     if (showGoBack && location.key !== 'default')
       return (
         <div
@@ -203,7 +199,6 @@ export const Header: React.FC<Props> = ({
     return null;
   };
 
-  // Render the header title/logo
   const renderTitle = (): JSX.Element | null => {
     const shouldGoToHome = true;
     return (
@@ -430,8 +425,8 @@ export const Header: React.FC<Props> = ({
     return (
       <>
         {/* Android Install Button */}
-  
-       {localStorage.getItem('curScreen') === 'Home'   && localStorage.getItem('hello') === "/tab-navigator" ? 
+
+        {localStorage.getItem('curScreen') === 'Home' && localStorage.getItem('hello') === "/tab-navigator" ?
           <>
             {true && !isIos() && (
               <div className="enhanced-floating-container"
@@ -482,9 +477,145 @@ export const Header: React.FC<Props> = ({
       </>
     );
   };
+  // **********************************************************777777777777777777777777777777777777777777777
 
+  const [addresses, setAddresses] = useState<any[]>([]);
+
+  const selectedAddressData = (Array.isArray(addresses) ?
+    addresses.filter((elem) => elem.id === localStorage.getItem('selectedAddressId')) :
+    []
+  );
+
+
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      const formData = new FormData();
+      const c_id = localStorage.getItem('c_id') || '0';
+      formData.append('c_id', c_id);
+      try {
+        const response = await axios.post(
+          'https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById',
+          formData
+        );
+        setAddresses(response.data.addresses)
+
+      } catch (err) {
+        console.error("Error fetching:", err);
+      }
+    };
+
+    fetchAddresses();
+  }, []);
+
+  const handleSelect = (e: any) => {
+    navigate("/selected-Address", {
+      state: { id: e },
+    });
+  };
+  const Search = (e: any) => {
+    navigate('/search')
+  };
+
+  const AddressSelect = () => {
+    return (
+      <>
+        <div className="selected-address-wrapper" style={{ cursor: 'pointer' }}>
+          <div className="address-dropdown">
+            {addresses && addresses.some((address: any) => address.is_default === '1') && (
+              <div className="dropdown-header" onClick={() => handleSelect(0)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="dropdown-icon"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </div>
+            )}
+            <div>
+              {(addresses && addresses.length > 0) ? (
+                selectedAddressData && selectedAddressData.length > 0 ?
+                  selectedAddressData.map((address: any) => (
+                    <div
+                      key={address.id}
+                      className="address-item"
+                      onClick={() => handleSelect(address.id)}
+                    >
+                      {address.area_name} ...
+                    </div>
+                  ))
+                  :
+                  addresses.filter((address: any) => address.is_default === '1')
+                    .map((address: any) => (
+                      <div
+                        key={address.id}
+                        className="address-item"
+                        onClick={() => handleSelect(address.id)}
+                      >
+                        {address.area_name} ...
+                      </div>
+                    ))
+              ) : (
+                <div> </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+
+      </>
+    );
+  };
+
+  const SearchSelect = () => {
+    return (
+      <>
+        <div className="selected-search-wrapper" style={{ cursor: 'pointer' }}>
+          {/* Check if any address has is_default === '1' */}
+          {addresses && addresses.some((address: any) => address.is_default === '1') ? (
+            <button onClick={() => Search(0)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-search"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          ) : (
+            <div></div>
+          )}
+        </div>
+
+      </>
+    );
+  };
+
+  // ****************************************************************8
   return (
     <>
+      {localStorage.getItem('curScreen') === "Home" && localStorage.getItem('hello') === '/tab-navigator' ?
+        <>
+          <SearchSelect />
+          <AddressSelect />
+        </> : <> </>
+      }
+
       <AddToHomeScreen />
       <header className="topHeader">
         {renderUser()}

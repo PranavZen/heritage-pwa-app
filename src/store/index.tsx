@@ -37,6 +37,7 @@ import {wishlistSlice} from './slices/wishlistSlice';
 import {promocodeSlice} from './slices/promocodeSlice';
 import {firstLaunchSlice} from './slices/firstLaunchSlice';
 import {loaderSlice} from './slices/loaderSlice';
+import rewardsReducer from './rewardsSlice';
 
 const rootReducer = combineReducers({
   bgSlice: bgSlice.reducer,
@@ -50,6 +51,7 @@ const rootReducer = combineReducers({
   promocodeSlice: promocodeSlice.reducer,
   firstLaunchSlice: firstLaunchSlice.reducer,
   loaderSlice: loaderSlice.reducer,
+  rewards: rewardsReducer,
 });
 
 const persistConfig = {
@@ -79,6 +81,7 @@ export interface RootState {
   wishlistSlice: WishlistStateType;
   verificationSlice: VerificationStateType;
   loaderSlice: LoaderStateType;
+  rewards: { rewards: any[]; loading: boolean; error: string | null };
 }
 
 // export const persistor = persistStore(store);

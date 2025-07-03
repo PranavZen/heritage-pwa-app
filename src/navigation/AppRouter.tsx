@@ -189,6 +189,10 @@ const stack = createBrowserRouter([
         element: <screens.SelectMyAddress />
       },
       {
+        path: Routes.SelectAddressFromHome,
+        element: <screens.SelectAddressFromHome />
+      },
+      {
         path: Routes.ThankYouPage,
         element: <screens.ThankYouPage />
       },

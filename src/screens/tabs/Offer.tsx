@@ -39,7 +39,7 @@ export const Offer: React.FC = () => {
         formData.append("area_id", localStorage.getItem("area_id") || "");
 
         const response = await fetch(
-          "https://heritage.bizdel.in/app/consumer/services_v11/couponListing",
+          "https://heritage.bizdel.in/app/consumer/services_v11/couponOffers",
           {
             method: "POST",
             body: formData,
@@ -50,8 +50,7 @@ export const Offer: React.FC = () => {
           throw new Error("Failed to fetch coupons");
         }
         const data = await response.json();
-
-        const cleanedCoupons = (data.couponListing || []).filter(Boolean);
+        const cleanedCoupons = (data.coupons || []).filter(Boolean);
 
         setCoupons(cleanedCoupons);
         setLoading(false);
@@ -75,11 +74,9 @@ export const Offer: React.FC = () => {
     if (error) {
       return <div className="error">{`Error: ${error}`}</div>;
     }
-
     const handleCouponHover = (couponId: string, isHovering: boolean) => {
       setHoveredCard(isHovering ? couponId : null);
     };
-
     return (
       <>
         <div className="coupon-list-container">
@@ -87,7 +84,7 @@ export const Offer: React.FC = () => {
           {coupons.filter((coupon) => coupon.c_id !== null).length > 0 ? (
             <div className="coupon-cards-wrapper">
               {coupons
-                .filter((coupon) => coupon.c_id !== null)
+                // .filter((coupon) => coupon.c_id !== null)
                 .map((coupon) => {
                   const isApplied = appliedCouponCode === coupon.code;
                   return (
@@ -115,7 +112,7 @@ export const Offer: React.FC = () => {
                             </div>
                           )}
                           <div className="discount-info">
-                            Get {coupon.coupon_display}
+                            Get {coupon.code}
                           </div>
                         </div>
                         <div className="coupon-details">

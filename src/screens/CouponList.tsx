@@ -13,12 +13,16 @@ export const CouponList: React.FC = () => {
   const [opacity, setOpacity] = useState<number>(0);
   const [coupons, setCoupons] = useState<any[]>([]);
 
+  // console.log("ssssssssssssssdddd", coupons);
+
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const [isApplying, setIsApplying] = useState<boolean>(false);
+  // console.log("ssssss", isApplying);
   const [activeCard, setActiveCard] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [appliedCouponCode, setAppliedCouponCode] = useState<string | null>(
@@ -57,7 +61,7 @@ export const CouponList: React.FC = () => {
           throw new Error("Failed to fetch coupons");
         }
         const data = await response.json();
-        
+
         // console.log("aaa", data);
         const cleanedCoupons = (data.couponListing || []).filter(Boolean);
 
@@ -126,28 +130,27 @@ export const CouponList: React.FC = () => {
 
     return (
       <>
+
         <div className="coupon-list-container">
           <h1>Coupons Cards</h1>
           {coupons.length > 0 ? (
             <div className="coupon-cards-wrapper">
               {coupons.map((coupon) => {
                 const isApplied = appliedCouponCode === coupon.code;
+                const isCouponDisplay1 = coupon.couponDisplay === 1;
+                const isCouponDisplay0 = coupon.couponDisplay === 0;
+
                 return (
                   <div
                     className={`coupon-card ${isApplied ? "applied" : ""}`}
                     key={coupon.coupon_id}
                     ref={(el) => (couponRefs.current[coupon.coupon_id] = el)}
                   >
-                    {/* {isApplied && (
-                      <div className="coupon-applied-badge">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M20 6 9 17l-5-5"/>
-                        </svg>
-                        Applied
-                      </div>
-                    )} */}
                     <div className="coupon-left-section">
-                      <div className="coupon-svg-icon">
+                      <div
+                        className="coupon-svg-icon"
+                        style={{ background: isCouponDisplay0 ? 'gray' : '' }}
+                      >
                         {isApplied ? (
                           <img src={svgCoupon} alt={coupon.name} />
                         ) : (
@@ -161,8 +164,7 @@ export const CouponList: React.FC = () => {
                       <div className="coupon-amount-info">
                         {coupon.cart_min_amount > 0 && (
                           <div className="amount-needed">
-                            Add ₹{coupon.cart_min_amount} more to avail this
-                            offer
+                            Add ₹{coupon.cart_min_amount} more to avail this offer
                           </div>
                         )}
                         <div className="discount-info">
@@ -171,8 +173,8 @@ export const CouponList: React.FC = () => {
                       </div>
                       <div className="coupon-details">
                         <div className="coupon-description">
-                          Use code {coupon.name} & get {coupon.coupon_display}{" "}
-                          on orders above ₹{coupon.cart_min_amount || 0}.
+                          Use code {coupon.name} & get {coupon.couponDisplay} on orders
+                          above ₹{coupon.cart_min_amount || 0}.
                           {coupon.cart_max_amount > 0 &&
                             ` Maximum discount: ₹${coupon.cart_max_amount}.`}
                         </div>
@@ -182,7 +184,17 @@ export const CouponList: React.FC = () => {
                     <div className="coupon-action">
                       {isApplied ? (
                         <div className="coupon-applied-status">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
                             <path d="M20 6 9 17l-5-5" />
                           </svg>
                           <span>APPLIED</span>
@@ -191,7 +203,7 @@ export const CouponList: React.FC = () => {
                         <button
                           className="apply-button"
                           onClick={() => {
-                            if (isApplying) return;
+                            if (isApplying || isCouponDisplay0) return; // Prevent applying if the coupon is disabled
                             setIsApplying(true);
                             localStorage.setItem("couponCode", coupon.code);
                             setAppliedCouponCode(coupon.code);
@@ -205,7 +217,8 @@ export const CouponList: React.FC = () => {
                               });
                             }, 3000);
                           }}
-                          disabled={isApplying}
+                          disabled={isApplying || isCouponDisplay0} // Disable button if coupon is not applicable
+                          style={{ background: isCouponDisplay0 ? 'gray' : '' }} // Apply gray background only if coupon is disabled
                         >
                           {isApplying ? (
                             <div className="button-loader">
@@ -228,6 +241,8 @@ export const CouponList: React.FC = () => {
             </div>
           )}
         </div>
+
+
       </>
     );
   };

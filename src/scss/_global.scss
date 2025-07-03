@@ -426,6 +426,7 @@ details summary {
         font-weight: 600;
         color: #1a712e;
         line-height: 3;
+        cursor: pointer;
       }
 
       .myAddressActionBtnWrap {
@@ -687,10 +688,8 @@ details summary {
   // Responsive styles
   @media screen and (max-width: 767px) {
     padding: 15px;
-
     .notification-client {
       padding: 14px;
-
       .notification-icon {
         width: 36px;
         height: 36px;
@@ -2908,3 +2907,4 @@ select {
     width: 100%;
   }
 }
+

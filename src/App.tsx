@@ -21,6 +21,13 @@ function App() {
     AOS.init();
   }, []);
 
+  useEffect(() => {
+  // Clear session storage or specific items
+  sessionStorage.clear(); // or
+  sessionStorage.removeItem('spinStop');
+  // localStorage.removeItem('authToken'); // if needed
+}, []);
+
   return (
     <div id="app">
       <AppRouter />

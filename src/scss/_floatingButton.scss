@@ -8,20 +8,24 @@ $transition-speed: 0.3s;
 
 // Animations
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-6px);
   }
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
@@ -32,6 +36,7 @@ $transition-speed: 0.3s;
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -42,6 +47,7 @@ $transition-speed: 0.3s;
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -82,6 +88,116 @@ $transition-speed: 0.3s;
     }
   }
 }
+
+.selected-search-wrapper {
+  top: 3%;
+  z-index: 1111;
+  position: absolute;
+  right: 22%;
+  pointer-events: all;
+  cursor: pointer;
+  color: white;
+}
+
+.selected-address-wrapper {
+  top: 45px;
+  z-index: 1;
+  left: 63px;
+  position: absolute;
+  pointer-events: all;
+  cursor: pointer;
+  color: black;
+}
+
+.selected-address-wrapper {
+  // width: 100%;
+  // max-width: 400px;
+  // margin: 20px auto;
+  // border-radius: 8px;
+  // background-color: #ffffff;
+  // padding: 10px;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  // transition: box-shadow 0.3s ease;
+}
+
+// .selected-address-wrapper:hover {
+//   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+// }
+
+.address-dropdown {
+  // padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  position: absolute;
+  font-weight: 500;
+  right: 8px;
+  top: 40%;
+  color: #333;
+  z-index: 2222;
+}
+
+.dropdown-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.dropdown-icon {
+  color: white;
+  cursor: pointer;
+  font-family: sans-serif;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+  position: absolute;
+  top: -6px;
+  left: 5px;
+}
+
+
+
+.dropdown-icon:hover {
+  transform: rotate(180deg);
+}
+
+.address-item {
+  // padding: 12px 22px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  color: white;
+  font-size: 12px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+@media screen and (max-width: 480px) {
+  .address-item{
+    font-size: 8px;
+  }
+  .dropdown-icon {
+    top: -6px;
+    left:5px;
+  }
+}
+
+.address-item:active {
+  transform: translateY(1px);
+}
+
+.address-item:last-child {
+  margin-bottom: 0;
+}
+
+
 // Close button
 .close-btn {
   position: absolute;
@@ -102,6 +218,7 @@ $transition-speed: 0.3s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   animation: float 3s ease-in-out infinite;
+
   &:hover {
     background: $white;
     color: #333;
@@ -112,6 +229,7 @@ $transition-speed: 0.3s;
     transform: scale(0.95);
   }
 }
+
 // Enhanced Floating Button
 .enhanced-floating-button {
   display: flex;
@@ -140,12 +258,10 @@ $transition-speed: 0.3s;
     left: -200%;
     width: 200%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba($white, 0.2),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        rgba($white, 0.2),
+        transparent);
     transition: all 0.8s ease;
   }
 
@@ -281,7 +397,7 @@ $transition-speed: 0.3s;
     border-top-color: rgba(0, 0, 0, 0.8);
   }
 
-  .enhanced-floating-button:hover + & {
+  .enhanced-floating-button:hover+& {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(-5px);
@@ -470,9 +586,12 @@ $transition-speed: 0.3s;
 
 // Additional animations
 @keyframes instructionPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.02);
   }
@@ -483,6 +602,7 @@ $transition-speed: 0.3s;
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

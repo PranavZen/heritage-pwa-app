@@ -70,7 +70,6 @@ export enum Routes{
   OrderItemCoupon='/order-item',
   SelectMyAddress='/select-Address',
   ThankYouPage='/thank-you',
-  NewUsereAddAddress='new-address',
-  
-
+  NewUsereAddAddress='/new-address',
+  SelectAddressFromHome='/selected-address'
 }

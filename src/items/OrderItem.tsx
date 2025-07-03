@@ -64,6 +64,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   }, []);
 
   const [quantity, setQuantity] = useState<number>(Number(dish.quantity) || 1);
+
+  // console.log("aaaa", quantity);
+
   const [deliveryPreference, setDeliveryPreference] = useState<string>(
     String(dish.delivery_preference) || ""
   );
@@ -226,7 +229,7 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               item.order_type
           );
           if (matchedItem) {
-            setQuantity(Number(matchedItem.quantity) || 1);
+            // setQuantity(Number(matchedItem.quantity) || 1);
             setOrderType(matchedItem.order_type);
 
           } else {
