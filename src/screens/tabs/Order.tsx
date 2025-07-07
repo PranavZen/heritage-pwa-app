@@ -914,7 +914,7 @@ export const Order: React.FC = () => {
   //   if (cartCount === 0) {
   //     localStorage.removeItem('curScreen');
   //   }
-  // },[]);
+  // },[cartCount]);
 
   const renderContent = (): JSX.Element | null => {
     return (

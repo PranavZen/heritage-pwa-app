@@ -136,9 +136,12 @@ export const CouponList: React.FC = () => {
           {coupons.length > 0 ? (
             <div className="coupon-cards-wrapper">
               {coupons.map((coupon) => {
+                    // console.log("aaa", coupon);
                 const isApplied = appliedCouponCode === coupon.code;
                 const isCouponDisplay1 = coupon.couponDisplay === 1;
-                const isCouponDisplay0 = coupon.couponDisplay === 0;
+                const isCouponDisplay0 = String(coupon.couponDisplay) === '0';
+
+            
 
                 return (
                   <div
@@ -217,7 +220,7 @@ export const CouponList: React.FC = () => {
                               });
                             }, 3000);
                           }}
-                          disabled={isApplying || isCouponDisplay0} // Disable button if coupon is not applicable
+                          disabled={isApplying || isCouponDisplay0} 
                           style={{ background: isCouponDisplay0 ? 'gray' : '' }} // Apply gray background only if coupon is disabled
                         >
                           {isApplying ? (

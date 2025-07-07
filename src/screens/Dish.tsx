@@ -878,7 +878,7 @@ export const Dish: React.FC = () => {
           >
             {dish.option_value_name}
           </h3>
-          <span className="t16">{dish.weight} ml</span>
+          <span className="t16">{dish.weight} {dish.weight_unit}</span>
           <div className="priceWrap">
             <span>
               {Number(dish.discount ?? 0) > 0 ? (

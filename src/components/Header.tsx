@@ -101,11 +101,11 @@ export const Header: React.FC<Props> = ({
   useEffect(() => {
     setTimeout(() => {
       if (cartCount === 0) {
-        // localStorage.removeItem('couponCode');
+        localStorage.removeItem('couponCode');
         localStorage.removeItem('isChecked');
       }
     }, 1000)
-  }, [shouldRefresh]);
+  }, [shouldRefresh, cartCount]);
 
   const cityId = localStorage.getItem('c_id');
   const [isModalOpen, setIsModalOpen] = useState(false);
