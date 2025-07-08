@@ -328,7 +328,6 @@ export const Home: React.FC = () => {
       </main>
     );
   };
-
   return (
     <div id="screen" style={{ opacity }}>
       {renderContent()}

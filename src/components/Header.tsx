@@ -11,9 +11,10 @@ import { Modal, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartCount } from '../store/slices/cartSlice';
 import NoCartData from '../screens/NoCartData';
-import homeImg from '../assets/icons/home.png'
-import { Color } from 'antd/es/color-picker';
-import { SpinTheWheel } from './SpinTheWheel/SpinTheWheel';
+// import homeImg from '../assets/icons/home.png'
+// import { Color } from 'antd/es/color-picker';
+// import { SpinTheWheel } from './SpinTheWheel/SpinTheWheel';
+
 
 type Props = {
   title?: string;
@@ -86,6 +87,9 @@ export const Header: React.FC<Props> = ({
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
+   const {spinId} = hooks.useGetMenu();
+
+//  console.log("vvv", spinId);
 
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
   useEffect(() => {
@@ -109,7 +113,7 @@ export const Header: React.FC<Props> = ({
 
   const cityId = localStorage.getItem('c_id');
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  
   useEffect(() => {
     const GetProfileData = async () => {
       const formData = new FormData();
@@ -257,10 +261,10 @@ export const Header: React.FC<Props> = ({
         <Modal
           open={isModalOpen}
           onCancel={handleCancel}
-          footer={null} // Remove footer buttons
-          centered // Center the modal
-          width={500} // Set appropriate width
-          closable={true} // Allow closing with X button
+          footer={null} 
+          centered 
+          width={500}
+          closable={true} 
         >
           <NoCartData />
         </Modal>
@@ -605,17 +609,15 @@ export const Header: React.FC<Props> = ({
       </>
     );
   };
-
   // ****************************************************************8
   return (
     <>
       {localStorage.getItem('curScreen') === "Home" && localStorage.getItem('hello') === '/tab-navigator' ?
         <>
-          <SearchSelect />
+         {String(spinId) === '0' ? <> <SearchSelect /> </> : <> </>} 
           <AddressSelect />
         </> : <> </>
       }
-
       <AddToHomeScreen />
       <header className="topHeader">
         {renderUser()}
