@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchRewards } from "../../store/rewardsSlice";
 import type { RootState } from "../../store";
 import styles from "./SpinTheWheel.module.scss";
-
-
 interface Reward {
   id: string;
   title: string;
@@ -22,13 +20,11 @@ interface SpinData {
   message: string;
 }
 
-
 export const SpinTheWheel: React.FC = () => {
   const dispatch = useDispatch();
   const { rewards, error } = useSelector(
     (state: RootState) => state.rewards
   );
-
   const [spinData, setSpinData] = useState<SpinData | null>(null);
   const [userId] = useState<string>("123207");
   const [deg, setDeg] = useState<number>(0);
@@ -40,12 +36,9 @@ export const SpinTheWheel: React.FC = () => {
     sessionStorage.getItem("spinStop") !== "true"
   );
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-
   const [countSpin, setCouponSpin] = useState<number>(0);
   const [betterluck, setBetterLuck] = useState<string>();
   const [counter, setCounter] = useState<number>(0);
-  // console.log("aaa", counter);
-
   useEffect(() => {
     const rewardsCounter = async () => {
       try {
@@ -59,7 +52,7 @@ export const SpinTheWheel: React.FC = () => {
               setCounter(data.remaining_credits);
         }
       } catch (err: any) {
-            // console.log('''')
+            // console.error('''')
       }
     }
     rewardsCounter();
@@ -92,7 +85,6 @@ export const SpinTheWheel: React.FC = () => {
         formData
       );
       const data = response.data;
-      // console.log("aaaaa", data);
       if (data.success === true) {
         setSpinData(data);
         const totalSegments = rewards.length;
@@ -102,16 +94,11 @@ export const SpinTheWheel: React.FC = () => {
         setIdSpin(rewardId);
         const matchedRewardIndex = rewards.findIndex((r) => r.id === rewardId);
         if (matchedRewardIndex === -1) throw new Error("Reward ID not found");
-
         const rewardTitle = rewards[matchedRewardIndex].title;
-
         setBetterLuck(rewardTitle)
-
-        // console.log("aaaa", rewardTitle);
         const stopAngle =
           360 - matchedRewardIndex * segmentAngle + segmentAngle / 2;
         const finalDeg = rounds * 360 + stopAngle + 720;
-
         setDeg(finalDeg);
         setCouponSpin(data.reward.spins_used)
         setIsSpinning(true);
@@ -120,7 +107,6 @@ export const SpinTheWheel: React.FC = () => {
           setRewardText(rewardTitle);
           setOfferMessage(data.message || `You won: ${rewardTitle}`);
           setIsModalVisible(true);
-
           const confetti = document.createElement("div");
           confetti.className = styles.confetti;
           document.body.appendChild(confetti);
@@ -179,8 +165,6 @@ export const SpinTheWheel: React.FC = () => {
               >
                 {isSpinning ? "Spin" : "Spin"}
               </button>
-
-
               <div
                 className={styles.wheel}
                 style={{ transform: `rotate(${deg}deg)` }}
@@ -227,7 +211,6 @@ export const SpinTheWheel: React.FC = () => {
         </section>
       )}
 
-      {/** Modal */}
       <div
         className={styles["result-modal"]}
         id="resultModal"

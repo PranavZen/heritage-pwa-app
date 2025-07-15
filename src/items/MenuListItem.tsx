@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { hooks } from "../hooks";
 import { svg } from "../assets/svg";
-import { Modal, notification } from "antd";
+import { Modal, notification, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { DishType } from "../types";
 import { actions } from "../store/actions";
@@ -142,8 +143,11 @@ export const MenuListItem: React.FC<Props> = ({
   useEffect(() => {
     fetchCartData();
   }, [cityId, c_id, dish, shouldRefresh, refreshData]);
+  const [spinner, setSpinner] = useState(false);
 
   const HandleAddToCart = async () => {
+    setSpinner(true);
+
     if (!c_id) {
       Modal.confirm({
         title: "Please Sign In",
@@ -186,6 +190,7 @@ export const MenuListItem: React.FC<Props> = ({
           message: "Success",
           description: response.data.message,
         });
+        setSpinner(false);
 
         dispatch(actions.addToCart({ ...dish, quantity: 1 }));
         // setQuantity(1);
@@ -690,8 +695,12 @@ export const MenuListItem: React.FC<Props> = ({
         <div className="product-actions">
           <div className="cart-controls">
             {quantity < 1 && orderType !== 1 ? (
-              <button className="cart-button" onClick={HandleAddToCart}>
-                <span> Add </span>
+              <button className="cart-button" onClick={HandleAddToCart} disabled={spinner}>
+                {spinner ? (
+                  <Spin indicator={<LoadingOutlined spin />} size="small" />
+                ) : (
+                  <span> Add </span>
+                )}
               </button>
             ) : (
               String(orderType) === "2" && (

@@ -67,10 +67,7 @@ export const Offer: React.FC = () => {
 
 
   const renderContent = (): JSX.Element => {
-    if (loading) {
-      return <div className="loading">Loading coupons...</div>;
-    }
-
+    if (loading) return <components.Loader local={true} message="Loading content..." />;
     if (error) {
       return <div className="error">{`Error: ${error}`}</div>;
     }
@@ -118,7 +115,7 @@ export const Offer: React.FC = () => {
                         <div className="coupon-details">
                           <div className="coupon-description">
                             Use code {coupon.name} & get {coupon.coupon_display} on
-                            orders above ₹{coupon.cart_min_amount || 0}.
+                            orders minimum ₹{coupon.min_amount || 0}.
                             {coupon.cart_max_amount > 0 &&
                               ` Maximum discount: ₹${coupon.cart_max_amount}.`}
                           </div>

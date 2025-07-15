@@ -453,6 +453,7 @@ export const AddressAdd: React.FC = () => {
   };
 
   const renderHeader = (): JSX.Element => {
+    const showBasket = true;
     return (
       <components.Header
         title={newAddress.id ? "Update Address" : "Add Address"}

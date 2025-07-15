@@ -33,13 +33,13 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const [prevQuantity, setPrevQuantity] = useState<number>(0);
   const [orderType, setOrderType] = useState([])
 
-
   const shouldRefresh = useSelector(
     (state: RootState) => state.cartSlice.shouldRefresh
   );
 
   useEffect(() => {
     const getData = async () => {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append("c_id", localStorage.getItem("c_id") || "");
       formData.append("city_id", localStorage.getItem("cityId") || "");
@@ -58,15 +58,14 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         setDeliveriesInModal(response.data.productDetails);
       } catch (error) {
         console.error("Error fetching delivery preferences:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getData();
   }, []);
 
   const [quantity, setQuantity] = useState<number>(Number(dish.quantity) || 1);
-
-  // console.log("aaaa", quantity);
-
   const [deliveryPreference, setDeliveryPreference] = useState<string>(
     String(dish.delivery_preference) || ""
   );
@@ -95,15 +94,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
       "no_of_deliveries",
       String(selectedPackageDetails || noOfDeliveries)
     );
-
     formData.append("order_date", String(dish.cart_order_date));
-
     const orderType = String(deliveryPreference) !== "0" ? "1" : "2";
-
-
-    
     formData.append("order_type", orderType);
-
     try {
       const response = await axios.post(
         "https://heritage.bizdel.in/app/consumer/services_v11/updateCartItem",
@@ -128,7 +121,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
 
   const handleRemoveFromCart = async (event: React.MouseEvent) => {
     event.stopPropagation();
-
     if (quantity > 1) {
       const newQuantity = quantity - 1;
       try {
@@ -168,7 +160,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
         setIsLoading(false);
       }
     } else {
-      // quantity === 1: remove completely
       Modal.confirm({
         content: "Are you sure you want to remove the item from the cart?",
         onOk: async () => {
@@ -229,13 +220,10 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               item.order_type
           );
           if (matchedItem) {
-            // setQuantity(Number(matchedItem.quantity) || 1);
             setOrderType(matchedItem.order_type);
-
           } else {
           }
         }
-
       } catch (error) {
         console.error(error);
       }
@@ -246,7 +234,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
   const showSubscribe = dish.subscription_product;
   const handleOpenModal = (option_name: any) => {
     navigate(`/dish/${dish.option_name}`, { state: { dish, showSubscribe } });
-
     localStorage.setItem(
       "product_option_value_id",
       dish.cart_product_option_value_id.toString()
@@ -267,14 +254,15 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
     });
   };
 
-  const handleOk = async () => {
-    await handleUpdateCart(quantity);
-    setIsModalOpen(false);
-  };
+  // const handleOk = async () => {
+  //   await handleUpdateCart(quantity);
+  //   setIsModalOpen(false);
+  // };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // };
+  // if (isLoading) return <div style={{ padding: 24 }}><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a712e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" strokeOpacity="0.2"/><path d="M12 2a10 10 0 0 1 10 10"/></svg><span style={{marginLeft:8}}>Loading...</span></div>;
   return (
     <>
       <div className="itemListBox">
@@ -289,7 +277,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 onClick={handleOpenModalMenuList}
               />
             </div>
-
             <div className="cartItemDetailsWrap">
               <span
                 className="t14"
@@ -301,10 +288,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
               >
                 {dish.option_value_name}{" "}
                 <span className="t10">
-                  ({dish.weight}ml)
+                  ({dish.weight} {dish.weight_unit})
                 </span>
               </span>
-
               {dish.discount ? (
                 <>
                   <del
@@ -335,8 +321,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                   ₹ {dish.price}
                 </span>
               )}
-
-
               {String(dish.order_type) === '1' ?
                 <>
                   <span
@@ -346,22 +330,19 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                       fontWeight: 600,
                       fontSize: 16,
                     }}
-                  >
+                  > 
                     Total: ₹ {Number(dish.price || 0) * (Number(dish.no_of_deliveries || 0) - (Number(dish?.no_of_free_deliveries) || 0))}
+                    
                   </span>
                 </> :
                 <>
                 </>}
-
-
               <span
                 className="t14"
                 style={{ color: "var(--main-color)", fontWeight: 500 }}
               >
                 <span className="cartLable">Qty :</span> {dish.quantity}
               </span>
-
-
               {noOfDeliveries > 0 && (
                 <span
                   className="t14"
@@ -370,16 +351,12 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                   Deliveries: {
                     Math.max(0, (Number(noOfDeliveries) || 0) - (Number(dish?.no_of_free_deliveries) || 0))
                   }
-
                   {String(dish.order_type) === '1' ? <>
                     <span
                       className="t14"
                       style={{ color: "var(--main-color)", fontWeight: 500 }}
                     >
-
                       + ({Number(dish.no_of_free_deliveries) * Number(dish.quantity)} FD)
-
-
                       ({dish.packages_name && dish.packages_name !== "0" && (
                         <span
                         // className="t14"
@@ -390,16 +367,9 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                       )})
 
                     </span> </> : <> </>}
-
-
-
-
-
                   {/* {dish.packages_name && dish.packages_name !== "0" } */}
                 </span>
               )}
-
-
               {/* {String(dish.order_type) === '1' ? <>  
               <span
                 className="t14"
@@ -408,7 +378,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
                 <span className="cartLable">Free Deliveries :</span>{" "}
                 {dish.no_of_free_deliveries}
               </span> </> : <> </>} */}
-
 
               {/* {dish.preferenceName && (
                 <span
@@ -488,7 +457,6 @@ export const OrderItem: React.FC<Props> = ({ dish, isLast }) => {
             </div>
           </div>
         </li>
-
         <div
           style={{
             display: "flex",

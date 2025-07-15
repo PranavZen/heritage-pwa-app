@@ -55,9 +55,15 @@ $transition-speed: 0.3s;
 
         &:hover {
           svg {
-            path, circle, rect, line, polyline {
+
+            path,
+            circle,
+            rect,
+            line,
+            polyline {
               stroke: $primary-color;
               transition: all $transition-speed ease;
+              fill: #1a712e;
             }
           }
 
@@ -68,7 +74,12 @@ $transition-speed: 0.3s;
 
         &.active-tab {
           svg {
-            path, circle, rect, line, polyline {
+
+            path,
+            circle,
+            rect,
+            line,
+            polyline {
               stroke: $primary-color;
             }
           }
@@ -79,11 +90,15 @@ $transition-speed: 0.3s;
         }
 
         svg {
-          width: 24px;
-          height: 24px;
-          margin-bottom: 4px;
+          // width: 24px;
+          // height: 24px;
+          // margin-bottom: 4px;
 
-          path, circle, rect, line, polyline {
+          path,
+          circle,
+          rect,
+          line,
+          polyline {
             stroke: $white;
             transition: all $transition-speed ease;
           }
@@ -138,9 +153,11 @@ $transition-speed: 0.3s;
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
+
   100% {
     transform: scale(1);
   }

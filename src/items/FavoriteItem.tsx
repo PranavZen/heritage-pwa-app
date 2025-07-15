@@ -64,7 +64,7 @@ export const FavoriteItem: React.FC<Props> = ({ dish, selectedCategory }) => {
         const wishlistData = response.data.wishlistListing
         setWishlistData(wishlistData);
       } catch (error) {
-        // console.log("error")
+        // console.error("error")
       }
     }
     functionData()

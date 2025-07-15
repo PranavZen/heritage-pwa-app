@@ -140,7 +140,19 @@ export const Search: React.FC = () => {
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header showGoBack={true} />;
+    const title = "Menu";
+    const showBasket = true;
+    const userName = true;
+    const userPhoto = true;
+
+    return (
+      <components.Header
+        title={title}
+        showBasket={showBasket}
+        userName={userName}
+        userPhoto={userPhoto}
+      />
+    );
   };
 
   const renderSearch = (): JSX.Element => {

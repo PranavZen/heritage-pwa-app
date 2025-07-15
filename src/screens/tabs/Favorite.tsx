@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
-
+import { components } from "../../components";
 import {hooks} from '../../hooks';
 import {items} from '../../items';
 import {RootState} from '../../store';
@@ -11,12 +11,17 @@ export const Favorite: React.FC = () => {
   const wishlist = useSelector((state: RootState) => state.wishlistSlice.list);
 
   const [opacity, setOpacity] = useState<number>(0);
+   const { menuLoading, menu } = hooks.useGetMenu();
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);
 
+    const loading: boolean =
+    menuLoading ;
+
   const renderContent = (): JSX.Element | null => {
+    if (loading) return <components.Loader local={true} message="Loading content..." />;
     if (wishlist.length === 0) return null;
 
     return (

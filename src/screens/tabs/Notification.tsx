@@ -184,5 +184,9 @@ export const Notification: React.FC = () => {
     );
   };
 
-  return <div id="screen">{renderContent()}</div>;
+  return (
+    <div id="screen">
+      {loading ? <components.Loader local={true} message="Loading content..." /> : renderContent()}
+    </div>
+  );
 };

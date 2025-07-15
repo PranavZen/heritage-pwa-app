@@ -16,9 +16,7 @@ export const useGetMenu = (): {
   const [menuLoading, setMenuLoading] = useState<boolean>(false);
   const [menuLoadingBanner, setMenuLoadingBanner] = useState<boolean>(false);
   const [selectedProductId, setSelectedProductId] = useState<string | string[] | null>(null); 
-    const [spinId, setShowSpinId] = useState<MenuType[]>([]);
-
-    // console.log("bbbb", spinId)
+  const [spinId, setShowSpinId] = useState<MenuType[]>([]);
 
   const c_id = localStorage.getItem('c_id');
   const cityId = localStorage.getItem('cityId');

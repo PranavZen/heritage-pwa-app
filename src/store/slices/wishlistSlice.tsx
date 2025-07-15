@@ -31,11 +31,7 @@ export const fetchWishlist = createAsyncThunk(
       'https://heritage.bizdel.in/app/consumer/services_v11/getWishlistData',
       formData
     );
-
-    // console.log('APIResponsezzzzzz:', response.data.wishlistListing);
-
     const wishlistData = response.data.wishlistListing as DishType[];
-
     return wishlistData;
   }
 );
@@ -52,9 +48,6 @@ export const toggleWishlistItem = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-
-    // console.log('Dispatching toggleWishlistItem with:', params);
-
     const formData = new FormData();
     formData.append('product_id', params.product_id.toString());
     formData.append('product_option_id', params.product_option_id.toString());
@@ -67,15 +60,11 @@ export const toggleWishlistItem = createAsyncThunk(
         'https://heritage.bizdel.in/app/consumer/services_v11/addItemToWishlist',
         formData
       );
-
       const resData = response.data;
-
-
       if (resData.status === 'fail' && resData.message === 'Wishlist already added!' && params.type === 1) {
         console.warn('Item is already in wishlist. Skipping update.');
         return rejectWithValue('Already in wishlist');
       }
-
       return {
         product_option_value_id: params.product_option_value_id,
         type: params.type
@@ -85,7 +74,6 @@ export const toggleWishlistItem = createAsyncThunk(
     }
   }
 );
-
 export const wishlistSlice = createSlice({
   name: 'wishlist',
   initialState,
@@ -103,17 +91,14 @@ export const wishlistSlice = createSlice({
       .addCase(fetchWishlist.fulfilled, (state, action) => {
         state.list = action.payload;
       })
-      // Add/Remove Item to/from Wishlist (API Call)
       .addCase(toggleWishlistItem.fulfilled, (state, action) => {
         const { product_option_value_id, type } = action.payload;
 
         if (type === 1) {
-          // Add Item to Wishlist
           const inWishlist = state.list.find(
             (item) => item.product_option_value_id === product_option_value_id
           );
-          if (!inWishlist) {
-            // state.list.push({ product_option_value_id }); 
+          if (!inWishlist) { 
             notification.success({
               message: 'Item Added',
               description: 'The item has been added to your wishlist.',
@@ -121,7 +106,6 @@ export const wishlistSlice = createSlice({
             });
           }
         } else if (type === 2) {
-          // Remove Item from Wishlist
           state.list = state.list.filter(
             (item) => item.product_option_value_id !== product_option_value_id
           );
@@ -136,5 +120,4 @@ export const wishlistSlice = createSlice({
 });
 
 export const { setWishlist, resetWishlist } = wishlistSlice.actions;
-
 export default wishlistSlice.reducer;

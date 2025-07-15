@@ -67,7 +67,7 @@ export const EditProfile: React.FC = () => {
             photo_url: profile.photo_url || null,
           });
         } else {
-          // console.log("Error:", response.data.message);
+          // console.error("Error:", response.data.message);
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -289,6 +289,7 @@ export const EditProfile: React.FC = () => {
                   className="form-input"
                   placeholder="Enter mobile number"
                   required
+                  disabled
                 />
               </div>
             </div>
@@ -350,7 +351,7 @@ export const EditProfile: React.FC = () => {
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
-      {renderContent()}
+      {loading ? <components.Loader local={true} message="Loading content..." /> : renderContent()}
     </div>
   );
 };

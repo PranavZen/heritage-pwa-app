@@ -89,7 +89,7 @@ export const ClientNotification: React.FC = () => {
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
-      {renderContent()}
+      {loading ? <components.Loader local={true} message="Loading content..." /> : renderContent()}
     </div>
   );
 };

@@ -26,7 +26,7 @@ export const Promocodes: React.FC = () => {
   useEffect(() => {
     const storeLocator = async () => {
       const formData = new FormData();
-      formData.append("c_id", localStorage.getItem('c_id')|| '');
+      formData.append("c_id", localStorage.getItem('c_id') || '');
       formData.append('latitude', '17.4654686')
       formData.append('longitude', '78.4277117')
       try {
@@ -36,20 +36,17 @@ export const Promocodes: React.FC = () => {
         );
         setLocator(response.data.distributors);
       } catch (error) {
-        // console.log(error);
+        // console.error(error);
       }
     };
     storeLocator();
   }, [c_id]);
 
   const [opacity, setOpacity] = useState<number>(0);
-
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
-
   const { promocodesLoading, promocodes } = hooks.useGetPromocodes();
-
   const renderHeader = (): JSX.Element => {
     return <components.Header showGoBack={true} title="Store Locator" />;
   };
@@ -58,7 +55,6 @@ export const Promocodes: React.FC = () => {
     if (!locator) {
       return null;
     }
-
     return (
       <main className="scrollable">
         <ul className="clientNotificationWrap">
@@ -66,9 +62,9 @@ export const Promocodes: React.FC = () => {
             return (
               <li key={index} className="notification-client">
                 <h3 className="mainText">{elem.name}</h3>
-                <p className="subText" style={{lineHeight: 1.4, marginBottom: 5}}>{elem.address1}</p>
-                <p className="subText" style={{lineHeight: 1.4, marginBottom: 5}}>{elem.address2}</p>
-                <p className="subText" style={{lineHeight: 1.4, marginBottom: 5}}>
+                <p className="subText" style={{ lineHeight: 1.4, marginBottom: 5 }}>{elem.address1}</p>
+                <p className="subText" style={{ lineHeight: 1.4, marginBottom: 5 }}>{elem.address2}</p>
+                <p className="subText" style={{ lineHeight: 1.4, marginBottom: 5 }}>
                   {elem.city_name}, {elem.state_name}, {elem.country_name}
                 </p>
               </li>

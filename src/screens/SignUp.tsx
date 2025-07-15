@@ -40,7 +40,6 @@ export const SignUp: React.FC = () => {
         email,
         password,
       });
-      // console.log('Sign-up successful', response);
       navigate(Routes.VerifyYourPhoneNumber);
     } catch (error: any) {
       console.error('Error during sign-up:', error);

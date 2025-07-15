@@ -198,10 +198,12 @@ export const NewUsereAddAddress: React.FC = () => {
   };
 
   const renderHeader = (): JSX.Element => {
+    const showBasket = true;
     return (
       <components.Header
         title={newAddress.id ? "Update Address" : "Add Address"}
         showGoBack={true}
+        showBasket={showBasket}
       />
     );
   };
@@ -216,7 +218,7 @@ export const NewUsereAddAddress: React.FC = () => {
 
         setAreaIdByPincode(response.data.areaDetails)
       } catch (eror) {
-        // console.log(eror)
+        // console.error(eror)
       }
     }
     GetAreaId();
@@ -225,7 +227,6 @@ export const NewUsereAddAddress: React.FC = () => {
   const handleAreaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAreaId(event.target.value);
   };
-
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader />;
     return (

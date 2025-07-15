@@ -149,11 +149,23 @@ export const SelectMyAddress: React.FC = () => {
   };
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header title="Select Address" showGoBack={true} />;
-  };
+   const title = "Menu";
+   const showBasket = true;
+   const userName = true;
+   const userPhoto = true;
+ 
+   return (
+     <components.Header
+       title={title}
+       showBasket={showBasket}
+       userName={userName}
+       userPhoto={userPhoto}
+     />
+   );
+ };
 
   const renderContent = (): JSX.Element => {
-    if (loading) return <components.Loader />;
+    if (loading) return <components.Loader local={true} message="Loading content..." />;
 
     return (
       <section className="scrollable">

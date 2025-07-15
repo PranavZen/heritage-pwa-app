@@ -12,22 +12,12 @@ export const CouponList: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const [opacity, setOpacity] = useState<number>(0);
   const [coupons, setCoupons] = useState<any[]>([]);
-
-  // console.log("ssssssssssssssdddd", coupons);
-
-
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
   const [showModal, setShowModal] = useState<boolean>(false);
-
   const [isApplying, setIsApplying] = useState<boolean>(false);
-  // console.log("ssssss", isApplying);
   const [activeCard, setActiveCard] = useState<string | null>(null);
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const [appliedCouponCode, setAppliedCouponCode] = useState<string | null>(
-    null
-  );
+  const [appliedCouponCode, setAppliedCouponCode] = useState<string | null>(null);
   const couponRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const navigate = useNavigate();
@@ -57,14 +47,10 @@ export const CouponList: React.FC = () => {
           }
         );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch coupons");
-        }
+        if (!response.ok) throw new Error("Failed to fetch coupons");
+
         const data = await response.json();
-
-        // console.log("aaa", data);
         const cleanedCoupons = (data.couponListing || []).filter(Boolean);
-
         setCoupons(cleanedCoupons);
         setLoading(false);
       } catch (error) {
@@ -78,183 +64,149 @@ export const CouponList: React.FC = () => {
   }, []);
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header showGoBack={true} showBasket={true} />;
-  };
+   const title = "Menu";
+   const showBasket = true;
+   const userName = true;
+   const userPhoto = true;
+   return (
+     <components.Header
+       title={title}
+       showBasket={showBasket}
+       userName={userName}
+       userPhoto={userPhoto}
+     />
+   );
+ };
 
   const renderContent = (): JSX.Element => {
-    if (loading) {
-      return <div className="loading">Loading coupons...</div>;
-    }
-
-    if (error) {
-      return <div className="error">{`Error: ${error}`}</div>;
-    }
-
-    const handleCouponHover = (couponId: string, isHovering: boolean) => {
-      setHoveredCard(isHovering ? couponId : null);
-    };
-
-    const handleCouponClick = (couponId: string) => {
-      setActiveCard(couponId);
-
-      // Add ripple effect
-      const card = couponRefs.current[couponId];
-      if (card) {
-        const ripple = document.createElement("span");
-        ripple.classList.add("ripple-effect");
-        card.appendChild(ripple);
-
-        setTimeout(() => {
-          ripple.remove();
-        }, 600);
-      }
-    };
-
-    // const applyCoupon = (coupon: any) => {
-    //   if (isApplying) return;
-
-    //   handleCouponClick(coupon.coupon_id);
-    //   setIsApplying(true);
-    //   localStorage.setItem("couponCode", coupon.code);
-    //   setAppliedCouponCode(coupon.code);
-
-    //   setShowModal(true);
-    //   setTimeout(() => {
-    //     setShowModal(false);
-    //     setIsApplying(false);
-    //     navigate("/tab-navigator", {
-    //       state: { couponCode: coupon.code },
-    //     });
-    //   }, 3000);
-    // };
+    if (loading) return <div className="loading">Loading coupons...</div>;
+    if (error) return <div className="error">{`Error: ${error}`}</div>;
 
     return (
-      <>
+      <div className="coupon-list-container">
+        <h1>Coupons Cards</h1>
+        {coupons.length > 0 ? (
+          <div className="coupon-cards-wrapper">
+            {coupons.map((coupon) => {
+              const total = Number(localStorage.getItem("total")) || 0;
+              const amountNeeded = Number(coupon.cart_min_amount) - total;
+              const isApplied = appliedCouponCode === coupon.code;
+              const isCouponDisplayZero = Number(coupon.couponDisplay) === 0;
+              const isCouponDisabled = total < coupon.cart_min_amount || isCouponDisplayZero;
 
-        <div className="coupon-list-container">
-          <h1>Coupons Cards</h1>
-          {coupons.length > 0 ? (
-            <div className="coupon-cards-wrapper">
-              {coupons.map((coupon) => {
-                    // console.log("aaa", coupon);
-                const isApplied = appliedCouponCode === coupon.code;
-                const isCouponDisplay1 = coupon.couponDisplay === 1;
-                const isCouponDisplay0 = String(coupon.couponDisplay) === '0';
-
-            
-
-                return (
-                  <div
-                    className={`coupon-card ${isApplied ? "applied" : ""}`}
-                    key={coupon.coupon_id}
-                    ref={(el) => (couponRefs.current[coupon.coupon_id] = el)}
-                  >
-                    <div className="coupon-left-section">
-                      <div
-                        className="coupon-svg-icon"
-                        style={{ background: isCouponDisplay0 ? 'gray' : '' }}
-                      >
-                        {isApplied ? (
-                          <img src={svgCoupon} alt={coupon.name} />
-                        ) : (
-                          <img src={svgWhiteCoupon} alt={coupon.name} />
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="coupon-content">
-                      <div className="coupon-code">{coupon.name}</div>
-                      <div className="coupon-amount-info">
-                        {coupon.cart_min_amount > 0 && (
-                          <div className="amount-needed">
-                            Add ₹{coupon.cart_min_amount} more to avail this offer
-                          </div>
-                        )}
-                        <div className="discount-info">
-                          Get {coupon.coupon_display}
-                        </div>
-                      </div>
-                      <div className="coupon-details">
-                        <div className="coupon-description">
-                          Use code {coupon.name} & get {coupon.couponDisplay} on orders
-                          above ₹{coupon.cart_min_amount || 0}.
-                          {coupon.cart_max_amount > 0 &&
-                            ` Maximum discount: ₹${coupon.cart_max_amount}.`}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="coupon-action">
+              return (
+                <div
+                  className={`coupon-card ${isApplied ? "applied" : ""}`}
+                  key={coupon.coupon_id}
+                  ref={(el) => (couponRefs.current[coupon.coupon_id] = el)}
+                >
+                  <div className="coupon-left-section">
+                    <div
+                      className="coupon-svg-icon"
+                      style={{ background: isCouponDisabled ? 'gray' : '' }}
+                    >
                       {isApplied ? (
-                        <div className="coupon-applied-status">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M20 6 9 17l-5-5" />
-                          </svg>
-                          <span>APPLIED</span>
-                        </div>
+                        <img src={svgCoupon} alt={coupon.name} />
                       ) : (
-                        <button
-                          className="apply-button"
-                          onClick={() => {
-                            if (isApplying || isCouponDisplay0) return; // Prevent applying if the coupon is disabled
-                            setIsApplying(true);
-                            localStorage.setItem("couponCode", coupon.code);
-                            setAppliedCouponCode(coupon.code);
-
-                            setShowModal(true);
-                            setTimeout(() => {
-                              setShowModal(false);
-                              setIsApplying(false);
-                              navigate("/tab-navigator", {
-                                state: { couponCode: coupon.code },
-                              });
-                            }, 3000);
-                          }}
-                          disabled={isApplying || isCouponDisplay0} 
-                          style={{ background: isCouponDisplay0 ? 'gray' : '' }} // Apply gray background only if coupon is disabled
-                        >
-                          {isApplying ? (
-                            <div className="button-loader">
-                              <div className="spinner"></div>
-                              <span>APPLYING...</span>
-                            </div>
-                          ) : (
-                            "APPLY"
-                          )}
-                        </button>
+                        <img src={svgWhiteCoupon} alt={coupon.name} />
                       )}
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="NoCoupons-available">
-              No coupons available at the moment.
-            </div>
-          )}
-        </div>
 
+                  <div className="coupon-content">
+                    <div className="coupon-code">{coupon.name}</div>
 
-      </>
+                    <div className="coupon-amount-info">
+                      {amountNeeded > 0 && (
+                        <div
+                          className="amount-needed"
+                          style={{ color: "red" }}
+                        >
+                          Add eligible items worth ₹{amountNeeded} more to unlock
+                        </div>
+                      )}
+                      <div className="discount-info">
+                        Get {coupon.coupon_display}
+                      </div>
+                    </div>
+
+                    <div className="coupon-details">
+                      <div className="coupon-description">
+                        Use code {coupon.name} & get {coupon.couponDisplay} on
+                        orders minimum ₹{coupon.cart_min_amount || 0}.
+                        {coupon.cart_max_amount > 0 &&
+                          ` Maximum discount: ₹${coupon.cart_max_amount}.`}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="coupon-action">
+                    {isApplied ? (
+                      <div className="coupon-applied-status">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                        <span>APPLIED</span>
+                      </div>
+                    ) : (
+                      <button
+                        className="apply-button"
+                        onClick={() => {
+                          if (isApplying || isCouponDisabled) return;
+                          setIsApplying(true);
+                          localStorage.setItem("couponCode", coupon.code);
+                          setAppliedCouponCode(coupon.code);
+                          setShowModal(true);
+                          setTimeout(() => {
+                            setShowModal(false);
+                            setIsApplying(false);
+                            navigate("/tab-navigator", {
+                              state: { couponCode: coupon.code },
+                            });
+                          }, 3000);
+                        }}
+                        disabled={isApplying || isCouponDisabled}
+                        style={{ background: isCouponDisabled ? 'gray' : '' }}
+                      >
+                        {isApplying ? (
+                          <div className="button-loader">
+                            <div className="spinner"></div>
+                            <span>APPLYING...</span>
+                          </div>
+                        ) : (
+                          "APPLY"
+                        )}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="NoCoupons-available">
+            No coupons available at the moment.
+          </div>
+        )}
+      </div>
     );
   };
+
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
       {renderContent()}
 
-      {/* Popup Modal */}
       {showModal && (
         <div className="popup-modal">
           <div className="popup-content couponApplied-main">
@@ -263,7 +215,17 @@ export const CouponList: React.FC = () => {
               style={{ width: 150, height: 150, margin: "0 auto" }}
             />
             <div className="success-message">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
               </svg>

@@ -80,11 +80,22 @@ export const MenuList: React.FC = () => {
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
-  const renderHeader = (): JSX.Element => {
-    return (
-      <components.Header title="Menu" showGoBack={true} showBasket={true} />
-    );
-  };
+ const renderHeader = (): JSX.Element => {
+  const title = "Menu";
+  const showBasket = true;
+  const userName = true;
+  const userPhoto = true;
+
+  return (
+    <components.Header
+      title={title}
+      showBasket={showBasket}
+      userName={userName}
+      userPhoto={userPhoto}
+    />
+  );
+};
+
 
   const renderSearch = (): JSX.Element | null => {
     if (menuLoading || dishesLoading || menu.length === 0 || dishes.length === 0) {

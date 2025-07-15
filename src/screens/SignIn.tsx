@@ -11,7 +11,6 @@ import { fetchWishlist } from "../store/slices/wishlistSlice";
 import Lottie from "lottie-react";
 import "./SignIn.scss";
 
-// Import animations
 import OtpVerificationAnimation from "../components/Animation/OtpVerification.json";
 import WelcomeAnimation from "../components/Animation/WelcomeAnimation.json";
 import FormBackground from "../components/Animation/FormBackground.json";
@@ -22,7 +21,6 @@ export const SignIn: React.FC = () => {
   const navigate = hooks.useNavigate();
   const formRef = useRef<HTMLDivElement>(null);
 
-  // State variables
   const [opacity, setOpacity] = useState<number>(0);
   const [mobile, setMobile] = useState<string>("");
   const [otp, setOtp] = useState<string>("");
@@ -38,9 +36,7 @@ export const SignIn: React.FC = () => {
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor("#F6F9F9", "#F6F9F9", dispatch);
 
-  // Animation effect when component mounts
   useEffect(() => {
-    // Trigger form animation after a short delay
     const timer = setTimeout(() => {
       setAnimateForm(true);
     }, 300);
@@ -48,7 +44,6 @@ export const SignIn: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // OTP timer effect
   useEffect(() => {
     if (isOtpSent && otpSentTime) {
       const interval = setInterval(() => {
@@ -99,7 +94,6 @@ export const SignIn: React.FC = () => {
             message: response.data.message || "OTP sent to your mobile number",
             placement: "bottomRight",
           });
-          // localStorage.setItem("c_idd", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
         } else if (
           response.data.status === "success" &&
@@ -110,7 +104,6 @@ export const SignIn: React.FC = () => {
             message: response.data.message || "OTP sent to your mobile number",
             placement: "bottomRight",
           });
-          // localStorage.setItem("c_idd", response.data.c_id);
           localStorage.setItem("cityId", response.data.city_id);
         } else {
           notification.error({
@@ -178,8 +171,6 @@ export const SignIn: React.FC = () => {
         if (areaId) {
           localStorage.setItem("area_id", areaId);
         }
-
-        // Notification and navigation based on address availability
         if (Array.isArray(addressDetails) && addressDetails.length === 0) {
           notification.success({
             message: "OTP Verified. Please add your address.",
@@ -191,17 +182,15 @@ export const SignIn: React.FC = () => {
             message: "OTP Verified.",
             placement: "bottomRight",
           });
-          navigate(0);
-          navigate(Routes.TabNavigator);
-          dispatch(fetchWishlist());
+          setTimeout(() => {
+            navigate(Routes.TabNavigator);
+            dispatch(fetchWishlist());
+          }, 100);
         }
       } else {
-        // Handle incorrect OTP
         const errorMessage = response?.data?.message || "Incorrect OTP. Please try again.";
         setOtpError(errorMessage);
-        setOtp(""); // Clear OTP inputs
-
-        // Focus first input box
+        setOtp("");
         setTimeout(() => {
           const firstInput = document.querySelector('.otp-input-box:first-child') as HTMLInputElement;
           if (firstInput) firstInput.focus();
@@ -216,9 +205,7 @@ export const SignIn: React.FC = () => {
       console.error("Error during OTP verification:", error);
       const errorMessage = "Error verifying OTP. Please try again.";
       setOtpError(errorMessage);
-      setOtp(""); // Clear OTP inputs
-
-      // Focus first input box
+      setOtp("");
       setTimeout(() => {
         const firstInput = document.querySelector('.otp-input-box:first-child') as HTMLInputElement;
         if (firstInput) firstInput.focus();
@@ -232,14 +219,8 @@ export const SignIn: React.FC = () => {
       setIsLoading(false);
     }
   }, [mobile, otp, navigate, dispatch]);
-
-  // Debug OTP changes and auto-verify when complete
   React.useEffect(() => {
-    // console.log("OTP changed:", otp, "Length:", otp.length);
-
-    // Auto-verify when OTP is complete (4 digits)
     if (otp.length === 4 && /^\d{4}$/.test(otp)) {
-      // console.log("Auto-verifying OTP:", otp);
       setTimeout(() => {
         handleVerifyOtp();
       }, 300);
@@ -253,7 +234,6 @@ export const SignIn: React.FC = () => {
   const renderContent = (): JSX.Element => {
     return (
       <main className="scrollable signInWrap">
-        {/* Background animation */}
         <div className="background-animation">
           <Lottie
             animationData={FormBackground}
@@ -323,14 +303,15 @@ export const SignIn: React.FC = () => {
                 {[0, 1, 2, 3].map((index) => (
                   <input
                     key={index}
-                    type="text"
+                    type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     maxLength={1}
                     className={`otp-input-box ${otp[index] ? "filled" : ""} ${otpError ? "error" : ""}`}
                     value={otp[index] || ""}
                     onChange={(e) => {
                       const value = e.target.value;
                       if (/^\d?$/.test(value)) {
-                        // Clear error when user starts typing
                         if (otpError) {
                           setOtpError("");
                         }
@@ -339,21 +320,17 @@ export const SignIn: React.FC = () => {
                         newOtp[index] = value;
                         const finalOtp = newOtp.join("");
                         setOtp(finalOtp);
-
-                        // Auto-focus next input (only if not the last input)
                         if (value && index < 3) {
                           const nextInput = document.querySelector(
                             `.otp-input-box:nth-child(${index + 2})`
                           ) as HTMLInputElement;
                           if (nextInput) nextInput.focus();
                         } else if (value && index === 3) {
-                          // Blur the last input to ensure the value is committed
                           (e.target as HTMLInputElement).blur();
                         }
                       }
                     }}
                     onKeyDown={(e) => {
-                      // Handle backspace to focus previous input
                       if (e.key === "Backspace" && !otp[index] && index > 0) {
                         const prevInput = document.querySelector(
                           `.otp-input-box:nth-child(${index})`
@@ -365,13 +342,10 @@ export const SignIn: React.FC = () => {
                       e.preventDefault();
                       const pastedData = e.clipboardData.getData("text");
                       if (/^\d{4}$/.test(pastedData)) {
-                        // Clear error when pasting
                         if (otpError) {
                           setOtpError("");
                         }
-
                         setOtp(pastedData);
-                        // Focus the last input and then blur to ensure value is set
                         const lastInput = document.querySelector(
                           ".otp-input-box:nth-child(4)"
                         ) as HTMLInputElement;
@@ -416,8 +390,6 @@ export const SignIn: React.FC = () => {
                   )
                 )}
               </div>
-
-
             </div>
           )}
 
@@ -444,11 +416,8 @@ export const SignIn: React.FC = () => {
       </main>
     );
   };
-
-  // Add loading modal for OTP verification
   const renderLoadingModal = (): JSX.Element | null => {
     if (!isLoading) return null;
-
     return (
       <div className="popup-modal">
         <div className="popup-content">
@@ -463,7 +432,6 @@ export const SignIn: React.FC = () => {
       </div>
     );
   };
-
   return (
     <div id="screen" style={{ opacity }}>
       {renderContent()}

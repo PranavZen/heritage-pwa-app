@@ -112,7 +112,7 @@ export const MyAddress: React.FC = () => {
         setDeleteAddressId(id);
       },
       onCancel: () => {
-        // console.log("Delete canceled");
+        // console.error("Delete canceled");
       },
     });
   };
@@ -149,19 +149,22 @@ export const MyAddress: React.FC = () => {
     });
   };
 
-  const handleNewAddressAdd = (newAddressData: any) => {
-    setNewAddress(newAddressData);
-    setAddresses((prev) => [newAddressData, ...prev]);
-  };
+  // const handleNewAddressAdd = (newAddressData: any) => {
+  //   setNewAddress(newAddressData);
+  //   setAddresses((prev) => [newAddressData, ...prev]);
+  // };
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header title="My Addresses" showGoBack={true} />;
+     const showBasket = true;
+    return <components.Header 
+    title="My Addresses" 
+    showGoBack={true}
+  
+     />;
   };
 
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader />;
-
-
     const SetDefaultAddress = async (elem: any) => {
       const formData = new FormData();
       formData.append("address_id", elem.id || "");
@@ -203,8 +206,6 @@ export const MyAddress: React.FC = () => {
         console.error("Error updating address:", error);
       }
     };
-
-
     return (
       <section className="scrollable">
         <div className="newAddressBtnWrap">
@@ -216,8 +217,6 @@ export const MyAddress: React.FC = () => {
             New Address
           </button>
         </div>
-
-        {/* Display existing addresses in a separate div if more than one address */}
         <div className="editAddressBoxWrap">
           <h3>Existing Addresses</h3>
           {addresses?.length > 0 ? (
@@ -269,17 +268,14 @@ export const MyAddress: React.FC = () => {
               <p>No addresses found. Please add a new address.</p>
             </div>
           )}
-
         </div>
-
       </section>
     );
   };
-
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
-      {renderContent()}
+      {loading ? <components.Loader local={true} message="Loading content..." /> : renderContent()}
     </div>
   );
 };

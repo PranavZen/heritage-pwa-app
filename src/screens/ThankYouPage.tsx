@@ -30,9 +30,20 @@ const ThankYouPage: React.FC = () => {
     }, 300);
   }, []);
 
-  const renderHeader = (): JSX.Element => {
-    return <components.Header showGoBack={true} showBasket={true} />;
-  };
+  const renderHeader = (): JSX.Element =>{
+   const title = "Menu";
+   const showBasket = true;
+   const userName = true;
+   const userPhoto = true;
+   return (
+     <components.Header
+       title={title}
+       showBasket={showBasket}
+       userName={userName}
+       userPhoto={userPhoto}
+     />
+   );
+ };
 
   return (
     <div className="thank-you-container">

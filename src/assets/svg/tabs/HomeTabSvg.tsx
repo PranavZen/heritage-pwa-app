@@ -33,7 +33,7 @@ export const HomeTabSvg: React.FC = () => {
         }
         strokeLinecap='round'
         strokeLinejoin='round'
-        strokeWidth={1.5}
+        strokeWidth={3.5}
         d='M5 21h14M5 21V8m14 13V8M2 10l10-8 10 8'
       />
     </svg>

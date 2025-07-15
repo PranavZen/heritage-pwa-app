@@ -35,9 +35,6 @@ export const addItemToCartAPI = createAsyncThunk(
         order_date,
         order_type,
       });
-
-      // console.log("responseaddto cart", response)
-
       return response.data;  
     } catch (error) {
       console.error('Failed to add item to cart:', error);

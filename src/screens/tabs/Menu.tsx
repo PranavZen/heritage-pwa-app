@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-
 import {hooks} from '../../hooks';
 import {Routes} from '../../routes';
 import {MenuType} from '../../types';
@@ -8,13 +7,8 @@ import '../../scss/menu.scss';
 export const Menu: React.FC = () => {
   const dispatch = hooks.useDispatch();
   const navigate = hooks.useNavigate();
-
   const {menuLoading, menu} = hooks.useGetMenu();
-
-  // console.log("menumenumenuaaaaa",menu);
-
   const [opacity, setOpacity] = useState<number>(0);
-
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   hooks.useThemeColor('#F6F9F9', '#F6F9F9', dispatch);

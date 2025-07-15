@@ -12,8 +12,6 @@ export const SelectAddressFromHome: React.FC = () => {
   const navigate = hooks.useNavigate();
   const location = useLocation();
   const { id } = location.state || {};
-
-// console.log("aaaa", id)
   const [loading, setLoading] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
   const [newAddress, setNewAddress] = useState<any | null>(null);
@@ -121,9 +119,21 @@ export const SelectAddressFromHome: React.FC = () => {
     localStorage.setItem("selectedAddressId", addressId.toString());
   };
 
-  const renderHeader = (): JSX.Element => {
-    return <components.Header title="Select Address" showGoBack={true} />;
-  };
+ const renderHeader = (): JSX.Element => {
+  const title = "Menu";
+  const showBasket = true;
+  const userName = true;
+  const userPhoto = true;
+
+  return (
+    <components.Header
+      title={title}
+      showBasket={showBasket}
+      userName={userName}
+      userPhoto={userPhoto}
+    />
+  );
+};
 
   const renderContent = (): JSX.Element => {
     if (loading) return <components.Loader />;

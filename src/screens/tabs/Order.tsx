@@ -40,52 +40,28 @@ interface Props {
   addresses: Address[];
 }
 
-// export const Order: React.FC = () => {
-// const Order = () => {
-
 export const Order: React.FC = () => {
   const location = useLocation();
   const couponCode = location.state?.couponCode;
-
-  // console.log("wwwwwwwww",  couponCode);
-
-  // const selectedAddressId = location.state?.addressId;
   const selectedAddressId = localStorage.getItem("selectedAddressId");
-
-  // console.log('aaaaaaaaaa', selectedAddressId);
-
   const dispatch = hooks.useDispatch();
   const [opacity, setOpacity] = useState<number>(0);
   const [totalPrice, SetTotalPrice] = useState<any[]>([]);
+  const [totalPricee, SetTotalPricee] = useState<any[]>([]);
 
-  // console.log("ffffffffffffff", totalPrice)
   const [freeNoOfdeliveries, SetfreeNoOfdeliveries] = useState<any[]>([]);
   const [Subtotal, setSubtotal] = useState<any>({});
-
-  // console.log("freeNoOfdeliveries", freeNoOfdeliveries);
-
   const [addressId, SetAddressId] = useState("");
-
-  // console.log("aaa", addressId)
-
   const [superPoint, setSuperPoint] = useState<any>(null);
-
-  // console.log("superPoint", superPoint);
-
+  const [initialLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [coupons, setCoupons] = useState<any[]>([]);
   const [cartDetails, setCartDetails] = useState<any>(null);
-  // console.log("cartDetails", cartDetails)
   const [deliveries, SetDeliveries] = useState<any[]>([]);
-
   const [addresses, setAddresses] = useState<any[]>([]);
-
-  // console.log("aaaaa",  addresses);
-
   const [getrewardbalance, setGetrewardBalance] = useState<any[]>([]);
-
   const [showAll, setShowAll] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -100,55 +76,30 @@ export const Order: React.FC = () => {
   const [passPoints, setPassPoints] = useState(0);
   const [coinAnimating, setCoinAnimating] = useState(false);
   const [amountAnimating, setAmountAnimating] = useState(false);
-
   const [superPointCoins, SetSuperPoint] = useState<number>(0);
-
-  // console.log("setRedeemedAmount", redeemedAmount);
-  // console.log("setRedeemedAmount", redeemedAmount);
-
   const maxRedeemableAmount = Math.floor(superPointCoins / 10);
-
   const adjustedRedeemedAmount = Math.min(redeemedAmount, maxRedeemableAmount);
   const PassPointsInCheckout = adjustedRedeemedAmount * 10;
-
-  // console.log("Adjusted Redeemed Amount:", adjustedRedeemedAmount);
-
-  // console.log("PassPointsInCheckout:", PassPointsInCheckout);
-
-  // console.log("sssssss", PassPointsInCheckout);
-
   const shouldRefresh = useSelector(
     (state: RootState) => state.cartSlice.shouldRefresh
   );
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isApplying, setIsApplying] = useState<boolean>(false);
-
   const [extraDiscount, setExtraDiscount] = useState<any[]>([]);
-
   const [extraDiscountShow, setExtraDiscountShow] = useState<any[]>([]);
-
   const [gstTax, setGstTax] = useState<number>(0)
-
-  // console.log("gstTax", gstTax);
-
-  // console.log("extraDiscount", extraDiscount);
   const [isChecked, setIsChecked] = useState<boolean>(() => {
     const stored = localStorage.getItem("isChecked");
     return stored === "true";
   });
-
-  //  console.log("aaaaaaaazzzzzzzz", superPoint.available_amount)
-
   const shouldMount = useSelector(
     (state: RootState) => state.cartSlice.shouldRefresh
   );
 
   useEffect(() => {
     const isChecked = localStorage.getItem("isChecked") === "true";
-
     if (isChecked) {
       setIsChecked(true);
-
       if (superPoint) {
         setRedeemedAmount(superPoint.available_amount);
         SetSuperPoint(superPoint.available_points);
@@ -159,19 +110,14 @@ export const Order: React.FC = () => {
   const handleCheckboxChange = (e: any) => {
     const checked = e.target.checked;
     setIsChecked(checked);
-
     localStorage.setItem("isChecked", JSON.stringify(checked));
-
     localStorage.setItem("isChecked", JSON.stringify(checked));
-
     setCoinAnimating(true);
     setAmountAnimating(true);
-
     setTimeout(() => setCoinAnimating(false), 600);
     setTimeout(() => setAmountAnimating(false), 500);
     setTimeout(() => setCoinAnimating(false), 600);
     setTimeout(() => setAmountAnimating(false), 500);
-
     if (checked) {
       setShowModal(true);
       setTimeout(() => setShowModal(false), 2000);
@@ -202,10 +148,7 @@ export const Order: React.FC = () => {
 
   const c_id = localStorage.getItem("c_id");
   const cityId = localStorage.getItem("cityId");
-
   const [couponsCount, setCouponsCount] = useState();
-  // console.log("aaaaaa", couponsCount);
-
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
@@ -250,19 +193,16 @@ export const Order: React.FC = () => {
           "https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById",
           formData
         );
-        // console.log('xxxxxxxxxxxxxxx', response.data.addresses);
         setAddresses(response.data.addresses);
-
         setLoading(false);
+        setInitialLoading(false);
       } catch (error) {
         setLoading(false);
-        // console.error("Error fetching addresses:", error);
+        setInitialLoading(false);
       }
     };
     fetchAddresses();
-  }, [c_id, shouldRefresh]);
-
-  // *************************************************************************************
+  }, [c_id]);
 
   useEffect(() => {
     const getAddToCartData = async () => {
@@ -279,6 +219,7 @@ export const Order: React.FC = () => {
         );
         setGstTax(response.data.gst_tax_total || 0)
         SetTotalPrice(response.data.optionListing);
+        SetTotalPricee(response.data.cart_final_grand_total);
         SetDeliveries(
           response.data.optionListing.map((elem: any) => elem.no_of_deliveries)
         );
@@ -321,6 +262,13 @@ export const Order: React.FC = () => {
   }, [cityId, c_id, shouldRefresh, dispatch]);
 
   useEffect(() => {
+    const currentScreen = localStorage.getItem('curScreen');
+    if (currentScreen === "Order") {
+      localStorage.setItem("total", String(totalPricee));
+    }
+  }, [c_id, shouldRefresh, totalPricee]);
+
+  useEffect(() => {
     const getAddress = async () => {
       const formData = new FormData();
       formData.append("c_id", c_id || "");
@@ -329,11 +277,8 @@ export const Order: React.FC = () => {
           `https://heritage.bizdel.in/app/consumer/services_v11/getAllAddressById`,
           formData
         );
-        //  console.log("aaaa", response);
         const addresses = response.data.addresses;
-
         // const defaultAddress = addresses.find((addr: any) => addr.is_default === 1);
-
         // if (defaultAddress) {
         //   SetAddressId(defaultAddress.id);
         // } else if (addresses.length > 0) {
@@ -343,9 +288,6 @@ export const Order: React.FC = () => {
           const defaultAddress = addresses.find(
             (addr: any) => addr.is_default === '1'
           );
-
-          // console.log("xx", defaultAddress);
-
           if (defaultAddress) {
             SetAddressId(defaultAddress.id);
           } else if (addresses.length > 0) {
@@ -364,7 +306,7 @@ export const Order: React.FC = () => {
 
   const handleCheckout = async () => {
     setLoading(true);
-    setButtonLoading(true); // Set button loading state to true
+    setButtonLoading(true);
 
     const formData = new FormData();
     formData.append("c_id", c_id || "");
@@ -392,15 +334,15 @@ export const Order: React.FC = () => {
         localStorage.removeItem("couponCode");
         localStorage.removeItem("discount_total");
       } else if (response.data.status === "fail") {
-        setButtonLoading(false); // Reset button loading state on failure
-        setLoading(false); // Reset global loading state on failure
+        setButtonLoading(false);
+        setLoading(false);
         notification.error({
           message: response.data.message || "Order placement failed",
         });
       }
     } catch (error) {
-      setButtonLoading(false); // Reset button loading state on error
-      setLoading(false); // Reset global loading state on error
+      setButtonLoading(false);
+      setLoading(false);
       console.error(error);
       notification.error({
         message: "An error occurred while placing your order.",
@@ -428,9 +370,6 @@ export const Order: React.FC = () => {
           formData
         );
         const data = response.data;
-
-        // console.log("iiiiiiiiiiiiiii", response);
-
         if (data) {
           setCoupons(data);
           setCartDetails({
@@ -476,13 +415,10 @@ export const Order: React.FC = () => {
           "https://heritage.bizdel.in/app/consumer/services_v11/getrewardbalance",
           formData
         );
-        //  console.log("rrtttttttttt", response)
-
         if (response.data.status === "success") {
           setGetrewardBalance(response.data.points);
           localStorage.setItem("reward_balance", response.data.points);
         }
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching coupons:", error);
@@ -494,7 +430,6 @@ export const Order: React.FC = () => {
   }, [shouldRefresh]);
 
   useEffect(() => {
-    // Check if c_id exists in localStorage
     const storedCId = localStorage.getItem("c_id");
     if (!storedCId) {
       console.warn("No customer ID found in localStorage");
@@ -514,18 +449,12 @@ export const Order: React.FC = () => {
           "redeem_points",
           String(localStorage.getItem("reward_balance") || "")
         );
-
-        // console.log('Passing redeem_points:', getrewardbalance);
-
         const response = await axios.post(
           "https://heritage.bizdel.in/app/consumer/services_v11/getCartDatasrv",
           formData
         );
 
         const data = response.data;
-
-        // console.log("vvvvvvvvvvv", data);
-
         // if (data && data.redeemed_points && data.redeemed_amount) {
         //   setSuperPoint({
         //     redeemed_points: data.redeemed_points,
@@ -533,7 +462,6 @@ export const Order: React.FC = () => {
         //   });
         // }
         setSuperPoint(data);
-
         // setLoading(false);
       } catch (error) {
         console.error("Error fetching coupons:", error);
@@ -591,10 +519,7 @@ export const Order: React.FC = () => {
       ) {
         return;
       }
-
-      // Add clicked class for animation
       e.currentTarget.classList.add("clicked");
-
       // Remove the clicked class after animation completes
       // setTimeout(() => {
       //   e.currentTarget.classList.remove("clicked");
@@ -605,16 +530,10 @@ export const Order: React.FC = () => {
         handleCoupon();
       }
     };
-
-    // Determine if we should show "Apply Coupon" or "View All Coupons"
     const couponButtonText =
       window.innerWidth <= 767 ? "Apply" : "View All Coupons";
-
-    // Format discount amount for better display
     const formatDiscount = (discount: string) => {
       if (discount === "0") return "No discount applied";
-
-      // Check if the discount already has a currency symbol
       if (discount.includes("₹")) return `Discount: ${discount}`;
       return `Discount: ₹${discount}`;
     };
@@ -666,7 +585,6 @@ export const Order: React.FC = () => {
           <div className="coupon-header">
             <div style={{ display: "flex", alignItems: "center" }}>
               <h3>{codeCoupon ? "Applied Coupon" : "Discount Coupon"}</h3>
-              {/* Count coupon */}
               <p>
                 Available Coupon (
                 {(couponsCount || 0) > 0 ? `${couponsCount}` : "0"})
@@ -721,7 +639,6 @@ export const Order: React.FC = () => {
               <p className="discount-text">
                 <span>{formatDiscount(cleanedDiscount)}</span>
               </p>
-              {/* <hr className="divider" /> */}
             </>
           )}
         </div>
@@ -907,9 +824,6 @@ export const Order: React.FC = () => {
   const cartCount = useSelector(
     (state: RootState) => state.cartSlice.cartCount
   );
-
-  // console.log("shouldRefresh", shouldRefresh);
-
   // useEffect(() => {
   //   if (cartCount === 0) {
   //     localStorage.removeItem('curScreen');
@@ -980,9 +894,7 @@ export const Order: React.FC = () => {
     );
   };
 
-  // Animation effect for the page
   useEffect(() => {
-    // Set opacity to 1 after component mounts for fade-in effect
     setTimeout(() => setOpacity(1), 100);
   }, []);
 
@@ -1120,7 +1032,7 @@ export const Order: React.FC = () => {
                   {localStorage.getItem("couponCode") &&
                     cartDetails?.after_discount_total > 0 &&
                     ` of ₹ ${cartDetails.after_discount_total}`}
-                  ! 
+                  !
                 </span>
 
                 {localStorage.getItem("couponCode") ? (
@@ -1262,7 +1174,6 @@ export const Order: React.FC = () => {
                   const cartTotal = Subtotal.cart_grand_total;
                   //  totalPrice
                   //   .reduce((total, elem) => {
-                  //     // console.log("aaaa", total);
                   //     const deliveryCount = elem.no_of_deliveries === '0'
                   //       ? 1
                   //       : Number(elem.no_of_deliveries) - (Number(elem.no_of_free_deliveries) || 0);
@@ -1274,7 +1185,6 @@ export const Order: React.FC = () => {
                     discount = Number(cartDetails?.after_discount_total || 0);
                   }
                   const gst = Number(cartDetails?.gst_tax_total || 0);
-
 
                   const total =
                     Number(cartTotal) -
@@ -1344,14 +1254,19 @@ export const Order: React.FC = () => {
   };
 
   const renderLoading = (): JSX.Element | null => {
-    if (loading || menuLoading) return <components.Loader />;
+    if (initialLoading) {
+      return <components.Loader local={true} message="Loading content..." />;
+    }
     return null;
   };
 
   return (
     <div id="screen" style={{ opacity }}>
-      {renderContent()}
-      {renderLoading()}
+      {initialLoading ? (
+        renderLoading()
+      ) : (
+        renderContent()
+      )}
       {showModal && (
         <div className="popup-modal super-coins-modal">
           <div className="popup-content">

@@ -88,12 +88,15 @@ $transition-speed: 0.3s;
     }
   }
 }
-
+.basketContainer{
+  display: flex;
+  gap: 20px;
+}
 .selected-search-wrapper {
-  top: 3%;
-  z-index: 1111;
-  position: absolute;
-  right: 22%;
+  // top: 3%;
+  // z-index: 1111;
+  // position: absolute;
+  // right: 22%;
   pointer-events: all;
   cursor: pointer;
   color: white;

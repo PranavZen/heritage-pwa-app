@@ -22,45 +22,22 @@ export const SubscriptionOrder: React.FC = () => {
 
   const loading: boolean =
     menuLoading || dishesLoading || reviewsLoading || carouselLoading;
-
   const [subscriptionData, setSubscriptionData] = useState<any[]>([]);
-
-  // console.log("aaaaaaaaaaaaaaaaaaaa", subscriptionData);
-
   const [oneTimeOrderData, setOneTimeOrderData] = useState<any[]>([]);
-
-  // console.log("oneTimeOrderDataoneTimeOrderData", oneTimeOrderData);
-
   const [activeTab, setActiveTab] = useState("subscriptions");
   const [isLoading, setIsLoading] = useState(false);
-
   const [subscriptionID, SetSubscriptionID] = useState<any[]>([]);
-
-  // console.log("subscriptionIDwwwwwwwwwwwwwwwwwww", subscriptionID);
-
   const [pauseToggle, SetPauseToggle] = useState<{ [key: number]: boolean }>(
     {}
   );
   const [currentSubscription, setCurrentSubscription] = useState<any>(null);
-
   const [oneTimeNextId, setOneTimeNextId] = useState<number>(0);
-
   const [oneTimeTotalData, setOneTimeTotalData] = useState<number>(0);
-
   const [nextId, setNextId] = useState<number>(0);
-
   const [subscriptionNextId, setSubscriptionNextId] = useState<number>(0);
-
   const [subscriptionnextId, SetSubscriptionNextId] = useState<number>(0);
-
   const [subscriptionnextTotalData, SetSubscriptionTotalData] =
     useState<number>(0);
-
-  // console.log("mm", oneTimeNextId);
-  // console.log("mmm", nextId);
-
-  // console.log("qqqqqq", pauseToggle);
-
   interface Subscription {
     subscription_id: number;
     product_name: string;
@@ -71,25 +48,12 @@ export const SubscriptionOrder: React.FC = () => {
   }
 
   const [subscription, SetSubscription] = useState<Subscription | null>(null);
-
-  // console.log("subscription1111111111111111111111", subscription);
-
   const [disabled, setDisabled] = useState(true);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedReason, setSelectedReason] = useState(null);
-
-  // console.log("selectedReason", selectedReason);
-
   const [isModalVisiblePause, setIsModalVisiblePause] = useState(false);
-
   const [pauseDate, setPauseDate] = useState<string | null>(null);
-
-  // console.log("pauseeeeq", pauseDate);
   const [resumeDate, setResumeDate] = useState<string | null>(null);
-
-  // console.log("resumeDate", resumeDate);
-
   interface orderToDelete {
     order_id: string;
     order_status_id: string;
@@ -105,15 +69,12 @@ export const SubscriptionOrder: React.FC = () => {
     reason: string;
   }
   const [cancelReasons, setCancelReasons] = useState<CancelReason[]>([]);
-
-  // *************************One time order**************************
   useEffect(() => {
     axios
       .post(
         "https://heritage.bizdel.in/app/consumer/services_v11/get_order_cancel_reason"
       )
       .then((response) => {
-        // console.log('mmmmm', response);
         setCancelReasons(response.data.order_cancel_reason);
       })
       .catch((error) => {
@@ -122,7 +83,6 @@ export const SubscriptionOrder: React.FC = () => {
   }, []);
 
   const handleDeleteClick = (order: any) => {
-    // console.log("orderhello", order);
     setOrderToDelete(order);
     setIsModalVisible(true);
   };
@@ -130,8 +90,6 @@ export const SubscriptionOrder: React.FC = () => {
   const handleReasonChange = (e: any) => {
     setSelectedReason(e.target.value);
   };
-
-  // Confirm deletion
   const handleConfirmDelete = () => {
     if (selectedReason && orderToDelete) {
       const formData = new FormData();
@@ -173,7 +131,6 @@ export const SubscriptionOrder: React.FC = () => {
       notification.error({ message: "Please select a pause date." });
       return;
     }
-    // Handle the pause logic (API call, etc.)
     const formData = new FormData();
     formData.append("c_id", String(localStorage.getItem("c_id")));
     formData.append("usertype", "user");
@@ -185,8 +142,6 @@ export const SubscriptionOrder: React.FC = () => {
     formData.append("subscription_pause_date", String(pauseDate));
     formData.append("status", "3");
     formData.append("quantity", "1");
-
-    // Example API call
     axios
       .post(
         "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
@@ -237,7 +192,6 @@ export const SubscriptionOrder: React.FC = () => {
         formData
       )
       .then((response) => {
-        // console.log("nnnnnnnnnnnn", response);
         if (response.data.status === "success") {
           notification.success({
             message: "Subscription resumed successfully!",
@@ -259,55 +213,53 @@ export const SubscriptionOrder: React.FC = () => {
   const [isModalVisibleResume, setIsModalVisibleResume] = useState(false);
   // *************************One time order**************************************
 
-  const toggle = (subscription: any) => (checked: boolean) => {
-    // console.log("subscriptionsubscriptionsubscription", subscription);
+  // const toggle = (subscription: any) => (checked: boolean) => {
+  //   if (checked) {
+  //     if (subscription.status === "Active") {
+  //       setCurrentSubscription(subscription);
+  //       SetSubscription(subscription);
+  //       setIsModalVisiblePause(true);
+  //     }
+  //   } else {
+  //     if (subscription.status === "Paused") {
+  //       const resumeDate = moment().add(1, "day").format("YYYY-MM-DD");
+  //       setPauseDate(resumeDate);
+  //       setCurrentSubscription(subscription);
+  //       SetSubscription(subscription);
+  //       setIsModalVisibleResume(true);
+  //     } else if (String(subscription.status) === "Active") {
+  //       setCurrentSubscription(subscription);
+  //       SetSubscription(subscription);
+  //       setIsModalVisiblePause(true);
+  //     }
+  //   }
 
-    if (checked) {
-      if (subscription.status === "Active") {
-        setCurrentSubscription(subscription);
-        SetSubscription(subscription);
-        setIsModalVisiblePause(true);
-      }
-    } else {
-      if (subscription.status === "Paused") {
-        const resumeDate = moment().add(1, "day").format("YYYY-MM-DD");
-        setPauseDate(resumeDate);
-        setCurrentSubscription(subscription);
-        SetSubscription(subscription);
-        setIsModalVisibleResume(true);
-      } else if (String(subscription.status) === "Active") {
-        setCurrentSubscription(subscription);
-        SetSubscription(subscription);
-        setIsModalVisiblePause(true);
-      }
-    }
+  //   SetPauseToggle((prevState) => ({
+  //     ...prevState,
+  //     [subscription.subscription_id]: checked,
+  //   }));
+  // };
 
-    SetPauseToggle((prevState) => ({
-      ...prevState,
-      [subscription.subscription_id]: checked,
-    }));
-  };
+  // const handlePauseCancel = () => {
+  //   setIsModalVisiblePause(false);
+  //   if (currentSubscription) {
+  //     SetPauseToggle((prevState) => ({
+  //       ...prevState,
+  //       [currentSubscription.subscription_id]: false,
+  //     }));
+  //   }
+  // };
 
-  const handlePauseCancel = () => {
-    setIsModalVisiblePause(false);
-    if (currentSubscription) {
-      SetPauseToggle((prevState) => ({
-        ...prevState,
-        [currentSubscription.subscription_id]: false,
-      }));
-    }
-  };
-
-  const handleResumeCancel = () => {
-    setIsModalVisibleResume(false);
-    window.location.reload();
-    if (currentSubscription) {
-      SetPauseToggle((prevState) => ({
-        ...prevState,
-        [currentSubscription.subscription_id]: false,
-      }));
-    }
-  };
+  // const handleResumeCancel = () => {
+  //   setIsModalVisibleResume(false);
+  //   window.location.reload();
+  //   if (currentSubscription) {
+  //     SetPauseToggle((prevState) => ({
+  //       ...prevState,
+  //       [currentSubscription.subscription_id]: false,
+  //     }));
+  //   }
+  // };
 
   // const handlePauseCancel = () => {
   //   setIsModalVisiblePause(false);
@@ -318,83 +270,75 @@ export const SubscriptionOrder: React.FC = () => {
   //   setIsModalVisibleResume(false);
   // };
 
-  const handleCancel = () => {
-    setPauseDate(null);
-    setResumeDate(null);
-    setIsModalVisiblePause(false);
-  };
+  // const handleCancel = () => {
+  //   setPauseDate(null);
+  //   setResumeDate(null);
+  //   setIsModalVisiblePause(false);
+  // };
 
-  const handleOk = async () => {
-    if (!pauseDate || !resumeDate) {
-      notification.error({
-        message: "Please select both pause and resume dates.",
-      });
-      return;
-    }
+  // const handleOk = async () => {
+  //   if (!pauseDate || !resumeDate) {
+  //     notification.error({
+  //       message: "Please select both pause and resume dates.",
+  //     });
+  //     return;
+  //   }
 
-    const currentDate = moment().startOf("day");
+  //   const currentDate = moment().startOf("day");
 
-    const selectedPauseDate = moment(pauseDate).startOf("day");
-    if (selectedPauseDate.isBefore(currentDate)) {
-      notification.error({
-        message:
-          "Subscription pause date must be greater than the current date.",
-      });
-      return;
-    }
-    const formData = new FormData();
-    formData.append("c_id", String(localStorage.getItem("c_id")));
-    formData.append("usertype", "user");
-    formData.append("subscription_id", String(subscription?.subscription_id));
-    formData.append("product_name", subscription?.product_name || "");
-    formData.append("option_value", subscription?.option_value || "");
-    formData.append("delivery_opt", subscription?.delivery_opt || "");
-    formData.append("package_days", subscription?.package_days || "");
-    formData.append("subscription_pause_date", pauseDate);
-    formData.append("subscription_resume_date", resumeDate);
-    formData.append("status", "3");
-    formData.append("extra_quantity", "0");
-    formData.append("declined_quantity", "0");
-    formData.append("default_quantity", "1");
-    formData.append("quantity", "1");
+  //   const selectedPauseDate = moment(pauseDate).startOf("day");
+  //   if (selectedPauseDate.isBefore(currentDate)) {
+  //     notification.error({
+  //       message:
+  //         "Subscription pause date must be greater than the current date.",
+  //     });
+  //     return;
+  //   }
+  //   const formData = new FormData();
+  //   formData.append("c_id", String(localStorage.getItem("c_id")));
+  //   formData.append("usertype", "user");
+  //   formData.append("subscription_id", String(subscription?.subscription_id));
+  //   formData.append("product_name", subscription?.product_name || "");
+  //   formData.append("option_value", subscription?.option_value || "");
+  //   formData.append("delivery_opt", subscription?.delivery_opt || "");
+  //   formData.append("package_days", subscription?.package_days || "");
+  //   formData.append("subscription_pause_date", pauseDate);
+  //   formData.append("subscription_resume_date", resumeDate);
+  //   formData.append("status", "3");
+  //   formData.append("extra_quantity", "0");
+  //   formData.append("declined_quantity", "0");
+  //   formData.append("default_quantity", "1");
+  //   formData.append("quantity", "1");
 
-    try {
-      const response = await axios.post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
-        formData
-      );
-
-      // console.log("qqqqqqqqqqqqq11111111", response.data)
-
-      if (response.data.status === "success") {
-        notification.success({
-          message: response.data.subscription_resume_note,
-        });
-        setIsModalVisiblePause(false);
-        window.location.reload();
-      } else if (response.data.status === "fail") {
-        notification.error({ message: response.data.message });
-      }
-    } catch (error) {
-      notification.error({
-        message: "Error occurred while pausing subscription.",
-      });
-    }
-  };
+  //   try {
+  //     const response = await axios.post(
+  //       "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
+  //       formData
+  //     );
+  //     if (response.data.status === "success") {
+  //       notification.success({
+  //         message: response.data.subscription_resume_note,
+  //       });
+  //       setIsModalVisiblePause(false);
+  //       window.location.reload();
+  //     } else if (response.data.status === "fail") {
+  //       notification.error({ message: response.data.message });
+  //     }
+  //   } catch (error) {
+  //     notification.error({
+  //       message: "Error occurred while pausing subscription.",
+  //     });
+  //   }
+  // };
 
   const [opacity, setOpacity] = useState<number>(0);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
   const handleSubscriptionID = (subscription_id: string) => {
-    // console.log("subscription_id string:", subscription_id);
-
     const uniqueSubscriptionIDs = Array.from(
       new Set(subscription_id.split(",").map((id) => id.trim()))
     );
-
-    // console.log("Unique subscription ID:", uniqueSubscriptionIDs);
-
     if (uniqueSubscriptionIDs.length > 0) {
       SetSubscriptionID((prevSubscriptionIDs) => [
         ...prevSubscriptionIDs,
@@ -420,7 +364,6 @@ export const SubscriptionOrder: React.FC = () => {
         formData
       )
       .then((response) => {
-        // console.log("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", response);
         if (
           response.data.subscriptionListing &&
           Array.isArray(response.data.subscriptionListing)
@@ -472,25 +415,15 @@ export const SubscriptionOrder: React.FC = () => {
     fetchSubscriptionData();
     fetchOneTimeOrderData();
   }, [nextId]);
-
-  // Set up Intersection Observer for card animations
   useEffect(() => {
     const cards = document.querySelectorAll(".card");
-
     if (cards.length === 0) return;
-
-    // Convert NodeList to Array for easier manipulation
     const cardsArray = Array.from(cards);
-
-    // Sort cards by their position from bottom to top
-    // This ensures cards at the bottom of the page animate first when scrolling up
     cardsArray.sort((a, b) => {
       const aRect = a.getBoundingClientRect();
       const bRect = b.getBoundingClientRect();
-      return bRect.top - aRect.top; // Sort from bottom to top
+      return bRect.top - aRect.top;
     });
-
-    // Create a map to store the index of each card
     const cardIndexMap = new Map();
     cardsArray.forEach((card, index) => {
       cardIndexMap.set(card, index);
@@ -502,26 +435,21 @@ export const SubscriptionOrder: React.FC = () => {
           if (entry.isIntersecting) {
             const card = entry.target;
             const index = cardIndexMap.get(card);
-
-            // Set a custom property for staggered animation delay
-            // The delay increases as the user scrolls up
             (card as HTMLElement).style.setProperty(
               "--card-index",
               String(index)
             );
-
-            // Add a class to trigger the animation
             setTimeout(() => {
               (card as HTMLElement).classList.add("animate-card");
-            }, 50 * index); // Staggered delay
+            }, 50 * index);
 
             observer.unobserve(card);
           }
         });
       },
       {
-        threshold: 0.15, // Increased threshold for better timing
-        rootMargin: "0px 0px -50px 0px", // Adjusted to trigger a bit earlier
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px",
       }
     );
 
@@ -575,7 +503,8 @@ export const SubscriptionOrder: React.FC = () => {
   }, [subscriptionID]);
 
   const renderContent = (): JSX.Element => {
-    if (loading || isLoading) return <components.Loader />;
+    if (loading) return <components.Loader local={true} message="Loading content..." />;
+    if (isLoading) return <components.Loader />;
 
     return (
       <main className="scrollable ordersScreenWrapper">
@@ -638,6 +567,7 @@ export const SubscriptionOrder: React.FC = () => {
                             Paid Amount: ₹{" "}
                             {subscription.subscription_block_amount}
                           </p>
+
                         </div>
                       </div>
                       <div className="dataWraps">
@@ -865,7 +795,7 @@ export const SubscriptionOrder: React.FC = () => {
                   oneTimeOrderData.length > 0 ? (
                   oneTimeOrderData.map((order) => (
                     <div key={order.subscription_id} className="card">
-                      <div className="topCardDataWrap">
+                      <div className="topCardDataWrap" style={{borderBottom:'none'}}>
                         <div className="orderImagWrap">
                           <img
                             src={order.image}
@@ -887,7 +817,7 @@ export const SubscriptionOrder: React.FC = () => {
                             {order.lastDeliveryDate || "-"}
                           </p> */}
                           <p className="orderPrice">
-              
+
                             {order.discount > 0 && (
                               <>
                                 ₹{order.price - order.discount}
@@ -898,10 +828,13 @@ export const SubscriptionOrder: React.FC = () => {
                           <p className="orderBalAmt">
                             Paid Amount: ₹ {order.total}
                           </p>
+                          <p className="orderBalAmt">
+                            {String(order.coupon_code) !== '0' ? <> Coupon Applied</> : <></>}
+                          </p>
                         </div>
                       </div>
-                      <div className="dataWraps"></div>
-                      <div className="orderDateWrap">
+                      {/* <div className="dataWraps"></div> */}
+                      <div className="orderDateWrap"  style={{borderTop:'none'}}>
                         <div className="orderDateLeftBox box50">
                           <div className="svgWrap">
                             <svg
@@ -1055,25 +988,9 @@ export const SubscriptionOrder: React.FC = () => {
       </main>
     );
   };
-
-  // ****************header and Footer**************************
-
-  // const renderHeader = (): JSX.Element => {
-  //   return (
-  //     <components.Header showGoBack={true} showBasket={true} />
-  //   );
-  // };
-
-  // const renderFooter = (): JSX.Element => {
-  //   return <components.Footer />;
-  // };
-
   return (
     <div id="screen" style={{ opacity }}>
-      {/* {renderHeader()} */}
       {renderContent()}
-
-      {/* {renderFooter()} */}
     </div>
   );
 };

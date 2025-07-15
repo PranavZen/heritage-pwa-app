@@ -133,7 +133,12 @@ export const Dish: React.FC = () => {
     (item) => item.option_value_id === dish.option_value_id
   );
 
+  // Add loading state for loader
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // Example: set loading true while fetching cart data
   useEffect(() => {
+    setLoading(true);
     const fetchCartData = async () => {
       try {
         const formData = new FormData();
@@ -172,6 +177,8 @@ export const Dish: React.FC = () => {
         }
       } catch (error) {
         console.error("Error fetching cart data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCartData();
@@ -661,7 +668,7 @@ export const Dish: React.FC = () => {
         );
         setDeliveryOptionsPreference(response.data.productDetails);
       } catch (error) {
-        // console.log(error);
+        // console.error(error);
       }
     };
     deliveryData();
@@ -699,28 +706,28 @@ export const Dish: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  const handleOpenModalAlternateDays = () => {
-    const c_id = localStorage.getItem("c_id");
+  // const handleOpenModalAlternateDays = () => {
+  //   const c_id = localStorage.getItem("c_id");
 
-    if (!c_id) {
-      Modal.confirm({
-        title: "Please Sign In",
-        content: "You need to sign in to add items to your cart.",
-        okText: "Sign In",
-        cancelText: "Cancel",
-        className: "sign-in-modal",
-        centered: true,
-        onOk() {
-          navigate("/");
-        },
-        onCancel() {},
-      });
-      return;
-    }
+  //   if (!c_id) {
+  //     Modal.confirm({
+  //       title: "Please Sign In",
+  //       content: "You need to sign in to add items to your cart.",
+  //       okText: "Sign In",
+  //       cancelText: "Cancel",
+  //       className: "sign-in-modal",
+  //       centered: true,
+  //       onOk() {
+  //         navigate("/");
+  //       },
+  //       onCancel() {},
+  //     });
+  //     return;
+  //   }
 
-    setIsAlternateModalOpen(true);
-    setIsModalOpen(true);
-  };
+  //   setIsAlternateModalOpen(true);
+  //   setIsModalOpen(true);
+  // };
 
   const handleCloseModalAlternateDays = () => {
     setIsAlternateModalOpen(false);
@@ -799,7 +806,10 @@ export const Dish: React.FC = () => {
   // };
 
   const renderHeader = (): JSX.Element => {
-    return <components.Header showGoBack={true} showBasket={true} />;
+    return <components.Header
+   
+     showGoBack={true}
+      showBasket={true} />;
   };
 
   const renderImage = (): JSX.Element => {
@@ -1233,6 +1243,7 @@ export const Dish: React.FC = () => {
 
   // ***************************Custom************************************************
   const renderContent = (): JSX.Element => {
+    if (loading) return <components.Loader local={true} message="Loading content..." />;
     return (
       <section className="scrollable">
         {renderImage()}

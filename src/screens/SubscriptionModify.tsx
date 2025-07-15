@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useLocation } from "react-router-dom";
 import { components } from "../components";
 import { notification, Modal, Spin } from "antd";
 import './SubscriptionModify.css';
@@ -11,28 +11,12 @@ export const SubscriptionModify: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [customerData, setCustomerData] = useState<any[]>([]);
-
-  // console.log("oneTimeOrderoneTimeOrder", customerData);
-
   const [oneTimeOrder, SetOneTimeOrder] = useState<any[]>([]);
-
-
-
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
-
-  // console.log("selectedOrder", selectedOrder)
-
   const [quantity, setQuantity] = useState<number>(1);
-
   const [quantityy, setQuantityy] = useState<number>(1);
-
   const [declinedQuantity, setDeclinedQuantity] = useState<number>(0);
-
-  // console.log("declinedQuantity", declinedQuantity);
   const [extraQuantity, setExtraQuantity] = useState<number>(1);
-
-  const navigate = useNavigate();
-
   const fetchSubscriptionData = async (date: string) => {
     if (!date) return;
 
@@ -111,16 +95,13 @@ export const SubscriptionModify: React.FC = () => {
     const subscriptionId = selectedOrder?.subscription_id || "";
     const defaultQuantity = selectedOrder?.default_quantity || 1;
     const prevOrderStatus = selectedOrder?.order_status_id || 0;
-
     const quantityToSend = quantityy || 1;
     const declinedQuantityToSend = declinedQuantity || 0;
     const extraQuantityToSend = extraQuantity || 1;
-
     if (!orderId || !cId || !subscriptionId) {
       notification.error({ message: "Missing required fields to update the subscription." });
       return;
     }
-
     const formData = new FormData();
     formData.append("order_id", orderId.toString());
     formData.append("c_id", cId.toString());
@@ -151,11 +132,9 @@ export const SubscriptionModify: React.FC = () => {
       notification.error({ message: "Error updating subscription" });
     }
   };
-
   const renderHeader = (): JSX.Element => {
     return <components.Header title="Modify Subscription" showGoBack={true} showBasket={true} />;
   };
-
   const renderContent = (): JSX.Element => {
     return (
       <section className="subscription-section">
@@ -206,8 +185,7 @@ export const SubscriptionModify: React.FC = () => {
             ) : (
               <>
                 {oneTimeOrder.length > 0 ? (
-                  oneTimeOrder.map((elem: any) => {
-                    // console.log("1111111111",elem);    
+                  oneTimeOrder.map((elem: any) => {   
                     return (
                       <div key={elem.id} className="order-card">
                         <img src={elem.image} alt="One-Time Item" className="order-image" />
@@ -222,12 +200,10 @@ export const SubscriptionModify: React.FC = () => {
                 ) : (
                   <p className="no-orders">No one-time orders available.</p>
                 )}
-
               </>
             )}
           </div>
         </div>
-
         <Modal
           title="Modify Subscription"
           open={isModalOpen}
@@ -244,10 +220,7 @@ export const SubscriptionModify: React.FC = () => {
                 >
                   -
                 </button>
-
-               
                 <p className="quantity-display">{quantityy}</p>  
-                
                 <button
                   className="quantity-button"
                   onClick={() => setQuantityy(prev => prev + 1)}
@@ -261,12 +234,9 @@ export const SubscriptionModify: React.FC = () => {
             </div>
           </div>
         </Modal>
-
-
       </section>
     );
   };
-
   return (
     <div id="screen">
       {renderHeader()}

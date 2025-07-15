@@ -24,19 +24,11 @@ export const SubscriptionOrderCheck: React.FC = () => {
     menuLoading || dishesLoading || reviewsLoading || carouselLoading;
 
   const [subscriptionData, setSubscriptionData] = useState<any[]>([]);
-
-  // console.log("aaaaaaaaaaaaaaaaaaaa", subscriptionData);
-
   const [oneTimeOrderData, setOneTimeOrderData] = useState<any[]>([]);
-
-  // console.log("oneTimeOrderDataoneTimeOrderData", oneTimeOrderData);
-
   const [activeTab, setActiveTab] = useState("subscriptions");
   const [isLoading, setIsLoading] = useState(false);
 
   const [subscriptionID, SetSubscriptionID] = useState<any[]>([]);
-
-  // console.log("subscriptionIDwwwwwwwwwwwwwwwwwww", subscriptionID);
 
   const [pauseToggle, SetPauseToggle] = useState<{ [key: number]: boolean }>(
     {}
@@ -56,11 +48,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
   const [subscriptionnextTotalData, SetSubscriptionTotalData] =
     useState<number>(0);
 
-  // console.log("mm", oneTimeNextId);
-  // console.log("mmm", nextId);
-
-  // console.log("qqqqqq", pauseToggle);
-
   interface Subscription {
     subscription_id: number;
     product_name: string;
@@ -71,24 +58,13 @@ export const SubscriptionOrderCheck: React.FC = () => {
   }
 
   const [subscription, SetSubscription] = useState<Subscription | null>(null);
-
-  // console.log("subscription1111111111111111111111", subscription);
-
   const [disabled, setDisabled] = useState(true);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedReason, setSelectedReason] = useState(null);
-
-  // console.log("selectedReason", selectedReason);
-
   const [isModalVisiblePause, setIsModalVisiblePause] = useState(false);
-
   const [pauseDate, setPauseDate] = useState<string | null>(null);
-
-  // console.log("pauseeeeq", pauseDate);
   const [resumeDate, setResumeDate] = useState<string | null>(null);
 
-  // console.log("resumeDate", resumeDate);
 
   interface orderToDelete {
     order_id: string;
@@ -113,7 +89,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
         "https://heritage.bizdel.in/app/consumer/services_v11/get_order_cancel_reason"
       )
       .then((response) => {
-        // console.log('mmmmm', response);
         setCancelReasons(response.data.order_cancel_reason);
       })
       .catch((error) => {
@@ -122,7 +97,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
   }, []);
 
   const handleDeleteClick = (order: any) => {
-    // console.log("orderhello", order);
     setOrderToDelete(order);
     setIsModalVisible(true);
   };
@@ -130,8 +104,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
   const handleReasonChange = (e: any) => {
     setSelectedReason(e.target.value);
   };
-
-  // Confirm deletion
   const handleConfirmDelete = () => {
     if (selectedReason && orderToDelete) {
       const formData = new FormData();
@@ -139,7 +111,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
       formData.append("order_option_id", orderToDelete.order_option_id);
       formData.append("order_status_id", "5");
       formData.append("cancel_reason_id", String(selectedReason));
-      // formData.append("comment", "ffffffffffff");
       formData.append("payment_method", orderToDelete.payment_method);
 
       axios
@@ -173,7 +144,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
       notification.error({ message: "Please select a pause date." });
       return;
     }
-    // Handle the pause logic (API call, etc.)
     const formData = new FormData();
     formData.append("c_id", String(localStorage.getItem("c_id")));
     formData.append("usertype", "user");
@@ -185,8 +155,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
     formData.append("subscription_pause_date", String(pauseDate));
     formData.append("status", "3");
     formData.append("quantity", "1");
-
-    // Example API call
     axios
       .post(
         "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
@@ -213,101 +181,98 @@ export const SubscriptionOrderCheck: React.FC = () => {
   //   setIsModalVisiblePause(false);  // Hide modal if canceled
   // };
 
-  const handleResumeConfirm = () => {
-    // setLoading(true);
-    const formData = new FormData();
-    formData.append("c_id", String(localStorage.getItem("c_id")));
-    formData.append("usertype", "user");
-    formData.append("subscription_id", String(subscription?.subscription_id));
-    formData.append("product_name", subscription?.product_name || "");
-    formData.append("option_value", subscription?.option_value || "");
-    formData.append("delivery_opt", subscription?.delivery_opt || "");
-    formData.append("package_days", subscription?.package_days || "");
-    formData.append("subscription_pause_date", pauseDate!);
-    formData.append("subscription_resume_date", subscription?.resumeDate || "");
-    formData.append("status", "2");
-    formData.append("extra_quantity", "0");
-    formData.append("declined_quantity", "0");
-    formData.append("default_quantity", "1");
-    formData.append("quantity", "1");
+  // const handleResumeConfirm = () => {
+  //   // setLoading(true);
+  //   const formData = new FormData();
+  //   formData.append("c_id", String(localStorage.getItem("c_id")));
+  //   formData.append("usertype", "user");
+  //   formData.append("subscription_id", String(subscription?.subscription_id));
+  //   formData.append("product_name", subscription?.product_name || "");
+  //   formData.append("option_value", subscription?.option_value || "");
+  //   formData.append("delivery_opt", subscription?.delivery_opt || "");
+  //   formData.append("package_days", subscription?.package_days || "");
+  //   formData.append("subscription_pause_date", pauseDate!);
+  //   formData.append("subscription_resume_date", subscription?.resumeDate || "");
+  //   formData.append("status", "2");
+  //   formData.append("extra_quantity", "0");
+  //   formData.append("declined_quantity", "0");
+  //   formData.append("default_quantity", "1");
+  //   formData.append("quantity", "1");
 
-    axios
-      .post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
-        formData
-      )
-      .then((response) => {
-        // console.log("nnnnnnnnnnnn", response);
-        if (response.data.status === "success") {
-          notification.success({
-            message: "Subscription resumed successfully!",
-          });
-          setIsModalVisibleResume(false);
-          window.location.reload();
-        } else {
-          notification.error({ message: response.data.message });
-        }
-      })
-      .catch((error) => {
-        // setLoading(false);
-        notification.error({
-          message: "Error occurred while resuming the subscription.",
-        });
-      });
-  };
+  //   axios
+  //     .post(
+  //       "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
+  //       formData
+  //     )
+  //     .then((response) => {
+  //       if (response.data.status === "success") {
+  //         notification.success({
+  //           message: "Subscription resumed successfully!",
+  //         });
+  //         setIsModalVisibleResume(false);
+  //         window.location.reload();
+  //       } else {
+  //         notification.error({ message: response.data.message });
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       // setLoading(false);
+  //       notification.error({
+  //         message: "Error occurred while resuming the subscription.",
+  //       });
+  //     });
+  // };
 
   const [isModalVisibleResume, setIsModalVisibleResume] = useState(false);
   // *************************One time order**************************************
 
-  const toggle = (subscription: any) => (checked: boolean) => {
-    // console.log("subscriptionsubscriptionsubscription", subscription);
+  // const toggle = (subscription: any) => (checked: boolean) => {
+  //   if (checked) {
+  //     if (subscription.status === "Active") {
+  //       setCurrentSubscription(subscription);
+  //       SetSubscription(subscription);
+  //       setIsModalVisiblePause(true);
+  //     }
+  //   } else {
+  //     if (subscription.status === "Paused") {
+  //       const resumeDate = moment().add(1, "day").format("YYYY-MM-DD");
+  //       setPauseDate(resumeDate);
+  //       setCurrentSubscription(subscription);
+  //       SetSubscription(subscription);
+  //       setIsModalVisibleResume(true);
+  //     } else if (String(subscription.status) === "Active") {
+  //       setCurrentSubscription(subscription);
+  //       SetSubscription(subscription);
+  //       setIsModalVisiblePause(true);
+  //     }
+  //   }
 
-    if (checked) {
-      if (subscription.status === "Active") {
-        setCurrentSubscription(subscription);
-        SetSubscription(subscription);
-        setIsModalVisiblePause(true);
-      }
-    } else {
-      if (subscription.status === "Paused") {
-        const resumeDate = moment().add(1, "day").format("YYYY-MM-DD");
-        setPauseDate(resumeDate);
-        setCurrentSubscription(subscription);
-        SetSubscription(subscription);
-        setIsModalVisibleResume(true);
-      } else if (String(subscription.status) === "Active") {
-        setCurrentSubscription(subscription);
-        SetSubscription(subscription);
-        setIsModalVisiblePause(true);
-      }
-    }
+  //   SetPauseToggle((prevState) => ({
+  //     ...prevState,
+  //     [subscription.subscription_id]: checked,
+  //   }));
+  // };
 
-    SetPauseToggle((prevState) => ({
-      ...prevState,
-      [subscription.subscription_id]: checked,
-    }));
-  };
+  // const handlePauseCancel = () => {
+  //   setIsModalVisiblePause(false);
+  //   if (currentSubscription) {
+  //     SetPauseToggle((prevState) => ({
+  //       ...prevState,
+  //       [currentSubscription.subscription_id]: false,
+  //     }));
+  //   }
+  // };
 
-  const handlePauseCancel = () => {
-    setIsModalVisiblePause(false);
-    if (currentSubscription) {
-      SetPauseToggle((prevState) => ({
-        ...prevState,
-        [currentSubscription.subscription_id]: false,
-      }));
-    }
-  };
-
-  const handleResumeCancel = () => {
-    setIsModalVisibleResume(false);
-    window.location.reload();
-    if (currentSubscription) {
-      SetPauseToggle((prevState) => ({
-        ...prevState,
-        [currentSubscription.subscription_id]: false,
-      }));
-    }
-  };
+  // const handleResumeCancel = () => {
+  //   setIsModalVisibleResume(false);
+  //   window.location.reload();
+  //   if (currentSubscription) {
+  //     SetPauseToggle((prevState) => ({
+  //       ...prevState,
+  //       [currentSubscription.subscription_id]: false,
+  //     }));
+  //   }
+  // };
 
   // const handlePauseCancel = () => {
   //   setIsModalVisiblePause(false);
@@ -318,90 +283,83 @@ export const SubscriptionOrderCheck: React.FC = () => {
   //   setIsModalVisibleResume(false);
   // };
 
-  const handleCancel = () => {
-    setPauseDate(null);
-    setResumeDate(null);
-    setIsModalVisiblePause(false);
-  };
+  // const handleCancel = () => {
+  //   setPauseDate(null);
+  //   setResumeDate(null);
+  //   setIsModalVisiblePause(false);
+  // };
 
-  const handleOk = async () => {
-    if (!pauseDate || !resumeDate) {
-      notification.error({
-        message: "Please select both pause and resume dates.",
-      });
-      return;
-    }
+  // const handleOk = async () => {
+  //   if (!pauseDate || !resumeDate) {
+  //     notification.error({
+  //       message: "Please select both pause and resume dates.",
+  //     });
+  //     return;
+  //   }
 
-    const currentDate = moment().startOf("day");
+  //   const currentDate = moment().startOf("day");
 
-    const selectedPauseDate = moment(pauseDate).startOf("day");
-    if (selectedPauseDate.isBefore(currentDate)) {
-      notification.error({
-        message:
-          "Subscription pause date must be greater than the current date.",
-      });
-      return;
-    }
-    const formData = new FormData();
-    formData.append("c_id", String(localStorage.getItem("c_id")));
-    formData.append("usertype", "user");
-    formData.append("subscription_id", String(subscription?.subscription_id));
-    formData.append("product_name", subscription?.product_name || "");
-    formData.append("option_value", subscription?.option_value || "");
-    formData.append("delivery_opt", subscription?.delivery_opt || "");
-    formData.append("package_days", subscription?.package_days || "");
-    formData.append("subscription_pause_date", pauseDate);
-    formData.append("subscription_resume_date", resumeDate);
-    formData.append("status", "3");
-    formData.append("extra_quantity", "0");
-    formData.append("declined_quantity", "0");
-    formData.append("default_quantity", "1");
-    formData.append("quantity", "1");
+  //   const selectedPauseDate = moment(pauseDate).startOf("day");
+  //   if (selectedPauseDate.isBefore(currentDate)) {
+  //     notification.error({
+  //       message:
+  //         "Subscription pause date must be greater than the current date.",
+  //     });
+  //     return;
+  //   }
+  //   const formData = new FormData();
+  //   formData.append("c_id", String(localStorage.getItem("c_id")));
+  //   formData.append("usertype", "user");
+  //   formData.append("subscription_id", String(subscription?.subscription_id));
+  //   formData.append("product_name", subscription?.product_name || "");
+  //   formData.append("option_value", subscription?.option_value || "");
+  //   formData.append("delivery_opt", subscription?.delivery_opt || "");
+  //   formData.append("package_days", subscription?.package_days || "");
+  //   formData.append("subscription_pause_date", pauseDate);
+  //   formData.append("subscription_resume_date", resumeDate);
+  //   formData.append("status", "3");
+  //   formData.append("extra_quantity", "0");
+  //   formData.append("declined_quantity", "0");
+  //   formData.append("default_quantity", "1");
+  //   formData.append("quantity", "1");
 
-    try {
-      const response = await axios.post(
-        "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
-        formData
-      );
-
-      // console.log("qqqqqqqqqqqqq11111111", response.data)
-
-      if (response.data.status === "success") {
-        notification.success({
-          message: response.data.subscription_resume_note,
-        });
-        setIsModalVisiblePause(false);
-        window.location.reload();
-      } else if (response.data.status === "fail") {
-        notification.error({ message: response.data.message });
-      }
-    } catch (error) {
-      notification.error({
-        message: "Error occurred while pausing subscription.",
-      });
-    }
-  };
+  //   try {
+  //     const response = await axios.post(
+  //       "https://heritage.bizdel.in/app/consumer/services_v11/subscriptionPauseResume",
+  //       formData
+  //     );
+  //     if (response.data.status === "success") {
+  //       notification.success({
+  //         message: response.data.subscription_resume_note,
+  //       });
+  //       setIsModalVisiblePause(false);
+  //       window.location.reload();
+  //     } else if (response.data.status === "fail") {
+  //       notification.error({ message: response.data.message });
+  //     }
+  //   } catch (error) {
+  //     notification.error({
+  //       message: "Error occurred while pausing subscription.",
+  //     });
+  //   }
+  // };
 
   const [opacity, setOpacity] = useState<number>(0);
 
   hooks.useScrollToTop();
   hooks.useOpacity(setOpacity);
-  const handleSubscriptionID = (subscription_id: string) => {
-    // console.log("subscription_id string:", subscription_id);
 
-    const uniqueSubscriptionIDs = Array.from(
-      new Set(subscription_id.split(",").map((id) => id.trim()))
-    );
-
-    // console.log("Unique subscription ID:", uniqueSubscriptionIDs);
-
-    if (uniqueSubscriptionIDs.length > 0) {
-      SetSubscriptionID((prevSubscriptionIDs) => [
-        ...prevSubscriptionIDs,
-        uniqueSubscriptionIDs[0],
-      ]);
-    }
-  };
+  // const handleSubscriptionID = (subscription_id: string) => {
+  //   const uniqueSubscriptionIDs = Array.from(
+  //     new Set(subscription_id.split(",").map((id) => id.trim()))
+  //   );
+  //   if (uniqueSubscriptionIDs.length > 0) {
+  //     SetSubscriptionID((prevSubscriptionIDs) => [
+  //       ...prevSubscriptionIDs,
+  //       uniqueSubscriptionIDs[0],
+  //     ]);
+  //   }
+  // };
 
   const c_id = localStorage.getItem("c_id");
 
@@ -420,7 +378,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
         formData
       )
       .then((response) => {
-        // console.log("waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", response);
         if (
           response.data.subscriptionListing &&
           Array.isArray(response.data.subscriptionListing)
@@ -462,8 +419,6 @@ export const SubscriptionOrderCheck: React.FC = () => {
         setIsLoading(false);
         setOneTimeNextId(response.data.next[0].next_id || "0");
         setOneTimeTotalData(response.data.next[0].total || 0);
-
-        // console.log("kkkkkkkkkkkkkkkkkkk", response.data.next[0].next_id);
       })
       .catch((error) => {
         console.error("Error fetching one-time order data", error);
@@ -475,22 +430,15 @@ export const SubscriptionOrderCheck: React.FC = () => {
     fetchSubscriptionData();
     fetchOneTimeOrderData();
   }, [nextId]);
-
-  // Set up Intersection Observer for card animations
   useEffect(() => {
     const cards = document.querySelectorAll(".card");
 
     if (cards.length === 0) return;
-
-    // Convert NodeList to Array for easier manipulation
     const cardsArray = Array.from(cards);
-
-    // Sort cards by their position from bottom to top
-    // This ensures cards at the bottom of the page animate first when scrolling up
     cardsArray.sort((a, b) => {
       const aRect = a.getBoundingClientRect();
       const bRect = b.getBoundingClientRect();
-      return bRect.top - aRect.top; // Sort from bottom to top
+      return bRect.top - aRect.top;
     });
 
     // Create a map to store the index of each card
@@ -901,6 +849,9 @@ export const SubscriptionOrderCheck: React.FC = () => {
                           <p className="orderBalAmt">
                             Paid Amount: ₹ {order.total}
                           </p>
+                           <p className="orderBalAmt">
+                            {String(order.coupon_code) !== '0' ? <> Coupon Applied</> : <></>}
+                          </p>
                         </div>
                       </div>
                       <div className="dataWraps"></div>
@@ -1061,11 +1012,21 @@ export const SubscriptionOrderCheck: React.FC = () => {
 
   // ****************header and Footer**************************
 
-  const renderHeader = (): JSX.Element => {
-    return (
-      <components.Header showGoBack={true} showBasket={true} />
-    );
-  };
+ const renderHeader = (): JSX.Element => {
+  const title = "Menu";
+  const showBasket = true;
+  const userName = true;
+  const userPhoto = true;
+
+  return (
+    <components.Header
+      title={title}
+      showBasket={showBasket}
+      userName={userName}
+      userPhoto={userPhoto}
+    />
+  );
+};
 
   // const renderFooter = (): JSX.Element => {
   //   return <components.Footer />;
@@ -1074,8 +1035,8 @@ export const SubscriptionOrderCheck: React.FC = () => {
   return (
     <div id="screen" style={{ opacity }}>
       {renderHeader()}
-      {renderContent()}
-
+      {(loading || isLoading) && <components.Loader local={true} message="Loading content..." />}
+      {!loading && !isLoading && renderContent()}
       {/* {renderFooter()} */}
     </div>
   );

@@ -55,8 +55,6 @@ function registerValidSW(swUrl: string, config?: Config) {
                 config.onUpdate(registration);
               }
             } else {
-            //   console.log('Content is cached for offline use.');
-
               if (config?.onSuccess) {
                 config.onSuccess(registration);
               }
@@ -90,9 +88,9 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
       }
     })
     .catch(() => {
-    //   console.log(
-    //     'No internet connection found. App is running in offline mode.'
-    //   );
+      // alert(
+      //   'No internet connection found. App is running in offline mode.'
+      // );
     });
 }
 

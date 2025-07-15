@@ -189,4 +189,12 @@
     bottom: 27%;
     padding: 4px 8px;
   }
+}
+@media screen and (max-width: 360px) {
+  .spinCountBox {
+    font-size: 14px;
+    left: 44%;
+    bottom: 22%;
+    padding: 4px 8px;
+  }
 }/*# sourceMappingURL=SpinTheWheel.module.css.map */

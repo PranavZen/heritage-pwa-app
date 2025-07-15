@@ -11,11 +11,6 @@ import { Modal, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCartCount } from '../store/slices/cartSlice';
 import NoCartData from '../screens/NoCartData';
-// import homeImg from '../assets/icons/home.png'
-// import { Color } from 'antd/es/color-picker';
-// import { SpinTheWheel } from './SpinTheWheel/SpinTheWheel';
-
-
 type Props = {
   title?: string;
   userName?: boolean;
@@ -25,7 +20,6 @@ type Props = {
   headerStyle?: React.CSSProperties;
   onGoBack?: () => void;
 };
-
 interface ProfileData {
   firstname: string;
   lastname: string;
@@ -33,8 +27,6 @@ interface ProfileData {
   photo: File | null;
   photo_url: string | null;
 }
-
-
 const modalMenu = [
   {
     id: 1,
@@ -67,8 +59,6 @@ const modalMenu = [
     switch: false,
   },
 ];
-
-
 export const Header: React.FC<Props> = ({
   title,
   userName,
@@ -76,7 +66,6 @@ export const Header: React.FC<Props> = ({
   showGoBack,
   showBasket,
   headerStyle,
-
 }) => {
   const navigate = hooks.useNavigate();
   const location = hooks.useLocation();
@@ -87,17 +76,15 @@ export const Header: React.FC<Props> = ({
   const [profileData, SetProfileData] = useState<ProfileData | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const shouldRefresh = useSelector((state: RootState) => state.cartSlice.shouldRefresh);
-   const {spinId} = hooks.useGetMenu();
-
-//  console.log("vvv", spinId);
-
+  const { spinId } = hooks.useGetMenu();
+  // console.log("aaa", spinId);
   const cartCount = useSelector((state: RootState) => state.cartSlice.cartCount);
   useEffect(() => {
     if (cartCount > 0) {
       setIsAnimating(true);
       const timer = setTimeout(() => {
         setIsAnimating(false);
-      }, 500); // Animation duration
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [cartCount]);
@@ -113,37 +100,30 @@ export const Header: React.FC<Props> = ({
 
   const cityId = localStorage.getItem('c_id');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   useEffect(() => {
     const GetProfileData = async () => {
       const formData = new FormData();
       formData.append('c_id', cityId || 'null');
-
       const initialCartCount = cartCount;
-
       try {
         const response = await axios.post(
           'https://heritage.bizdel.in/app/consumer/services_v11/getCustomerById',
           formData
         );
-
         if (response.data.status === 'success') {
           SetProfileData(response.data.CustomerDetail[0]);
           const newCartCount = response.data.cart_count;
-
-          // Only update cart count if it changed
           if (newCartCount !== undefined && newCartCount !== initialCartCount) {
             dispatch(setCartCount(Number(newCartCount)));
-            // Animation will be triggered by the cartCount change in the useEffect
           }
         } else {
           console.error('API call failed:', response.data.message);
         }
       } catch (error) {
         console.error('Error fetching profile data:', error);
-      } 
+      }
     };
-
     GetProfileData();
   }, [shouldRefresh, cartCount, cityId, dispatch]);
 
@@ -153,11 +133,8 @@ export const Header: React.FC<Props> = ({
     navigate(Routes.SignIn);
     navigate(0)
   };
-
-  // Render user profile section
   const renderUser = (): JSX.Element | null => {
     if (!userName && !userPhoto) return null;
-
     return (
       <div
         className="leftBox"
@@ -230,6 +207,18 @@ export const Header: React.FC<Props> = ({
     return (
       <>
         <div className="basketContainer">
+          {
+            // localStorage.getItem('curScreen') === "Home" && localStorage.getItem('hello') === '/tab-navigator' || 
+            // localStorage.getItem('hello') === '/menu-list' ?
+            //   <>
+            //     {String(spinId) === '0' ? <> <SearchSelect /> </> : <> </>}
+            //     <AddressSelect />
+            //   </> : <> </>
+            <>
+              {String(spinId) === '0' || String(spinId) === '1'   ? <> <SearchSelect /> </> : <> </>}
+              <AddressSelect />
+            </>
+          }
           {cartCount >= 1 ? (
             <button
               onClick={() => {
@@ -261,10 +250,10 @@ export const Header: React.FC<Props> = ({
         <Modal
           open={isModalOpen}
           onCancel={handleCancel}
-          footer={null} 
-          centered 
+          footer={null}
+          centered
           width={500}
-          closable={true} 
+          closable={true}
         >
           <NoCartData />
         </Modal>
@@ -274,7 +263,6 @@ export const Header: React.FC<Props> = ({
 
   const renderModal = (): JSX.Element | null => {
     if (!showModal) return null;
-
     return (
       <div className="modalWrapBox">
         <div
@@ -311,7 +299,6 @@ export const Header: React.FC<Props> = ({
               <span>{profileData?.email || ''}</span>
             </div>
           </div>
-
 
           <ul className="sideMenuList">
             {modalMenu.map((item, index, array) => {
@@ -390,16 +377,13 @@ export const Header: React.FC<Props> = ({
       setIsInstallable(false);
       return;
     }
-
     const handleBeforeInstallPrompt = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstallPrompt(true);
       setIsInstallable(true);
     };
-
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
@@ -407,9 +391,7 @@ export const Header: React.FC<Props> = ({
 
   const handleInstallClick = () => {
     if (!deferredPrompt || isInStandaloneMode()) return;
-
     deferredPrompt.prompt();
-
     deferredPrompt.userChoice.then((choiceResult: any) => {
       if (choiceResult.outcome === 'accepted') {
         setShowInstallPrompt(false);
@@ -422,7 +404,7 @@ export const Header: React.FC<Props> = ({
   const hideInstallPrompt = () => {
     setShowInstallPrompt(false);
   };
-
+  // ****!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   const AddToHomeScreen = () => {
     if (!showInstallPrompt) return null;
@@ -458,7 +440,6 @@ export const Header: React.FC<Props> = ({
                 </div>
               </div>
             )}
-
             {/* iOS Instruction Message */}
             {isIos() && !isInStandaloneMode() && (
               <div className="ios-instruction-container">
@@ -482,16 +463,12 @@ export const Header: React.FC<Props> = ({
     );
   };
   // **********************************************************777777777777777777777777777777777777777777777
-
   const [addresses, setAddresses] = useState<any[]>([]);
 
   const selectedAddressData = (Array.isArray(addresses) ?
     addresses.filter((elem) => elem.id === localStorage.getItem('selectedAddressId')) :
     []
   );
-
-
-
   useEffect(() => {
     const fetchAddresses = async () => {
       const formData = new FormData();
@@ -553,7 +530,9 @@ export const Header: React.FC<Props> = ({
                       className="address-item"
                       onClick={() => handleSelect(address.id)}
                     >
-                      {address.area_name} ...
+                      {address?.area_name?.length > 11
+                        ? address.area_name.substring(0, 11)  + '...'
+                        : address.area_name}
                     </div>
                   ))
                   :
@@ -564,7 +543,9 @@ export const Header: React.FC<Props> = ({
                         className="address-item"
                         onClick={() => handleSelect(address.id)}
                       >
-                        {address.area_name} ...
+                       {address?.area_name?.length > 11
+                        ? address.area_name.substring(0, 11) + '...'
+                        : address.area_name}
                       </div>
                     ))
               ) : (
@@ -612,12 +593,7 @@ export const Header: React.FC<Props> = ({
   // ****************************************************************8
   return (
     <>
-      {localStorage.getItem('curScreen') === "Home" && localStorage.getItem('hello') === '/tab-navigator' ?
-        <>
-         {String(spinId) === '0' ? <> <SearchSelect /> </> : <> </>} 
-          <AddressSelect />
-        </> : <> </>
-      }
+
       <AddToHomeScreen />
       <header className="topHeader">
         {renderUser()}
