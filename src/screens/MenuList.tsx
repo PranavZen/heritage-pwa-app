@@ -19,9 +19,9 @@ export const MenuList: React.FC = () => {
 
   const { menuLoading, menu, selectedProductId } = hooks.useGetMenu();
   const location = hooks.useLocation();
-
-  const product_cat_id: string = location.state.menuName;
-  const searchId: string = location.state.id;
+  const product_cat_id: string = location.state?.menuName ?? null;
+  // const product_cat_id: string | null = location.state?.menuName ?? null;
+  const searchId: string = location.state?.id ?? null;
   const [opacity, setOpacity] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] =
     useState<string>(product_cat_id);

@@ -85,8 +85,8 @@ export const Onboarding: React.FC = () => {
           body: formData,
         }
       );
-
       const data = await response.json();
+      // console.log("aaaaaaaaaa", data);
       if (
         data.status === "success" &&
         data.search_data &&
@@ -102,6 +102,7 @@ export const Onboarding: React.FC = () => {
           placement: "bottomRight",
           duration: 3
         });
+        
         setTimeout(() => {
           navigate(Routes.TabNavigator);
         }, 2000);
@@ -221,10 +222,8 @@ export const Onboarding: React.FC = () => {
     );
   };
 
-  // Add loading modal for verification
   const renderLoadingModal = (): JSX.Element | null => {
     if (!isLoading) return null;
-
     return (
       <div className="popup-modal">
         <div className="popup-content">
